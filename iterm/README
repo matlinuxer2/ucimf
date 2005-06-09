@@ -1,0 +1,102 @@
+             Internationalized Terminal Emulator Framework
+           Jiro SEKIBA <sekiba@jp.ibm.com/jir@openi18n.org>
+
+
+* What is This ?
+  This is a platform-independent framework for making Internationalized 
+ Virtual Terminal Emulator.  Implementing platform-dependent part of this
+ framework, you can easily build internationalized virtual terminal/Widget.
+ You can obtain latest .tar.gz package from following URL..
+
+   http://www-124.ibm.com/linux/projects/iterm/
+
+ or latest codes from Subversion Repository as below..
+
+   svn co http://svn.openi18n.org:8081/repos/iterm/trunk
+
+ The distribution consist of 4 parts, such are
+
+ - lib
+    libiterm, the terminal emulator library.
+ - unix/fbiterm
+    terminal emulator for framebuffer, which uses libiterm.
+ - unix/Xaw/lib
+    libXiterm, the terminal emulator widget library.
+ - unix/Xaw/src
+    terminal emulator for X, which uses above widget and libiterm.
+
+  Please check Documents in each directory for further information.
+
+* Overview
+  The iterm is the multi-platform capable I18N terminal emulator, based
+ on the Model-View-Controller(MVC) architecture. The MVC model provide
+ portabilty and consistency among terminal emulators, including
+ framebuffer based Console.
+
+  Here is the architectural diagram of iterm.
+
+  frame     Athena   gtk+ based   Qt based   Other
+  buffer    Widget    GNOME         KDE     Widget
+   i18n    based X   termianl     terminal   based
+  console  terminal                         terminal
+ +--------+---------+-----------+----------+--------+
+ |        | xiterm  |GNOMEiterm | KDEiterm | *iterm |
+ |fbiterm +---------+-----------+----------+--------+
+ |        |libXiterm|libgtkiterm|libQtiterm|etc.....|
+ +--------------------------------------------------+
+ |                     libiterm                     |
+ +--------------------------+                       |
+ | Pluggable BiDI engine SPI|                       |
+ +---------+-------+--------+-----------------------+
+ |Sun PLS  |IBM PLS|FriBiDi |
+ |liblayout|       |        |
+ +---------+-------+--------+
+
+  The foundation of the I18N terminal emulator "libiterm" implements
+ the "View" independent core I18N terminal emulator capability,
+ including BiDi support. The libiterm includes pluggable BiDi engine
+ SPI.  At this moment, Sun's opensourced PLS library(liblayout), IBM
+ PLS library, and FriBiDi are supported.(At this moment, only libiterm,
+ fbiterm, libXiterm and xiterm are available).
+
+* ToDo
+ - IM support
+ - Gnome, KDE widget
+ - Tuning ;-)
+
+* Known Bugs
+ - doesn't shape Arabic characters when compiling with libfribidi.
+
+* Reporting bugs/Discussion
+
+ - Bug report of iterm are mainly accepted on li18nux-utildev, on which 
+   also discussion about iterm are held.  Please refer the following URL
+   for joining the list.
+    
+    - http://www.openi18n.org/ml/
+
+* FAQ
+
+ Q1. I can't erase character other than ASCII by backspace, is this a bug?
+ A1. This is not a bug of terminal emulator, but a problem of shells.
+     
+ Q2. When I use it on UTF-8, command line folding is strange!
+ A2. This is also the problem of shells.
+     You can solve these problems by using I18Ned shell.
+     You can get I18N patch against bash-2.05 from URL below.
+ http://oss.software.ibm.com/developer/opensource/linux/patches/?patch_id=34
+
+ Q3. When I start xiterm, following error message appears
+  > Warning: locale not supported by Xlib, locale set to C
+    but I have the locale in /usr/lib/locale directory, is this a bug?
+ A3. Do you set your LANG like ja_JP.utf8? X locale mechanism is case 
+    sensitive.  So you have to set your LANG as ja_JP.UTF-8.
+
+ Q4. on UTF-8 locale, xiterm seems very odd.
+ A4. You may need to specify fontset by -fn option.
+     I recommend unifont(http://czyborra.com/unifont/) for UTF-8 locale.
+  Note: iso10646 fonts XFree86 bundles contain very limited glyphs.
+        You have to choose -ja- font if you want to display Japanese.
+        But ascii part of the font is, what we call, double width,
+        as a result, it'll be very ugly.
+     

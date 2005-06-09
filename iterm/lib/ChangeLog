@@ -1,0 +1,58 @@
+- since version 0.5
+	* fixed a bug that multi column characters aren't erased properly
+	* added Insert, Delete, Home, End, PageUp and PageDown keys support
+		Mark Thomas <mbt99@doc.ic.ac.uk>
+	* fixed a bug that multi column characters aren't redisplayed properly
+	* fixed a bug that can't select a character on the right edge
+	* fixed a bug that can't select string on w3m
+	* fixed a bug that TBC with no parameter doesn't work
+	* fixed a bug that XTERM_RESTORE doesn't restore the video mode
+	* fixed a bug that fbiterm crashes when multicolum char overstrikes
+	  only first column of multicolumn character
+	  	Chris Heath <chris@heathens.co.nz>
+	* use /dev/pts for master device on AIX
+		Dan McNichol <mcnichol@austin.ibm.com>
+	* fixed a bug of buffer overrun when copy buffer to view
+		Chris Heath <chris@heathens.co.nz>
+	* added fallback to exec /bin/sh when failing to exec specified program
+	* fixed a bug of line duplication on some situation
+		Chris Heath <chris@heathens.co.nz>
+	* changed VTCore_new 4th parameter meaing to specify history lines
+	  independently
+	* fixed a bug that dec application mode is not reset
+- since version 0.4
+	* added libutempter support
+	* changed utmp to utmpx for better compatibility
+	* fixed a bug of core dump when dragging to under the window
+	* fixed bugs of (un)drawing cursor
+	* fixed automake/autoconf related bugs
+	* fixed bugs of fribidi layout driver for IA-64 system
+- since version 0.3
+	* added utmp support
+	* fixed a bug that doesn't scroll properly when using scrollbar
+	* fixed a bug of selection that multi width characters are not 
+	selected properly
+	* fixed a bug that selection of highlighted text doesn't inverse
+	* deleted VTScreenView_update_rect
+- since version 0.2
+	* added CHA(ESC [ G) Cursor Character Absolute escape sequence
+	* fixed a bug of HPA mapping (ESC [ G -> ESC [ `)
+	* added CHT(ESC [ I) Cursor Forward Tabulation escape sequence
+	* fixed a bug that TAB(^I) doesn't wrap properly
+	* added CNL(ESC [ E) Cursor Next Line escape sequence
+	* added CPL(ESC [ F) Cursor Preceding Line escape sequence
+	* re-implemented screen_row.c to reduce memory consumption
+- since version 0.1
+	* changed thread model to event dispatch model
+	* added ECH(ESC [ X): Erase Character escape sequence
+	* added HPA(ESC [ G): Character Position Absolute escape sequence
+	* added CBT(ESC [ Z): Cursor Backward Character escape sequence
+	* added VPA(ESC [ d): Line Position Absolute escape sequence
+	* changed tty_termila_io_<name> to TtyTerminalIO_<name>
+	* added TtyTerminalIO_get_associated_fd() method
+	* changed enable PLS library is default
+	* added Splash Text
+	* fixed a bug that fribidi layout doesn't work on some locales
+	* added alternate buffer & cursor(ESC [ ? 1049 h/l) escape sequences
+	
+	

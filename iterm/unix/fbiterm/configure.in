@@ -1,0 +1,148 @@
+#################################################################
+# Process this file with autoconf to produce a configure script.
+AC_INIT(src/fbiterm.c)
+AM_INIT_AUTOMAKE(fbiterm, 0.4)
+AM_CONFIG_HEADER(config.h)
+
+#################################################################
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+
+#################################################################
+# Check for OS.
+AC_CANONICAL_HOST
+case "$host_os" in
+  *linux*)
+    AC_MSG_CHECKING(for OS...)
+    AC_MSG_RESULT(OK)
+    ;;
+  *)
+    # AC_MSG_ERROR([*** fbiterm only supports linux ***])
+    echo "*** The fbiterm program is currently not available for this platform."
+    exit 1
+    ;;
+esac
+
+#################################################################
+# Checks for header files.
+AC_HEADER_STDC
+AC_PATH_X
+AC_PATH_XTRA
+
+AC_CHECK_HEADERS(errno.h fcntl.h getopt.h iconv.h linux/fb.h \
+	linux/input.h linux/kd.h linux/keyboard.h linux/vt.h \
+	locale.h signal.h stdlib.h string.h sys/ioctl.h \
+	sys/kd.h sys/mman.h sys/stat.h termios.h \
+	stdio.h unistd.h wchar.h wctype.h)
+
+# X related header
+xfont_headers="FSproto.h Xdefs.h Xdefs.h \
+	Xfuncproto.h Xfuncs.h Xproto.h Xmd.h fsmasks.h"
+for header in $xfont_headers; do
+  have_xfont_header="no"
+  for x_dir in $x_includes; do
+    if test -f $x_dir/X11/$header; then
+      have_xfont_header="yes"
+      break
+    else 
+      if test -f $x_dir/X11/fonts/$header; then
+	have_xfont_header="yes"
+	break
+      fi
+    fi
+  done
+  if test "$have_xfont_header" = no; then
+    AC_MSG_ERROR([Cannot find $header. Please install X11 related header files first.])
+  fi
+done
+AC_MSG_CHECKING(for X11 fonts related headers)
+AC_MSG_RESULT($have_xfont_header)
+X_CFLAGS="-I$x_includes/X11 -I$x_includes/X11/fonts"
+
+# iterm related header
+iterm_headers="iterm/core.h iterm/screen.h iterm/thread.h iterm/unix/ttyio.h iterm/vtlayout.h"
+for header in $iterm_headers; do
+  have_iterm_header="no"
+  if test -f /usr/local/include/$header; then
+    have_iterm_header="yes"
+    break
+  fi
+  if test "$have_xfont_header" = no; then
+    AC_MSG_ERROR([Cannot find $header. Please install iterm related header files first.])
+  fi
+done
+AC_MSG_CHECKING(for iterm related headers)
+AC_MSG_RESULT($have_iterm_header)
+
+#################################################################
+# Checks for libraries.
+
+AC_CHECK_LIB(z, inflate,,AC_MSG_WARN([Cannot find libz library. Please install first.]))
+
+# Xfont Library check
+have_x_font_lib="no"
+for x_dir in $x_libraries; do
+  for ext in so a ; do
+    if test -f $x_dir/libXfont.$ext; then
+      have_x_font_lib="yes"
+      if test "$ext" = "a"; then
+	X_LIBS="$X_LIBS $x_dir/libXfont.$ext"
+      fi
+      break
+    fi
+  done
+done
+AC_MSG_CHECKING(for libXfont library)
+if test "$have_x_font_lib" != yes; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([Cannot find libXfont library. Please install X11 first.])
+else
+  AC_MSG_RESULT(yes)
+fi
+
+#################################################################
+# Checks for fonts.
+have_mb_font="no"
+for x_dir in $x_libraries; do
+  if test -f $x_dir/X11/fonts/misc/unifont.pcf.gz; then
+    have_mb_font="yes"
+    break
+  fi
+done
+AC_MSG_CHECKING(for multibyte(unicode) font)
+AC_MSG_RESULT($have_mb_font)
+if test "$have_mb_font" = no; then
+  AC_MSG_WARN([Cannot find unicode font. Please install unicode font (unifont.pcf.gz).])
+fi
+
+have_ascii_font="no"
+for x_dir in $x_libraries; do
+  if test -f $x_dir/X11/fonts/misc/8x16.pcf.gz; then
+    have_ascii_font="yes"
+    break
+  fi
+done
+AC_MSG_CHECKING(for ascii font)
+AC_MSG_RESULT($have_ascii_font)
+if test "$have_ascii_font" = no; then
+  AC_MSG_WARN([Cannot find ascii font. Please install ascii font (8x16.pcf.gz).])
+fi
+
+#################################################################
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+#################################################################
+# Checks for library functions.
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MMAP
+AC_TYPE_SIGNAL
+AC_CHECK_FUNCS(getenv select strdup strstr)
+
+#################################################################
+# Output.
+AC_OUTPUT(Makefile src/Makefile)
