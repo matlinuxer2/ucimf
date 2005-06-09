@@ -1,0 +1,33 @@
+               Internationalized Terminal Emulator Library
+           Jiro SEKIBA <jir@yamato.ibm.com/jir@openi18n.org>
+            
+* What's this.
+  This is a portable library for internationalized terminal emulator.
+All you need to make terminal emulator is to implements Callback functions,
+like a drawing string on specfic column and row, or set fore/background
+color and so on.
+
+* Install
+
+$ ./configure
+$ make
+$ make install
+
+ - configure options
+
+  --enable-pls
+     enabling PLS library for BiDi layout engine[ Default enable ]
+
+  --enable-fribidi
+     enabling fribidi library for BiDi layout engine[ Default disable ]
+
+  If you specify both library, only fribidi library is enabled.
+
+  --with-utempter
+     use libutempter to access utmp [ Default without ]
+
+* Directories
+  - src
+     all source files
+  - src/unix
+     unicses dependent source files

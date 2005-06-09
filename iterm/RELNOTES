@@ -1,0 +1,63 @@
+             Internationalized Terminal Emulator Framework
+           Jiro SEKIBA <sekiba@jp.ibm.com/jir@openi18n.org>
+
+* PREFACE
+
+ This is the public release of Internationalized Terminal Emulator
+Framework(iterm) version 0.5. You can download tar.gz package from 
+the URL below
+
+   http://www-124.ibm.com/linux/projects/iterm/
+
+ or obtain latest codes from Subversion Repository as below..
+
+  svn co http://svn.openi18n.org:8081/repos/iterm/trunk
+
+ The distribution consist of 4 parts, such are
+
+ - lib
+    libiterm, the terminal emulator library.
+ - unix/fbiterm
+    terminal emulator for framebuffer, which uses libiterm.
+ - unix/Xaw/lib
+    libXiterm, the terminal emulator widget library.
+ - unix/Xaw/src
+    terminal emulator for X, which uses above widget and libiterm.
+
+  Please check documents in each directory for further information.
+
+* NEW FEATURES
+
+ This time, we included very early version of 'gtkiterm': gtk implementation
+of iterm.  Because of the first early release of the implementation,
+you can easily understand how libiterm works and how to use libiterm to 
+create own terminal emulators.  It is a limited implementation, so the
+feature of gtkiterm is not fully available not like xiterm.  However, it
+works complete 80x24 terminal emulator even it is only 650 lines of codes.
+ Now you can use libutempter for secure utmp access.  We implemented
+libutempter driver.  By libutempter, you can access utmp database without
+any privilege.
+ 
+* CHANGES
+
+ changes since version 0.4
+
+ - libiterm
+  * added libutempter support
+  * changed utmp to utmpx for better compatibility
+  * fixed a bug of core dump when dragging to under the window
+  * fixed bugs of (un)drawing cursor
+  * fixed automake/autoconf related bugs
+  * fixed bugs of fribidi layout driver for IA-64 system
+
+ - libXiterm
+  * fixed a bug that xiterm crashes on IA-64 system
+  * fixed a bug which cursor color doesn't change when reverse video
+  * fixed automake/autoconf related bugs
+  * fixed a but that Alt+ "anykey" flips screen
+
+ - xiterm
+  * fixed automake/autoconf related bugs
+
+ - fbiterm
+  * fixed automake/autoconf related bugs

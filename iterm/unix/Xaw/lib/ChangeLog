@@ -1,0 +1,29 @@
+- since version 0.5
+	* added Insert, Delete, Home, End, PageUp and PageDown keys support
+		Mark Thomas <mbt99@doc.ic.ac.uk>
+	* added AIX single byte input method type support
+		Dan McNichol <mcnichol@austin.ibm.com>
+	* added user specified program execution support
+	* added OverTheSpot without StatusLine
+	* added saveLines resource that can specify lines of history
+	* fixed a bug of focus flickering with IM window
+	* added VT.h and VTP.h to be installed
+	* modified to self host
+- since version 0.4
+	* fixed a bug that xiterm crashes on IA-64 system
+	* fixed a bug which cursor color doesn't change when reverse video
+	* fixed automake/autoconf related bugs
+	* fixed a but that Alt+ "anykey" flips screen
+- since version 0.3
+	* added VT.loginShell resource to support login shell
+	* deleted update_rect according to libiterm
+	* changed text colors for xterm compatibility
+- since version 0.2
+	* fixed a bug which doesn't send position of mouse button 3
+	* changed default TERM environment variable value kterm to xterm
+- since version 0.1
+	* modified for iterm event dispatch model
+	* fixed a bug window not refreshed when FlashBell
+	* fixed small some bugs
+	* fixed a bug that xiterm crashes when failed to open XIM
+	* fixed a bug that xiterm crashes when can't open fontset

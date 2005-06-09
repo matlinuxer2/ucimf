@@ -1,0 +1,87 @@
+========================> 8 说明由此开始 8< ==============================
+
+                基于帧缓冲模式的国际化终端模拟器
+
+                原著：Masahide WASHIZAWA <washi@yamato.ibm.com>
+                      Jiro SEKIBA <jir@yamato.ibm.com>
+                翻译：梁昌泰 <beos@turbolinux.com.cn>
+介绍：
+=====
+  基于帧缓冲模式的国际化终端模拟器(iterm)是一个可在Linux字符界面主控台上
+  能够显示世界上各种语言的终端程序。它使用了libiterm(国际化终端架构)，
+  Linux帧缓冲设备，由X视窗系统字体库加载的字体，以及BiDi双向文本排版引擎。
+  因此，fbiterm已经能够支持BiDi/CTL和CJK语言显示了。
+
+特性：
+=====
+
+    * 帧缓冲支持
+        8bpp
+        16bpp
+        24bpp
+        32bpp
+
+    * 屏幕缓冲区历史模式(Shift+PageUp / Shift+PageDown)
+
+    * BiDi output (using layout engine)
+
+组合键
+======
+
+    * Shift + PageUp     屏幕上滚，查看屏幕历史内容
+    * Shift + PageDown   屏幕下滚，查看屏幕历史内容
+    * Alt + Enter        变换BiDi语言排版的方向
+
+倚赖关系：
+=========
+
+  为了能够正常执行本程序，请确保以下两个库已经安装：
+
+      必须安装的库                 软件包名称
+    ----------------------------  -----------------------------
+    /usr/X11R6/lib/libXfont.so    XFree86-devel-4.0.3-5
+    /usr/lib/libz.so              zlib-devel-1.1.3-22
+    ----------------------------  -----------------------------
+
+  字体 (k14, 7x14 pcf/bdf)
+
+帧缓冲模式代码：
+===============
+
+  下列表格所列举的模式代码您可以在VGA提示时输入，或者在LILO程序中使用：
+
+    色深   640x400 640x480 800x600 1024x768 1280x1024 1600x1200
+    -----+----------------------------------------------------
+     8 位| 0x300   0x301   0x303    0x305    0x307     0x31C
+         |  768     769     771      773      775       796
+    -----+----------------------------------------------------
+    16 位|   -     0x311   0x314    0x317    0x31A     0x31E
+         |          785     788      791      794       798
+    -----+----------------------------------------------------
+    24 位|   -     0x312   0x315    0x318    0x31B     0x31F
+         |          786     789      792      795       799
+    -----+----------------------------------------------------
+    32 位|   -       -       -        -        -         -
+    -----+----------------------------------------------------
+
+Unicode字体
+============
+
+请参见以下URL地址：
+    http://www.linuxdoc.org/HOWTO/Unicode-HOWTO-2.html
+
+Roman Czyborra已经组装了一套8x16/16x16的75dpi字体，使用的是Unicode编码，涵
+盖了Unicode的一大部分。 您可以从http://czyborra.com/unifont/下载到hex2bdf
+和unifont.hex.gz。该字体文件并非固定宽度的，其中8个像素宽的是欧洲字符，16
+像素宽度的是中文字符。安装指令如下：
+
+    $ gunzip unifont.hex.gz
+    $ hex2bdf < unifont.hex > unifont.bdf
+    $ bdftopcf -o unifont.pcf unifont.bdf
+    $ gzip -9 unifont.pcf
+    # cp unifont.pcf.gz /usr/X11R6/lib/X11/fonts/misc
+    # cd /usr/X11R6/lib/X11/fonts/misc
+    # mkfontdir
+    # xset fp rehash
+
+========================> 8 说明到此结束 8< ==============================

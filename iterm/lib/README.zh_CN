@@ -1,0 +1,32 @@
+
+                    国际化终端模拟器库
+                  原著∶Jiro SEKIBA <jir@yamato.ibm.com>
+                  翻译∶梁昌泰 <beos@turbolinux.com.cn>
+            
+* 这是什么玩意儿？
+  这是一个可移植的国际化终端模拟器库。打造一个终端模拟器所需要的全部工作只
+是实现一些回调函数，比如一个在指定的行和列上绘制的字串，或者设置前景/背景
+颜色等等诸如此类的。
+
+* 安装
+
+$ ./configure
+$ make
+$ make install
+
+ - 编译配置选项
+
+  --enable-pls
+     为BiDi双向排版引擎激活PLS库支持 [ 缺省激活 ]
+
+  --enable-fribidi
+     为BiDi双向排版引擎激活fribidi库支持 [ 缺省屏蔽 ]
+
+  如果您两个库都指定激活，那么最终只能选择激活fribidi库。
+
+* 目录
+  - src
+     所有的源文件
+  - src/unix
+     Unix平台相关的源文件
+

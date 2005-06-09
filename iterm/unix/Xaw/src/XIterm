@@ -1,0 +1,55 @@
+*international: True
+*VT.translations: #override Ctrl <Btn3Down>: XawPositionSimpleMenu(fontMenu) MenuPopup(fontMenu) \n\
+Ctrl <Btn2Down>: XawPositionSimpleMenu(optionMenu) MenuPopup(optionMenu)
+
+*VT*fontSet1:   -*-fixed-medium-r-normal--2-*,*
+*VT*fontSet2:   -*-fixed-medium-r-normal--10-*,*
+*VT*fontSet3:   -*-fixed-medium-r-normal--12-*,*
+*VT*fontSet4:   -*-fixed-medium-r-normal--16-*,*
+*VT*fontSet5:   -*-fixed-medium-r-normal--20-*,*
+*VT*fontSet6:   -*-fixed-medium-r-normal--24-*,*
+
+*SimpleMenu*menuLabel.fontSet:  -adobe-helvetica-bold-r-normal--*-120-*-*-*-*-iso8859-*,-misc-fixed-bold-r-normal-*-12,*
+*SimpleMenu*fontSet:             -adobe-helvetica-medium-r-normal--*-120-*-*-*-*-iso8859-*,-misc-fixed-medium-r-normal-*-12,*
+
+*SimpleMenu*Cursor: left_ptr
+*SimpleMenu*menuLabel.vertSpace:        100
+*SimpleMenu*HorizontalMargins: 16
+*SimpleMenu*Sme.height: 16
+
+*fontMenu.Label: Fonts
+*fontMenu*default*Label: Default
+*fontMenu*fontSet1*Label: FontSet 1
+*fontMenu*fontSet2*Label: FontSet 2
+*fontMenu*fontSet3*Label: FontSet 3
+*fontMenu*fontSet4*Label: FontSet 4
+*fontMenu*fontSet5*Label: FontSet 5
+*fontMenu*fontSet6*Label: FontSet 6
+
+
+*optionMenu.Label: Option
+*optionMenu*enableScrollbar*Label: Enable Scrollbar
+*optionMenu*enableScrollbarLeft*Label: Display Scrollbar on Left
+*optionMenu*enableVisualBell*Label: Enable Visual Bell
+*optionMenu*enableReverseVideo*Label: Enable Reverse Video
+
+*VT*textColor0: black
+*VT*textColor1: red3
+*VT*textColor2: green3
+*VT*textColor3: yellow3
+*VT*textColor4: blue3
+*VT*textColor5: magenta3
+*VT*textColor6: cyan3
+*VT*textColor7: gray90
+*VT*textColor8: gray30
+*VT*textColor9: red
+*VT*textColor10: green
+*VT*textColor11: yellow
+*VT*textColor12: blue
+*VT*textColor13: magenta
+*VT*textColor14: cyan
+*VT*textColor15: white
+
+*VT*rows: 24
+*VT*cols: 80
+*VT*saveLines: 500

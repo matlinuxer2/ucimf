@@ -1,0 +1,181 @@
+\section{\_\-VTScreen\-View Struct Reference}
+\label{struct__VTScreenView}\index{_VTScreenView@{\_\-VTScreenView}}
+VTScreen\-View interface. 
+
+
+{\tt \#include $<$screen.h$>$}
+
+\subsection*{Data Fields}
+\begin{CompactItemize}
+\item 
+\index{object@{object}!_VTScreenView@{\_\-VTScreenView}}\index{_VTScreenView@{\_\-VTScreenView}!object@{object}}
+void $\ast$ {\bf object}\label{struct__VTScreenView_m0}
+
+\begin{CompactList}\small\item\em reference to platform dependent VTScreen\-View object\item\end{CompactList}\item 
+void($\ast$ {\bf draw\_\-text} )(struct \_\-VTScreen\-View $\ast$view, int col, int row, char $\ast$mbstring, int length, int width)
+\begin{CompactList}\small\item\em draw text in screen\item\end{CompactList}\item 
+void($\ast$ {\bf update\_\-cursor\_\-position} )(struct \_\-VTScreen\-View $\ast$view, int col, int row)
+\begin{CompactList}\small\item\em set cursor position\item\end{CompactList}\item 
+void($\ast$ {\bf set\_\-rendition} )(struct \_\-VTScreen\-View $\ast$view, int bold, int blink, int inverse, int underline, int foreground, int background, char charset)
+\begin{CompactList}\small\item\em set graphic rendition of text\item\end{CompactList}\item 
+void($\ast$ {\bf clear\_\-rect} )(struct \_\-VTScreen\-View $\ast$view, int s\_\-col, int s\_\-row, int e\_\-col, int e\_\-row)
+\begin{CompactList}\small\item\em clear specified rectangular\item\end{CompactList}\item 
+void($\ast$ {\bf swap\_\-video} )(struct \_\-VTScreen\-View $\ast$view)
+\begin{CompactList}\small\item\em swap foreground and background color permanently\item\end{CompactList}\item 
+void($\ast$ {\bf ring} )(struct \_\-VTScreen\-View $\ast$view)
+\begin{CompactList}\small\item\em ring the bell\item\end{CompactList}\item 
+void($\ast$ {\bf resize\_\-request} )(struct \_\-VTScreen\-View $\ast$view, int cols, int rows)
+\begin{CompactList}\small\item\em request new size of the screen\item\end{CompactList}\item 
+void($\ast$ {\bf notify\_\-osc} )(struct \_\-VTScreen\-View $\ast$view, int type, char $\ast$params, int n\_\-params)
+\begin{CompactList}\small\item\em notify OSC(operating system command)\item\end{CompactList}\item 
+void($\ast$ {\bf update\_\-scrollbar} )(struct \_\-VTScreen\-View $\ast$view, int max, int top, int shown)
+\begin{CompactList}\small\item\em notify scrollbar event\item\end{CompactList}\item 
+void($\ast$ {\bf scroll\_\-view} )(struct \_\-VTScreen\-View $\ast$view, int dest\_\-row, int src\_\-row, int num\_\-line)
+\begin{CompactList}\small\item\em notify scrollbar event\item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+VTScreen\-View interface.
+
+\par
+ View of VTScreen. User must create instance that implements these methods. To short, this is a set of callback functions which are called by {\bf VTCore } 
+
+
+
+\subsection{Field Documentation}
+\index{_VTScreenView@{\_\-VTScreen\-View}!clear_rect@{clear\_\-rect}}
+\index{clear_rect@{clear\_\-rect}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::clear\_\-rect)(struct \_\-VTScreen\-View $\ast$view,int s\_\-col, int s\_\-row, int e\_\-col, int e\_\-row)}\label{struct__VTScreenView_m4}
+
+
+clear specified rectangular
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em s\_\-col}]top left column \item[{\em s\_\-row}]top left row \item[{\em e\_\-col}]bottom right column \item[{\em e\_\-row}]bottom right row \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!draw_text@{draw\_\-text}}
+\index{draw_text@{draw\_\-text}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::draw\_\-text)(struct \_\-VTScreen\-View $\ast$view,int col, int row, char $\ast$mbstring, int length,int width)}\label{struct__VTScreenView_m1}
+
+
+draw text in screen
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em col}]start column to draw text \item[{\em row}]start row to draw text \item[{\em mbstring}]reference multibyte string \item[{\em length}]length of multibyte string \item[{\em width}]column width of multibyte string \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!notify_osc@{notify\_\-osc}}
+\index{notify_osc@{notify\_\-osc}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::notify\_\-osc)(struct \_\-VTScreen\-View $\ast$view, int type, char $\ast$params, int n\_\-params)}\label{struct__VTScreenView_m8}
+
+
+notify OSC(operating system command)
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em type}]type of OSC \item[{\em params}]parameter string \item[{\em n\_\-params}]length of parameter string\end{description}
+\end{Desc}
+type is usually(on xterm) decoded as \par
+ 0 - change icon \& window title \par
+ 1 - change icon title \par
+ 2 - change window titile \par
+ 46 - change log file \par
+ 50 - change font \par
+ \index{_VTScreenView@{\_\-VTScreen\-View}!resize_request@{resize\_\-request}}
+\index{resize_request@{resize\_\-request}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::resize\_\-request)(struct \_\-VTScreen\-View $\ast$view, int cols, int rows)}\label{struct__VTScreenView_m7}
+
+
+request new size of the screen
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em cols}]number of request columns \item[{\em rows}]number of request rows \item[{\em cols}]number of actual new columns \item[{\em rows}]number of actual new rows\end{description}
+\end{Desc}
+Screen\-View must return actual rows and columns for model know if request had been accepted or not. \index{_VTScreenView@{\_\-VTScreen\-View}!ring@{ring}}
+\index{ring@{ring}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::ring)(struct \_\-VTScreen\-View $\ast$view)}\label{struct__VTScreenView_m6}
+
+
+ring the bell
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!scroll_view@{scroll\_\-view}}
+\index{scroll_view@{scroll\_\-view}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::scroll\_\-view)(struct \_\-VTScreen\-View $\ast$view, int dest\_\-row, int src\_\-row, int num\_\-line)}\label{struct__VTScreenView_m10}
+
+
+notify scrollbar event
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em dest\_\-row}]destination row position \item[{\em src\_\-row}]source row position \item[{\em num\_\-line}]number of line to bitblit \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!set_rendition@{set\_\-rendition}}
+\index{set_rendition@{set\_\-rendition}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::set\_\-rendition)(struct \_\-VTScreen\-View $\ast$view, int bold, int blink, int inverse, int underline, int foreground, int background, char charset)}\label{struct__VTScreenView_m3}
+
+
+set graphic rendition of text
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em bold}]bold text \item[{\em inverse}]reverse text \item[{\em underline}]underlined text \item[{\em foreground}]foreground color number(1 - 9) may change \item[{\em background}]background color number(1 - 9) may change \item[{\em charset}]graphic character sets \par
+ A - UK charset \par
+ B - ASCII charset \par
+ 0 - Special Graphics \par
+ 1 - Alternate Rom character set \par
+ 2 - Alternate Rom Special Graphics \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!swap_video@{swap\_\-video}}
+\index{swap_video@{swap\_\-video}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::swap\_\-video)(struct \_\-VTScreen\-View $\ast$view)}\label{struct__VTScreenView_m5}
+
+
+swap foreground and background color permanently
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object.\end{description}
+\end{Desc}
+After calling this, whole background color will be swaped. \index{_VTScreenView@{\_\-VTScreen\-View}!update_cursor_position@{update\_\-cursor\_\-position}}
+\index{update_cursor_position@{update\_\-cursor\_\-position}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::update\_\-cursor\_\-position)(struct \_\-VTScreen\-View $\ast$view,int col, int row)}\label{struct__VTScreenView_m2}
+
+
+set cursor position
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em col}]start column to draw text \item[{\em row}]start row to draw text \end{description}
+\end{Desc}
+\index{_VTScreenView@{\_\-VTScreen\-View}!update_scrollbar@{update\_\-scrollbar}}
+\index{update_scrollbar@{update\_\-scrollbar}!_VTScreenView@{\_\-VTScreen\-View}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ \_\-VTScreen\-View::update\_\-scrollbar)(struct \_\-VTScreen\-View $\ast$view, int max, int top, int shown)}\label{struct__VTScreenView_m9}
+
+
+notify scrollbar event
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em view}]reference to VTScreen\-View object \item[{\em max}]max length of scrollbar \item[{\em top}]point of scrollbar \item[{\em shown}]length of scrollbar thumb \end{description}
+\end{Desc}
+
+
+The documentation for this struct was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf screen.h}\end{CompactItemize}

@@ -1,0 +1,46 @@
+                   X 国际化终端模拟器
+               原著∶Jiro SEKIBA <jir@yamato.ibm.com>
+               翻译∶梁昌泰 <beos@turbolinux.com.cn>
+            
+* 这是什么玩意儿？
+  这是一套 X 国际化终端模拟器和器件。二者都使用libiterm库。因此需要
+  先安装libiterm库才能使用。
+
+* 安装
+
+ 首先，请编译/安装libXiterm，这是一个终端模拟器器件∶
+
+$ cd lib
+$ ./configure
+$ make
+$ make install
+
+ 器件编译目前还不需要任何配置选项。
+
+ 其次，请编译/安装xiterm程序∶
+
+$ cd src
+$ ./configure
+$ make
+$ make install
+
+ xiterm编译目前还不需要任何配置选项。
+ 
+* xiterm的命令选项
+
+ 当前的xiterm支持有限的几个选项。
+
+ -fn <fontset>    指定用于显示字符的字体集
+ -fb <fontst>     指定用于显示粗体字符的粗体字体集
+ -fg <color>      指定前景颜色
+ -bg <color>      指定背景颜色
+ -rv              激活反色
+ -sb              激活滚动条
+ -sbl             激活滚动条并置左
+ -vb              激活鸣铃
+
+ 如果您已经在libiterm里面编译了PLS或者fribidi排版引擎的支持，您
+ 就可以通过组合键Alt+Enter来切换文本的方向，即激活所有文本从终端
+ 的右端向左端进行排版。
+ 注意∶fribidi库尚未支持外形重排(shaping)。
+

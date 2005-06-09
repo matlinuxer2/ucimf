@@ -1,0 +1,87 @@
+
+              FrameBuffer Internationalized TERMinal emulator
+
+                Masahide WASHIZAWA <washi@yamato.ibm.com>
+           Jiro SEKIBA <jir@yamato.ibm.com/jir@openi18n.org>
+
+1. 概要
+=======
+
+ FrameBuffer Internationalized TERMinal emulator (fbiterm) は、国際化
+端末エミュレータフレームワークと Linux のフレームバッファおよび X
+Window System のフォントやフォントアクセスライブラリを利用し、Linux コ
+ンソール画面上に各国語を表示することができるターミナルプログラムです。
+また、BiDi 用のレイアウトエンジンを設定すると、BiDi 表示も可能です。
+
+2. 特徴
+=======
+
+2.1 フォント
+============
+
+ fbiterm では、X Window が扱うフォント(pcf/bdf) やフォントアクセスラ
+イブラリを利用しています。デフォルトでは、アスキーフォントとして 
+8x16.pcf.gz を、マルチバイト用のフォントとしてユニフォントが設定されて
+います。次のフォントがシステムに存在するかどうか確認し、存在しない場合
+は次のいずれかの URL から入手してください。
+
+/usr/lib/X11/fonts/misc/unifont.pcf.gz :
+  ftp://rpmfind.net/linux/contrib/noarch/noarch/unifont-1999.04.30-2.noarch.rpm
+  http://rpmfind.net/linux/RPM/contrib/noarch/noarch/unifont-1999.04.30-2.noarch.html
+  http://czyborra.com/unifont/
+
+/usr/lib/X11/fonts/misc/8x16.pcf.gz :
+  http://www.mit.edu/afs/sipb/system/i386_linux1/srvd.beta/usr/X11R6/lib/X11/fonts/misc/
+  http://web.mit.edu/afs/dev/project/x11r6/decmips/lib/X11/fonts/misc/
+  http://distro.ibiblio.org/pub/Linux/distributions/caldera/eDesktop/live/usr/X11R6/lib/X11/fonts/misc/
+  http://distro.ibiblio.org/pub/Linux/distributions/redhat/6.2/en/os/alpha/usr/X11R6/lib/X11/fonts/misc/
+
+2.2 フレームバッファ
+====================
+
+ fbiterm では、疑似端末(pty) を使ってコンソール出力をフックし、フレー
+ムバッファに展開しています。したがって、コンソールドライバを変更するわ
+けではないので、カーネルソースにパッチを当てる必要はありません。
+ 
+ 現在サポートしているフレームバッファは、タイプがパックドピクセルで、色
+の深さは、8ビット、16ビット、24ビット、32ビットです。
+
+ 使用している Linux カーネルがフレームバッファが可能なように作られてい
+れば、コンソールの解像度に合わせ色の深さを選択して、モード値(vga= モー
+ド値)をカーネルのブートパラメータで指定することで、フレームバッファを
+使用できるようになります。
+
+なお、フレームバッファの詳細については、カーネルドキュメント 
+    /usr/src/linux/Documentation/fb/vesafb.txt
+および、オンラインマニュアル`man fbdev`を参照ください。
+
+
+2.3 キーアサイン
+================
+
+fbiterm では、次のキーを割り当てています。
+
+ヒストリーモード：
+    Shift + PageUp    : 上方に半ページ分スクロールします。
+    Shift + PageDown  : 下方に半ページ分スクロールします。
+
+ BiDi 言語でのレイアウト方向の切り替え：
+    Alt + Enter       : BiDi 言語でのレイアウト方向を切り替えます。
+
+3. 必要なパッケージ
+===================
+
+ 使用するためには、次のパッケージが予めインストールされていることを確
+認してください。
+
+      Required object                           Package name
+  -----------------------------------------  -----------------------------
+  /usr/X11R6/lib/libXfont.so                  XFree86-devel-4.0.3-5
+  /usr/lib/libz.so                            zlib-devel-1.1.3-22
+  libiterm.so                                 libiterm
+  -----------------------------------------  -----------------------------
+  /usr/lib/X11/fonts/misc/unifont.pcf.gz      Ref: Above URLs
+  /usr/lib/X11/fonts/misc/8x16.pcf.gz         Ref: Above URLs
+  -----------------------------------------  -----------------------------
+
+End of README

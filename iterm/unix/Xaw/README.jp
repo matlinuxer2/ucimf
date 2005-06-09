@@ -1,0 +1,53 @@
+                  X Internationalized Terminal Emulator
+           Jiro SEKIBA <jir@yamato.ibm.com/jir@openi18n.org>
+            
+* What's this.
+  これは X 国際化端末エミュレータとそのウィジェットです。
+ これらのプログラムは libiterm を利用します。
+ まず、libiterm をインストールしてください。
+
+* Install
+
+ まず、端末エミュレータウィジェット libXiterm をインストールしてください。
+
+$ cd lib
+$ ./configure
+$ make
+$ make install
+
+ ウィジェットには configure オプションはありません。
+次に、xiterm プログラムのコンパイルとインストールをします。
+
+$ cd src
+$ ./configure
+$ make
+$ make install
+
+ xiterm プログラムには configure オプションはありません。
+
+* Options for xiterm
+
+  現在、xiterm は以下のオプションをサポートしています。
+
+ -fn <fontset>    フォントセットの指定
+ -fb <fontst>     ボールドフォントセットの指定
+ -fg <color>      前景色の指定
+ -bg <color>      背景色の指定
+ -rv              反転表示を有効にする
+ -sb              スクロールバーを有効にする
+ -sb              スクロールバーを左側に表示する [default on right]
+ -vb              ビジュアルベルを有効にする
+ -ls              ログインシェルを有効にする
+
+ また、付属のリソースファイル(XIterm,XIterm.ja(euc))を適切なディレクトリに
+インストールと Ctrl+中ボタン/Ctrl+右ボタンでメニューが出るようになります。
+
+  もし libiterm が PLS または fribidi などのレイアウトエンジンを
+ 有効にしてコンパイルしてあった場合は、`Alt+Enter' でテキストの
+ オリエンテーションを変更することが出来ます。これにより、テキストは
+ 端末の右端から左端に向かって書かれていきます。
+注意: 今のところ fribidi ライブラリは shaping をサポートしていません
+
+* Known Bugs
+
+ - -geometry オプションは利用できません

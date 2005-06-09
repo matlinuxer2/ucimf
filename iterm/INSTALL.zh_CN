@@ -1,0 +1,106 @@
+                           iterm 快速安装指南
+                           ==================
+                    原著∶Jiro SEKIBA <jir@yamato.ibm.com>
+                    译者∶梁昌泰 <beos@turbolinux.com.cn>
+
+* 介绍
+
+这个软件包由几部分组成，其中有两个库(libiterm，libXiterm)和两个应用程序
+(xiterm，fbiterm)。以下描述了每个子包的倚赖关系∶
+
+ - xiterm的倚赖关系
+     +-----------+
+     |  xiterm   |  X I18N 终端模拟器应用程序
+     +-----------+
+     | libXiterm |  X I18N 终端模拟器器件(Athena器件)库
+     +-----------+
+     | libiterm  |  X I18N 终端模拟器库
+     +-----------+
+
+ - fbiterm的倚赖关系
+     +-----------+
+     |  fbiterm  |  帧缓冲 I18N 终端模拟器应用程序
+     +-----------+
+     | libiterm  |  X I18N 终端模拟器库
+     +-----------+
+
+如上图所示，xiterm倚赖于libXiterm，libXiterm倚赖于libiterm。同时fbiterm也
+倚赖于libiterm。
+
+* 编译/安装libiterm
+
+最基本的操作，仅仅需要 ./configure && make && make install 就可以了。
+libiterm有两个配置选项，以下将予以讲解。您需要PLS或者fribidi库才能激活所说
+的配置选项。
+
+  --enable-pls
+     激活PLS库作为BiDi排版引擎[ 缺省是激活的 ]
+
+  --enable-fribidi
+     激活fribidi库作为BiDi排版引擎[ 缺省是屏蔽的 ]
+
+     如果您两个库您都指定了，那么激活的只有fribidi库。
+
+  --with-utempter
+     使用libutempter来访问utmp[ 缺省是without，即不使用 ]
+
+fribidi库能够实现bidi双向排版，但是不会太在意外形重排(shaping)，因此阿拉伯
+文字的显示处理还不够正确。
+
+$ cd lib
+$ ./configure
+$ make
+$ make install
+$ su -
+# ldconfig -v
+
+* 编译/安装libXiterm
+
+libXiterm 没有配置选项，因此您只需要简单地执行 ./configure && make && 
+make install 即可。
+
+$ cd unix/Xaw/lib
+$ ./configure
+$ make
+$ make install
+$ su -
+# ldconfig -v
+
+* 编译/安装xiterm
+
+xiterm 没有配置选项。
+
+$ cd unix/Xaw/src
+$ ./configure
+$ make
+$ make install
+
+xiterm 会安装在目录 /usr/local/bin 中。
+详情敬请查阅 unix/Xaw/README
+
+* 编译/安装fbiterm
+
+libXiterm 没有配置选项。您只需要简单地执行 ./configure && make &&
+make install 即可。
+
+$ cd unix/fbiterm
+$ ./configure
+$ make
+$ make install
+
+fbiterm 会安装在目录 /usr/local/bin 中。
+详情敬请查阅 unix/fbiterm/README
+
+* 编译/安装 terminfo 条目
+
+fbiterm 在缺省情况下会设置 TERM 这个环境变量为 "iterm"，因此至少您得同下面
+所示意的那样安装正确的terminfo。
+
+$ cd unix/terminfo
+$ tic iterm.terminfo
+
+tic 会编译和安装terminfo条目。如果您没有指定安装的位置，那么系统会尝试安装
+到缺省的目录中去，通常情况下是 /usr/share/terminfo 下。但是，如果您没有该
+目录的写权限，那么就会尝试安装到 ~/.terminfo 目录下。
+详情敬请查阅 unix/terminfo/README 
+

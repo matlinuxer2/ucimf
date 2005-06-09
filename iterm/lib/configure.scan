@@ -1,0 +1,41 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
+AC_CONFIG_SRCDIR([src/core.c])
+AC_CONFIG_HEADER([config.h])
+
+# Checks for programs.
+AC_PROG_AWK
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_RANLIB
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lfribidi':
+AC_CHECK_LIB([fribidi], [main])
+# FIXME: Replace `main' with a function in `-llayout':
+AC_CHECK_LIB([layout], [main])
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([fcntl.h limits.h locale.h stdlib.h string.h sys/ioctl.h termios.h unistd.h wchar.h wctype.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_FUNC_FORK
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MALLOC
+AC_TYPE_SIGNAL
+AC_CHECK_FUNCS([dup2 mbrtowc memmove memset setlocale wcwidth])
+
+AC_CONFIG_FILES([src/unix/Makefile
+                 src/unix/fribidi_layout/test/Makefile
+                 src/unix/pls_layout/test/Makefile
+                 src/unix/pthread/Makefile
+                 test/screen/Makefile])
+AC_OUTPUT
