@@ -22,7 +22,7 @@ fbiterm_SOURCES = \
 	vt.c VTScreenView.c fbiterm.h palette.h VTScreenView.h
 
 fbiterm_LDADD = \
-	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm
+	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype
 
 CFLAGS = -I$(includedir) @X_CFLAGS@ -I$(top_srcdir)/include -I/usr/local/include $(EXTRA_CFLAGS) @CFLAGS@
 
