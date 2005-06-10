@@ -54,7 +54,8 @@
 #define FB_DEFDEV "/dev/fb0"
 
 #define DefaultAsc	"/usr/lib/X11/fonts/misc/8x16.pcf.gz"
-#define DefaultMB	"/usr/lib/X11/fonts/misc/unifont.pcf.gz"
+#define DefaultMB	"/usr/X11R6/lib/X11/fonts/misc/unifont.pcf.gz"
+//#define DefaultMB	"/usr/share/fonts/unifont/unifont.pcf.gz"
 #define DefaultFont	"/usr/local/share/iterm/fonts/8x16.pcf.gz"
 
 enum ITERM_RETCODE
