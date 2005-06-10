@@ -8,6 +8,7 @@
    from url http://oss.software.ibm.com/developer/opensource/license-cpl.html */
 
 #include <locale.h>
+#include <stdint.h>
 #include "fbiterm.h"
 
 #ifdef HAVE_CONFIG_H
@@ -21,9 +22,11 @@
 #ifdef HAVE_SELECT
 #include <errno.h>
 #include <iterm/unix/ttyio.h>
+#include <iterm/input.h>
 #endif
 
 Iterm *pIterm;
+VTInput *pInput;
 
 void
 exitFbiterm (int exitcode)
@@ -69,7 +72,7 @@ main (int argc, char *argv[])
   int i;
 
   setlocale (LC_ALL, "");
-
+  
   /* allocate memory for Iterm structure */
   pIterm = (Iterm *) malloc (sizeof (Iterm));
   if (pIterm != NULL)
@@ -151,14 +154,23 @@ main (int argc, char *argv[])
     int fd = TtyTerminalIO_get_associated_fd(pIterm->tio);
     int ret;
     int max = 0;
-    fd_set rfds;
+    fd_set rfds;	// declare a file descriptor set
     struct timeval timeout;
 
+    /* Argument for IIIMCF input switch. */
+    int SWITCH_TO_IIIMCF= 0;
+	
+	/* Import some definition from input.h to here */
+	extern VTInput *pInput;
+	pInput = VTInput_new( buf, &ret, &fd  );
+	VTInput_init( pInput ); 
+	
+	
     while (1)
       {
-	FD_ZERO (&rfds);
-	FD_SET (0, &rfds);
-	FD_SET (fd, &rfds);
+	FD_ZERO (&rfds);	// zeroize
+	FD_SET (0, &rfds);	// add a new fd STDIN
+	FD_SET (fd, &rfds);	// add a new fd of "fd"
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 100000;
 	if (fd > max)
@@ -171,10 +183,26 @@ main (int argc, char *argv[])
 	if (ret < 0)
 	  perror ("select");
 
-	if (FD_ISSET (0, &rfds))
+	if (FD_ISSET (0, &rfds))  // if STDIN(0) is in the fd_set
 	  {
 	    ret = read (0, buf, sizeof (buf));
-	    if (ret == 1)
+	    
+	    /* At First check whether switch input mode or not*/
+	    /* if key == F7 == (27,91,49,56,126) */
+	    if( buf[0]=='\033' && buf[1]=='[' && buf[2]=='1' && buf[3]=='8' && buf[4]=='~' )	    	    
+	    {
+			 if( SWITCH_TO_IIIMCF == 0 ){
+				 SWITCH_TO_IIIMCF = 1;
+				 VTInput_start( pInput );
+			 }else{
+				 SWITCH_TO_IIIMCF = 0;
+				 VTInput_stop( pInput );
+			 }
+		 	
+			 continue;
+	    }
+	    
+	    if (ret == 1 && !(SWITCH_TO_IIIMCF==1) )
             {
               int i;
               for (i = 0; i < ret; i++)
@@ -183,18 +211,38 @@ main (int argc, char *argv[])
                     write (fd, &buf[i], 1);
               }
             }
-            else if (ret > 1)
-            {
+        /* if SWITCH_TO_IIIMCF is on, then redirect the input to iiimcf*/
+		else if( SWITCH_TO_IIIMCF == 1 )
+	    {
+			VTInput_read_in( pInput );
+			VTInput_handle( pInput );
+			if ( pInput->lookup_done == 1 ){
+					VTInput_write_out( pInput );
+					pInput->lookup_done = 0;
+					pInput->mb_length = 0;
+					pInput->mbbuffer='\0';
+			}else{
+					continue;
+			}
+	    }
+		else if( ret > 1 )
+        {
               if (keypress2(buf,ret) == False)
                   write (fd, buf, ret);
-            }
+        }
+			 
 	  }
-	else if (FD_ISSET (fd, &rfds))
+	else if (FD_ISSET (fd, &rfds)) // if the foreign 'fd' is in the fd_set
 	  {
 	    if (ret > 0)
 	      VTCore_dispatch(pIterm->vtcore_ptr);
 	  }
+	  
       }
+	  
+	  /* Exit the iiimcf client */
+	  VTInput_exit( pInput );
+	  
   }
 #else
   {
