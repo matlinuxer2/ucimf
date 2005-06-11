@@ -1,5 +1,7 @@
 CPPFLAGS	=  
 
+SUBDIR		= display
+
 if DEBUG
 AM_CFLAGS= -g -DDEBUG
 endif
