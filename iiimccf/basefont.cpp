@@ -25,7 +25,6 @@
 #include <stdexcept>
 #include <cassert>
 #include "global.h"
-#include "debug.h"
 #include "hzdecoder.h"
 #include "basefont.h"
 
