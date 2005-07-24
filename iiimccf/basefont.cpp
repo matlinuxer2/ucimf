@@ -1,21 +1,3 @@
-// vi:ts=4:shiftwidth=4:expandtab
-/***************************************************************************
-                          basefont.cpp  -  description
-                             -------------------
-    begin                : Fri Mar 16 2001
-    copyright            : (C) 2001 by ejoy
-    email                : ejoy@users.sourceforge.net
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -24,8 +6,6 @@
 #include <sys/stat.h>
 #include <stdexcept>
 #include <cassert>
-#include "global.h"
-#include "hzdecoder.h"
 #include "basefont.h"
 
 BaseFont::BaseFont(string & fn, int w, int h)
@@ -101,7 +81,7 @@ char *BaseFont::GetChar(char c) {
 }
 
 char *BaseFont::GetChar(char c1, char c2) {
-    char* p = mpBuf + mDataOffset + mByteLen * gpDecoder->Index(c1,c2);
+    char* p = mpBuf + mDataOffset + mByteLen ;//* gpDecoder->Index(c1,c2);
     if (p > mpBuf + mBufSize - 1)
         return mpNull;
     else
