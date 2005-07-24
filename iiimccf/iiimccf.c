@@ -22,6 +22,7 @@
 /* Global parameter */
 #define CONVERT_BUFSIZE 48
 IIIMCCF *iiimccf;
+OverSpot* overspot;
 
 /** Registed component functions **/
 static IIIMF_status iiimccf_preedit( IIIMCF_context context, IIIMCF_event event, IIIMCF_component current, IIIMCF_component parent );
@@ -40,24 +41,6 @@ void debug( char *str ){
   tmp=strcat( tmp, str );
   tmp=strcat( tmp, "\n");
   fprintf( stderr, tmp );
-}
-
-IIIMF_status 
-send_key(
-    int keycode,
-    int keychar,
-    int modifier
-){
-    extern IIIMCCF *iiimccf;
-    IIIMCF_event ev;
-    IIIMCF_keyevent kev;
-
-    kev.keycode = keycode;
-    kev.keychar = keychar;
-    kev.modifier = modifier;
-    kev.time_stamp = time( NULL );
-    iiimcf_create_keyevent( &kev, &ev );
-    iiimcf_forward_event( iiimccf->context, ev );
 }
 
 
@@ -160,19 +143,25 @@ int get_committed_text()
 	IIIMF_status st;
 	IIIMCF_text text;
 
-	unsigned char *buf;
-	int buf_len;
-	size_t next_max = 4;
-	mbstate_t *ps;
+	unsigned char *buf=iiimccf->buf_out ;
+	int *buf_len = iiimccf->buf_out_len ;
 	
 	iiimcf_get_committed_text( iiimccf->context , &text);
-	iiimcf_get_text_length( text, &buf_len );
+	iiimcf_get_text_length( text, buf_len );
 	buf = iiimcf_text_to_utf8( text );
 
-	iiimccf->buf_out = buf;
-	iiimccf->buf_out_len = mbrlen( buf, next_max, ps );
+	size_t next_max = 4;
+	mbstate_t *ps;
+	(*buf_len) = mbrlen( buf, next_max, ps );
 
 	return 0;
+}
+
+int clr_committed_text()
+{
+  extern IIIMCCF *iiimccf;
+  *(iiimccf->buf_out_len)=0;
+
 }
 
 
@@ -183,7 +172,7 @@ int get_committed_text()
  * para1 : a pointer to buffer, which store the keyinput information.
  * para2 : a pointer to int, pass the length of the buffer.
  */
-IIIMCCF* iiimccf_new( unsigned char* buf_in, int buf_in_len, unsigned char* buf_out, int buf_out_len )
+IIIMCCF* iiimccf_new( unsigned char* buf_in, int *buf_in_len, unsigned char* buf_out, int *buf_out_len )
 {
 	// Allocate memory.
 	extern IIIMCCF *iiimccf;
@@ -208,15 +197,23 @@ IIIMCCF* iiimccf_new( unsigned char* buf_in, int buf_in_len, unsigned char* buf_
 int to_init()
 {
   	extern IIIMCCF *iiimccf;
-	// Register new component
+
 	IIIMCF_component parent, child;
 	IIIMF_status st;
+    	IIIMCF_attr attr;
 
-	st = iiimcf_initialize( IIIMCF_ATTR_NULL );
-	st = iiimcf_create_handle( IIIMCF_ATTR_NULL, &( iiimccf->handle) );
+    	st = iiimcf_initialize( IIIMCF_ATTR_NULL );
+    	st = iiimcf_create_attr(&attr);
+    	st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
+	                                      "IIIM Console Client Framework");
+    	st = iiimcf_create_handle(attr, &( iiimccf->handle ) );
+    	st = iiimcf_destroy_attr(attr);
+
+	
+	/*  Register new component */
 	     
 	st = iiimcf_get_component( iiimccf->handle,"org.OpenI18N.IIIMCF.UI.preedit",&parent);
-//	st = iiimcf_register_component( iiimccf->handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
+	st = iiimcf_register_component( iiimccf->handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
          
 	st = iiimcf_get_component( iiimccf->handle,"org.OpenI18N.IIIMCF.UI.status",&parent);
 	st = iiimcf_register_component( iiimccf->handle,"iiimccf-status",iiimccf_status,parent,&child);
@@ -264,7 +261,6 @@ int to_start()
 int to_stop()
 {
   	extern IIIMCCF *iiimccf;
-	
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 0, &event );
 	iiimcf_forward_event( iiimccf->context, event );
@@ -273,27 +269,37 @@ int to_stop()
 	
 }
 
-int to_process()
+int to_process( int keycode, int keychar, int modifier )
 {
   	extern IIIMCCF *iiimccf;
 
-	IIIMCF_event event;
+	IIIMCF_event event,ev ;
+	IIIMCF_keyevent kev;
 	IIIMCF_event_type event_type;
-	
+
+	/* sent the keyevent to iiimcf */
+	kev.keycode = keycode;
+    	kev.keychar = keychar;
+        kev.modifier = modifier;
+    	kev.time_stamp = time( NULL );
+        iiimcf_create_keyevent( &kev, &ev );
+        iiimcf_forward_event( iiimccf->context, ev );
+
+	/* get the reponse from the iiimcf */	
 	while( iiimcf_get_next_event( iiimccf->context, &event ) == IIIMF_STATUS_SUCCESS ){
 		
 	    IIIMF_status st;
 	    st = iiimcf_dispatch_event( iiimccf->context , event );
 	    if (st != IIIMF_STATUS_SUCCESS) {
 			if (st == IIIMF_STATUS_COMPONENT_FAIL) {
-			    fprintf(stderr, "at least one component reported failure.\n");
+			    debug("at least one component reported failure");
 			} else if (st == IIIMF_STATUS_COMPONENT_INDIFFERENT) {
-			    fprintf(stderr, "none of the components deal with the event.\n");
+			    debug("none of the components deal with the event");
 				IIIMCF_event_type event_type;
 				iiimcf_get_event_type( event, &event_type );
 				fprintf( stderr, "\t\t %x\n", event_type );
 			} else {
-			    fprintf(stderr, "fail to dispatch");
+			    debug("fail to dispatch");
 			}
 	    }
 		
@@ -303,7 +309,63 @@ int to_process()
 	
 }
 
+void to_show_ims()
+{
+    IIIMF_status st;
+    IIIMCF_input_method *pims;
+    IIIMCF_language *plangs;
+    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
+    char *idname, *hrn, *domain;
+    const char *langid;
+    int num_of_ims, num_of_langs;
+
+    st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
+
+    int i;
+    for (i = 0; i < num_of_ims ; i++) {
+       iiimcf_get_input_method_desc(pims[i], &u16idname, &u16hrn, &u16domain);
+       iiimcf_get_input_method_languages(pims[i], &num_of_langs, &plangs);
+
+       idname = test_format_iiimcf_string(u16idname);
+       hrn = test_format_iiimcf_string(u16hrn);
+       domain = test_format_iiimcf_string(u16domain);
+       fprintf(stderr,
+                "Input Method %d ----------------------------------\n"
+                "  idname: %s\n"
+                "  HRN: %s\n"
+                "  domain: %s\n"
+                "  langs: ",
+                i, idname, hrn, domain);
+
+       		int j;
+	        for (j = 0; j < nlangs; j++) {
+	              iiimcf_get_language_id(plangs[j], &langid);
+	              fprintf(stderr, "%s, ", langid);
+	        }
+	 free(idname);
+	 free(hrn);
+	 free(domain);
+    }
+}
+
+int to_change_ims( int ){
+
+}
+
+int show_input_style()
+{
+
+}
+
+int change_input_style( int )
+{
+
+
+}
+
+
 /** Registered components **/
+
 static IIIMF_status
 iiimccf_preedit(
     IIIMCF_context context,
@@ -320,14 +382,20 @@ iiimccf_preedit(
 			
 		case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 			debug("preedit start");
+			//dsply->preedit->update();
+			//disply->preedit->show();
 			break;
 			
 		case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 			debug(" preedit changed");
+			//dsply->preedit->update();
+			//dsply->preedit->show();
 			break;
 			
 		case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 			debug("preedit done");
+			//dsply->preedit->update();
+			//dsply->preedit->hide();
 			break;
 			
 		case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
@@ -354,26 +422,30 @@ iiimccf_lookup_choice(
 	
 	switch( event_type ){
 		case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
-			fprintf( stderr, "\t\t lookup \n" );
+			debug( "lookup" );
 			break;
 			
 		case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
-			// lookup->start();
-			fprintf( stderr, "\t\t lookup start \n" );
+			debug( "lookup start" );
+			overspot->start();
 			break;
 		
 		case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
-			// lookup->show();
-			fprintf( stderr, "\t\t lookup change \n" );
+			debug( "lookup change" );
+			overspot->update();
+			overspot->redraw();
+			get_lookup_choice()
 			break;
 		
 		case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
-			iiimccf->lookup_done = 1;
+			overspot->update();
+			overspot->redraw();
 			get_committed_text();
-			    fprintf( stderr, "\t\t lookup done \n" );
-			    break;
+			debug( "lookup done" );
+			break;
 		case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
-			fprintf( stderr, "\t\t lookup end \n" );
+			overspot->hide();
+			debug( "lookup end" );
 			break;
 			
 		default: break;
@@ -420,9 +492,13 @@ iiimccf_commit(
 	
 	switch( event_type ){	
 		case IIIMCF_EVENT_TYPE_UI_COMMIT: 
-			break;
+		    debug("commit");
+		    get_committed_text();
+		    break;
 			
 		case IIIMCF_EVENT_TYPE_UI_COMMIT_END:
+		    debug("commit_end");
+		    clr_committed_text();
 		    break;
 		    
 		default: break;
