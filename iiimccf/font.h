@@ -1,5 +1,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 #include "graphdev.h"
 
 #define KFont   "/usr/share/fonts/arphicfonts/bkai00mp.ttf"

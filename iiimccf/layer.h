@@ -54,7 +54,7 @@ class String : public Layer
     //String(){};
     String( vector<FT_ULong> charcodes );
     String( int font_width, int font_height, vector<FT_ULong> charcodes );
-    ~String();
+    ~String(){};
 
     int fw();
     int fh();
@@ -78,7 +78,7 @@ class Text : public Layer
     Text(){};
     Text( vector<String> strings );
     Text( int pos_x, int pos_y, vector<String> strings );
-    ~Text();
+    ~Text(){};
     
     int fw();
     int fh();

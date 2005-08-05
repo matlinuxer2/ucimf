@@ -5,16 +5,16 @@ INCLUDES2 = -I. -I/usr/include/freetype2
 LIBS2     = -L. -lgraphdev -lfreetype
 
 INCLUDES3 = -I. -I/usr/include/freetype2
-LIBS3     = -L. -liiimccf -lgraphdev -ldriver
+LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay 
 
 run: 
-	g++ -g -o test.exe $(INCLUDE3) $(LIB3) console-app.cpp 
+	g++ -g  -o test.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
 
 iiimccf:
-	g++ -g -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp
+	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp
 
 graphdev:
-	g++ -g -shared -o libgraphdev.a  $(INCLUDES) $(LIBS) graphdev.cpp font.cpp layer.cpp overspot.cpp
+	g++ -g -fPIC -shared -o libgraphdev.a  $(INCLUDES) $(LIBS) graphdev.cpp font.cpp layer.cpp overspot.cpp
 
 driver:
-	g++ -g -shared -o ./display/libdisplay.a -I. ./display/*cpp 
+	g++ -g -fPIC -shared -o ./display/libdisplay.a -I. ./display/*cpp 

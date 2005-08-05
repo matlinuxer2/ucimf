@@ -1,29 +1,30 @@
 #include "overspot.h"
 
-inline OverSpot::OverSpot()
+OverSpot::OverSpot()
 {
   visible = false;
   modified = false;
 }
-inline OverSpot::~OverSpot()
+
+OverSpot::~OverSpot()
 { 
 
 }
 
-inline void OverSpot::show()
+void OverSpot::show()
 {
   visible = true;
   update();
 }
 
-inline void OverSpot::hide()
+void OverSpot::hide()
 {
   visible = false;
   update();
 }
 
 
-inline void OverSpot::update()
+void OverSpot::update()
 {
   if( modified )
   {
@@ -31,7 +32,7 @@ inline void OverSpot::update()
   }
 }
 
-inline void OverSpot::draw()
+void OverSpot::draw()
 {
   int pos_x = x() - b();
   int pos_y = y() - b();
@@ -50,9 +51,9 @@ inline void OverSpot::draw()
   }
 }
 
-inline int OverSpot::b(){ return boarder; }
-inline void OverSpot::b( int new_boarder ){ boarder = new_boarder; }
-inline void OverSpot::pos( int new_x, int new_y )
+int OverSpot::b(){ return boarder; }
+void OverSpot::b( int new_boarder ){ boarder = new_boarder; }
+void OverSpot::pos( int new_x, int new_y )
 {
   x( new_x );
   y( new_y );
