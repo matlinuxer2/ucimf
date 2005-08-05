@@ -40,8 +40,11 @@ GraphDev *GraphDev::mpGraphDev = NULL;
 // font
 int GraphDev::mXres = 0;
 int GraphDev::mYres = 0;
+/*
 BaseFont *GraphDev::mpAscFont = NULL;
 BaseFont *GraphDev::mpDblFont = NULL;
+*/
+
 // char display
 int GraphDev::mBlockWidth = 0;
 int GraphDev::mBlockHeight = 0;
@@ -159,6 +162,7 @@ void GraphDev::DrawRect(int x1,int y1,int x2,int y2,int color) {
     DrawLine(x2,y1,x2,y2,color);
 }
 
+/*
 void GraphDev::SetAscFont(BaseFont *pAscFont) {
     mpAscFont = pAscFont;
 
@@ -228,4 +232,4 @@ void GraphDev::OutChar(int x, int y, int fg, int bg, char c1, char c2) {
     }
     DrawChar(x,y,fg,bg,&mDbl);
 }
-
+*/

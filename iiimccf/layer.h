@@ -1,38 +1,31 @@
-class Color
-{
-  char r,g,b;
-}
+#include <vector>
+#include <ft2build.h> 
+#include FT_FREETYPE_H 
+using namespace std;
 
-class Pixel
-{
-  int x,y;
-  char r,g,b;
-}
 
-class Layer
-{
-  public:
-    Layer( int pos_x, int pos_y, int width, int height, Color color );
-    ~Layer();
-   
+/* Basic Object */
+
+class Layer { 
+  public: 
+    Layer(){};
+    ~Layer(){};
     int x();
     int y();
     int w();
     int h();
-    Color color();
+    int c();
 
-    void x( int new_pos_x ); 
-    void y( int new_pos_y );
+    void x( int new_x );
+    void y( int new_y );
     void w( int new_width );
     void h( int new_height );
-    void color( Color new_color );
-    
-    virtual void render();
+    void c( int new_color );
   
- private:
-    int pos_x, pos_y;
-    int width, height;
-    char r, g, b;
+  private:
+    int X, Y;
+    int Width, Height;
+    int Color;
 };
 
 
@@ -40,82 +33,73 @@ class Layer
  * Geometry Object Layer
  */
 
-class Point : Layer
+class Rectangle: public Layer
 {
   public:
-    Point( int pos_x, int pos_y );
-    ~Point();
-}
-
-class Line : Layer
-{
-  public:
-    Line( int pos_x, int pos_y, int pos_xx, int pos_yy );
-    ~Line();
-}
-
-class Rectangle: Layer
-{
-  public:
-    Rectangle(int pos_x, int pos_y, int pos_xx, int pos_yy);
-    ~Rectangle();
+    Rectangle(){};
+    Rectangle(int pos_x, int pos_y, int pos_xx, int pos_yy, int color );
+    ~Rectangle(){ };
     
-    virtual void render();	// boarder only
-    virtual void render2();	// full filled
-    
-}
+    virtual void render();	
+};
+
 
 /*
  * Character Object Layer
  */
-typedef long FT_ULong 
 
-class Word : Layer
+class String : public Layer
 {
   public:
-    Word( int pos_x, int pos_y, int height, FT_encoding encoding, FT_ULong charcode );
-    Word( FT_encoding encoding, FT_ULong charcode );
-    ~Word();
-  private:
-    int font_width;
-    int font_height;
-
-    FT_Face face;
-    FT_Slot slot;
-    FT_Glyph glyph;
-}
-
-class String : Layer
-{
-  public:
-    String( int pos_x, int pos_y, int height, vector<Word>& words );
-    String( int pos_x, int pos_y, int height, FT_encoding encoding, vector<FT_ULong> charcodes );
+    //String(){};
+    String( vector<FT_ULong> charcodes );
+    String( int font_width, int font_height, vector<FT_ULong> charcodes );
     ~String();
+
+    int fw();
+    int fh();
+
+    void fw( int new_font_width );
+    void fh( int new_font_height ); 
+    
+    void render(int pos_x, int pos_y);
+    void render();
+
+  private:
+    int FontWidth;
+    int FontHeight;
+    vector<FT_ULong> CharCodes;
+ 
+};
+
+class Text : public Layer
+{
+  public:
+    Text(){};
+    Text( vector<String> strings );
+    Text( int pos_x, int pos_y, vector<String> strings );
+    ~Text();
+    
+    int fw();
+    int fh();
+
+    void fw( int );
+    void fh( int );
     
     virtual void render();
   private:
-    vector<Word> words;
-
+    vector<String> Strings;
 };
 
-class Text : Layer
-{
-  public:
-    Text( int pos_x, int pos_y, int height, vector<String>& strings );
-    Text( int pos_x, int pos_y, int height, int width, int rows, FT_encoding encoding, vector<FT_ULong> charcodes );
-    ~Text();
-    
-    virtual render();
-  private:
-    vector<String> strings;
-};
+
 
 /* 
  * Other Bitmap Object
  */
-class BitmapLayer : Layer
+
+class BitmapLayer : public Layer
 {
-  BitmapLayer( int pos_x, int pos_y, int width, int height );
-  
-  virtual void render();
+  public:
+    BitmapLayer( int pos_x, int pos_y, int width, int height );
+    virtual void render();
 };
