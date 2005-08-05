@@ -1,12 +1,11 @@
 #include "layer.h"
 #include "graphdev.h"
 #include "font.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
+
 #include <vector>
 
-extern GraphDev *gdev;
-extern Font font;
+GraphDev *gdev;
+Font font( EFont_H );
 
 
 /* Layer implementation */

@@ -1,10 +1,9 @@
 #include <stdint.h>
 #include <iiimcf.h>
-/*
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-*/
 
 /* initialization */
 int iiimccf_init();
@@ -26,8 +25,6 @@ int iiimccf_pos( int x, int y);
 /* request refresh */
 void iiimccf_refresh();
 
-/*
 #ifdef __cplusplus
 }
 #endif
-*/
