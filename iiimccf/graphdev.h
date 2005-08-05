@@ -25,7 +25,7 @@
     #include "utypes.h"
 #endif
 #include <stdexcept>
-#include "basefont.h"
+//#include "basefont.h"
 
 struct CharBitMap {
     char* pBuf;         // point to bitmap
@@ -57,10 +57,12 @@ class GraphDev {
         }
 
         // font
+	/*
         static void SetAscFont(BaseFont *pAscFont);
         static void SetDblFont(BaseFont *pDblFont);
         void OutChar(int x, int y, int fg, int bg, char c);
         void OutChar(int x, int y, int fg, int bg, char c1, char c2);
+	*/
 
         // char display
         virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;
@@ -85,8 +87,10 @@ class GraphDev {
     protected:
         static int mXres, mYres;
         // font
-        static BaseFont *mpAscFont;
+	/*
+	static BaseFont *mpAscFont;
         static BaseFont *mpDblFont;
+	*/
 
         static int mBlockWidth;
         static int mBlockHeight;

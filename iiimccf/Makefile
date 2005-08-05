@@ -1,22 +1,20 @@
-test-font2: 
-	g++ -g -lfreetype -I. -I/usr/include/freetype2 -L. -Ldisplay -ldisplay -lgraphdev test-font2.cpp font.cpp
-test-font: 
-	g++ -g -lfreetype -I. -I/usr/include/freetype2 -L. -Ldisplay -ldisplay -lgraphdev test-font.cpp
-test-freetype: 
-	g++ -g -lfreetype -I/usr/include/freetype2 -L. -Ldisplay -ldisplay -lgraphdev test-freetype.cpp
+INCLUDES  = -I. -I/usr/include/freetype2
+LIBS      = -L. -Ldisplay -ldisplay -lfreetype
 
-graphiz:
-	g++ -g -I. -I/usr/include/freetype2 -L. -Ldisplay -ldisplay -lfreetype basefont.cpp graphdev.cpp font.cpp 
+INCLUDES2 = -I. -I/usr/include/freetype2
+LIBS2     = -L. -lgraphdev -lfreetype
 
+INCLUDES3 = -I. -I/usr/include/freetype2
+LIBS3     = -L. -liiimccf -lgraphdev -ldriver
 
-test-basefont: libdisplay.a libgraphdev.a
-	g++ -g -L. -Ldisplay -ldisplay -lgraphdev test-basefont.cpp
-test-graphdev: libdisplay.a libgraphdev.a
-	g++ -g -I. -Ldisplay -L. test-graphdev.cpp -ldisplay -lgraphdev
-main:
-	gcc -g -shared iiimccf.c -o libiiimccf.so
-	cp libiiimccf.so /tmp/iterm/lib/
-libdisplay.a:
-	gcc -g -shared -I.  ./display/*cpp -o ./display/libdisplay.a
-libgraphdev.a: libdisplay.a
-	g++ -g -shared -I. -Ldisplay -ldisplay graphdev.cpp basefont.cpp 
+run: 
+	g++ -g -o test.exe $(INCLUDE3) $(LIB3) console-app.cpp 
+
+iiimccf:
+	g++ -g -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp
+
+graphdev:
+	g++ -g -shared -o libgraphdev.a  $(INCLUDES) $(LIBS) graphdev.cpp font.cpp layer.cpp overspot.cpp
+
+driver:
+	g++ -g -shared -o ./display/libdisplay.a -I. ./display/*cpp 
