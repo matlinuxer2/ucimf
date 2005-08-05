@@ -33,17 +33,24 @@ int iiimccf_proc( int keycode, int keychar, int modifier )
   return 0;
 }
 
-int iiimccf_scrn( int height, int width, int resolution )
-{
-  return 0;
+int iiimccf_result( char* *buf_out )
+{ 
+  int buf_len;
+  buf_len= iiimccf->result( buf_out ); 
+  return buf_len;
 }
 
-int iiimccf_pos( int x, int y)
+void iiimccf_scrn( int height, int width, int resolution )
 {
-  return 0;
+  iiimccf->scrn( height, width, resolution );
+}
+
+void iiimccf_pos( int x, int y)
+{
+  iiimccf->pos( x, y );
 }
 
 void iiimccf_refresh()
 {
-
+  iiimccf->refresh();
 }

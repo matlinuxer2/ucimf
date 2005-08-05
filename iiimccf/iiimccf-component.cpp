@@ -12,6 +12,7 @@ iiimccf_preedit(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
+ 
   OverSpot prdt;
   IIIMCF_event_type event_type;
   iiimcf_get_event_type( event, &event_type);
@@ -27,6 +28,7 @@ iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  debug(" preedit changed");
+		  show_preedit_info( context );
 		  prdt.update();
 		  break;
 		  
@@ -59,11 +61,11 @@ iiimccf_lookup_choice(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-  OverSpot lkc;
+  static OverSpot lkc;
   IIIMCF_event_type event_type;
   iiimcf_get_event_type( event, &event_type );
   IIIMF_status st;
-  
+   
   switch( event_type ){
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
 		  debug( "lookup" );
@@ -76,7 +78,7 @@ iiimccf_lookup_choice(
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		  get_lookup_choice();
+		  show_lookup_choice( context );
 		  lkc.update();
 		  break;
 	  

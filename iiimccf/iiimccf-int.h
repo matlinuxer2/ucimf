@@ -22,10 +22,17 @@ class IIIMCCF {
     bool on();
     bool off();
     int proc( int, int, int );
-    
+    int result( char** );
+   
+    void lkc_show();
+
     bool ims_show();
     bool ims_set();
-  
+    
+    void scrn( int, int ,int );
+    void pos( int, int );
+    void refresh();
+    
   private:
 
     // IIIMCF Object
@@ -58,4 +65,6 @@ int wchar_to_utf8( wchar_t c, char * outbuf, int bufsize);
 bool  get_committed_text();
 char* iiimcf_text_to_utf8( IIIMCF_text t);
 char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 );
-void get_lookup_choice();
+void show_lookup_choice( IIIMCF_context context );
+void show_preedit_info( IIIMCF_context context );
+void show_incoming_event( IIIMCF_event ev );

@@ -1,5 +1,6 @@
 #include "iiimccf-int.h"
 #include <ctime>
+#include <cstring>
 
 IIIMCCF::IIIMCCF()
 {
@@ -82,6 +83,8 @@ int IIIMCCF::proc( int keycode, int keychar, int modifier )
 	/* get the reponse from the iiimcf */	
 	while( iiimcf_get_next_event( context, &event ) == IIIMF_STATUS_SUCCESS ){
 		
+	    show_incoming_event( event );  
+	  
 	    IIIMF_status st;
 	    st = iiimcf_dispatch_event( context , event );
 	    if (st != IIIMF_STATUS_SUCCESS) {
@@ -100,6 +103,50 @@ int IIIMCCF::proc( int keycode, int keychar, int modifier )
 		iiimcf_ignore_event( event );
     	}
 }
+
+int IIIMCCF::result( char* *buf_out )
+{
+  int buf_len;
+  strcpy( (*buf_out) , cmt_buf );
+  buf_len=strlen( (*buf_out) );
+
+  return buf_len;
+}
+
+void IIIMCCF::lkc_show()
+{
+  IIIMF_status st;
+  IIIMCF_lookup_choice ilc;
+
+  st = iiimcf_get_lookup_choice( context, &ilc);
+  if (st == IIIMF_STATUS_SUCCESS) {
+      char *itemstr, *labelstr;
+      int i, flag;
+      int size, idx_first, idx_last, idx_current;
+      IIIMCF_text cand, label;
+
+      iiimcf_get_lookup_choice_size(ilc, &size,
+					  &idx_first,
+					  &idx_last,
+					  &idx_current);
+
+      for (i = 0; i < size; i++) {
+	  iiimcf_get_lookup_choice_item(ilc, i, &cand, &label, &flag);
+	  if (flag & IIIMCF_LOOKUP_CHOICE_ITEM_ENABLED) {
+	      itemstr = iiimcf_text_to_utf8(cand);
+	      labelstr = iiimcf_text_to_utf8(label);
+	      fprintf(stderr, "LC[%d](%s): %s\n", i, labelstr, itemstr);
+	      free(labelstr);
+	      free(itemstr);
+	  }
+      }
+  } else if (st == IIIMF_STATUS_NO_LOOKUP_CHOICE) {
+      fprintf(stderr, "Lookup choice is disabled.\n");
+  } else {
+  }
+
+}
+
 
 bool IIIMCCF::ims_show()
 {
@@ -146,8 +193,22 @@ bool IIIMCCF::ims_set ( )
   return true;
 }
 
+void IIIMCCF::scrn(int w, int h, int r)
+{
+  width=w;
+  height=h;
+  resolution=r;
+}
 
+void IIIMCCF::pos( int new_x, int new_y )
+{
+  x = new_x;
+  y = new_y;
+}
 
+void IIIMCCF::refresh()
+{
 
+}
 
 
