@@ -16,11 +16,14 @@ int iiimccf_off();
 /* keyboard input */
 int iiimccf_proc( int keycode, int keychar, int modifier );
 
+/* committed output */
+int iiimccf_result( char* *buf_out );
+
 /* current screen setting */
-int iiimccf_scrn( int height, int width, int resolution );
+void iiimccf_scrn( int height, int width, int resolution );
 
 /* current position */
-int iiimccf_pos( int x, int y);
+void iiimccf_pos( int x, int y);
 
 /* request refresh */
 void iiimccf_refresh();

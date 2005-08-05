@@ -14,10 +14,8 @@ int main( int argc, char** argv )
   iiimccf_on();
   iiimccf_pos( 200, 200 );
 
-  iiimccf_proc( IIIMF_KEYCODE_A, 'a', 0);
-  iiimccf_proc( IIIMF_KEYCODE_K, 'k', 0);
-  iiimccf_proc( IIIMF_KEYCODE_U, 'u', 0);
-  iiimccf_proc( IIIMF_KEYCODE_1, '1', 0);
+  iiimccf_proc( IIIMF_KEYCODE_W, 'w', 0);
+  iiimccf_proc( IIIMF_KEYCODE_O, 'o', 0);
   iiimccf_proc( IIIMF_KEYCODE_ENTER, 0, 0);
   
   iiimccf_off();

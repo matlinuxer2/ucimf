@@ -7,8 +7,12 @@ LIBS2     = -L. -lgraphdev -lfreetype
 INCLUDES3 = -I. -I/usr/include/freetype2
 LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay 
 
-run: 
-	g++ -g  -o test.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
+run:
+	sleep 2; 
+	./demo
+
+demo: iiimccf
+	g++ -g  -o demo $(INCLUDES3) $(LIBS3) console-app.cpp 
 
 iiimccf:
 	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp

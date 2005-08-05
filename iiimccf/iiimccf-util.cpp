@@ -1,17 +1,13 @@
 #include "iiimccf-int.h"
-#include <string.h>
-#include <stdio.h>
-
-/* Global parameter */
+#include <iostream>
 #define CONVERT_BUFSIZE 48
+
+using namespace std;
+
 
 /** Local static operations   **/
 void debug( char *str ){
-  char *tmp, *tmp2;
-  tmp=strcat( tmp, "\t");
-  tmp=strcat( tmp, str );
-  tmp=strcat( tmp, "\n");
-  fprintf( stderr, tmp );
+  cout << "\t" << str << endl;
 }
 
 
@@ -157,14 +153,12 @@ char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 )
     return pr;
 }
 
-
-void get_lookup_choice()
+void show_lookup_choice( IIIMCF_context context )
 {
-  IIIMCF_context c;
   IIIMF_status st;
   IIIMCF_lookup_choice ilc;
 
-  st = iiimcf_get_lookup_choice(c, &ilc);
+  st = iiimcf_get_lookup_choice( context, &ilc);
   if (st == IIIMF_STATUS_SUCCESS) {
       char *itemstr, *labelstr;
       int i, flag;
@@ -193,3 +187,103 @@ void get_lookup_choice()
 }
 
 
+void show_preedit_info( IIIMCF_context c )
+{
+    int cpos;
+    IIIMF_status st;
+    IIIMCF_text text;
+    
+    st = iiimcf_get_preedit_text(c, &text, &cpos);
+    if (st == IIIMF_STATUS_SUCCESS) {
+	char *str;
+
+	str = iiimcf_text_to_utf8(text);
+	fprintf(stderr, "Preedit(%d):%s\n", cpos, str);
+	free(str);
+    } else if (st == IIIMF_STATUS_NO_PREEDIT) {
+	fprintf(stderr, "Preedit is disabled.\n");
+    } else {
+	cout << "unknow err" << st << endl;
+    }
+}
+
+
+void show_incoming_event( IIIMCF_event ev )
+{
+    IIIMF_status st;
+    IIIMCF_event_type et;
+    iiimcf_get_event_type(ev, &et);
+    switch (et) {
+      case IIIMCF_EVENT_TYPE_KEYEVENT:
+      {
+	  IIIMCF_keyevent kev;
+
+	  iiimcf_get_keyevent_value(ev, &kev);
+	  cout << "Event[KEY]:" << kev.keycode << ", "
+	                        << kev.keychar << ", "
+				<< kev.modifier<< ", "
+				<< kev.time_stamp << endl;
+	  
+	  break;
+      }
+      case IIIMCF_EVENT_TYPE_TRIGGER_NOTIFY:
+      {
+	  int flag;
+
+	  iiimcf_get_trigger_notify_flag(ev, &flag);
+	  cout << "Event[TRIGGER-NOTIFY]:" << flag << endl ;
+	  break;
+      }
+      case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
+       cout << "Event[PREEDIT-START]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
+       cout << "Event[PREEDIT-CHANGE]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
+       cout << "Event[PREEDIT-DONE]" << endl;
+       break;
+
+      case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
+       cout << "Event[LOOKUP-CHOICE-START]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
+       cout << "Event[LOOKUP-CHOICE-CHANGE]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
+       cout << "Event[LOOKUP-CHOICE-DONE]" << endl;
+       break;
+
+      case IIIMCF_EVENT_TYPE_UI_STATUS_START:
+       cout << "Event[STATUS-START]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_STATUS_CHANGE:
+       cout << "Event[STATUS-CHANGE]" << endl;
+       break;
+      case IIIMCF_EVENT_TYPE_UI_STATUS_DONE:
+       cout << "Event[STATUS-DONE]" << endl;
+       break;
+
+      case IIIMCF_EVENT_TYPE_UI_COMMIT:
+       cout << "Event[COMMIT]" << endl;
+       break;
+/*
+      case IIIMCF_EVENT_TYPE_AUX_START:
+       show_aux("AUX-START", ev);
+       break;
+
+      case IIIMCF_EVENT_TYPE_AUX_DRAW:
+       show_aux("AUX-DRAW", ev);
+       break;
+      case IIIMCF_EVENT_TYPE_AUX_SETVALUES:
+       show_aux("AUX-SETVALUES", ev);
+       break;
+      case IIIMCF_EVENT_TYPE_AUX_DONE:
+       show_aux("AUX-DONE", ev);
+       break;
+*/       
+      default:
+       cout << "Event[Unknown]:" << et << endl;;
+       break;
+    }
+}
