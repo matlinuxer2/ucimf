@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include "global.h"
-#include "debug.h"
+//#include "global.h"
+//#include "debug.h"
 #include "fblinear24.h"
 
 FBLinear24::FBLinear24() {

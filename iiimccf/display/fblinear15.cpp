@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include "global.h"
+//#include "global.h"
 #include "fblinear15.h"
 
 FBLinear15::FBLinear15() {

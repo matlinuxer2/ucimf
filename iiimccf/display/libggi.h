@@ -21,7 +21,7 @@
 #define LIBGGI_H
 
 #include <ggi/ggi.h>
-#include "basefont.h"
+//#include "basefont.h"
 #include "graphdev.h"
 
 class LIBGGI : public GraphDev  {

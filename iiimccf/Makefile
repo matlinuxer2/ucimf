@@ -10,9 +10,13 @@ LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay
 run:
 	sleep 2; 
 	./demo
+all: driver graphdev iiimccf main
 
-demo: iiimccf
-	g++ -g  -o demo $(INCLUDES3) $(LIBS3) console-app.cpp 
+clean: 
+	rm main.exe libiiimccf.a libgraphdev.a display/libdisplay.a
+
+main: iiimccf
+	g++ -g  -o main.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
 
 iiimccf:
 	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp

@@ -18,9 +18,10 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include "global.h"
+//#include "global.h"
 #include "fblinear8.h"
 
+//gray scale
 __u32 FBLinear8::nibbletab_cfb8[] = {
 0x00000000,0xff000000,0x00ff0000,0xffff0000,
 0x0000ff00,0xff00ff00,0x00ffff00,0xffffff00,

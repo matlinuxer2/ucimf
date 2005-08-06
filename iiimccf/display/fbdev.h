@@ -20,7 +20,7 @@
 #ifndef FBDEV_H
 #define FBDEV_H
 
-#include "basefont.h"
+//#include "basefont.h"
 #include "graphdev.h"
 
 class FBDev : public GraphDev  {

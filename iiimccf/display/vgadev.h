@@ -21,7 +21,7 @@
 #ifndef VGADEV_H
 #define VGADEV_H
 
-#include "basefont.h"
+//#include "basefont.h"
 
 /**
  *@author Rick Lei
