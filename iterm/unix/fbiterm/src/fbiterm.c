@@ -22,11 +22,11 @@
 #ifdef HAVE_SELECT
 #include <errno.h>
 #include <iterm/unix/ttyio.h>
-#include <iterm/input.h>
+#include <iiimccf.h>
 #endif
 
 Iterm *pIterm;
-VTInput *pInput;
+IIIMCCF *iiimccf;
 
 void
 exitFbiterm (int exitcode)
@@ -161,9 +161,10 @@ main (int argc, char *argv[])
     int SWITCH_TO_IIIMCF= 0;
 	
 	/* Import some definition from input.h to here */
-	extern VTInput *pInput;
-	pInput = VTInput_new( buf, &ret, &fd  );
-	VTInput_init( pInput ); 
+        unsigned char *buf2;
+	int *buf2_len;
+	iiimccf = iiimccf_new( buf, &ret, buf2, buf2_len );
+	iiimccf->init(); 
 	
 	
     while (1)
@@ -193,10 +194,10 @@ main (int argc, char *argv[])
 	    {
 			 if( SWITCH_TO_IIIMCF == 0 ){
 				 SWITCH_TO_IIIMCF = 1;
-				 VTInput_start( pInput );
+				 iiimccf->start();
 			 }else{
 				 SWITCH_TO_IIIMCF = 0;
-				 VTInput_stop( pInput );
+				 iiimccf->stop();
 			 }
 		 	
 			 continue;
@@ -214,13 +215,9 @@ main (int argc, char *argv[])
         /* if SWITCH_TO_IIIMCF is on, then redirect the input to iiimcf*/
 		else if( SWITCH_TO_IIIMCF == 1 )
 	    {
-			VTInput_read_in( pInput );
-			VTInput_handle( pInput );
-			if ( pInput->lookup_done == 1 ){
-					VTInput_write_out( pInput );
-					pInput->lookup_done = 0;
-					pInput->mb_length = 0;
-					pInput->mbbuffer='\0';
+			iiimccf->process();
+			if ( iiimccf->lookup_done == 1 ){
+			  write( fd, iiimccf->buf_out, *(iiimccf->buf_out_len) );
 			}else{
 					continue;
 			}
@@ -241,7 +238,7 @@ main (int argc, char *argv[])
       }
 	  
 	  /* Exit the iiimcf client */
-	  VTInput_exit( pInput );
+	  iiimccf->exit();
 	  
   }
 #else

@@ -9,10 +9,11 @@
 
 EXTRA_LIBS = \
          -L../../Xaw/lib/.libs \
-         -L../../../lib/src/.libs
-
+         -L../../../lib/src/.libs \
+	 -L../../../../iiimccf
 EXTRA_CFLAGS = \
-         -I../../../lib/include
+         -I../../../lib/include \
+	 -I../../../../iiimccf
 
 bin_PROGRAMS = fbiterm
 
@@ -22,7 +23,7 @@ fbiterm_SOURCES = \
 	vt.c VTScreenView.c fbiterm.h palette.h VTScreenView.h
 
 fbiterm_LDADD = \
-	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf
+	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
 
 CFLAGS = -I$(includedir) @X_CFLAGS@ -I$(top_srcdir)/include -I/usr/local/include $(EXTRA_CFLAGS) @CFLAGS@
 

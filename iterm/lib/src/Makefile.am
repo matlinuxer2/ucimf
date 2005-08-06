@@ -9,9 +9,9 @@ endif
 lib_LTLIBRARIES = libiterm.la
 
 if BIDI
-libiterm_la_SOURCES 	= input.c core.c screen.c screen_visual_row.h screen_internal.h state.c vt100.c screen_buffer.c screen_row.c state.h vt100.h screen_buffer.h screen_row.h tabs.c mbchar.h screen_visual_row.c tabs.h
+libiterm_la_SOURCES 	= core.c screen.c screen_visual_row.h screen_internal.h state.c vt100.c screen_buffer.c screen_row.c state.h vt100.h screen_buffer.h screen_row.h tabs.c mbchar.h screen_visual_row.c tabs.h
 else
-libiterm_la_SOURCES 	= input.c core.c screen.c screen_internal.h state.c vt100.c screen_buffer.c screen_row.c state.h vt100.h screen_buffer.h screen_row.h tabs.c mbchar.h tabs.h dummy_layout.c screen_visual_row.c screen_visual_row.h
+libiterm_la_SOURCES 	= core.c screen.c screen_internal.h state.c vt100.c screen_buffer.c screen_row.c state.h vt100.h screen_buffer.h screen_row.h tabs.c mbchar.h tabs.h dummy_layout.c screen_visual_row.c screen_visual_row.h
 endif
 
 libiterm_la_LDFLAGS 	= -version-info 1:0:0
