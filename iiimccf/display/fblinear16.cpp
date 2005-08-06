@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include "global.h"
+//#include "global.h"
 #include "fblinear16.h"
 
 __u32 FBLinear16::tab_cfb16[] = {

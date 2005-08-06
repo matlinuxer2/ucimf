@@ -3,5 +3,5 @@ libdisplay_a_SOURCES = fbdev.cpp fblinear15.cpp fblinear16.cpp fblinear24.cpp fb
 
 EXTRA_DIST = fbdev.h fblinear15.h fblinear16.h fblinear24.h fblinear32.h fblinear4.h fblinear8.h fbvgaplanes.h libggi.h lrmi.h vgadev.h
 
-INCLUDES = -I${top_srcdir}/src
+INCLUDES = -I/..
 

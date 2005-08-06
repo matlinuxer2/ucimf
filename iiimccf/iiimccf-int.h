@@ -1,17 +1,5 @@
-/* System support */
-#include <sys/ioctl.h>
-#include <linux/input.h>
-#include <linux/kd.h>
-#include <linux/keyboard.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <wchar.h>
-#include <sys/types.h>
-
-/* Add IIIMCF support. */
 #include "iiimccf.h"
-#include "keycodes.h"
-
+#include <cstdlib>
 
 
 class IIIMCCF {

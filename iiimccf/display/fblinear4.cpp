@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include <assert.h>
-#include "global.h"
+//#include "global.h"
 #include "fblinear4.h"
 
 __u16 FBLinear4::nibbletab_cfb4[] = {

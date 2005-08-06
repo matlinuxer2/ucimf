@@ -125,7 +125,7 @@ OPEN_RC FBDev::TryOpen() {
     mpBufLen = Finfo.smem_len;
     mpBuf = (char*)mmap(0,mpBufLen,PROT_READ | PROT_WRITE, MAP_SHARED, mFd, 0);
     if (mpBuf == MAP_FAILED)
-        throw(runtime_error("fb device mmap failed!"));
+        //throw(runtime_error("fb device mmap failed!"));
     mNextLine = Finfo.line_length;
 #endif
     return rc;
