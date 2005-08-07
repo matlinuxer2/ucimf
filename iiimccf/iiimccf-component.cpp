@@ -81,7 +81,7 @@ iiimccf_lookup_choice(
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		 // show_lookup_choice( context );
+		  show_lookup_choice( context );
 		  //.update();
 		  break;
 	  
@@ -152,11 +152,14 @@ iiimccf_commit(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-	IIIMF_status st;
-	IIIMCF_event_type type;
-	st = iiimcf_get_event_type( event, &type );
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
+    IIIMF_status st;
+    IIIMCF_event_type type;
+    st = iiimcf_get_event_type( event, &type );
+    if( st != IIIMF_STATUS_SUCCESS ) return st;
 
+    if ((type >= IIIMCF_EVENT_TYPE_UI_COMMIT)
+	    && (type < IIIMCF_EVENT_TYPE_UI_COMMIT_END))
+    {
 	switch( type ){	
 	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
 	      debug("commit");
@@ -175,8 +178,10 @@ iiimccf_commit(
 	      cout << " !! " << endl;
 	      break;	
 	}
-
 	return IIIMF_STATUS_SUCCESS;
+    }
+
+    return IIIMF_STATUS_COMPONENT_INDIFFERENT;
 }
 
 
