@@ -1,6 +1,6 @@
 #include "iiimccf-int.h"
-#include "overspot.h"
-
+#include <iostream>
+using namespace std;
 /*
  * Preedit
  */
@@ -12,38 +12,41 @@ iiimccf_preedit(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
- 
-  OverSpot prdt;
-  IIIMCF_event_type event_type;
-  iiimcf_get_event_type( event, &event_type);
-  switch( event_type ){
+
+  Prdt prdt( context );
+  IIIMF_status st;
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+   
+  switch( type ){
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
-		  debug("preedit");
+		  mesg("preedit");
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
-		  debug("preedit start");
+		  mesg("preedit start");
 		  prdt.show();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
-		  debug(" preedit changed");
-		  show_preedit_info( context );
+		  mesg("preedit changed");
+		  prdt.info();
 		  prdt.update();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
-		  debug("preedit done");
+		  mesg("preedit done");
 		  prdt.update();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
-		  debug("preedit end");
+		  mesg("preedit end");
 		  prdt.hide();
 		  break;
 		  
 	  default:
-		  debug("preedit none");
+		  mesg("preedit none");
 		  break;
   }
   return IIIMF_STATUS_SUCCESS;
@@ -61,37 +64,38 @@ iiimccf_lookup_choice(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-  static OverSpot lkc;
-  IIIMCF_event_type event_type;
-  iiimcf_get_event_type( event, &event_type );
   IIIMF_status st;
-   
-  switch( event_type ){
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+  
+  switch( type ){	
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
 		  debug( "lookup" );
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  lkc.show();
+		  //.show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		  show_lookup_choice( context );
-		  lkc.update();
+		 // show_lookup_choice( context );
+		  //.update();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
-		  lkc.update();
+		  //.update();
 		  debug( "lookup done" );
 		  break;
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
-		  lkc.hide();
+		  //.hide();
 		  debug( "lookup end" );
 		  break;
 		  
-	  default: break;
+	  default:
+		  break;
   }
   
   return IIIMF_STATUS_SUCCESS;
@@ -109,20 +113,30 @@ iiimccf_status(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-	IIIMCF_event_type event_type;
-	iiimcf_get_event_type( event, &event_type );
-	switch( event_type ){	
+	IIIMF_status st;
+	IIIMCF_event_type type;
+	st = iiimcf_get_event_type( event, &type );
+	if( st != IIIMF_STATUS_SUCCESS ) return st;
+	
+	switch( type ){	
 		case IIIMCF_EVENT_TYPE_UI_STATUS:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_START:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_CHANGE:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_DONE:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_END:
+		  break;
 		  
-		default: break;
+		default: 
+		  debug(" !!status!! "); 
+		  break; 
 	}
 	return IIIMF_STATUS_SUCCESS;
 }
@@ -139,23 +153,30 @@ iiimccf_commit(
     IIIMCF_component parent
 ){
 	IIIMF_status st;
-	IIIMCF_event_type event_type;
-	st = iiimcf_get_event_type( event, &event_type );
-	
-	switch( event_type ){	
-		case IIIMCF_EVENT_TYPE_UI_COMMIT: 
-		    debug("commit");
-		    get_committed_text();
-		    break;
-			
-		case IIIMCF_EVENT_TYPE_UI_COMMIT_END:
-		    debug("commit_end");
-		    break;
-		    
-		default: break;
-	}
-	return IIIMF_STATUS_SUCCESS;
+	IIIMCF_event_type type;
+	st = iiimcf_get_event_type( event, &type );
+	if( st != IIIMF_STATUS_SUCCESS ) return st;
 
+	switch( type ){	
+	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
+	      debug("commit");
+	      //get_committed_text();
+	      break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_COMMIT_END:
+	      debug("commit_end");
+	      break;
+	      
+	  default: 
+	      debug(" !!commit!! ");
+	      cout << " !! " ;
+	      cout.setf( ios_base::hex, ios_base::basefield );
+	      cout << type;
+	      cout << " !! " << endl;
+	      break;	
+	}
+
+	return IIIMF_STATUS_SUCCESS;
 }
 
 
@@ -170,17 +191,24 @@ iiimccf_event_key(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-	IIIMCF_event_type event_type;
-	iiimcf_get_event_type( event, &event_type );
+	IIIMF_status st;
+	IIIMCF_event_type type;
+	st = iiimcf_get_event_type( event, &type );
+	if( st != IIIMF_STATUS_SUCCESS ) return st;
 	
-	switch( event_type ){	
+	switch( type ){	
 		case IIIMCF_EVENT_TYPE_EVENTLIKE: 
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_KEYEVENT:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_KEYEVENT_END: 
+		  break;
 		  
-		default: break;
+		default: 
+		  debug(" !!event_key!! ");
+		  break;
 	}
 
 	return IIIMF_STATUS_SUCCESS;
@@ -198,24 +226,39 @@ iiimccf_trigger_notify(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-	IIIMCF_event_type event_type;
-	iiimcf_get_event_type( event, &event_type );
-
-	switch( event_type ){
+	IIIMF_status st;
+	IIIMCF_event_type type;
+	st = iiimcf_get_event_type( event, &type );
+	if( st != IIIMF_STATUS_SUCCESS ) return st;
+	
+	switch( type ){
 		//case IIIMCF_EVENT_TYPE_TRIGGER_NOTIFY_START:
 		case IIIMCF_EVENT_TYPE_TRIGGER_NOTIFY:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_TRIGGER_NOTIFY_END:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_OPERATION:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_SETICFOCUS:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UNSETICFOCUS:
+		  break;
 		  
 		case IIIMCF_EVENT_TYPE_EVENTLIKE_END:
+		  break;
 		  
-		default: break;
+		default: 
+		  debug(" !!trigger_notify!! ");
+
+	          cout << " !! " ;
+		  cout.setf( ios_base::hex, ios_base::basefield );
+		  cout << type;
+		  cout << " !! " << endl;
+		  break;
 		
 	}
 	return IIIMF_STATUS_SUCCESS;
@@ -233,25 +276,29 @@ iiimccf_aux(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-	IIIMCF_event_type event_type;
-	iiimcf_get_event_type( event, &event_type );
+	IIIMF_status st;
+	IIIMCF_event_type type;
+	st = iiimcf_get_event_type( event, &type );
+	if( st != IIIMF_STATUS_SUCCESS ) return st;
 	
-	switch( event_type ){	
+	switch( type ){	
 		case IIIMCF_EVENT_TYPE_AUX: 
-		  
+		  break; 
 		case IIIMCF_EVENT_TYPE_AUX_START:
-		  
+		  break; 
 		case IIIMCF_EVENT_TYPE_AUX_DRAW:
-		  
+		  break; 
 		case IIIMCF_EVENT_TYPE_AUX_SETVALUES:
-		  
+		  break; 
 		case IIIMCF_EVENT_TYPE_AUX_DONE:
-		  
+		  break; 
 		case IIIMCF_EVENT_TYPE_AUX_GETVALUES:
-		  
+		  break;
 		case IIIMCF_EVENT_TYPE_AUX_END:
-		  
-		default: break;
+		  break; 
+		default: 
+		  debug(" !!aux!! ");
+		  break;
 	}	
 	return IIIMF_STATUS_SUCCESS;
 }

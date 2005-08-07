@@ -5,7 +5,7 @@
 #include <vector>
 
 GraphDev *gdev;
-Font font( EFont_H );
+Font font( EFont );
 
 
 /* Layer implementation */

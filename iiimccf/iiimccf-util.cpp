@@ -6,8 +6,13 @@ using namespace std;
 
 
 /** Local static operations   **/
+
+void mesg( char *str ){
+  cout << "msg:" << str << endl;
+}
+
 void debug( char *str ){
-  cout << "\t" << str << endl;
+  cout << "err:" << str << endl;
 }
 
 
@@ -267,7 +272,7 @@ void show_incoming_event( IIIMCF_event ev )
       case IIIMCF_EVENT_TYPE_UI_COMMIT:
        cout << "Event[COMMIT]" << endl;
        break;
-/*
+       /*
       case IIIMCF_EVENT_TYPE_AUX_START:
        show_aux("AUX-START", ev);
        break;
@@ -281,9 +286,151 @@ void show_incoming_event( IIIMCF_event ev )
       case IIIMCF_EVENT_TYPE_AUX_DONE:
        show_aux("AUX-DONE", ev);
        break;
-*/       
+       */
+
+
       default:
        cout << "Event[Unknown]:" << et << endl;;
        break;
     }
+}
+
+void check( IIIMF_status st )
+{
+  switch( st )
+  {
+    case IIIMF_STATUS_FAIL	 :	
+      cout << "[st: fail ]" << endl;
+      break;
+    case IIIMF_STATUS_SUCCESS	 :	
+      cout << "[st: sucess ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_MALLOC	 :	
+      cout << "[st: malloc ]" << endl;
+      break;
+    case IIIMF_STATUS_ARGUMENT	 :	
+      cout << "[st: argument ]" << endl;
+      break;
+    case IIIMF_STATUS_PROTOCOL_VERSION :	
+      cout << "[st: protocal_version ]" << endl; 
+      break;
+    
+    case IIIMF_STATUS_CONFIG	 :	
+      cout << "[st: config ]" << endl;
+      break;
+    case IIIMF_STATUS_ROLE	 :	
+      cout << "[st: role ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_OPCODE	 :	
+      cout << "[st: opcode ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_SEQUENCE_REQUEST :	
+      cout << "[st: sequence_request ]" << endl;
+      break;
+    case IIIMF_STATUS_SEQUENCE_REPLY :	
+      cout << "[st: sequence reply ]" << endl;
+      break;
+    case IIIMF_STATUS_SEQUENCE_ROLE :	
+      cout << "[st: sequence role ]" << endl;
+      break;
+    case IIIMF_STATUS_SEQUENCE_STATE :	
+      cout << "[st:  sequence state ]" << endl;
+      break;
+    case IIIMF_STATUS_SEQUENCE_NEST :	
+      cout << "[st: sequence_nest ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_IM_INVALID	 :	
+      cout << "[st: im invalid ]" << endl;
+      break;
+    case IIIMF_STATUS_IC_INVALID	 :	
+      cout << "[st: ic invalid ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_STREAM	 :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_STREAM_SEND :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_STREAM_RECEIVE :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_PACKET	 :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_INVALID_ID	 :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_TIMEOUT	 :	
+      cout << "[st:  ]" << endl;
+      break;
+    case IIIMF_STATUS_CONNECTION_CLOSED :        
+      cout << "[st:  ]" << endl;
+      break;
+    
+    case IIIMF_STATUS_IIIMCF_START :	
+      cout << "[st: iiimcf_start ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_ATTR_VALUE :	
+      cout << "[st: no_attr_value ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_TEXT_PROPERTY :	
+      cout << "[st: no_text_property ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_EVENT	 :	
+      cout << "[st: no event ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_PREEDIT	 :	
+      cout << "[st: no preedit ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_LOOKUP_CHOICE :	
+      cout << "[st: no lookup choice ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_STATUS_TEXT :	
+      cout << "[st: no status text ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_COMMITTED_TEXT :	
+      cout << "[st: no committed text ]" << endl;
+      break;
+    case IIIMF_STATUS_CLIENT_RESET_BY_PEER:	
+      cout << "[st: client reset by peer ]" << endl;
+      break;
+    case IIIMF_STATUS_INVALID_EVENT_TYPE :	
+      cout << "[st: invalid event type ]" << endl;
+      break;
+    case IIIMF_STATUS_EVENT_NOT_FORWARDED:	
+      cout << "[st: event not forwarded ]" << endl;
+      break;
+    case IIIMF_STATUS_COMPONENT_DUPLICATED_NAME:	
+      cout << "[st: component duplicated ]" << endl;
+      break;
+    case IIIMF_STATUS_COMPONENT_FAIL :	
+      cout << "[st: component_fail ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_COMPONENT :	
+      cout << "[st: no component ]" << endl;
+      break;
+    case IIIMF_STATUS_STATIC_EVENT_FLOW :	
+      cout << "[st: static event flow ]" << endl;
+      break;
+    case IIIMF_STATUS_FAIL_TO_EVENT_DISPATCH:	
+      cout << "[st: fail to event dispatch ]" << endl;
+      break;
+    case IIIMF_STATUS_NO_AUX	 :	
+      cout << "[st: no aux ]" << endl;
+      break;
+    case IIIMF_STATUS_NOT_TRIGGER_KEY :	
+      cout << "[st: not trigger key ]" << endl;
+      break;
+    case IIIMF_STATUS_COMPONENT_INDIFFERENT:	
+      cout << "[st: component indifferent ]" << endl;
+      break;
+    
+    default:
+      break;
+  }
 }

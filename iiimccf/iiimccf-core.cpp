@@ -1,4 +1,5 @@
 #include "iiimccf-int.h"
+#include <iostream>
 #include <ctime>
 #include <cstring>
 
@@ -12,7 +13,7 @@ IIIMCCF::IIIMCCF()
     	st = iiimcf_create_attr(&attr);
     	st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
 	                                      "IIIM Console Client Framework");
-    	st = iiimcf_create_handle(attr, &handle );
+	st = iiimcf_create_handle(attr, &handle );
     	st = iiimcf_destroy_attr(attr);
 
 	
@@ -24,11 +25,12 @@ IIIMCCF::IIIMCCF()
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.status",&parent);
 	st = iiimcf_register_component( handle,"iiimccf-status",iiimccf_status,parent,&child);
          
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
-	st = iiimcf_register_component( handle,"iiimccf-commit",iiimccf_commit,parent,&child);
-         
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.lookup_choice",&parent);
 	st = iiimcf_register_component( handle,"iiimccf-lookup_choice",iiimccf_lookup_choice,parent,&child);
+        
+	/* each registration should be check !! to avoid bug */
+	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
+	st = iiimcf_register_component( handle,"iiimccf-commit",iiimccf_commit,parent,&child);
          
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.trigger_notify",&parent);
 	st = iiimcf_register_component( handle,"iiimccf-trigger_notify",iiimccf_trigger_notify,parent,&child);
@@ -48,7 +50,13 @@ IIIMCCF::~IIIMCCF()
 
 bool IIIMCCF::on()
 {
-	iiimcf_create_context( handle, IIIMCF_ATTR_NULL, &context );
+        IIIMF_status st;
+        IIIMCF_attr attr;
+	st = iiimcf_create_attr( &attr );
+	// This line is for input method setting 
+	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
+    	
+	iiimcf_create_context( handle, attr , &context );
 	
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 1, &event);
@@ -87,20 +95,22 @@ int IIIMCCF::proc( int keycode, int keychar, int modifier )
 	  
 	    IIIMF_status st;
 	    st = iiimcf_dispatch_event( context , event );
+	    
 	    if (st != IIIMF_STATUS_SUCCESS) {
 			if (st == IIIMF_STATUS_COMPONENT_FAIL) {
 			    debug("at least one component reported failure");
 			} else if (st == IIIMF_STATUS_COMPONENT_INDIFFERENT) {
-			    debug("none of the components deal with the event");
-				IIIMCF_event_type event_type;
-				iiimcf_get_event_type( event, &event_type );
-				fprintf( stderr, "\t\t %x\n", event_type );
+			    //debug("none of the components deal with the event");
+			    IIIMCF_event_type event_type;
+			    iiimcf_get_event_type( event, &event_type );
+			    fprintf( stderr, "none of the components deal with the event: [[ %x ]]\n", event_type );
 			} else {
 			    debug("fail to dispatch");
 			}
 	    }
-		
-		iiimcf_ignore_event( event );
+	    
+	    iiimcf_ignore_event( event );
+
     	}
 }
 
@@ -181,6 +191,7 @@ bool IIIMCCF::ims_show()
 	              iiimcf_get_language_id(plangs[j], &langid);
 	              fprintf(stderr, "%s, ", langid);
 	        }
+	 fprintf( stderr, "\n" );
 	 free(idname);
 	 free(hrn);
 	 free(domain);
@@ -190,6 +201,19 @@ bool IIIMCCF::ims_show()
 
 bool IIIMCCF::ims_set ( )
 {
+  IIIMF_status st;
+  IIIMCF_attr attr;
+
+  st = iiimcf_create_attr( &attr );
+  
+  //st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_LANGUAGE, "zh_CN" ); 
+  //st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD, "1");
+  st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
+  /* libiiimccf.a doesn't define the iiimcf_icsetvalues function*/
+  //st = iiimcf_seticvalues( context, attr );
+  
+  st = iiimcf_destroy_attr( attr );
+  
   return true;
 }
 
