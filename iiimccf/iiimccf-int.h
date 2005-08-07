@@ -1,4 +1,5 @@
 #include "iiimccf.h"
+#include "overspot.h"
 #include <cstdlib>
 
 
@@ -46,9 +47,30 @@ IIIMF_status iiimccf_event_key( IIIMCF_context, IIIMCF_event, IIIMCF_component, 
 IIIMF_status iiimccf_trigger_notify( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF_component );
 IIIMF_status iiimccf_aux( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF_component );
 
+/** Preedit Object **/
+class Prdt
+{
+  public:
+    Prdt( IIIMCF_context context);
+    ~Prdt(){};
+
+    void info();
+    void draw();
+    void show();
+    void hide();
+    void update();
+
+  private:
+    OverSpot oswin;
+    IIIMCF_context context;
+    IIIMCF_text    prdt_buf;
+};
+
 /** Utilities functions **/
 
+void check(IIIMF_status st);
 void debug( char *str );
+void mesg( char *str );
 int wchar_to_utf8( wchar_t c, char * outbuf, int bufsize);
 bool  get_committed_text();
 char* iiimcf_text_to_utf8( IIIMCF_text t);
