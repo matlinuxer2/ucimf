@@ -18,28 +18,56 @@ IIIMCCF::IIIMCCF()
 
 	
 	/*  Register new component */
-	     
+	
+	cout << "==reg preedit start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.preedit",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg preedit end===" << endl;
          
+	cout << "==reg status start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.status",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-status",iiimccf_status,parent,&child);
-         
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.lookup_choice",&parent);
-	st = iiimcf_register_component( handle,"iiimccf-lookup_choice",iiimccf_lookup_choice,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg status end===" << endl;
         
-	/* each registration should be check !! to avoid bug */
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
+	cout << "==reg lookup_choice start===" << endl;
+	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.lookup_choice",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	st = iiimcf_register_component( handle,"iiimccf-lookup_choice",iiimccf_lookup_choice,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg lookup_choice end===" << endl;
+
+	cout << "==reg commit start===" << endl;
+	// st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
+	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-commit",iiimccf_commit,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg commit end===" << endl;
          
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.trigger_notify",&parent);
+	cout << "==reg trigger start===" << endl;
+	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.event.trigger_notify",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-trigger_notify",iiimccf_trigger_notify,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg trigger end===" << endl;
          
+	cout << "==reg event_key start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.event.key",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-event.key",iiimccf_event_key,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg event_key end===" << endl;
          
+	cout << "==reg aux start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.AUX",&parent);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-aux",iiimccf_aux,parent,&child);
+	if( st != IIIMF_STATUS_SUCCESS ) check(st);
+	cout << "==reg aux end===" << endl;
 }
 
 IIIMCCF::~IIIMCCF()
