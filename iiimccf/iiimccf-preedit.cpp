@@ -8,8 +8,8 @@ Prdt::Prdt( IIIMCF_context new_context)
 
 void Prdt::info()
 {
-    int cur_pos;
     IIIMF_status st;
+    IIIMCF_text prdt_buf;
     
     st = iiimcf_get_preedit_text (context, &prdt_buf, &cur_pos);
     if (st == IIIMF_STATUS_SUCCESS) {
@@ -23,7 +23,77 @@ void Prdt::info()
     }
 }
 
-void Prdt::draw(){}
-void Prdt::show(){}
-void Prdt::hide(){}
-void Prdt::update(){}
+void Prdt::show()
+{
+  if( visible == true ) return;
+  visible = true;
+  update();
+  return;
+}
+
+void Prdt::hide()
+{
+  visible = false;
+  return;
+}
+
+bool Prdt::update()
+{
+  if( visible == false ) return true;
+  IIIMF_status st;
+  IIIMCF_text buf0;
+  st = iiimcf_get_preedit_text( context, &buf0 , &cur_pos);
+  if( st != IIIMF_STATUS_SUCCESS )
+  {
+    // throw error
+    return false;
+  }
+
+  IIIMP_card16* buf1;
+  st = iiimcf_get_text_utf16string( buf0, ( const IIIMP_card16** ) &buf1 );
+  if( st != IIIMF_STATUS_SUCCESS )
+  {
+    // error from the conversion itself
+    return false;
+  }
+
+  int buf1_len;
+  st = iiimcf_get_text_length( buf0, &buf1_len ); 
+  if( st != IIIMF_STATUS_SUCCESS ) return false;
+
+  vector<IIIMP_card16> buf_utf16(buf1_len);
+  IIIMP_card16 ch;
+  int nfb;
+  const IIIMP_card32 *pids, *pfbs;
+  for( int i=0; i < buf1_len; i++ )
+  {
+    st = iiimcf_get_char_with_feedback( buf0, i, &ch, &nfb, &pids, &pfbs );
+    if( st != IIIMF_STATUS_SUCCESS ) return false;
+    buf_utf16[i] = ch;
+  }
+  
+  String buf3( buf_utf16 );
+ 
+  // delete prdt_text;
+  
+  prdt_text = new Text;
+  prdt_text->append( buf3 );
+  
+  return draw();
+}
+
+bool Prdt::position( int x, int y )
+{
+  //if( x < X_MIN | x > X_MAX | y < Y_MIN | y > Y_MAX ) return false;
+  cur_x = x;
+  cur_y = y;
+  return draw();
+}
+
+bool Prdt::draw()
+{
+  prdt_text->fw(16);
+  prdt_text->fh(16);
+  prdt_text->render();
+  return true; 
+}
