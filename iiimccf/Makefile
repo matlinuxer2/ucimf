@@ -8,9 +8,9 @@ INCLUDES3 = -I. -I/usr/include/freetype2
 LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay 
 
 run:
-	sleep 2; 
 	./main.exe
-all: iiimccf main
+
+all: driver graphdev main
 
 clean: 
 	rm main.exe libiiimccf.a libgraphdev.a display/libdisplay.a

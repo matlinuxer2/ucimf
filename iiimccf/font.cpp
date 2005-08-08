@@ -1,9 +1,9 @@
+#include <iostream>
+using namespace std;
 #include "font.h"
 #include "graphdev.h"
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
 
 Font::Font( const char *fpath)
 {
@@ -20,7 +20,8 @@ Font::~Font()
 
 void Font::info()
 {
-
+  cout << "fontpath: " << fontpath << endl;
+  cout << "fontsize: " << fontsize << endl;
 }
 
 void Font::load( int x, int y, int size, FT_Encoding enc, FT_ULong code)

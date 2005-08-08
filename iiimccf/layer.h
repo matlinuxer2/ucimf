@@ -58,6 +58,8 @@ class String : public Layer
     String( int font_width, int font_height, vector<IIIMP_card16> charcodes );
     ~String(){};
 
+    void info();
+    
     int fw();
     int fh();
 
@@ -83,6 +85,7 @@ class Text : public Layer
     ~Text(){};
     
     void append( String str );
+    void info();
     
     int fw();
     int fh();
