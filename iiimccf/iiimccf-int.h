@@ -51,19 +51,24 @@ IIIMF_status iiimccf_aux( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF
 class Prdt
 {
   public:
-    Prdt( IIIMCF_context context);
+    Prdt( IIIMCF_context context );
     ~Prdt(){};
 
-    void info();
-    void draw();
+    void info(); // for text-mode checking.
+
     void show();
     void hide();
-    void update();
-
+    bool update();
+    bool position(int x, int y);
   private:
-    OverSpot oswin;
+    bool draw();
+
     IIIMCF_context context;
-    IIIMCF_text    prdt_buf;
+    vector<IIIMP_card16> buf_utf16;
+    bool visible;
+    int cur_x, cur_y;
+    int cur_pos;
+    Text* prdt_text;
 };
 
 /** Utilities functions **/

@@ -50,6 +50,13 @@ void OverSpot::draw()
     Table.render();
   }
 }
+void OverSpot::title( const char* )
+{
+  //vector<FT_ULong> charcodes;
+  //String title_str( charcodes );
+  //vector<String> title_strs={ title_str };
+  //Text.Text( title_strs );
+}
 
 int OverSpot::b(){ return boarder; }
 void OverSpot::b( int new_boarder ){ boarder = new_boarder; }

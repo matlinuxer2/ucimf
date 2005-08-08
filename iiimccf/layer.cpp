@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <iiimp.h>
 #include "layer.h"
 #include "graphdev.h"
 #include "font.h"
@@ -35,14 +37,25 @@ void Rectangle::render()
 /* String implementation */
 
 
-inline String::String( vector<FT_ULong> charcodes )
+String::String( vector<IIIMP_card16> charcodes )
 {
-  CharCodes = charcodes;
+  int size = charcodes.size();
+  vector<FT_ULong> CharCodes( size );
+  for (int i =0; i< size; i++ )
+  {
+    CharCodes[i] = (FT_ULong) charcodes[i];
+  }
 }
 
-inline String::String( int font_width, int font_height, vector<FT_ULong> charcodes )
+String::String( int font_width, int font_height, vector<IIIMP_card16> charcodes )
 {
-  CharCodes = charcodes;
+  int size = charcodes.size();
+  vector<FT_ULong> CharCodes( size );
+  for (int i =0; i< size; i++ )
+  {
+    CharCodes[i] = (FT_ULong) charcodes[i];
+  }
+  
   fw( font_width );
   fh( font_height );
   w( fw()*(CharCodes.size()) );
@@ -77,12 +90,12 @@ void String::render( int pos_x, int pos_y)
 
 /* Text implementation */
 
-inline Text::Text( vector<String> strings )
+Text::Text( vector<String> strings )
 {
   Strings = strings;
 }
 
-inline Text::Text( int pos_x, int pos_y, vector<String> strings )
+Text::Text( int pos_x, int pos_y, vector<String> strings )
 {
   Strings = strings;
   x(pos_x);
@@ -101,11 +114,17 @@ inline Text::Text( int pos_x, int pos_y, vector<String> strings )
   h( Strings[0].fw() * rows );
 }
 
-inline int Text::fw(){ return Strings[0].fw(); }
+void Text::append( String str )
+{
+  Strings.push_back( str );
+  return ;
+}
 
-inline int Text::fh(){ return Strings[0].fh(); }
+int Text::fw(){ return Strings[0].fw(); }
 
-inline void Text::fw( int font_width )
+int Text::fh(){ return Strings[0].fh(); }
+
+void Text::fw( int font_width )
 {
   
   int rows = Strings.size();
@@ -121,7 +140,7 @@ inline void Text::fw( int font_width )
   w(max_width);
 }
 
-inline void Text::fh( int font_height )
+void Text::fh( int font_height )
 {
   int rows = Strings.size();
   for ( int i =0; i< rows; i++ )

@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <iiimp.h>
 #include <vector>
 #include <ft2build.h> 
 #include FT_FREETYPE_H 
@@ -52,8 +54,8 @@ class String : public Layer
 {
   public:
     //String(){};
-    String( vector<FT_ULong> charcodes );
-    String( int font_width, int font_height, vector<FT_ULong> charcodes );
+    String( vector<IIIMP_card16> charcodes );
+    String( int font_width, int font_height, vector<IIIMP_card16> charcodes );
     ~String(){};
 
     int fw();
@@ -79,6 +81,8 @@ class Text : public Layer
     Text( vector<String> strings );
     Text( int pos_x, int pos_y, vector<String> strings );
     ~Text(){};
+    
+    void append( String str );
     
     int fw();
     int fh();
