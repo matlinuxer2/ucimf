@@ -72,8 +72,9 @@ bool Prdt::update()
     buf_utf16[i] = ch;
   }
   
+  
   String buf3( buf_utf16 );
- 
+  
   // delete prdt_text;
   
   prdt_text = new Text;
@@ -92,8 +93,14 @@ bool Prdt::position( int x, int y )
 
 bool Prdt::draw()
 {
-  prdt_text->fw(16);
-  prdt_text->fh(16);
+  cout << "---start of render---" << endl;
+  prdt_text->fw(160);
+  prdt_text->fh(160);
+  prdt_text->x(10);
+  prdt_text->y(20);
+  prdt_text->info();
   prdt_text->render();
+  cout << "---end of render-----" << endl;
+  
   return true; 
 }
