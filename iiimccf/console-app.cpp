@@ -5,11 +5,16 @@
 #include <stdio.h>
 #include <iostream>
 #include "iiimccf.h" 
+#include "graphdev.h"
 using namespace std;
+
+GraphDev *gdev;
 
 int main( int argc, char** argv )
 {
-
+  GraphDev::Open();
+  gdev = GraphDev::mpGraphDev;
+  
   iiimccf_init();
   iiimccf_show_ims();
   iiimccf_scrn( 1024, 768, 75 );
