@@ -434,3 +434,21 @@ void check( IIIMF_status st )
       break;
   }
 }
+
+vector<IIIMP_card16> text_to_vector( IIIMCF_text text )
+{
+  int text_len;
+  iiimcf_get_text_length( text, &text_len );
+  
+  vector<IIIMP_card16> output(text_len);
+  IIIMP_card16 ch;
+  int nfb;
+  const IIIMP_card32 *pids, *pfbs;
+  for( int i = 0; i< text_len; i++)
+  {
+    iiimcf_get_char_with_feedback( text, i, &ch, &nfb, &pids, &pfbs );
+    output[i] = ch;
+  }
+  
+  return output;
+}

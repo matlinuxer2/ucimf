@@ -1,37 +1,63 @@
+#include "font.h"
 #include <iostream>
 using namespace std;
-#include "font.h"
-#include "graphdev.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
+
+GraphDev* gdev;
+
+Font::Font()
+{
+  Font( KFont );
+}
 
 Font::Font( const char *fpath)
 {
+  fontpath = (char*) fpath;
+  font_width = 0;
+  font_height = 0;
+  font_color = 3;
+  charcode = 0;
+
   FT_Init_FreeType( &library ); 
   FT_New_Face( library, fpath, 0, &face);
   slot = face->glyph;
+
   GraphDev::Open();
   gdev = GraphDev::mpGraphDev;    
 }
+
 Font::~Font()
 {
 
 }
 
-void Font::info()
+void Font::status()
 {
   cout << "fontpath: " << fontpath << endl;
-  cout << "fontsize: " << fontsize << endl;
+  cout << "encoding: " << "UTF-16" << endl;
 }
 
-void Font::load( int x, int y, int size, FT_Encoding enc, FT_ULong code)
+void Font::info()
+{
+  cout << "--Font info--" << endl;
+  cout.setf(ios_base::hex, ios_base::basefield );
+  cout << "charcode: [" << charcode << "] in UTF-16" << endl;
+  cout.setf(ios_base::dec, ios_base::basefield );
+  cout << "font_width: " << font_width << endl;
+  cout << "font_height: " << font_height << endl;
+  cout << "font_color: " << font_color << endl;
+  cout << "--info end---" << endl;
+}
+
+void Font::load( int code, int x, int y, int fw, int fh, int c )
 {
   pos_x = x;
   pos_y = y;
-  fontsize = size;
-  FT_Set_Char_Size( face, 0, fontsize*64, 0, 0 );
-  encoding = enc;
-  charcode = code;
+  font_width = fw;
+  font_height = fh;
+  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
+  encoding = FT_ENCODING_UNICODE;
+  charcode = (FT_ULong) code;
+  font_color = c;
 }
   
 void Font::draw()
@@ -40,7 +66,7 @@ void Font::draw()
     unsigned char* tmp = slot->bitmap.buffer;
     int pos_left = pos_x + slot->bitmap_left;
     int pos_top = pos_y + slot->bitmap_top;
-    int color=3;
+    int color = font_color;
 
     for (int i=0; i< slot->bitmap.rows; i++ )
     {

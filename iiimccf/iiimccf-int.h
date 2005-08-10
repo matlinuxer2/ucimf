@@ -71,6 +71,29 @@ class Prdt
     Text* prdt_text;
 };
 
+
+/** LookupChoice Object **/
+class Lkc
+{
+  public:
+    Lkc( IIIMCF_context context );
+    ~Lkc(){};
+
+    void info(); // for text-mode checking.
+
+    void show();
+    void hide();
+    bool update();
+    bool position(int x, int y);
+  private:
+    bool draw();
+
+    IIIMCF_context context;
+    bool visible;
+    int cur_x, cur_y;
+    int cur_idx;
+    Text* lkc_text;
+};
 /** Utilities functions **/
 
 void check(IIIMF_status st);
@@ -83,3 +106,4 @@ char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 );
 void show_lookup_choice( IIIMCF_context context );
 void show_preedit_info( IIIMCF_context context );
 void show_incoming_event( IIIMCF_event ev );
+vector<IIIMP_card16> text_to_vector( IIIMCF_text t );
