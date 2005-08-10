@@ -64,6 +64,9 @@ iiimccf_lookup_choice(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
+
+  Lkc lkc( context );
+
   IIIMF_status st;
   IIIMCF_event_type type;
   st = iiimcf_get_event_type( event, &type );
@@ -76,21 +79,21 @@ iiimccf_lookup_choice(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  //.show();
+		  lkc.show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		  show_lookup_choice( context );
-		  //.update();
+		  // show_lookup_choice( context );
+		  lkc.update();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
-		  //.update();
+		  lkc.update();
 		  debug( "lookup done" );
 		  break;
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
-		  //.hide();
+		  lkc.hide();
 		  debug( "lookup end" );
 		  break;
 		  

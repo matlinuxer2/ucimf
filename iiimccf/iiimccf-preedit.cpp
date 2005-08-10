@@ -78,9 +78,10 @@ bool Prdt::update()
   prdt_text = new Text;
     
   prdt_text->append( buf3 );
-  prdt_text->x(400);
-  prdt_text->fh(70);
-  prdt_text->fw(70);
+  prdt_text->x(600);
+  prdt_text->y(100);
+  prdt_text->fh(16);
+  prdt_text->fw(16);
   cout << "--end of update--" << endl;
   prdt_text->info();
   cout << "-----------------" << endl;
