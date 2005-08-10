@@ -27,7 +27,7 @@ void Prdt::show()
 {
   if( visible == true ) return;
   visible = true;
-  update();
+  //update();
   return;
 }
 
@@ -72,13 +72,18 @@ bool Prdt::update()
     buf_utf16[i] = ch;
   }
   
-  
   String buf3( buf_utf16 );
-  
-  // delete prdt_text;
-  
+  //delete prdt_text;
+
   prdt_text = new Text;
+    
   prdt_text->append( buf3 );
+  prdt_text->x(400);
+  prdt_text->fh(70);
+  prdt_text->fw(70);
+  cout << "--end of update--" << endl;
+  prdt_text->info();
+  cout << "-----------------" << endl;
   
   return draw();
 }
@@ -94,11 +99,6 @@ bool Prdt::position( int x, int y )
 bool Prdt::draw()
 {
   cout << "---start of render---" << endl;
-  prdt_text->fw(160);
-  prdt_text->fh(160);
-  prdt_text->x(10);
-  prdt_text->y(20);
-  prdt_text->info();
   prdt_text->render();
   cout << "---end of render-----" << endl;
   

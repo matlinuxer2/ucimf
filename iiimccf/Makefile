@@ -19,7 +19,7 @@ main: iiimccf
 	g++ -g  -o main.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
 
 iiimccf:
-	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp iiimccf-preedit.cpp
+	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp iiimccf-preedit.cpp iiimccf-lookup_choice.cpp
 
 graphdev:
 	g++ -g -fPIC -shared -o libgraphdev.a  $(INCLUDES) $(LIBS) graphdev.cpp font.cpp layer.cpp overspot.cpp

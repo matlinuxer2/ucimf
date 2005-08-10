@@ -10,7 +10,7 @@ using namespace std;
 
 class Layer { 
   public: 
-    Layer(){};
+    Layer();
     ~Layer(){};
     int x();
     int y();
@@ -29,6 +29,15 @@ class Layer {
     int Width, Height;
     int Color;
 };
+
+inline Layer::Layer()
+{
+  X=0; 
+  Y=0;
+  Width=0; 
+  Height=0;
+  Color = 0;
+}
 
 
 /*
@@ -50,38 +59,33 @@ class Rectangle: public Layer
  * Character Object Layer
  */
 
-class String : public Layer
+class String 
 {
   public:
-    //String(){};
-    String( vector<IIIMP_card16> charcodes );
-    String( int font_width, int font_height, vector<IIIMP_card16> charcodes );
+    String(){};
+    String( const vector<IIIMP_card16>& charcodes );
     ~String(){};
 
+    int size();
+    void push_char( const IIIMP_card16& );
+    void push_string( String );
+    IIIMP_card16 operator[]( const int& i);
+    
     void info();
-    
-    int fw();
-    int fh();
-
-    void fw( int new_font_width );
-    void fh( int new_font_height ); 
-    
-    void render(int pos_x, int pos_y);
-    void render();
+    void render(int pos_x, int pos_y, int font_width, int font_height, int color );
 
   private:
-    int FontWidth;
-    int FontHeight;
-    vector<FT_ULong> CharCodes;
+    vector<IIIMP_card16> CharCodes;
  
 };
 
 class Text : public Layer
 {
   public:
-    Text(){};
+    Text();
     Text( vector<String> strings );
-    Text( int pos_x, int pos_y, vector<String> strings );
+    Text( int pox_x, int pos_y, int font_height, int font_width, int color );
+
     ~Text(){};
     
     void append( String str );
@@ -89,12 +93,17 @@ class Text : public Layer
     
     int fw();
     int fh();
-
+    int fc();
+    
     void fw( int );
     void fh( int );
-    
+    void fc( int );
+
     virtual void render();
   private:
+    int FontWidth;
+    int FontHeight;
+    int FontColor;
     vector<String> Strings;
 };
 
