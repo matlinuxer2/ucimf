@@ -76,16 +76,21 @@ bool Prdt::update()
   //delete prdt_text;
 
   prdt_text = new Text;
-    
+ 
   prdt_text->append( buf3 );
   prdt_text->x(600);
-  prdt_text->y(100);
-  prdt_text->fh(16);
-  prdt_text->fw(16);
-  cout << "--end of update--" << endl;
+  prdt_text->y(350);
+  prdt_text->fh(32);
+  prdt_text->fw(32);
   prdt_text->info();
-  cout << "-----------------" << endl;
-  
+  Rectangle r( prdt_text->x() , 
+               prdt_text->y() ,
+               prdt_text->x() + prdt_text->w() ,
+	       prdt_text->y() + prdt_text->h() ,
+	       4 );
+  r.render();
+  cout << "--end of update--" << endl;
+  cout << "-----------------" << endl; 
   return draw();
 }
 

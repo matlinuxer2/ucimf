@@ -2,7 +2,7 @@ INCLUDES  = -I. -I/usr/include/freetype2
 LIBS      = -L. -Ldisplay -ldisplay -lfreetype
 
 INCLUDES2 = -I. -I/usr/include/freetype2
-LIBS2     = -L. -lgraphdev -lfreetype
+LIBS2     = -liiimcf -L. -lgraphdev -lfreetype -Ldisplay -ldisplay
 
 INCLUDES3 = -I. -I/usr/include/freetype2
 LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay 
@@ -15,7 +15,7 @@ all: driver graphdev main
 clean: 
 	rm main.exe libiiimccf.a libgraphdev.a display/libdisplay.a
 
-main: iiimccf
+main: 
 	g++ -g  -o main.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
 
 iiimccf:
