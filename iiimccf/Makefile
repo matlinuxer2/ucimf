@@ -1,11 +1,13 @@
+PWD	  = /home/mat/src-cvs/iiimtcf/iiimccf
+
 INCLUDES  = -I. -I/usr/include/freetype2
-LIBS      = -L. -Ldisplay -ldisplay -lfreetype
+LIBS      = -L$(PWD) -L$(PWD)/display -ldisplay -lfreetype
 
 INCLUDES2 = -I. -I/usr/include/freetype2
-LIBS2     = -liiimcf -L. -lgraphdev -lfreetype -Ldisplay -ldisplay
+LIBS2     = -liiimcf -L $(PWD) -lgraphdev -lfreetype -L$(PWD)/display -ldisplay
 
 INCLUDES3 = -I. -I/usr/include/freetype2
-LIBS3     = -liiimcf -L. -liiimccf -lgraphdev -Ldisplay -ldisplay 
+LIBS3     = -liiimcf -L$(PWD) -liiimccf -lgraphdev -L$(PWD)/display -ldisplay 
 
 run:
 	./main.exe
@@ -16,13 +18,21 @@ clean:
 	rm main.exe libiiimccf.a libgraphdev.a display/libdisplay.a
 
 main: 
-	g++ -g  -o main.exe $(INCLUDES3) $(LIBS3) console-app.cpp 
+	g++ -c $(INCLUDES3) console-app.cpp
+	gcc -o main.exe  $(LIBS3) console-app.cpp 
 
 iiimccf:
-	g++ -g -fPIC -shared -o libiiimccf.a $(INCLUDES2) $(LIBS2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp iiimccf-preedit.cpp iiimccf-lookup_choice.cpp
+	g++ -c $(INCLUDES2) iiimccf.cpp iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp iiimccf-preedit.cpp iiimccf-lookup_choice.cpp
+	gcc -static -o libiiimccf.so $(LIBS2)  libgraphdev.so ./display/libdisplay.so iiimccf.o iiimccf-core.o iiimccf-component.o iiimccf-util.o iiimccf-preedit.o iiimccf-lookup_choice.o
+
 
 graphdev:
-	g++ -g -fPIC -shared -o libgraphdev.a  $(INCLUDES) $(LIBS) graphdev.cpp font.cpp layer.cpp overspot.cpp
+	g++ -c $(INCLUDES) graphdev.cpp font.cpp layer.cpp overspot.cpp
+	gcc -shared -o libgraphdev.so  $(LIBS) graphdev.o font.o layer.o overspot.o
 
 driver:
-	g++ -g -fPIC -shared -o ./display/libdisplay.a -I. ./display/*cpp 
+	cd ./display
+	g++ -c -I.. *.cpp 
+	cd ..
+	gcc -shared -lstdc++ -o ./display/libdisplay.so ./display/*.o
+
