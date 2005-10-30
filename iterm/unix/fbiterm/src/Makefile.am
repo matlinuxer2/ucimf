@@ -9,11 +9,15 @@
 
 EXTRA_LIBS = \
          -L../../Xaw/lib/.libs \
-         -L../../../lib/src/.libs \
-	 -L../../../../iiimccf
+         -L../../../lib/src/.libs 
+
+IIIMCCF_DIR = /home/mat/src-cvs/iiimtcf/iiimccf
+LIBS2	= -L$(IIIMCCF_DIR) -liiimccf 
+
 EXTRA_CFLAGS = \
-         -I../../../lib/include \
-	 -I../../../../iiimccf
+         -I../../../lib/include 
+
+CFLAGS2	= -I/home/mat/src-cvs/iiimtcf/iiimccf 
 
 bin_PROGRAMS = fbiterm
 
@@ -23,9 +27,9 @@ fbiterm_SOURCES = \
 	vt.c VTScreenView.c fbiterm.h palette.h VTScreenView.h
 
 fbiterm_LDADD = \
-	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
+	-L$(libdir) @X_LIBS@ $(LIBS2) $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf 
 
-CFLAGS = -I$(includedir) @X_CFLAGS@ -I$(top_srcdir)/include -I/usr/local/include $(EXTRA_CFLAGS) @CFLAGS@
+CFLAGS = -I$(includedir) @X_CFLAGS@ -I$(top_srcdir)/include -I/usr/local/include $(CFLAGS2) $(EXTRA_CFLAGS) @CFLAGS@
 
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/fbiterm

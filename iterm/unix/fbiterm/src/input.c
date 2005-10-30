@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <linux/input.h>
 #include <linux/kd.h>
+#include <sys/types.h>
 #include <linux/keyboard.h>
 
 #define BIDI
