@@ -1,16 +1,15 @@
 SUBDIRS = display
 
-EXTRA_INCS = -I/usr/include/freetype2
-EXTRA_LIBS = -Ldisplay/
+EXTRA_INCS = -I/usr/include/freetype2 
+EXTRA_LIBS = -Ldisplay/ -ldisplay
 
 AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS)
 
-bin_PROGRAMS = testing
-testing_SOURCES = console-app.c
-testing_LIBADD = -L. -liiimccf.la
-
 lib_LTLIBRARIES = libiiimccf.la
 
-libiiimccf_la_SOURCES = iiimccf.cpp iiimccf-core.cpp iiimccf-component iiimccf-utils overspot.cpp layer.cpp font.cpp graphdev.cpp
+libiiimccf_la_SOURCES = iiimccf.cpp \
+                        iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp \
+			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp \
+                        overspot.cpp layer.cpp font.cpp graphdev.cpp
 libiiimccf_la_LDFLAGS = 
-libiiimccf_la_LIBADD = -L$(libdir) $(EXTRA_LIBS) -ldisplay -lfreetype -liiimcf 
+libiiimccf_la_LIBADD = -L$(libdir) $(EXTRA_LIBS) -lfreetype -liiimcf 
