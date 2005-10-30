@@ -4,6 +4,7 @@
 
 
 class IIIMCCF {
+    //friend class Cmt;
   public:
     IIIMCCF();
     ~IIIMCCF();
@@ -22,14 +23,16 @@ class IIIMCCF {
     void pos( int, int );
     void refresh();
     
+    /* committed text */
+    char* cmt_buf;
+    int cmt_buf_len;
+
   private:
 
     // IIIMCF Object
     IIIMCF_handle 	handle;
     IIIMCF_context 	context;
    
-    /* committed text */
-    char* cmt_buf;
     /* current screen infomation */
     int height, width, resolution;
     /* current cursor position */
@@ -37,6 +40,7 @@ class IIIMCCF {
  
 };
 
+extern IIIMCCF* iiimccf;
 
 /** Registed component functions **/
 IIIMF_status iiimccf_preedit( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF_component );
@@ -94,13 +98,28 @@ class Lkc
     int cur_idx;
     Text* lkc_text;
 };
+
+/** Commit Object **/
+class Cmt
+{
+  public:
+    Cmt( IIIMCF_context );
+    ~Cmt(){};
+    bool query( char** );
+    void update();
+  private:
+    IIIMCF_context context;
+    char* cmt_utf8_str;
+    bool valid;
+};
+
 /** Utilities functions **/
 
 void check(IIIMF_status st);
 void debug( char *str );
 void mesg( char *str );
 int wchar_to_utf8( wchar_t c, char * outbuf, int bufsize);
-bool  get_committed_text();
+bool  get_committed_text( IIIMCF_context, IIIMCCF& );
 char* iiimcf_text_to_utf8( IIIMCF_text t);
 char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 );
 void show_lookup_choice( IIIMCF_context context );

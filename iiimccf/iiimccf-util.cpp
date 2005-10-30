@@ -60,17 +60,17 @@ int wchar_to_utf8(wchar_t c, char * outbuf, int bufsize)
 	return len;
 }
 
-bool  get_committed_text()
+bool  get_committed_text(IIIMCF_context context, IIIMCCF& iiimccf)
 {
 	IIIMF_status st;
 	IIIMCF_text text;
-
-	//char *buf=cmt_buf;
-	//int *buf_len = &cmt_len;
 	
-	//iiimcf_get_committed_text( context , &text);
+	iiimcf_get_committed_text( context , &text);
 	//iiimcf_get_text_length( text, buf_len );
 
+	char* buf_utf8 = iiimcf_text_to_utf8( text );
+	int buf_utf8_len = strlen( buf_utf8 );
+	
 	return 0;
 }
 

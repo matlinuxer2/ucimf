@@ -145,49 +145,6 @@ iiimccf_status(
 }
 
 
-/* 
- * Commit
- */
-IIIMF_status
-iiimccf_commit(
-    IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
-){
-    IIIMF_status st;
-    IIIMCF_event_type type;
-    st = iiimcf_get_event_type( event, &type );
-    if( st != IIIMF_STATUS_SUCCESS ) return st;
-
-    if ((type >= IIIMCF_EVENT_TYPE_UI_COMMIT)
-	    && (type < IIIMCF_EVENT_TYPE_UI_COMMIT_END))
-    {
-	switch( type ){	
-	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
-	      debug("commit");
-	      //get_committed_text();
-	      break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_COMMIT_END:
-	      debug("commit_end");
-	      break;
-	      
-	  default: 
-	      debug(" !!commit!! ");
-	      cout << " !! " ;
-	      cout.setf( ios_base::hex, ios_base::basefield );
-	      cout << type;
-	      cout << " !! " << endl;
-	      break;	
-	}
-	return IIIMF_STATUS_SUCCESS;
-    }
-
-    return IIIMF_STATUS_COMPONENT_INDIFFERENT;
-}
-
-
 
 /* 
  * Event Key
