@@ -63,8 +63,8 @@ am__DEPENDENCIES_1 =
 libiiimccf_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libiiimccf_la_OBJECTS = iiimccf.lo iiimccf-core.lo \
 	iiimccf-component.lo iiimccf-util.lo iiimccf-preedit.lo \
-	iiimccf-lookup_choice.lo overspot.lo layer.lo font.lo \
-	graphdev.lo
+	iiimccf-lookup_choice.lo iiimccf-commit.lo overspot.lo \
+	layer.lo font.lo graphdev.lo
 libiiimccf_la_OBJECTS = $(am_libiiimccf_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -202,7 +202,7 @@ AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS)
 lib_LTLIBRARIES = libiiimccf.la
 libiiimccf_la_SOURCES = iiimccf.cpp \
                         iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp \
-			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp \
+			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp iiimccf-commit.cpp\
                         overspot.cpp layer.cpp font.cpp graphdev.cpp
 
 libiiimccf_la_LDFLAGS = 
@@ -300,6 +300,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/font.Plo
 include ./$(DEPDIR)/graphdev.Plo
+include ./$(DEPDIR)/iiimccf-commit.Plo
 include ./$(DEPDIR)/iiimccf-component.Plo
 include ./$(DEPDIR)/iiimccf-core.Plo
 include ./$(DEPDIR)/iiimccf-lookup_choice.Plo

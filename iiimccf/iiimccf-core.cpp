@@ -144,9 +144,17 @@ int IIIMCCF::proc( int keycode, int keychar, int modifier )
 
 int IIIMCCF::result( char* *buf_out )
 {
-  int buf_len;
-  strcpy( (*buf_out) , cmt_buf );
-  buf_len=strlen( (*buf_out) );
+  int buf_len=0;
+  cerr << " ===1===" << endl;
+  if( cmt_buf_len > 0 )
+  {
+  cerr << " ===2===" << endl;
+    (*buf_out) = cmt_buf ;
+    buf_len=strlen( (*buf_out) );
+    cmt_buf_len = 0;
+    cmt_buf = 0 ;
+  }
+  cerr << " ===3===" << endl;
 
   return buf_len;
 }
