@@ -22,11 +22,175 @@
 #ifdef HAVE_SELECT
 #include <errno.h>
 #include <iterm/unix/ttyio.h>
-#include <iiimccf.h>
 #endif
 
 Iterm *pIterm;
-IIIMCCF *iiimccf;
+//IIIMCCF *iiimccf;
+
+/**** externel ****/
+#include "iiimccf.h"
+#include <iiimcf.h>
+#include <iiimp-keycode.h>
+
+//int keychar_to_keycode( int );
+
+static const int keychar_to_keycode[] = {
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_TAB,
+
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_ENTER,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_ESCAPE,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_SPACE,
+	IIIMF_KEYCODE_EXCLAMATION_MARK,
+	IIIMF_KEYCODE_QUOTEDBL,
+	IIIMF_KEYCODE_NUMBER_SIGN,
+	IIIMF_KEYCODE_DOLLAR,
+	IIIMF_KEYCODE_UNDEFINED, 		/* % */
+	IIIMF_KEYCODE_AMPERSAND,
+	IIIMF_KEYCODE_QUOTE,
+
+	IIIMF_KEYCODE_LEFT_PARENTHESIS,
+	IIIMF_KEYCODE_RIGHT_PARENTHESIS,
+	IIIMF_KEYCODE_ASTERISK,
+	IIIMF_KEYCODE_PLUS,
+	IIIMF_KEYCODE_COMMA,
+	IIIMF_KEYCODE_MINUS,
+	IIIMF_KEYCODE_PERIOD,
+	IIIMF_KEYCODE_SLASH,
+	IIIMF_KEYCODE_0,
+	IIIMF_KEYCODE_1,
+
+	IIIMF_KEYCODE_2,
+	IIIMF_KEYCODE_3,
+	IIIMF_KEYCODE_4,
+	IIIMF_KEYCODE_5,
+	IIIMF_KEYCODE_6,
+	IIIMF_KEYCODE_7,
+	IIIMF_KEYCODE_8,
+	IIIMF_KEYCODE_9,
+	IIIMF_KEYCODE_COLON,
+	IIIMF_KEYCODE_SEMICOLON,
+
+	IIIMF_KEYCODE_LESS,
+	IIIMF_KEYCODE_EQUALS,
+	IIIMF_KEYCODE_GREATER,
+	IIIMF_KEYCODE_UNDEFINED,		/* ? */
+	IIIMF_KEYCODE_AT,
+	IIIMF_KEYCODE_A,
+	IIIMF_KEYCODE_B,
+	IIIMF_KEYCODE_C,
+	IIIMF_KEYCODE_D,
+	IIIMF_KEYCODE_E,
+
+	IIIMF_KEYCODE_F,
+	IIIMF_KEYCODE_G,
+	IIIMF_KEYCODE_H,
+	IIIMF_KEYCODE_I,
+	IIIMF_KEYCODE_J,
+	IIIMF_KEYCODE_K,
+	IIIMF_KEYCODE_L,
+	IIIMF_KEYCODE_M,
+	IIIMF_KEYCODE_N,
+	IIIMF_KEYCODE_O,
+
+	IIIMF_KEYCODE_P,
+	IIIMF_KEYCODE_Q,
+	IIIMF_KEYCODE_R,
+	IIIMF_KEYCODE_S,
+	IIIMF_KEYCODE_T,
+	IIIMF_KEYCODE_U,
+	IIIMF_KEYCODE_V,
+	IIIMF_KEYCODE_W,
+	IIIMF_KEYCODE_X,
+	IIIMF_KEYCODE_Y,
+
+	IIIMF_KEYCODE_Z,
+	IIIMF_KEYCODE_OPEN_BRACKET,
+	IIIMF_KEYCODE_BACK_SLASH,
+	IIIMF_KEYCODE_CLOSE_BRACKET,
+	IIIMF_KEYCODE_CIRCUMFLEX,
+	IIIMF_KEYCODE_UNDERSCORE,
+	IIIMF_KEYCODE_BACK_QUOTE,
+	IIIMF_KEYCODE_A,
+	IIIMF_KEYCODE_B,
+	IIIMF_KEYCODE_C,
+
+	IIIMF_KEYCODE_D,
+	IIIMF_KEYCODE_E,
+	IIIMF_KEYCODE_F,
+	IIIMF_KEYCODE_G,
+	IIIMF_KEYCODE_H,
+	IIIMF_KEYCODE_I,
+	IIIMF_KEYCODE_J,
+	IIIMF_KEYCODE_K,
+	IIIMF_KEYCODE_L,
+	IIIMF_KEYCODE_M,
+
+	IIIMF_KEYCODE_N,
+	IIIMF_KEYCODE_O,
+	IIIMF_KEYCODE_P,
+	IIIMF_KEYCODE_Q,
+	IIIMF_KEYCODE_R,
+	IIIMF_KEYCODE_S,
+	IIIMF_KEYCODE_T,
+	IIIMF_KEYCODE_U,
+	IIIMF_KEYCODE_V,
+	IIIMF_KEYCODE_W,
+
+	IIIMF_KEYCODE_X,
+	IIIMF_KEYCODE_Y,
+	IIIMF_KEYCODE_Z,
+	IIIMF_KEYCODE_BRACELEFT,
+	IIIMF_KEYCODE_UNDEFINED,		/* | */
+	IIIMF_KEYCODE_BRACERIGHT,
+	IIIMF_KEYCODE_UNDEFINED,		/* ~ */
+};
+
+int keyinput_to_keyevent( char* buf, int buf_len, int* p_keycode, int* p_keychar, int* p_modifier )
+{
+  if( buf_len== 1 )
+  {
+    int ich = (int) buf[0];
+    *p_keychar = ich;
+    *p_keycode = keychar_to_keycode[ ich ];
+    *p_modifier = 0; // default as zero.
+  }
+
+  return 0;
+}
+
+
+/******************/
+
 
 void
 exitFbiterm (int exitcode)
@@ -161,10 +325,10 @@ main (int argc, char *argv[])
     int SWITCH_TO_IIIMCF= 0;
 	
 	/* Import some definition from input.h to here */
-        unsigned char *buf2;
-	int *buf2_len;
-	iiimccf = iiimccf_new( buf, &ret, buf2, buf2_len );
-	iiimccf->init(); 
+        //unsigned char *buf2;
+	//int *buf2_len;
+	//iiimccf = iiimccf_new( buf, &ret, buf2, buf2_len );
+	iiimccf_init(); 
 	
 	
     while (1)
@@ -194,10 +358,10 @@ main (int argc, char *argv[])
 	    {
 			 if( SWITCH_TO_IIIMCF == 0 ){
 				 SWITCH_TO_IIIMCF = 1;
-				 iiimccf->start();
+				 iiimccf_on();
 			 }else{
 				 SWITCH_TO_IIIMCF = 0;
-				 iiimccf->stop();
+				 iiimccf_off();
 			 }
 		 	
 			 continue;
@@ -212,24 +376,31 @@ main (int argc, char *argv[])
                     write (fd, &buf[i], 1);
               }
             }
-        /* if SWITCH_TO_IIIMCF is on, then redirect the input to iiimcf*/
-		else if( SWITCH_TO_IIIMCF == 1 )
+	    /* if SWITCH_TO_IIIMCF is on, then redirect the input to iiimcf*/
+	    else if( SWITCH_TO_IIIMCF == 1 )
 	    {
-			iiimccf->process();
-			if ( iiimccf->lookup_done == 1 ){
-			  write( fd, iiimccf->buf_out, *(iiimccf->buf_out_len) );
-			}else{
-					continue;
-			}
+                int keycode, keychar, modifier;
+                keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
+	      
+		iiimccf_proc( keycode, keychar, modifier );
+		
+		char* committed_buf;
+		int committed_buf_len=0 ;
+		committed_buf_len = iiimccf_result( &committed_buf );
+		if ( committed_buf_len > 0 ){
+		  write( fd, committed_buf, committed_buf_len );
+		}else{
+				continue;
+		}
 	    }
-		else if( ret > 1 )
-        {
+	    else if( ret > 1 )
+	    {
               if (keypress2(buf,ret) == False)
                   write (fd, buf, ret);
-        }
+	    }
 			 
 	  }
-	else if (FD_ISSET (fd, &rfds)) // if the foreign 'fd' is in the fd_set
+	  else if (FD_ISSET (fd, &rfds)) // if the foreign 'fd' is in the fd_set
 	  {
 	    if (ret > 0)
 	      VTCore_dispatch(pIterm->vtcore_ptr);
@@ -238,7 +409,7 @@ main (int argc, char *argv[])
       }
 	  
 	  /* Exit the iiimcf client */
-	  iiimccf->exit();
+	  iiimccf_exit();
 	  
   }
 #else
