@@ -1,6 +1,6 @@
 SUBDIRS = display
 
-EXTRA_INCS = -I/usr/include/freetype2 
+EXTRA_INCS =
 EXTRA_LIBS = -Ldisplay/ -ldisplay
 
 AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS)
@@ -12,4 +12,7 @@ libiiimccf_la_SOURCES = iiimccf.cpp \
 			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp iiimccf-commit.cpp\
                         overspot.cpp layer.cpp font.cpp graphdev.cpp
 libiiimccf_la_LDFLAGS = 
-libiiimccf_la_LIBADD = -L$(libdir) $(EXTRA_LIBS) -lfreetype -liiimcf 
+libiiimccf_la_LIBADD = \
+	-L$(libdir) \
+	$(EXTRA_LIBS) \
+	-liiimcf 
