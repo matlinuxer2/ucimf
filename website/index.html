@@ -1,48 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="cssjs/style.css" >
-<title>IIIMCCF -- IIIM Console Client Framework </title>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  <link rel="stylesheet" href="content.css" type="text/css">
+  <title>IIIMCCF -- IIIM Console Client Framework</title>
 </head>
 <body>
+<h1 class="title" style="font-weight: bold;">
+<center>IIIMCCF -- IIIM Console Client Framework</center>
+</h1>
 
-<h2>Note:</h2>
+<table border="0" cellspacing="0" width = 100%><tr>
+<td>
+引入 IIIMF 架構的 Unicode 終端機環境   Copyright &copy; 2005
+<p>
+授權方式： <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a> (GPL)</p>
+<p>
+開發者:
+</p>
+<ul>
+  <li>MatLinuxer2@gmail.com</li>
+</ul>
+</td>
+<td bgcolor="#DDDDDD">
+<ul>
+	<li><a href="#origin">緣起</a></li>
+	<li><a href="#howtoget">取得方式</a></li>
+	<li><a href="#compile">編譯方式</a></li>
+	<li><a href="#testing">測試方式</a></li>
+	<li><a href="#document">設計文件</a></li>
+</ul>
+</td>
+</tr></table>
+
+<a name="origin"><h2 class="title">緣起</h2></a>
+<p>
+小弟常常在 console 弄東弄西，然而在 console 下遇到中文處理，總是一個頭兩個大。
+為此，我一直尋找一個完整的 Unicode console enviroment 的解決方案，感謝先人的努力，
+已經有 fbiterm、jfbterm、... 等 Unicode 的 console applications。然而，
+輸入法的支援上一直是一個缺憾，於是我開始著手嘗試將 IIIMF 的架構引入 console，
+也就是你現在看到的專案。
+</p>
+<p>
+目前這個專案還在發展當中，如你有任何想法與建議，歡迎與我聯絡：<ul>
+Email: MatLinuxer2@gmail.com</ul>
+</p>
+<br>
+<a name="howtoget"><h2 class="title">取得方式：</h2></a>
+<ul>
+  <li>取得開發中的最新程式碼，請安裝 <a href="http://subversion.tigris.org/">Subversion</a>，並確保 https 連線正常。在終端機下輸入以下指令：
+    
+    <ul>
+      <code><b>svn co https://svn.csie.net/iiimtcf</b></code>
+    
+    </ul>
+  </li>
+</ul>
+<br>
+<a name="compile"><h2 class="title">編譯方式：</h2></a>
+<ul>
+  <li>請先安裝好 iiimcf 和 iiimsf 等套件，以提供 IIIMF 的支援</li>
+  <li>./autogen.sh (只有從 Subversion 取出的開發版本需要)</li>
+  <li>./configure --help 查看編譯選項，因為功能持續開發中，項目隨時可能增減</li>
+  <li>./configure [編譯選項，請參閱上行]</li>
+  <li>make ; make install</li>
+</ul>
+<br>
+<a name="testing"><h2 class="title">測試方式</h2></a>
+<ul>
+  <li>先安裝 lib，然後再安裝 fbiterm</li>
+  <li>字型的路徑在 /iterm/unix/fbiterm/src/fbiterm.h 裡，參數: DefaultMB</li>
+</ul>
+<br>
+<a name="document"><h2 class="title">設計文件</h2></a>
+<br>
+<ul>
 There are several directories under the "iiimtcf/".
 The "iiimtcf/iiimccf/" is the main source. Files there will be built to a independent module.
 And "iiimtcf/iterm/" is an instance for IIIMCCF to apply.
 If you are interested in this project, just try to build "iiimtcf/iiimccf/" first.
 "iiimtcf/iterm/" doesn't affect the functionality of IIIMCCF, in fact.
-
-<h2>News:</h2>
-2005-08-05 All components of the program are going to be  ready. 
-
-2005-07-25 字型的介面已經可以運作了. 關於程式的說明, 各位可以參考iiimccf/document/下的圖檔. 是手寫的筆記.
-字跡潦草, 請大家多多包涵.
-
-2005-07-xx 程式的架構有了一些更動. 請參考 http://genbian.m8.ntu.edu.tw/dokuwiki/doku.php?id=designspec
-
-
-<h2>源起:</h2>
-小弟常常在console弄東弄西. 然而在console下遇到中文處理, 總是一個頭兩個大.
-為此,我一直尋找一個完整的unicode console enviroment的解決方案.
-感謝先人的努力, 已經有fbiterm, jfbterm, ...等unicode的console apps. 
-然而, 輸入法的支援上一直是一個缺憾. 於是我開始著手嘗試將IIIMF的架構引入console.
-也就是你現在看到的專案.
-目前這個專案還在發展當中, 如果你有任何想法與建議, 歡迎與我聯絡.
-Email: MatLinuxer2@gmail.com
-
-<h2>測試:</h2>
-1. 先安裝lib, 然後再安裝fbiterm.
-2. 字型的路徑在/iterm/unix/fbiterm/src/fbiterm.h裡, 參數: DefaultMB 
-
-<h2>需求:</h2>
-1. 請先安裝好iiimcf和iiimsf等套件, 以提供IIIMF的支援.
-
-<h2>備註: </h2>
-此網頁作得相當潦草, 請大家多多包涵. 
-希望能集中心力在實作上, 等完成一定的進步後, 再回頭美化一下網頁 orz.
-
-
-
+</ul>
+<br>
+<ul>
+關於程式的說明, 各位可以參考 <a href="document/">iiimccf/document</a> 下的圖檔。是手寫的筆記，字跡潦草，請大家多多包涵。
+</ul>
+<br>
 </body>
 </html>

@@ -1,0 +1,16 @@
+body { background-color:#FFFFFF; color: #000000; margin-left:20px; margin-right:20px; margin-top:6px; margin-bottom:0px }
+h1.title { background-color:#0080FF; color:#FFFFFF }
+h2.title { background-color:#DDDDDD; color:#000000 }
+h3.title { background-color:#000000; color:#FFFFFF }
+dt {font-weight:bold;}
+dd {color:rgb(60,60,60)}
+code {background-color:#000000; color:#FFFFFF;}
+code.script {background-color:#FFFFFF; color:#000000;}
+code.comment {background-color:#FFFFFF; color:#AAAAAA;}
+div.link:hover { background-color:#0080FF; }
+a.head:link { color:#0080FF; text-decoration:none; font-weight:bold; }
+a.head:visited { color:#000000; text-decoration:none; font-weight:bold; }
+a.head:hover { background-color:#0080FF; color:#FFFFFF; text-decoration:none; font-weight:bold; }
+a.head:active { background-color:#0080FF; color:#FFFFFF; text-decoration:none; font-weight:bold; }
+td { padding:4px; border-color:#DDDDDD; border-width:2px; border-style:solid; }
+th { color:#FFFFFF; background-color:#000000; padding:4px; border-color:#DDDDDD; border-width:2px; border-style:solid; }
