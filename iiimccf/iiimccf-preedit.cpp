@@ -78,10 +78,10 @@ bool Prdt::update()
   prdt_text = new Text;
  
   prdt_text->append( buf3 );
-  prdt_text->x(600);
+  prdt_text->x(300);
   prdt_text->y(350);
-  prdt_text->fh(32);
-  prdt_text->fw(32);
+  prdt_text->fh(16);
+  prdt_text->fw(16);
   prdt_text->info();
   Rectangle r( prdt_text->x() , 
                prdt_text->y() ,

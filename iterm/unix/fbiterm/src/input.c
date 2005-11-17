@@ -27,6 +27,7 @@ enum
   CTRL_F1,
   ALT_ENTER,
   ALT_ENTER_GR,
+  CTRL_SPACE = 203,
 };
 
 typedef struct _new_key
@@ -44,6 +45,7 @@ static new_key nkeys[] = {
   {(1 << KG_CTRL), KEY_F1, K (KT_LATIN, CTRL_F1)},	/* Ctrl + F1 */
   {(1 << KG_ALT), KEY_ENTER, K (KT_LATIN, ALT_ENTER)},	/* Alt + Enter */
   {(1 << KG_ALTGR), KEY_ENTER, K (KT_LATIN, ALT_ENTER)},	/* Alt + Enter (GR) */
+  {(1 << KG_CTRL), KEY_SPACE, K (KT_LATIN, CTRL_SPACE)},	/* Ctrl + Space */
 };
 
 int
