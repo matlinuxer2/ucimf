@@ -34,20 +34,26 @@ Iterm *pIterm;
 
 //int keychar_to_keycode( int );
 
-static const int keychar_to_keycode[] = {
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_UNDEFINED,
-	IIIMF_KEYCODE_TAB,
+/*
+ *  Mapping: ASCII keychar --> IIIMF keycode
+ */
 
+static const int keychar_to_keycode[] = {
+  // ascii code 00-0
+	IIIMF_KEYCODE_UNDEFINED, 
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_TAB,	 
+
+        // 10-19
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_CLEAR,
 	IIIMF_KEYCODE_ENTER,
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
@@ -56,6 +62,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
 
+  	// 20-29
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
@@ -67,6 +74,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
 
+        // 30-39
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_UNDEFINED,
 	IIIMF_KEYCODE_SPACE,
@@ -78,6 +86,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_AMPERSAND,
 	IIIMF_KEYCODE_QUOTE,
 
+	// 40-49
 	IIIMF_KEYCODE_LEFT_PARENTHESIS,
 	IIIMF_KEYCODE_RIGHT_PARENTHESIS,
 	IIIMF_KEYCODE_ASTERISK,
@@ -89,6 +98,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_0,
 	IIIMF_KEYCODE_1,
 
+	// 50-59
 	IIIMF_KEYCODE_2,
 	IIIMF_KEYCODE_3,
 	IIIMF_KEYCODE_4,
@@ -100,6 +110,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_COLON,
 	IIIMF_KEYCODE_SEMICOLON,
 
+	// 60-69
 	IIIMF_KEYCODE_LESS,
 	IIIMF_KEYCODE_EQUALS,
 	IIIMF_KEYCODE_GREATER,
@@ -111,6 +122,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_D,
 	IIIMF_KEYCODE_E,
 
+	// 70-79
 	IIIMF_KEYCODE_F,
 	IIIMF_KEYCODE_G,
 	IIIMF_KEYCODE_H,
@@ -122,6 +134,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_N,
 	IIIMF_KEYCODE_O,
 
+	// 80-89
 	IIIMF_KEYCODE_P,
 	IIIMF_KEYCODE_Q,
 	IIIMF_KEYCODE_R,
@@ -133,6 +146,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_X,
 	IIIMF_KEYCODE_Y,
 
+	// 90-99
 	IIIMF_KEYCODE_Z,
 	IIIMF_KEYCODE_OPEN_BRACKET,
 	IIIMF_KEYCODE_BACK_SLASH,
@@ -144,6 +158,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_B,
 	IIIMF_KEYCODE_C,
 
+	// 100-109
 	IIIMF_KEYCODE_D,
 	IIIMF_KEYCODE_E,
 	IIIMF_KEYCODE_F,
@@ -155,6 +170,7 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_L,
 	IIIMF_KEYCODE_M,
 
+	// 110-119
 	IIIMF_KEYCODE_N,
 	IIIMF_KEYCODE_O,
 	IIIMF_KEYCODE_P,
@@ -166,14 +182,17 @@ static const int keychar_to_keycode[] = {
 	IIIMF_KEYCODE_V,
 	IIIMF_KEYCODE_W,
 
+	// 120-126
 	IIIMF_KEYCODE_X,
 	IIIMF_KEYCODE_Y,
 	IIIMF_KEYCODE_Z,
 	IIIMF_KEYCODE_BRACELEFT,
 	IIIMF_KEYCODE_UNDEFINED,		/* | */
 	IIIMF_KEYCODE_BRACERIGHT,
-	IIIMF_KEYCODE_UNDEFINED,		/* ~ */
+	IIIMF_KEYCODE_DELETE,		/* ~ */
+	IIIMF_KEYCODE_BACK_SPACE,		/* BACKSPACE */
 };
+
 
 int keyinput_to_keyevent( char* buf, int buf_len, int* p_keycode, int* p_keychar, int* p_modifier )
 {
@@ -184,7 +203,66 @@ int keyinput_to_keyevent( char* buf, int buf_len, int* p_keycode, int* p_keychar
     *p_keycode = keychar_to_keycode[ ich ];
     *p_modifier = 0; // default as zero.
   }
+  else 
+    if( buf_len == 3 && buf[0]==27 && buf[1]==91 )
+  {
+    switch( buf[2] )
+    {
+      case 65:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_UP;
+	*p_modifier = 0; // default as zero.
+	break;
 
+      case 66:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_DOWN;
+	*p_modifier = 0; // default as zero.
+	break;
+	
+      case 67:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_RIGHT;
+	*p_modifier = 0; // default as zero.
+	break;
+	
+      case 68:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_LEFT;
+	*p_modifier = 0; // default as zero.
+	break;
+
+      default:
+	break;
+    }
+  }
+  else 
+    if( buf_len == 4 && buf[0]==27 && buf[1]==91 && buf[4]==126 )
+  {
+    switch( buf[3] )
+    {
+      case 53:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_PAGE_UP;
+	*p_modifier = 0; // default as zero.
+	break;
+	
+      case 54:
+	*p_keychar = 0;
+	*p_keycode = IIIMF_KEYCODE_PAGE_DOWN;
+	*p_modifier = 0; // default as zero.
+	break;
+      default:
+	break;
+    }
+  }
+  else
+  {
+    *p_keychar = 0;
+    *p_keycode = 0;
+    *p_modifier = 0; // default as zero.
+  }
+  
   return 0;
 }
 
@@ -354,7 +432,9 @@ main (int argc, char *argv[])
 	    
 	    /* At First check whether switch input mode or not*/
 	    /* if key == F7 == (27,91,49,56,126) */
-	    if( buf[0]=='\033' && buf[1]=='[' && buf[2]=='1' && buf[3]=='8' && buf[4]=='~' )	    	    
+	    
+	    //if( buf[0]=='\033' && buf[1]=='[' && buf[2]=='1' && buf[3]=='8' && buf[4]=='~' )	    	    
+	    if( buf[0] == 203 )
 	    {
 			 if( SWITCH_TO_IIIMCF == 0 ){
 				 SWITCH_TO_IIIMCF = 1;
@@ -380,8 +460,8 @@ main (int argc, char *argv[])
 	    else if( SWITCH_TO_IIIMCF == 1 )
 	    {
                 int keycode, keychar, modifier;
-                keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
-	      
+                
+		keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
 		iiimccf_proc( keycode, keychar, modifier );
 		
 		char* committed_buf;
