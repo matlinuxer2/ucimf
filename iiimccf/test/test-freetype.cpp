@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "graphdev.h"
-#include "basefont.h"
+//#include "basefont.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -16,7 +16,7 @@ int main( int argc, char argv[] )
   GraphDev *gdev = GraphDev::mpGraphDev;
   gdev->FillRect( 10, 20, 10, 20 , 3);
 
-  string fontpath="./font/ming.ttf";
+  std::string fontpath="./font/ming.ttf";
   
   FT_Library library;
   {
@@ -79,8 +79,8 @@ int main( int argc, char argv[] )
 
     FT_Matrix matrix;
     FT_Int load_flags=FT_LOAD_DEFAULT;
-    error=FT_Load_Glyph( face, glyph_index, load_flags );
-    error=FT_Render_Glyph( face->glyph, 0 );
+    error = FT_Load_Glyph( face, glyph_index, load_flags );
+    error = FT_Render_Glyph( face->glyph, (FT_Render_Mode) 0 );
     FT_GlyphSlot slot=face->glyph;
 
   }

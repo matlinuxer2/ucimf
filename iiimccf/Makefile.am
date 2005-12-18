@@ -3,7 +3,7 @@ SUBDIRS = display
 EXTRA_INCS =
 EXTRA_LIBS = -Ldisplay/ -ldisplay
 
-AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS)
+AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS) -I/usr/include/iiim
 
 lib_LTLIBRARIES = libiiimccf.la
 

@@ -166,6 +166,7 @@ void FBLinear24::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
 
     __u8* dest = ((__u8*)mpBuf + mNextLine * y + x * 3 );
     __u32* dest32;
+    __u16* tmp_half;
 
     char* cdat = pFont->pBuf;
     int cnt;
@@ -203,11 +204,15 @@ void FBLinear24::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
             d1 = (-(*cdat >> 3 & 1) & eorx) ^ bgx;
             d2 = (-(*cdat >> 2 & 1) & eorx) ^ bgx;
             fb_writel(d1 | (d2<<24), dest32++);
-            fb_writew(d2>>8, ((__u16*)dest32)++);
+            fb_writew(d2>>8, dest32);
+            tmp_half = (__u16*) dest32;
+            dest32 = (__u32*) ++tmp_half;
         }
         if (pFont->w & 1) {
             d3 = (-(*cdat >> 1 & 1) & eorx) ^ bgx;
-            fb_writew(d3, ((__u16*)dest32)++);
+            fb_writew(d3, dest32);
+            tmp_half = (__u16*) dest32;
+            dest32 = (__u32*) ++tmp_half;
             fb_writeb(d3>>16, (__u8*)dest32);
         }
         cdat++;
