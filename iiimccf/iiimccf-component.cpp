@@ -5,6 +5,8 @@ using namespace std;
  * Preedit
  */
 
+extern IIIMCCF* iiimccf;
+
 IIIMF_status
 iiimccf_preedit(
     IIIMCF_context context,
@@ -31,12 +33,14 @@ iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
+		  prdt.position(iiimccf->x, iiimccf->y);
 		  prdt.info();
 		  prdt.update();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
+		  prdt.position(iiimccf->x, iiimccf->y);
 		  prdt.update();
 		  break;
 		  

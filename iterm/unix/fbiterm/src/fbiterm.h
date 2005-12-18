@@ -73,6 +73,11 @@ enum ITERM_ERRCODE
   INPUT_ERROR_EXIT,
 };
 
+/*============*/
+int cur_col;
+int cur_row;
+/*============*/
+  
 /* drawing methods */
 typedef void (*SetPaletteProc) ();
 typedef void (*DrawTextProc) (int col, int row, char *mbstring, int length,

@@ -78,8 +78,8 @@ bool Prdt::update()
   prdt_text = new Text;
  
   prdt_text->append( buf3 );
-  prdt_text->x(300);
-  prdt_text->y(350);
+  prdt_text->x(cur_x);
+  prdt_text->y(cur_y);
   prdt_text->fh(16);
   prdt_text->fw(16);
   prdt_text->info();

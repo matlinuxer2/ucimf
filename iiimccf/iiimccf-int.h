@@ -27,6 +27,9 @@ class IIIMCCF {
     char* cmt_buf;
     int cmt_buf_len;
 
+    /* current cursor position */
+    int x,y;
+
   private:
 
     // IIIMCF Object
@@ -35,8 +38,6 @@ class IIIMCCF {
    
     /* current screen infomation */
     int height, width, resolution;
-    /* current cursor position */
-    int x,y;
  
 };
 
