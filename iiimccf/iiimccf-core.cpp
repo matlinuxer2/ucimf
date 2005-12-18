@@ -82,7 +82,11 @@ bool IIIMCCF::on()
         IIIMCF_attr attr;
 	st = iiimcf_create_attr( &attr );
 	// This line is for input method setting 
+	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "chewing");
 	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
+	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "default");
+	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "untitle");
+	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "hangul");
     	
 	iiimcf_create_context( handle, attr , &context );
 	
