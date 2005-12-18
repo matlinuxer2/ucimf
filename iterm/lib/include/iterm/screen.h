@@ -82,6 +82,14 @@ typedef struct _VTScreenView
        * @param row start row to draw text
        */
 
+  void (*get_cursor_position)(struct _VTScreenView *view,int *col, int *row);
+      /**<
+       * get cursor position
+       * @param view reference to VTScreenView object
+       * @param col current column of cursor
+       * @param row current row of cursor
+       */
+
   void (*set_rendition)(struct _VTScreenView *view,
                         int bold, int blink,
                         int inverse, int underline,
@@ -176,7 +184,7 @@ typedef struct _VTScreenView
        * @param src_row source row position
        * @param num_line number of line to bitblit
        */
-
+  
 } VTScreenView;
 /**< typedefed struct of struct _VTScreenView */
 
@@ -190,6 +198,7 @@ do \
   view->swap_video = NULL; \
   view->resize_request = NULL; \
   view->update_cursor_position = NULL; \
+  view->get_cursor_position = NULL; \
   view->ring = NULL; \
   view->notify_osc = NULL; \
   view->update_scrollbar = NULL; \

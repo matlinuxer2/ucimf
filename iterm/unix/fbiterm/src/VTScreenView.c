@@ -9,6 +9,13 @@
 
 #include "fbiterm.h"
 
+static void 
+VTScreenView_update_cursor_position(VTScreenView *view, int col, int row )
+{
+  cur_col = col;
+  cur_row = row;
+}
+
 static void
 VTScreenView_draw_text (VTScreenView * view, int col, int row,
 			char *mbstring, int length, int width)
