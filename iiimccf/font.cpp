@@ -65,7 +65,7 @@ void Font::draw()
     error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
     unsigned char* tmp = slot->bitmap.buffer;
     int pos_left = pos_x + slot->bitmap_left;
-    int pos_top = pos_y + slot->bitmap_top;
+    int pos_top = pos_y;// + slot->bitmap_top;
     int color = font_color;
 
     for (int i=0; i< slot->bitmap.rows; i++ )
