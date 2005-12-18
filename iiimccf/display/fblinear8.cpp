@@ -86,6 +86,7 @@ void FBLinear8::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
 
     __u8* dest = ((__u8*)mpBuf + mNextLine * y + x);
     __u32* dest32;
+    __u16* tmp_half;
 
     char* cdat = pFont->pBuf;
     int rows, cnt;
@@ -103,7 +104,9 @@ void FBLinear8::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
             fb_writel((nibbletab_cfb8[*cdat >> 4] & eorx) ^ bgx, dest32++);
         }
         if (pFont->w & 2) {
-            fb_writew((nibbletab_cfb8[*cdat & 0xc] & eorx) ^ bgx, ((__u16*)dest32)++);
+            fb_writew((nibbletab_cfb8[*cdat & 0xc] & eorx) ^ bgx, dest32);
+            tmp_half = (__u16*) dest32;
+            dest32 = (__u32*) ++tmp_half;
         }
         if (pFont->w & 1) {
             fb_writeb((*cdat & 2) ? fg : bg, (__u8*)dest32);
