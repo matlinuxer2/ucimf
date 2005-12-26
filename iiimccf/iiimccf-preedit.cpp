@@ -1,9 +1,67 @@
 #include "iiimccf-int.h"
 #include <iostream>
 
+extern IIIMCCF* iiimccf;
+
+IIIMF_status
+iiimccf_preedit(
+    IIIMCF_context context,
+    IIIMCF_event event,
+    IIIMCF_component current,
+    IIIMCF_component parent
+){
+
+  Prdt prdt( context );
+  IIIMF_status st;
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+   
+  switch( type ){
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
+		  mesg("preedit");
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
+		  mesg("preedit start");
+		  prdt.show();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
+		  mesg("preedit changed");
+		  prdt.position(iiimccf->x, iiimccf->y);
+		  cout << "RECV POS ((( "<< iiimccf->x << ", " << iiimccf->y << " )))" << endl;
+		  prdt.info();
+		  prdt.update();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
+		  mesg("preedit done");
+		  //prdt.position(iiimccf->x, iiimccf->y);
+		  prdt.update();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
+		  mesg("preedit end");
+		  prdt.hide();
+		  break;
+		  
+	  default:
+		  mesg("preedit none");
+		  break;
+  }
+  return IIIMF_STATUS_SUCCESS;
+}
+
+
+
+
+
 Prdt::Prdt( IIIMCF_context new_context)
 {
   context = new_context;
+  cur_x =0;
+  cur_y =0;
 }
 
 void Prdt::info()
@@ -99,7 +157,8 @@ bool Prdt::position( int x, int y )
   //if( x < X_MIN | x > X_MAX | y < Y_MIN | y > Y_MAX ) return false;
   cur_x = x;
   cur_y = y;
-  return draw();
+  cout << "( CUR_X, CUR_Y ) => ( "<< cur_x << " , " << cur_y << " )" << endl;
+  //return draw();
 }
 
 bool Prdt::draw()

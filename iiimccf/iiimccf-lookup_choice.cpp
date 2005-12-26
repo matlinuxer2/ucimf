@@ -1,9 +1,69 @@
 #include "iiimccf-int.h"
 #include <iostream>
 
+
+extern IIIMCCF* iiimccf;
+
+/* 
+ * Lookup Choice 
+ * */
+IIIMF_status
+iiimccf_lookup_choice(
+    IIIMCF_context context,
+    IIIMCF_event event,
+    IIIMCF_component current,
+    IIIMCF_component parent
+){
+
+  Lkc lkc( context );
+
+  IIIMF_status st;
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+  
+  switch( type ){	
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
+		  debug( "lookup" );
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
+		  debug( "lookup start" );
+		  lkc.show();
+		  break;
+	  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
+		  debug( "lookup change" );
+		  lkc.position( iiimccf->x, iiimccf->y );
+		  // show_lookup_choice( context );
+		  lkc.update();
+		  break;
+	  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
+		  lkc.update();
+		  debug( "lookup done" );
+		  break;
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
+		  lkc.hide();
+		  debug( "lookup end" );
+		  break;
+		  
+	  default:
+		  break;
+  }
+  
+  return IIIMF_STATUS_SUCCESS;
+}
+
+
+
+
+
 Lkc::Lkc( IIIMCF_context new_context)
 {
   context = new_context;
+  cur_x=0;
+  cur_y=0;
 }
 
 void Lkc::info()
@@ -75,15 +135,15 @@ bool Lkc::position( int x, int y )
   //if( x < X_MIN | x > X_MAX | y < Y_MIN | y > Y_MAX ) return false;
   cur_x = x;
   cur_y = y;
-  return draw();
+  //return draw();
 }
 
 bool Lkc::draw()
 {
   lkc_text->fw(24);
   lkc_text->fh(24);
-  lkc_text->x(600);
-  lkc_text->y(400);
+  lkc_text->x(cur_x+40);
+  lkc_text->y(cur_y+30);
   lkc_text->info();
   Rectangle r( lkc_text->x() , 
                lkc_text->y() ,
