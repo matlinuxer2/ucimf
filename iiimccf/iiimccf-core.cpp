@@ -265,6 +265,7 @@ void IIIMCCF::pos( int new_x, int new_y )
 {
   x = new_x;
   y = new_y;
+  cout << "IIIMCCF CURSOR POSITION ==> ( " << x << ", " << y << " )" << endl;
 }
 
 void IIIMCCF::refresh()

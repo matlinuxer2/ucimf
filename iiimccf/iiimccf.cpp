@@ -1,3 +1,4 @@
+#include "iiimccf.h"
 #include "iiimccf-int.h"
 
 IIIMCCF* iiimccf=NULL;
