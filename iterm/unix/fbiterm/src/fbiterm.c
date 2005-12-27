@@ -31,9 +31,10 @@ Iterm *pIterm;
 #include "iiimccf.h"
 #include <iiimcf.h>
 #include <iiimp-keycode.h>
-//#include "/home/mat/src-cvs/iiimtcf/iterm/lib/src/screen_internal.h"
 
-//int keychar_to_keycode( int );
+int cur_col;
+int cur_row;
+
 
 /*
  *  Mapping: ASCII keychar --> IIIMF keycode
@@ -268,21 +269,21 @@ int keyinput_to_keyevent( char* buf, int buf_len, int* p_keycode, int* p_keychar
 }
 
 
-int get_cursor_position( int *pos_x, int *pos_y )
+int get_cursor_position()
 {
-  int var=3; // vary with depth 8=1,16=2,24=3,32=4
+  int pos_x, pos_y;
+  int var=1; // vary with depth 8=1,16=2,24=3,32=4
   
   /*
   int col = pIterm->vtcore_ptr->screen->cursor_x;
   int row = pIterm->vtcore_ptr->screen->cursor_y;
   */
 
+  pos_x = var * cur_col * (pIterm->asc_font->cell_width);
+  pos_y = cur_row * (pIterm->asc_font->cell_height);
+  //pos_y = cur_row * (pIterm->fb->line_length) * (pIterm->asc_font->cell_height);
   
-  
-  *pos_x = var * cur_col * (pIterm->asc_font->cell_width);
-  *pos_y = cur_row * (pIterm->fb->line_length) * (pIterm->asc_font->cell_height);
-  
-  iiimccf_pos( *pos_x, *pos_y );
+  iiimccf_pos( pos_x, pos_y );
   
   return 0;
 }
@@ -481,6 +482,8 @@ main (int argc, char *argv[])
 	    /* if SWITCH_TO_IIIMCF is on, then redirect the input to iiimcf*/
 	    else if( SWITCH_TO_IIIMCF == 1 )
 	    {
+	        get_cursor_position();
+	  
                 int keycode, keychar, modifier;
                 
 		keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
