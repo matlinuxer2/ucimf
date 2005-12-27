@@ -8,12 +8,16 @@
    from url http://oss.software.ibm.com/developer/opensource/license-cpl.html */
 
 #include "fbiterm.h"
+#include "stdio.h"
+
+extern int cur_col,cur_row;
 
 static void 
 VTScreenView_update_cursor_position(VTScreenView *view, int col, int row )
 {
   cur_col = col;
   cur_row = row;
+  fprintf(stderr, "CURSOR POSITION: ((( %d, %d )))\n", cur_col, cur_row );
 }
 
 static void
@@ -101,6 +105,7 @@ VTScreenView_new (void)
   view->clear_rect = VTScreenView_clear_rect;
   view->set_rendition = VTScreenView_set_rendition;
   view->scroll_view = VTScreenView_scroll_view;
+  view->update_cursor_position = VTScreenView_update_cursor_position;
   return view;
 }
 
