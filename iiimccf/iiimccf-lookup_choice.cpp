@@ -64,6 +64,7 @@ Lkc::Lkc( IIIMCF_context new_context)
   context = new_context;
   cur_x=0;
   cur_y=0;
+  rect = new Rectangle;
 }
 
 void Lkc::info()
@@ -138,6 +139,16 @@ bool Lkc::position( int x, int y )
   //return draw();
 }
 
+void Lkc::push()
+{
+  rect->push( lkc_tmp );
+}
+
+void Lkc::pop()
+{
+  rect->pop( lkc_tmp );
+}
+
 bool Lkc::draw()
 {
   lkc_text->fw(24);
@@ -145,12 +156,12 @@ bool Lkc::draw()
   lkc_text->x(cur_x+40);
   lkc_text->y(cur_y+30);
   lkc_text->info();
-  Rectangle r( lkc_text->x() , 
+  rect->update( lkc_text->x() , 
                lkc_text->y() ,
                lkc_text->x() + lkc_text->w() ,
 	       lkc_text->y() + lkc_text->h() ,
 	       2);
-  r.render();
+  rect->render();
   cout << "---start of render---" << endl;
   lkc_text->render();
   cout << "---end of render-----" << endl;

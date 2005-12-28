@@ -1,7 +1,10 @@
 #include "iiimcf.h"
 #include "overspot.h"
+#include "graphdev.h"
 #include <cstdlib>
 
+class Prdt;
+class Lkc;
 
 class IIIMCCF {
     //friend class Cmt;
@@ -29,6 +32,12 @@ class IIIMCCF {
 
     /* current cursor position */
     int x,y;
+
+    /* pointers to overspot elements */
+    Prdt *prdt;
+    Lkc  *lkc;
+    
+    /* bitmap block for overspot elements */
 
   private:
 
@@ -65,6 +74,9 @@ class Prdt
     void hide();
     bool update();
     bool position(int x, int y);
+    void push();
+    void pop();
+    
   private:
     bool draw();
 
@@ -74,6 +86,8 @@ class Prdt
     int cur_x, cur_y;
     int cur_pos;
     Text* prdt_text;
+    Rectangle* rect;
+    struct BitMap* prdt_tmp;
 };
 
 
@@ -90,6 +104,9 @@ class Lkc
     void hide();
     bool update();
     bool position(int x, int y);
+    void push();
+    void pop();
+
   private:
     bool draw();
 
@@ -98,6 +115,8 @@ class Lkc
     int cur_x, cur_y;
     int cur_idx;
     Text* lkc_text;
+    Rectangle* rect;
+    struct BitMap* lkc_tmp;
 };
 
 /** Commit Object **/

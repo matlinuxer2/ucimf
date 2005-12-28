@@ -31,6 +31,8 @@ void iiimccf_pos( int x, int y);
 
 /* request refresh */
 void iiimccf_refresh();
+void iiimccf_push(); 
+void iiimccf_pop();
 
 #ifdef __cplusplus
 }

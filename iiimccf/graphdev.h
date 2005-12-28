@@ -38,6 +38,13 @@ struct CharBitMap {
     bool isMulti8;      // width is multi 8 or not?
 };
 
+struct BitMap {
+    char* pBuf;         // point to bitmap
+    int BufLen;         // include blank line height
+    int h;              // height
+    int w;              // width
+};
+
 enum OPEN_RC { NORMAL, UNSUPPORT, FAILURE };
 
 class GraphDev {
@@ -81,7 +88,9 @@ class GraphDev {
         virtual void PutPixel(int x,int y,int color) = 0;
         virtual void FillRect(int x1,int y1,int x2,int y2,int color) = 0;
         virtual void RevRect(int x1,int y1,int x2,int y2) = 0;
-
+        virtual void SaveRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
+        virtual void RstrRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
+        
         virtual void SwitchToGraph() {};
         virtual void SwitchToText() {};
     protected:
