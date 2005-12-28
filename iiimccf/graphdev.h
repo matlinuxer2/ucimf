@@ -88,8 +88,8 @@ class GraphDev {
         virtual void PutPixel(int x,int y,int color) = 0;
         virtual void FillRect(int x1,int y1,int x2,int y2,int color) = 0;
         virtual void RevRect(int x1,int y1,int x2,int y2) = 0;
-        virtual void SaveRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
-        virtual void RstrRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
+        virtual void SaveRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer ) = 0;
+        virtual void RstrRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer ) = 0;
         
         virtual void SwitchToGraph() {};
         virtual void SwitchToText() {};

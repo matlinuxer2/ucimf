@@ -30,7 +30,6 @@ iiimccf_preedit(
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
 		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
-		  cout << "RECV POS ((( "<< iiimccf->x << ", " << iiimccf->y << " )))" << endl;
 		  iiimccf->prdt->info();
 		  iiimccf->prdt->update();
 		  break;

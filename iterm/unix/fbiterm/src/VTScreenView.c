@@ -17,7 +17,6 @@ VTScreenView_update_cursor_position(VTScreenView *view, int col, int row )
 {
   cur_col = col;
   cur_row = row;
-  fprintf(stderr, "CURSOR POSITION: ((( %d, %d )))\n", cur_col, cur_row );
 }
 
 static void
