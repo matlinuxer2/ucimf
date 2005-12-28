@@ -11,7 +11,6 @@ iiimccf_preedit(
     IIIMCF_component parent
 ){
 
-  //Prdt prdt( context );
   IIIMF_status st;
   IIIMCF_event_type type;
   st = iiimcf_get_event_type( event, &type );
@@ -24,6 +23,7 @@ iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
+		  iiimccf->prdt = new Prdt( context );
 		  iiimccf->prdt->show();
 		  break;
 		  
@@ -43,6 +43,8 @@ iiimccf_preedit(
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
 		  mesg("preedit end");
 		  iiimccf->prdt->hide();
+		  delete iiimccf->prdt;
+		  iiimccf->prdt = NULL;
 		  break;
 		  
 	  default:

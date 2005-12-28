@@ -509,11 +509,13 @@ main (int argc, char *argv[])
 	  {
 	    if (ret > 0)
 	    {
-              iiimccf_push(); // save the IIIMCCF display first
+              if( SWITCH_TO_IIIMCF == 1 )
+		iiimccf_push(); // save the IIIMCCF display first
 	      
 	      VTCore_dispatch(pIterm->vtcore_ptr);
 	      
-	      iiimccf_pop();  // then restore IIIMCCF display
+	      if( SWITCH_TO_IIIMCF == 1 )
+		iiimccf_pop();  // then restore IIIMCCF display
 	    }
 	  }
 	  
