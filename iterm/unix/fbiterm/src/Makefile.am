@@ -14,6 +14,8 @@ EXTRA_LIBS = \
 EXTRA_CFLAGS = \
          -I../../../lib/include 
 
+IIIM_CFLAGS = -I/usr/include/iiim
+
 bin_PROGRAMS = fbiterm
 
 fbiterm_SOURCES = \
@@ -24,7 +26,10 @@ fbiterm_SOURCES = \
 fbiterm_LDADD = \
 	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
 
-CFLAGS = -I$(includedir) @X_CFLAGS@ -I$(top_srcdir)/include -I/usr/local/include $(EXTRA_CFLAGS) @CFLAGS@
+AM_CFLAGS = -I$(includedir) @X_CFLAGS@ \
+	-I$(top_srcdir)/include \
+	-I/usr/local/include \
+	$(IIIM_CFLAGS) $(EXTRA_CFLAGS) @CFLAGS@
 
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/fbiterm
