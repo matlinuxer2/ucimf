@@ -90,6 +90,68 @@ void FBLinear16::RevRect(int x1,int y1,int x2,int y2) {
     }
 }
 
+void FBLinear16::SaveRect(int x1,int y1,int x2,int y2, struct BitMap* pBuffer) {
+    assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
+    assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
+    assert(x1 <= x2 && y1 <= y2);
+    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 2;
+    __u8* buf= (__u8*)pBuffer->pBuf;
+  
+    int height = y2 - y1 + 1;
+    int width = x2 - x1 + 1;
+
+    pBuffer->h = height;
+    pBuffer->w = width;
+    pBuffer->BufLen = height * width * 2;
+   
+    
+    __u8* dest8;
+    __u8* buf8;
+    int cnt;
+    for(; height--; dest += mNextLine) {
+        dest8 = (__u8*)dest;
+        buf8 = (__u8*)buf;
+        for (cnt = width * 2; cnt--;) {
+            *buf8 = fb_readb(dest8);
+            dest8++;
+            buf8++;
+        }
+        buf += mNextLine;
+    }
+    
+}
+
+void FBLinear16::RstrRect(int x1,int y1,int x2,int y2, struct BitMap* pBuffer) {
+    assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
+    assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
+    assert(x1 <= x2 && y1 <= y2);
+    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 2;
+    __u8* buf= (__u8*)pBuffer;
+
+    int height = y2 - y1 + 1;
+    int width = x2 - x1 + 1;
+    
+    pBuffer->h = height;
+    pBuffer->w = width;
+    pBuffer->BufLen = height * width * 2;
+    
+    assert ( pBuffer->h == height &&  pBuffer->w == width && pBuffer->BufLen == height * width * 2 );
+    
+    __u8* dest8;
+    __u8*  buf8;
+    int cnt;
+    for(; height--; dest += mNextLine) {
+        dest8 = (__u8*)dest;
+        buf8 = (__u8*)buf;
+        for (cnt = width * 2; cnt--;) {
+            fb_writeb( *buf8, dest8 );
+            dest8++;
+            buf8++;
+        }
+        buf += mNextLine;
+    }
+}
+
 inline void FBLinear16::PutPixel(int x,int y,int color) {
     assert( x >= 0 && x < mXres && y >=0 && y < mYres);
     fb_writew(cfb16[color], mpBuf + mNextLine * y + x * 2);

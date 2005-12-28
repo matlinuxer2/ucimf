@@ -5,6 +5,7 @@
 #include FT_FREETYPE_H 
 using namespace std;
 
+struct BitMap;
 
 /* Basic Object */
 
@@ -50,6 +51,10 @@ class Rectangle: public Layer
     Rectangle(){};
     Rectangle(int pos_x, int pos_y, int pos_xx, int pos_yy, int color );
     ~Rectangle(){ };
+    void update(int pos_x, int pos_y, int pos_xx, int pos_yy, int color );
+    void push( struct BitMap* tmp );
+    void pop(  struct BitMap* tmp );
+
     
     virtual void render();	
 };

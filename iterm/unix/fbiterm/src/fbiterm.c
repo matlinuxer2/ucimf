@@ -475,7 +475,7 @@ main (int argc, char *argv[])
               int i;
               for (i = 0; i < ret; i++)
               {
-                if (keypress (buf[i]) == False)
+                if ( keypress (buf[i]) == False )
                     write (fd, &buf[i], 1);
               }
             }
@@ -508,7 +508,13 @@ main (int argc, char *argv[])
 	  else if (FD_ISSET (fd, &rfds)) // if the foreign 'fd' is in the fd_set
 	  {
 	    if (ret > 0)
+	    {
+              iiimccf_push(); // save the IIIMCCF display first
+	      
 	      VTCore_dispatch(pIterm->vtcore_ptr);
+	      
+	      iiimccf_pop();  // then restore IIIMCCF display
+	    }
 	  }
 	  
       }

@@ -1,5 +1,6 @@
 #include "layer.h"
 #include "font.h"
+#include "graphdev.h"
 
 #include <iostream>
 #include <stdint.h>
@@ -37,6 +38,9 @@ void Layer::c( int new_color ){ Color = new_color;}
 Rectangle::Rectangle( int pos_x, int pos_y, int pos_xx, int pos_yy ,int color)
 { x(pos_x); y(pos_y); w( pos_xx - pos_x ); h( pos_yy- pos_y ); c(color);}
 
+void Rectangle::update( int pos_x, int pos_y, int pos_xx, int pos_yy ,int color)
+{ x(pos_x); y(pos_y); w( pos_xx - pos_x ); h( pos_yy- pos_y ); c(color);}
+
 void Rectangle::render()
 {
   GraphDev *gdev;
@@ -45,6 +49,22 @@ void Rectangle::render()
   gdev->FillRect( x(), y(), x()+w(), y()+h(), c() );
 }
 
+void Rectangle::push( struct BitMap* tmp )
+{
+  GraphDev *gdev;
+  GraphDev::Open();
+  gdev = GraphDev::mpGraphDev;
+  gdev->SaveRect( x(), y(), x()+w(), y()+h(), tmp );
+}
+
+
+void Rectangle::pop( struct BitMap* tmp )
+{
+  GraphDev *gdev;
+  GraphDev::Open();
+  gdev = GraphDev::mpGraphDev;
+  gdev->RstrRect( x(), y(), x()+w(), y()+h(), tmp );
+}
 
 /* 
  *

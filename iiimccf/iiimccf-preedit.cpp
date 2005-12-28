@@ -11,7 +11,7 @@ iiimccf_preedit(
     IIIMCF_component parent
 ){
 
-  Prdt prdt( context );
+  //Prdt prdt( context );
   IIIMF_status st;
   IIIMCF_event_type type;
   st = iiimcf_get_event_type( event, &type );
@@ -24,26 +24,26 @@ iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
-		  prdt.show();
+		  iiimccf->prdt->show();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
-		  prdt.position(iiimccf->x, iiimccf->y);
+		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
 		  cout << "RECV POS ((( "<< iiimccf->x << ", " << iiimccf->y << " )))" << endl;
-		  prdt.info();
-		  prdt.update();
+		  iiimccf->prdt->info();
+		  iiimccf->prdt->update();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
-		  //prdt.position(iiimccf->x, iiimccf->y);
-		  prdt.update();
+		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
+		  iiimccf->prdt->update();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
 		  mesg("preedit end");
-		  prdt.hide();
+		  iiimccf->prdt->hide();
 		  break;
 		  
 	  default:
@@ -62,6 +62,7 @@ Prdt::Prdt( IIIMCF_context new_context)
   context = new_context;
   cur_x =0;
   cur_y =0;
+  rect = new Rectangle;
 }
 
 void Prdt::info()
@@ -141,12 +142,13 @@ bool Prdt::update()
   prdt_text->fh(16);
   prdt_text->fw(16);
   prdt_text->info();
-  Rectangle r( prdt_text->x() , 
+  
+  rect->update( prdt_text->x() , 
                prdt_text->y() ,
                prdt_text->x() + prdt_text->w() ,
 	       prdt_text->y() + prdt_text->h() ,
 	       4 );
-  r.render();
+  rect->render();
   cout << "--end of update--" << endl;
   cout << "-----------------" << endl; 
   return draw();
@@ -159,6 +161,17 @@ bool Prdt::position( int x, int y )
   cur_y = y;
   cout << "( CUR_X, CUR_Y ) => ( "<< cur_x << " , " << cur_y << " )" << endl;
   //return draw();
+}
+
+void Prdt::push()
+{
+  
+  rect->push( prdt_tmp );
+}
+
+void Prdt::pop()
+{
+  rect->pop( prdt_tmp );
 }
 
 bool Prdt::draw()

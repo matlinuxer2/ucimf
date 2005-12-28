@@ -31,6 +31,8 @@ class FBLinear8 : public FBDev {
 
         void FillRect(int x1,int y1,int x2,int y2,int color);
         void RevRect(int x1,int y1,int x2,int y2);
+        void SaveRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
+        void RstrRect(int x1, int y1, int x2, int y2, struct BitMap* pBuffer );
         void PutPixel(int x,int y,int color);
         void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont);
 

@@ -2,7 +2,8 @@
 #include FT_FREETYPE_H
 #include "graphdev.h"
 
-#define KFont   "/usr/share/fonts/arphicfonts/bkai00mp.ttf"
+//#define KFont   "/usr/share/fonts/arphicfonts/bkai00mp.ttf"
+#define KFont "/usr/share/fonts/truetype/arphic/ukai.ttf"
 //#define EFont   "/usr/lib/X11/fonts/misc/b16.pcf.gz"
 #define EFont   "/usr/share/fonts/efont-unicode/b16.pcf.gz"
 
