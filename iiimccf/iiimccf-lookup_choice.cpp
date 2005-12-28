@@ -3,6 +3,8 @@
 
 
 extern IIIMCCF* iiimccf;
+//class Lkc;
+//static Lkc lkc;
 
 /* 
  * Lookup Choice 
@@ -14,8 +16,6 @@ iiimccf_lookup_choice(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
-
-  Lkc lkc( context );
 
   IIIMF_status st;
   IIIMCF_event_type type;
@@ -29,23 +29,27 @@ iiimccf_lookup_choice(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  lkc.show();
+		  iiimccf->lkc = new Lkc( context );
+		  iiimccf->lkc->show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		  lkc.position( iiimccf->x, iiimccf->y );
+		  iiimccf->lkc->position( iiimccf->x, iiimccf->y );
 		  // show_lookup_choice( context );
-		  lkc.update();
+		  iiimccf->lkc->update();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
-		  lkc.update();
 		  debug( "lookup done" );
+		  iiimccf->lkc->update();
 		  break;
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
-		  lkc.hide();
 		  debug( "lookup end" );
+		  
+		  iiimccf->lkc->hide();
+		  //delete iiimccf->lkc;
+		  //iiimccf->lkc = NULL;
 		  break;
 		  
 	  default:
