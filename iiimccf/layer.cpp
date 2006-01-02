@@ -49,7 +49,7 @@ void Rectangle::render()
   gdev->FillRect( x(), y(), x()+w(), y()+h(), c() );
 }
 
-void Rectangle::push( struct BitMap* tmp )
+void Rectangle::push( BitMap& tmp )
 {
   GraphDev *gdev;
   GraphDev::Open();
@@ -58,7 +58,7 @@ void Rectangle::push( struct BitMap* tmp )
 }
 
 
-void Rectangle::pop( struct BitMap* tmp )
+void Rectangle::pop( BitMap& tmp )
 {
   GraphDev *gdev;
   GraphDev::Open();

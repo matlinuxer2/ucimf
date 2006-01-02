@@ -1,8 +1,8 @@
 
 ft2:ft2.o
-	g++ -o $@ $< `freetype-config --libs`
-ft2.o:ft2.cpp
-	g++ -c `freetype-config --cflags` $<
+	g++ -g -o $@ $< `freetype-config --libs`
+ft2.o:font_loading.cpp
+	g++ -g -c -o ft2.o `freetype-config --cflags` $<
 
 clean:
 	rm -rf *.o
