@@ -28,7 +28,14 @@ int print_face_info(const FT_Face &face)
   else
     cout << "scalable" << endl;
   cout << "num_fixed_sizes: " << face->num_fixed_sizes << endl;
-  cout << "size: " << face->size << endl;
+  cout << "size: x_ppem:" << face->size->metrics.x_ppem << endl;
+  cout << "size: y_ppem:" << face->size->metrics.y_ppem << endl;
+  cout << "size: x_scale:" << face->size->metrics.x_scale << endl;
+  cout << "size: y_scale:" << face->size->metrics.y_scale << endl;
+  cout << "size: ascender:" << face->size->metrics.ascender << endl;
+  cout << "size: descender:" << face->size->metrics.descender << endl;
+  cout << "size: height:" << face->size->metrics.height << endl;
+  cout << "size: max_advance:" << face->size->metrics.max_advance << endl;
   cout << "num_charmaps: " << face->num_charmaps << endl;
 
   //cout << "family_name: " << face->family_name << endl;
@@ -80,7 +87,7 @@ int main(int argc, char **argv)
   }
 
   FT_Face face;
-  char *fp="./taipei16.pcf";
+  char *fp="./ukai.ttf";
   if (argc > 1)
     fp=argv[1];
   //const char fp[]="./gz/taipei16.pcf.gz";
@@ -95,27 +102,20 @@ int main(int argc, char **argv)
        }
   print_face_info(face);
 
-/*
-  if FT_Set_Pixel_Sizes(face,0,24)
-  then taipei24.pcf will fail in this function
-  but taipei16.pcf can success
-  don't use FT_Set_Pixel_Sizes() function
-  still render taipei16.pcf, taipei24.pcf
   error=FT_Set_Pixel_Sizes(face,0,16);
   if (error)
   {
     err_msg("fail: FT_Set_Pixel_Sizes");
   }
-*/
 
-  /*
-  error=FT_Select_Charmap(face,ft_encoding_big5);
+  
+  error=FT_Select_Charmap(face,FT_ENCODING_UNICODE);
 
   if (error)
   {
     err_msg("fail: FT_Select_CharMap");
   }
-  */
+  
   //int charcode=45157;// 0xb065 °e
   union Int
   {
@@ -146,7 +146,8 @@ int main(int argc, char **argv)
   else
     cout << "charmap is selected" << endl;
   
-
+  FT_Set_Char_Size( face, 16*64, 16*64, 0, 0);
+  
   //int charcode=41; // 0190 °e
   int charcode=42938; // hex a7ba = dec 42938 §º, this big5 encoding
   int glyph_index=FT_Get_Char_Index(face,charcode);
@@ -162,13 +163,17 @@ int main(int argc, char **argv)
   {
     cout << "ft_glyph_format_bitmap" << endl;
   }
-  else
+  else{
     cout << "not ft_glyph_format_bitmap" << endl;
-
+  }
 
 
   cout << face->glyph->bitmap_top << endl;
   cout << face->glyph->bitmap_left << endl;
+  cout << face->glyph->bitmap.width << endl;
+  cout << face->glyph->bitmap.rows << endl;
+
+
   draw_bitmap(face->glyph->bitmap,face->glyph->bitmap_top,face->glyph->bitmap_left);
 
 }

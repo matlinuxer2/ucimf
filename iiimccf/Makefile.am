@@ -13,7 +13,7 @@ iiimccfinclude_HEADERS = iiimccf.h
 libiiimccf_la_SOURCES = iiimccf.cpp \
                         iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp \
 			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp iiimccf-commit.cpp\
-                        overspot.cpp layer.cpp font.cpp graphdev.cpp
+                        layer.cpp font.cpp graphdev.cpp
 libiiimccf_la_LDFLAGS = 
 libiiimccf_la_LIBADD = \
 	-L$(libdir) \

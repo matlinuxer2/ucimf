@@ -65,11 +65,11 @@ void iiimccf_refresh()
 void iiimccf_push()
 {
   iiimccf->prdt->push();
-  iiimccf->lkc->push();
+//  iiimccf->lkc->push();
 }
 
 void iiimccf_pop()
 {
   iiimccf->prdt->pop();
-  iiimccf->lkc->pop();
+//  iiimccf->lkc->pop();
 }

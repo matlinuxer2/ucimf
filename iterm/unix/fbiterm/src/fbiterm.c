@@ -25,7 +25,6 @@
 #endif
 
 Iterm *pIterm;
-//IIIMCCF *iiimccf;
 
 /**** externel ****/
 #include "iiimccf.h"
@@ -34,7 +33,6 @@ Iterm *pIterm;
 
 int cur_col;
 int cur_row;
-
 
 /*
  *  Mapping: ASCII keychar --> IIIMF keycode
@@ -453,21 +451,18 @@ main (int argc, char *argv[])
 	  {
 	    ret = read (0, buf, sizeof (buf));
 	    
-	    /* At First check whether switch input mode or not*/
-	    /* if key == F7 == (27,91,49,56,126) */
 	    
-	    //if( buf[0]=='\033' && buf[1]=='[' && buf[2]=='1' && buf[3]=='8' && buf[4]=='~' )	    	    
+	    /* "203" has been registed for "Ctrl-Space" in input.c */    	    
 	    if( buf[0] == 203 )
 	    {
-			 if( SWITCH_TO_IIIMCF == 0 ){
-				 SWITCH_TO_IIIMCF = 1;
-				 iiimccf_on();
-			 }else{
-				 SWITCH_TO_IIIMCF = 0;
-				 iiimccf_off();
-			 }
-		 	
-			 continue;
+	       if( SWITCH_TO_IIIMCF == 0 ){
+		 SWITCH_TO_IIIMCF = 1;
+		 iiimccf_on();
+	       }else{
+		 SWITCH_TO_IIIMCF = 0;
+		 iiimccf_off();
+	       }
+	       continue;
 	    }
 	    
 	    if (ret == 1 && !(SWITCH_TO_IIIMCF==1) )
@@ -510,19 +505,19 @@ main (int argc, char *argv[])
 	    if (ret > 0)
 	    {
               if( SWITCH_TO_IIIMCF == 1 )
-		iiimccf_push(); // save the IIIMCCF display first
+		;//iiimccf_pop(); // save the IIIMCCF display first
 	      
 	      VTCore_dispatch(pIterm->vtcore_ptr);
 	      
 	      if( SWITCH_TO_IIIMCF == 1 )
-		iiimccf_pop();  // then restore IIIMCCF display
+		;//iiimccf_push();  // then restore IIIMCCF display
 	    }
 	  }
 	  
       }
 	  
-	  /* Exit the iiimcf client */
-	  iiimccf_exit();
+      /* Exit the iiimcf client */
+      iiimccf_exit();
 	  
   }
 #else

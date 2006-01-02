@@ -30,26 +30,30 @@ iiimccf_lookup_choice(
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
 		  iiimccf->lkc = new Lkc( context );
+		  iiimccf->lkc->push();
 		  iiimccf->lkc->show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
+		  iiimccf->lkc->pop();
 		  iiimccf->lkc->position( iiimccf->x, iiimccf->y );
-		  // show_lookup_choice( context );
 		  iiimccf->lkc->update();
+		  iiimccf->lkc->push();
+		  iiimccf->lkc->draw();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
 		  debug( "lookup done" );
+		  iiimccf->lkc->pop();
+		  iiimccf->lkc->position( iiimccf->x, iiimccf->y );
 		  iiimccf->lkc->update();
 		  break;
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
 		  debug( "lookup end" );
-		  
 		  iiimccf->lkc->hide();
-		  //delete iiimccf->lkc;
-		  //iiimccf->lkc = NULL;
+		  delete iiimccf->lkc;
+		  iiimccf->lkc = NULL;
 		  break;
 		  
 	  default:
@@ -83,7 +87,7 @@ void Lkc::show()
 {
   if( visible == true ) return;
   visible = true;
-  update();
+  //update();
   return;
 }
 
@@ -132,7 +136,18 @@ bool Lkc::update()
     
   }
 
-  return draw();
+  lkc_text->fw(24);
+  lkc_text->fh(24);
+  lkc_text->x(cur_x+40);
+  lkc_text->y(cur_y+30);
+  lkc_text->info();
+  rect->update( lkc_text->x() , 
+               lkc_text->y() ,
+               lkc_text->x() + lkc_text->w() ,
+	       lkc_text->y() + lkc_text->h() ,
+	       2);
+
+  //return draw();
 }
 
 bool Lkc::position( int x, int y )
@@ -155,18 +170,8 @@ void Lkc::pop()
 
 bool Lkc::draw()
 {
-  lkc_text->fw(24);
-  lkc_text->fh(24);
-  lkc_text->x(cur_x+40);
-  lkc_text->y(cur_y+30);
-  lkc_text->info();
-  rect->update( lkc_text->x() , 
-               lkc_text->y() ,
-               lkc_text->x() + lkc_text->w() ,
-	       lkc_text->y() + lkc_text->h() ,
-	       2);
-  rect->render();
   cout << "---start of render---" << endl;
+  rect->render();
   lkc_text->render();
   cout << "---end of render-----" << endl;
   

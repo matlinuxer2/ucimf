@@ -76,9 +76,9 @@ class Prdt
     bool position(int x, int y);
     void push();
     void pop();
+    bool draw();
     
   private:
-    bool draw();
 
     IIIMCF_context context;
     vector<IIIMP_card16> buf_utf16;
@@ -87,7 +87,7 @@ class Prdt
     int cur_pos;
     Text* prdt_text;
     Rectangle* rect;
-    struct BitMap* prdt_tmp;
+    BitMap prdt_tmp;
 };
 
 
@@ -106,9 +106,9 @@ class Lkc
     bool position(int x, int y);
     void push();
     void pop();
+    bool draw();
 
   private:
-    bool draw();
 
     IIIMCF_context context;
     bool visible;
@@ -116,7 +116,7 @@ class Lkc
     int cur_idx;
     Text* lkc_text;
     Rectangle* rect;
-    struct BitMap* lkc_tmp;
+    BitMap lkc_tmp;
 };
 
 /** Commit Object **/

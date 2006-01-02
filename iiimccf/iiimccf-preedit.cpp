@@ -24,18 +24,22 @@ iiimccf_preedit(
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
 		  iiimccf->prdt = new Prdt( context );
+		  iiimccf->prdt->push();
 		  iiimccf->prdt->show();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
+		  iiimccf->prdt->pop();
 		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
-		  iiimccf->prdt->info();
 		  iiimccf->prdt->update();
+		  iiimccf->prdt->push();
+		  iiimccf->prdt->draw();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
+		  iiimccf->prdt->pop();
 		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
 		  iiimccf->prdt->update();
 		  break;
@@ -149,10 +153,9 @@ bool Prdt::update()
                prdt_text->x() + prdt_text->w() ,
 	       prdt_text->y() + prdt_text->h() ,
 	       4 );
-  rect->render();
   cout << "--end of update--" << endl;
   cout << "-----------------" << endl; 
-  return draw();
+  //return draw();
 }
 
 bool Prdt::position( int x, int y )
@@ -178,6 +181,7 @@ void Prdt::pop()
 bool Prdt::draw()
 {
   cout << "---start of render---" << endl;
+  rect->render();
   prdt_text->render();
   cout << "---end of render-----" << endl;
   
