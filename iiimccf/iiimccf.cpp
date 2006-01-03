@@ -47,6 +47,11 @@ void iiimccf_show_ims()
   iiimccf->ims_show();
 }
 
+void iiimccf_change_ims()
+{
+  iiimccf->ims_chg();
+}
+
 void iiimccf_scrn( int height, int width, int resolution )
 {
   iiimccf->scrn( height, width, resolution );

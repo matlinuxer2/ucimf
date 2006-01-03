@@ -138,8 +138,11 @@ bool Lkc::update()
 
   lkc_text->fw(24);
   lkc_text->fh(24);
-  lkc_text->x(cur_x+40);
-  lkc_text->y(cur_y+30);
+  
+  shift();
+  
+  lkc_text->x(cur_x - shift_x);
+  lkc_text->y(cur_y - shift_y);
   lkc_text->info();
   rect->update( lkc_text->x() , 
                lkc_text->y() ,
@@ -156,6 +159,37 @@ bool Lkc::position( int x, int y )
   cur_x = x;
   cur_y = y;
   //return draw();
+}
+
+#define X_MIN 0
+#define X_MAX 800
+#define Y_MIN 0
+#define Y_MAX 600
+
+
+void Lkc::shift()
+{
+  shift_x = (cur_x + lkc_text->w()) - X_MAX ;
+  if ( shift_x < 0 )
+  {
+    shift_x = 0;
+  }
+  else
+  {
+    ; // shift back
+  }
+
+  shift_y = (cur_y + lkc_text->h() ) - Y_MAX ;
+  if ( shift_y < 0 )
+  {
+    shift_y = 0;
+  }
+  else
+  {
+    shift_y = shift_y + lkc_text->h();
+
+  }
+
 }
 
 void Lkc::push()
