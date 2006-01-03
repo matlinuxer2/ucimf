@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
+using namespace std;
 
 IIIMCCF::IIIMCCF()
 {
@@ -68,6 +69,10 @@ IIIMCCF::IIIMCCF()
 	st = iiimcf_register_component( handle,"iiimccf-aux",iiimccf_aux,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	cout << "==reg aux end===" << endl;
+        
+	st = iiimcf_create_attr( &attr );
+	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
+	iiimcf_create_context( handle, attr , &context );
 }
 
 IIIMCCF::~IIIMCCF()
@@ -78,17 +83,6 @@ IIIMCCF::~IIIMCCF()
 
 bool IIIMCCF::on()
 {
-        IIIMF_status st;
-        IIIMCF_attr attr;
-	st = iiimcf_create_attr( &attr );
-	// This line is for input method setting 
-	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "chewing");
-	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
-	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "default");
-	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "untitle");
-	//st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "hangul");
-    	
-	iiimcf_create_context( handle, attr , &context );
 	
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 1, &event);
@@ -194,6 +188,46 @@ void IIIMCCF::lkc_show()
 
 }
 
+bool IIIMCCF::ims_chg()
+{
+
+    IIIMF_status st;
+    IIIMCF_input_method *pims;
+    //IIIMCF_language *plangs;
+    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
+    char *idname, *hrn, *domain;
+    //const char *langid;
+    int num_of_ims;//, num_of_langs;
+
+    st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
+    
+    if ( cur_ims_id == (num_of_ims - 1) )
+    {  
+      cur_ims_id =0;
+    }
+    else
+    {
+      cur_ims_id++;
+    }
+
+    iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
+    idname = iiimcf_string_to_utf8(u16idname);
+    
+    IIIMCF_attr attr;
+
+    off();
+    
+    cout << " INPUT METHOD : " << idname << endl;
+    st = iiimcf_create_attr( &attr );
+    st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
+    
+    st = iiimcf_create_context( handle,attr, &context );
+    IIIMCF_event event;
+    st = iiimcf_create_trigger_notify_event( 1, &event);
+    st = iiimcf_forward_event( context, event);
+    
+    return true;
+}
 
 bool IIIMCCF::ims_show()
 {

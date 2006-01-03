@@ -21,6 +21,7 @@ class IIIMCCF {
 
     bool ims_show();
     bool ims_set();
+    bool ims_chg();
     
     void scrn( int, int ,int );
     void pos( int, int );
@@ -45,6 +46,9 @@ class IIIMCCF {
     IIIMCF_handle 	handle;
     IIIMCF_context 	context;
    
+    /* current imput method id */
+    int cur_ims_id;
+    
     /* current screen infomation */
     int height, width, resolution;
  
@@ -107,12 +111,14 @@ class Lkc
     void push();
     void pop();
     bool draw();
+    void shift();
 
   private:
 
     IIIMCF_context context;
     bool visible;
     int cur_x, cur_y;
+    int shift_x, shift_y;
     int cur_idx;
     Text* lkc_text;
     Rectangle* rect;

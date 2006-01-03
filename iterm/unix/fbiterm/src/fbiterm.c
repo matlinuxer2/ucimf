@@ -465,6 +465,12 @@ main (int argc, char *argv[])
 	       continue;
 	    }
 	    
+	    if( buf[0] == 204 && SWITCH_TO_IIIMCF == 1 )
+	    {
+	      iiimccf_change_ims();
+	      continue;
+	    }
+	    
 	    if (ret == 1 && !(SWITCH_TO_IIIMCF==1) )
             {
               int i;

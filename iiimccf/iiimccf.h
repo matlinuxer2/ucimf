@@ -22,6 +22,7 @@ int iiimccf_result( char* *buf_out );
 
 /* show input methods */
 void iiimccf_show_ims();
+void iiimccf_change_ims();
 
 /* current screen setting */
 void iiimccf_scrn( int height, int width, int resolution );
