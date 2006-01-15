@@ -26,7 +26,7 @@
 
 Iterm *pIterm;
 
-/**** externel ****/
+/**** external : IIIM specific ****/
 #include "iiimccf.h"
 #include <iiimcf.h>
 #include <iiimp-keycode.h>
