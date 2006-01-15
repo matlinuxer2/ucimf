@@ -1,6 +1,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "graphdev.h"
+//#include <string>
+using namespace std;
 
 //#define KFont   "/usr/share/fonts/arphicfonts/bkai00mp.ttf"
 #define KFont "/usr/share/fonts/truetype/arphic/ukai.ttf"
@@ -10,7 +12,7 @@
 class Font{
  public:
    Font();
-   Font( const char* fontpath );
+   Font( string fontpath );
    ~Font();
    void info();
    void status();
@@ -19,7 +21,7 @@ class Font{
 
  private:
    GraphDev *gdev;
-   char* fontpath;
+   string fontpath;
    
    /* freetype parameter */
    FT_Library library;
