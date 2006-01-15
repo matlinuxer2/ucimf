@@ -464,11 +464,17 @@ main (int argc, char *argv[])
 	       }
 	       continue;
 	    }
-	    
-	    if( buf[0] == 204 && SWITCH_TO_IIIMCF == 1 )
+	   
+	    /* "204" has been registed for "Ctrl-Shift" in input.c */
+	    if( buf[0] == 204 )
 	    {
-	      iiimccf_change_ims();
-	      continue;
+	       if( SWITCH_TO_IIIMCF == 0 ){
+		 SWITCH_TO_IIIMCF = 1;
+		 iiimccf_on();
+	       }else{
+		 iiimccf_change_ims();
+	       }
+	       continue;
 	    }
 	    
 	    if (ret == 1 && !(SWITCH_TO_IIIMCF==1) )
