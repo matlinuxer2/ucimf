@@ -9,8 +9,8 @@
 using namespace std;
 
 
-Font font(KFont);
-
+//Font font(KFont);
+Font* font2=NULL;
 /* 
  * 
  * Layer implementation 
@@ -121,13 +121,15 @@ void String::info()
 void String::render( int x, int y, int fw, int fh, int color )
 {
   int num=CharCodes.size();
-  
-  font.status();
+ 
+  if( font2 == NULL )
+  font2=new Font();
+  font2->status();
 
   for( int i= 0; i < num ; i++ )
   { 
-    font.load( CharCodes[i], x+i*fw, y , fw , fh, color );
-    font.draw();
+    font2->load( CharCodes[i], x+i*fw, y , fw , fh, color );
+    font2->draw();
   }
 }
 

@@ -151,8 +151,8 @@ bool Prdt::update()
   rect->update( prdt_text->x() , 
                prdt_text->y() ,
                prdt_text->x() + prdt_text->w() ,
-	       prdt_text->y() + prdt_text->h() ,
-	       4 );
+	       prdt_text->y() + prdt_text->h() -1 ,
+	       0 );
   cout << "--end of update--" << endl;
   cout << "-----------------" << endl; 
   //return draw();
@@ -181,7 +181,9 @@ void Prdt::pop()
 bool Prdt::draw()
 {
   cout << "---start of render---" << endl;
+  rect->c(0);
   rect->render();
+  prdt_text->fc(4);
   prdt_text->render();
   cout << "---end of render-----" << endl;
   

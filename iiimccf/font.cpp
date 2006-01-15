@@ -1,24 +1,66 @@
 #include "font.h"
 #include <iostream>
+#include <string>
+#include <cstdlib>
+#include <libxml++/libxml++.h>
+#include <libxml++/parsers/textreader.h>
 using namespace std;
+using namespace xmlpp;
 
 GraphDev* gdev;
 
 Font::Font()
 {
-  Font( KFont );
+  try
+  {
+        string homedir = getenv("HOME");
+	Glib::ustring conf=static_cast<Glib::ustring>( homedir +"/iiimccf.conf.xml" );
+	cout << " Configure file is : " << conf << endl;
+	xmlpp::TextReader reader( conf );
+	while( reader.read() )
+	{
+	  if( reader.get_name() == "fontpath" && reader.get_node_type() != TextReader::EndElement )
+	  {
+	    reader.read();
+	    fontpath= static_cast<string>( reader.get_value().data() ) ;
+	    cout << "FontPatch fetch successfully...[" << fontpath << "]"<< endl;
+	  } 
+	}
+	
+	font_width = 0;
+	font_height = 0;
+	font_color = 3;
+	charcode = 0;
+	
+	cout << "fontpath is: " << fontpath << endl;
+
+	FT_Init_FreeType( &library ); 
+	FT_New_Face( library, fontpath.c_str(), 0, &face);
+	slot = face->glyph;
+
+	GraphDev::Open();
+	gdev = GraphDev::mpGraphDev;    
+  
+  }
+  catch( const std::exception& e)
+  {
+    cout << "Exception caught: " << e.what() << endl;
+  }
+  
 }
 
-Font::Font( const char *fpath)
+Font::Font( string fpath )
 {
-  fontpath = (char*) fpath;
+  fontpath = fpath;
   font_width = 0;
   font_height = 0;
   font_color = 3;
   charcode = 0;
+  
+  cout << "fontpath is: " << fontpath << endl;
 
   FT_Init_FreeType( &library ); 
-  FT_New_Face( library, fpath, 0, &face);
+  FT_New_Face( library, fontpath.c_str(), 0, &face);
   slot = face->glyph;
 
   GraphDev::Open();

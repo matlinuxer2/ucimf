@@ -144,11 +144,11 @@ bool Lkc::update()
   lkc_text->x(cur_x - shift_x);
   lkc_text->y(cur_y - shift_y);
   lkc_text->info();
-  rect->update( lkc_text->x() , 
-               lkc_text->y() ,
-               lkc_text->x() + lkc_text->w() ,
-	       lkc_text->y() + lkc_text->h() ,
-	       2);
+  rect->update( lkc_text->x()-6 , 
+               lkc_text->y()-6 ,
+               lkc_text->x() + lkc_text->w() +6,
+	       lkc_text->y() + lkc_text->h() +6,
+	       7);
 
   //return draw();
 }
@@ -170,23 +170,23 @@ bool Lkc::position( int x, int y )
 void Lkc::shift()
 {
   shift_x = (cur_x + lkc_text->w()) - X_MAX ;
-  if ( shift_x < 0 )
+  if ( shift_x < -20 )
   {
-    shift_x = 0;
+    shift_x = -20 ;
   }
   else
   {
-    ; // shift back
+    shift_x = shift_x + ( X_MAX - cur_x ) + 20 ; // shift back
   }
 
   shift_y = (cur_y + lkc_text->h() ) - Y_MAX ;
-  if ( shift_y < 0 )
+  if ( shift_y < -30 )
   {
-    shift_y = 0;
+    shift_y = -30;
   }
   else
   {
-    shift_y = shift_y + lkc_text->h();
+    shift_y = shift_y + ( Y_MAX - cur_y ) + 30 ;
 
   }
 
@@ -206,6 +206,22 @@ bool Lkc::draw()
 {
   cout << "---start of render---" << endl;
   rect->render();
+  Rectangle up,left,right,bottom;
+  int u,l,r,b;
+  u=lkc_text->y() -3;
+  l=lkc_text->x() -3;
+  r=lkc_text->x() + lkc_text->w() +3;
+  b=lkc_text->y() + lkc_text->h() +3;
+  up.update( l, u, r, u,8);
+  left.update( l,u,l,b ,8);
+  right.update( r,u,r,b,15);
+  bottom.update( l,b,r,b,15);
+  up.render();
+  left.render();
+  right.render();
+  bottom.render();
+
+  lkc_text->fc(16);
   lkc_text->render();
   cout << "---end of render-----" << endl;
   
