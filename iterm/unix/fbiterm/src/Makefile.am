@@ -24,12 +24,12 @@ fbiterm_SOURCES = \
 	vt.c VTScreenView.c fbiterm.h palette.h VTScreenView.h
 
 fbiterm_LDADD = \
-	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
+	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) $(LIBXML_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
 
 AM_CFLAGS = -I$(includedir) @X_CFLAGS@ \
 	-I$(top_srcdir)/include \
 	-I/usr/local/include \
-	$(IIIM_CFLAGS) $(EXTRA_CFLAGS) @CFLAGS@
+	$(IIIM_CFLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) @CFLAGS@
 
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/fbiterm
