@@ -26,6 +26,10 @@
 
 Iterm *pIterm;
 
+/**** external : for libxml reading ****/
+#include <string.h>
+#include <libxml/xmlreader.h>
+
 /**** external : IIIM specific ****/
 #include "iiimccf.h"
 #include <iiimcf.h>
@@ -331,6 +335,85 @@ options:\n\
 int
 main (int argc, char *argv[])
 {
+  /* for xml configuration reading */
+  xmlTextReaderPtr reader;
+  xmlDocPtr doc=NULL;
+  xmlNodePtr cur;
+  int ret;
+
+  char* homedir= getenv("HOME");
+  char* xmlconf= strcat( homedir,"/fbiterm.conf.xml");
+  char* Asc_fontpath= (char*)malloc(128);
+  char* MB_fontpath= (char*)malloc(128);
+  char* Font_fontpath= (char*)malloc(128);
+ 
+  reader = xmlReaderForFile( xmlconf, NULL, 0 );
+  if( reader != NULL ){
+    ret = xmlTextReaderRead(reader);
+    while( ret == 1 )
+    {
+      xmlChar *name, *value;
+      
+      name = (xmlChar*) xmlTextReaderConstName(reader);
+      if( name == NULL )
+      {
+	name = "----";
+      }
+
+      value = (xmlChar*) xmlTextReaderConstValue(reader);
+
+      printf( "%d %d %s %d %d", 
+	  xmlTextReaderDepth(reader),
+	  xmlTextReaderNodeType(reader),
+	  name,
+	  xmlTextReaderIsEmptyElement(reader),
+	  xmlTextReaderHasValue(reader) );
+
+      if( xmlTextReaderNodeType(reader) != 15 ){
+	
+	if( !xmlStrcmp( name, (const xmlChar*)"DefaultAsc" ) ){
+          xmlTextReaderRead(reader);
+	  value=  (xmlChar*) xmlTextReaderConstValue(reader);
+	  Asc_fontpath = (char*)memcpy( Asc_fontpath, value, strlen(value) ) ;
+	}else if( !xmlStrcmp( name, (const xmlChar*)"DefaultMB" ) ){
+          xmlTextReaderRead(reader);
+	  value =  (xmlChar*) xmlTextReaderConstValue(reader);
+	  MB_fontpath = (char*)memcpy( MB_fontpath, value, strlen(value) ) ;
+	}else if( !xmlStrcmp( name, (const xmlChar*)"DefaultFont") ){
+          xmlTextReaderRead(reader);
+	  value =  (xmlChar*) xmlTextReaderConstValue(reader);
+	  Font_fontpath = (char*)memcpy( Font_fontpath, value, strlen(value) ) ;
+	}else{
+	  ;
+	}
+      }
+      
+      if( value == NULL ){
+	printf( "\n");
+      }
+      else
+      {
+	printf( " %s\n", value );
+      }
+      
+      printf( "DefaultMB: %s\n", MB_fontpath );
+      printf( "DefaultAsc: %s\n", Asc_fontpath );
+      printf( "DefaultFont: %s\n", Font_fontpath );
+      
+      ret = xmlTextReaderRead(reader);
+    }
+    xmlFreeTextReader(reader);
+    if( ret !=0 )
+    {
+      fprintf( stderr, "%s: failed to parse\n", xmlconf );
+    }
+  }
+  else
+  {
+    fprintf(stderr, "Unable to open %s\n", xmlconf );
+  }
+  
+  
   unsigned char buf[BUFSIZ + 1], *ascfontname, *mbfontname;
   int i;
 
@@ -356,8 +439,11 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  ascfontname = DefaultAsc;
-  mbfontname = DefaultMB;
+//  ascfontname = DefaultAsc;
+//  mbfontname = DefaultMB;
+  ascfontname = Asc_fontpath;
+  mbfontname = MB_fontpath;
+  
   while ((i = getopt (argc, argv, "a:m:hv")) != EOF)
     switch (i)
       {
@@ -365,14 +451,14 @@ main (int argc, char *argv[])
 	if (optarg != NULL)
 	  ascfontname = optarg;
 	else
-	  ascfontname = DefaultAsc;
+	  ascfontname = Asc_fontpath;
 	break;
 
       case 'm':
 	if (optarg != NULL)
 	  mbfontname = optarg;
 	else
-	  mbfontname = DefaultMB;
+	  mbfontname = MB_fontpath;
 	break;
 
       case 'v':
