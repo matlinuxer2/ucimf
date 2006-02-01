@@ -36,30 +36,6 @@ AC_CHECK_HEADERS(errno.h fcntl.h getopt.h iconv.h linux/fb.h \
 	sys/kd.h sys/mman.h sys/stat.h termios.h \
 	stdio.h unistd.h wchar.h wctype.h)
 
-# X related header
-xfont_headers="FSproto.h Xdefs.h Xdefs.h \
-	Xfuncproto.h Xfuncs.h Xproto.h Xmd.h fsmasks.h"
-for header in $xfont_headers; do
-  have_xfont_header="no"
-  for x_dir in $x_includes; do
-    if test -f $x_dir/X11/$header; then
-      have_xfont_header="yes"
-      break
-    else 
-      if test -f $x_dir/X11/fonts/$header; then
-	have_xfont_header="yes"
-	break
-      fi
-    fi
-  done
-  if test "$have_xfont_header" = no; then
-    AC_MSG_ERROR([Cannot find $header. Please install X11 related header files first.])
-  fi
-done
-AC_MSG_CHECKING(for X11 fonts related headers)
-AC_MSG_RESULT($have_xfont_header)
-X_CFLAGS="-I$x_includes/X11 -I$x_includes/X11/fonts"
-
 # iterm related header
 iterm_headers="iterm/core.h iterm/screen.h iterm/thread.h iterm/unix/ttyio.h iterm/vtlayout.h"
 for header in $iterm_headers; do
@@ -84,27 +60,6 @@ AC_CHECK_LIB(z, inflate,,AC_MSG_WARN([Cannot find libz library. Please install f
 PKG_CHECK_MODULES(LIBXML,libxml-2.0)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
-
-# Xfont Library check
-have_x_font_lib="no"
-for x_dir in $x_libraries; do
-  for ext in so a ; do
-    if test -f $x_dir/libXfont.$ext; then
-      have_x_font_lib="yes"
-      if test "$ext" = "a"; then
-	X_LIBS="$X_LIBS $x_dir/libXfont.$ext"
-      fi
-      break
-    fi
-  done
-done
-AC_MSG_CHECKING(for libXfont library)
-if test "$have_x_font_lib" != yes; then
-  AC_MSG_RESULT(no)
-  AC_MSG_ERROR([Cannot find libXfont library. Please install X11 first.])
-else
-  AC_MSG_RESULT(yes)
-fi
 
 #################################################################
 # Checks for typedefs, structures, and compiler characteristics.
