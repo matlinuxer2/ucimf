@@ -107,34 +107,6 @@ else
 fi
 
 #################################################################
-# Checks for fonts.
-have_mb_font="no"
-for x_dir in $x_libraries; do
-  if test -f $x_dir/X11/fonts/misc/unifont.pcf.gz; then
-    have_mb_font="yes"
-    break
-  fi
-done
-AC_MSG_CHECKING(for multibyte(unicode) font)
-AC_MSG_RESULT($have_mb_font)
-if test "$have_mb_font" = no; then
-  AC_MSG_WARN([Cannot find unicode font. Please install unicode font (unifont.pcf.gz).])
-fi
-
-have_ascii_font="no"
-for x_dir in $x_libraries; do
-  if test -f $x_dir/X11/fonts/misc/8x16.pcf.gz; then
-    have_ascii_font="yes"
-    break
-  fi
-done
-AC_MSG_CHECKING(for ascii font)
-AC_MSG_RESULT($have_ascii_font)
-if test "$have_ascii_font" = no; then
-  AC_MSG_WARN([Cannot find ascii font. Please install ascii font (8x16.pcf.gz).])
-fi
-
-#################################################################
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_OFF_T
