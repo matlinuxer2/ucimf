@@ -342,7 +342,9 @@ main (int argc, char *argv[])
   int ret;
 
   char* homedir= getenv("HOME");
-  char* xmlconf= strcat( homedir,"/fbiterm.conf.xml");
+  char* xmlconf= (char *)malloc( 128);
+  xmlconf = strcat( xmlconf, homedir );
+  xmlconf = strcat( xmlconf, "/fbiterm.conf.xml" );
   char* Asc_fontpath= (char*)malloc(128);
   char* MB_fontpath= (char*)malloc(128);
   char* Font_fontpath= (char*)malloc(128);
@@ -401,6 +403,8 @@ main (int argc, char *argv[])
       printf( "DefaultFont: %s\n", Font_fontpath );
       
       ret = xmlTextReaderRead(reader);
+      //xmlFree( value );
+      //xmlFree( name );
     }
     xmlFreeTextReader(reader);
     if( ret !=0 )
