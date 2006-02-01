@@ -20,55 +20,41 @@ IIIMCCF::IIIMCCF()
 	
 	/*  Register new component */
 	
-	cout << "==reg preedit start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.preedit",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg preedit end===" << endl;
          
-	cout << "==reg status start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.status",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-status",iiimccf_status,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg status end===" << endl;
         
-	cout << "==reg lookup_choice start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.lookup_choice",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-lookup_choice",iiimccf_lookup_choice,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg lookup_choice end===" << endl;
 
-	cout << "==reg commit start===" << endl;
 	// st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-commit",iiimccf_commit,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg commit end===" << endl;
          
-	cout << "==reg trigger start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.event.trigger_notify",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-trigger_notify",iiimccf_trigger_notify,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg trigger end===" << endl;
          
-	cout << "==reg event_key start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.event.key",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-event.key",iiimccf_event_key,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg event_key end===" << endl;
          
-	cout << "==reg aux start===" << endl;
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.AUX",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-aux",iiimccf_aux,parent,&child);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
-	cout << "==reg aux end===" << endl;
         
 	st = iiimcf_create_attr( &attr );
 	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
@@ -87,7 +73,7 @@ bool IIIMCCF::on()
     IIIMCF_input_method *pims;
     const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
     char *idname, *hrn, *domain;
-    int num_of_ims;//, num_of_langs;
+    int num_of_ims;
 
     st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
     iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
@@ -208,11 +194,9 @@ bool IIIMCCF::ims_chg()
 
     IIIMF_status st;
     IIIMCF_input_method *pims;
-    //IIIMCF_language *plangs;
     const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
     char *idname, *hrn, *domain;
-    //const char *langid;
-    int num_of_ims;//, num_of_langs;
+    int num_of_ims;
 
     st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
     
@@ -232,7 +216,6 @@ bool IIIMCCF::ims_chg()
 
     off();
     
-    cout << " INPUT METHOD : " << idname << endl;
     st = iiimcf_create_attr( &attr );
     st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
     
@@ -292,8 +275,6 @@ bool IIIMCCF::ims_set ( )
 
   st = iiimcf_create_attr( &attr );
   
-  //st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_LANGUAGE, "zh_CN" ); 
-  //st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD, "1");
   st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
   /* libiiimccf.a doesn't define the iiimcf_icsetvalues function*/
   //st = iiimcf_seticvalues( context, attr );
@@ -314,7 +295,6 @@ void IIIMCCF::pos( int new_x, int new_y )
 {
   x = new_x;
   y = new_y;
-  cout << "IIIMCCF CURSOR POSITION ==> ( " << x << ", " << y << " )" << endl;
 }
 
 void IIIMCCF::refresh()

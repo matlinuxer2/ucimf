@@ -3,8 +3,6 @@
 
 
 extern IIIMCCF* iiimccf;
-//class Lkc;
-//static Lkc lkc;
 
 /* 
  * Lookup Choice 

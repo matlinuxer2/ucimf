@@ -76,6 +76,10 @@ void Font::status()
 {
   cout << "fontpath: " << fontpath << endl;
   cout << "encoding: " << "UTF-16" << endl;
+  PCF_Public_Face pcfface = (PCF_Public_Face)face ;
+  cout << "encoding: " << pcfface->charset_encoding << endl;
+  cout << "registry: " << pcfface->charset_registry << endl;
+
 }
 
 void Font::info()
@@ -96,7 +100,7 @@ void Font::load( int code, int x, int y, int fw, int fh, int c )
   pos_y = y;
   font_width = fw;
   font_height = fh;
-  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
+  //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   encoding = FT_ENCODING_UNICODE;
   charcode = (FT_ULong) code;
   font_color = c;
@@ -104,7 +108,8 @@ void Font::load( int code, int x, int y, int fw, int fh, int c )
   
 void Font::draw()
 {
-    error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
+    //error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
+    error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
     unsigned char* tmp = slot->bitmap.buffer;
     int pos_left = pos_x + slot->bitmap_left;
     int pos_top = pos_y;// + slot->bitmap_top;
@@ -114,9 +119,8 @@ void Font::draw()
     {
       for( int j=0; j< slot->bitmap.width; j++ )
       {
-	if (*tmp)
-        gdev->PutPixel(pos_left+j, pos_top+i, color );
-        tmp++;
+	if ( tmp[ i * slot->bitmap.pitch + j/8] & (1 << ( 7- j%8)) )
+          gdev->PutPixel(pos_left+j, pos_top+i, color );
       }
     }
 }
