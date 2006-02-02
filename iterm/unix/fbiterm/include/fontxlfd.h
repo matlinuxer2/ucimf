@@ -32,7 +32,63 @@ from The Open Group.
 #ifndef _FONTXLFD_H_
 #define _FONTXLFD_H_
 
-#include "FSproto.h"
+
+/* import macro from "FS.h" */
+#define MSBFirst                1
+
+//#include "FSproto.h"
+#include "Xmd.h"
+/* import declaration from FSproto.h to reduce dependency  */
+#define sz_fsRange		4
+
+
+#ifndef Bool
+#  ifndef _XTYPEDEF_BOOL
+#   define _XTYPEDEF_BOOL
+typedef int Bool;
+#  endif
+#endif
+/*
+typedef unsigned short CARD16;
+typedef unsigned char  CARD8;
+#ifdef LONG64
+typedef unsigned int CARD32;
+#else
+typedef unsigned long CARD32;
+#endif
+
+#ifndef I_NEED_OS2_H
+typedef CARD8		BYTE;
+typedef CARD8		BOOL;
+#else
+#define BYTE	CARD8
+#define BOOL	CARD8
+#endif
+
+#define B32 :32
+#define B16 :16
+*/
+
+typedef struct {
+    CARD8	min_char_high;
+    CARD8	min_char_low;
+    CARD8	max_char_high;
+    CARD8	max_char_low;
+}           fsRange;
+
+typedef CARD32	fsTimestamp;
+
+typedef struct {
+    BYTE        type;
+    BYTE        request;
+    CARD16 	sequenceNumber B16;
+    CARD32 	length B32;
+    fsTimestamp	timestamp;
+    CARD8	major_opcode;
+    CARD8	minor_opcode;
+    CARD16	pad B16;
+    fsRange	range;
+}	    fsRangeError;
 
 /* Constants for values_supplied bitmap */
 
