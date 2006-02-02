@@ -7,12 +7,9 @@
 #  Further information about Common Public License Version 0.5 is obtained 
 #  from url http://oss.software.ibm.com/developer/opensource/license-cpl.html
 
-EXTRA_LIBS = \
-         -L../../Xaw/lib/.libs \
-         -L../../../lib/src/.libs 
+EXTRA_LIBS = 
 
-EXTRA_CFLAGS = \
-         -I../../../lib/include 
+EXTRA_CFLAGS = 
 
 IIIM_CFLAGS = -I/usr/include/iiim
 
@@ -24,12 +21,13 @@ fbiterm_SOURCES = \
 	vt.c VTScreenView.c fbiterm.h palette.h VTScreenView.h
 
 fbiterm_LDADD = \
-	-L$(libdir) @X_LIBS@ $(EXTRA_LIBS) $(LIBXML_LIBS) -lXfont -literm -lm -lfreetype -liiimcf -liiimccf
+	-L$(libdir)  $(EXTRA_LIBS) $(LIBXML_LIBS) $(FREETYPE2_LIBS)\
+	-literm -lm -liiimcf -liiimccf
 
-AM_CFLAGS = -I$(includedir) @X_CFLAGS@ \
+AM_CFLAGS = -I$(includedir) \
 	-I$(top_srcdir)/include \
 	-I/usr/local/include \
-	$(IIIM_CFLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) @CFLAGS@
+	$(IIIM_CFLAGS) $(EXTRA_CFLAGS) $(FREETYPE2_CFLAGS) $(LIBXML_CFLAGS) @CFLAGS@
 
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/fbiterm

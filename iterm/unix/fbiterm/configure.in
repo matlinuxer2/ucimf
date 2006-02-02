@@ -27,8 +27,8 @@ esac
 #################################################################
 # Checks for header files.
 AC_HEADER_STDC
-AC_PATH_X
-AC_PATH_XTRA
+#AC_PATH_X
+#AC_PATH_XTRA
 
 AC_CHECK_HEADERS(errno.h fcntl.h getopt.h iconv.h linux/fb.h \
 	linux/input.h linux/kd.h linux/keyboard.h linux/vt.h \
@@ -44,9 +44,9 @@ for header in $iterm_headers; do
     have_iterm_header="yes"
     break
   fi
-  if test "$have_xfont_header" = no; then
-    AC_MSG_ERROR([Cannot find $header. Please install iterm related header files first.])
-  fi
+#  if test "$have_xfont_header" = no; then
+#    AC_MSG_ERROR([Cannot find $header. Please install iterm related header files first.])
+#  fi
 done
 AC_MSG_CHECKING(for iterm related headers)
 AC_MSG_RESULT($have_iterm_header)
@@ -55,6 +55,11 @@ AC_MSG_RESULT($have_iterm_header)
 # Checks for libraries.
 
 AC_CHECK_LIB(z, inflate,,AC_MSG_WARN([Cannot find libz library. Please install first.]))
+
+# FreeType2 Library check
+PKG_CHECK_MODULES(FREETYPE2,freetype2)
+AC_SUBST(FREETYPE2_CFLAGS)
+AC_SUBST(FREETYPE2_LIBS)
 
 # LibXML Library check
 PKG_CHECK_MODULES(LIBXML,libxml-2.0)

@@ -26,10 +26,36 @@ SOFTWARE.
 #ifndef FONTSTR_H
 #define FONTSTR_H
 
-#include <X11/Xproto.h>
+//#include <X11/Xproto.h>
+/* Import declaration from X11/Xproto.h */
+#include "Xmd.h"
+#define sz_xCharInfo 12
+typedef struct {
+    INT16 leftSideBearing B16,
+	  rightSideBearing B16,
+	  characterWidth B16,
+	  ascent B16,
+	  descent B16;
+    CARD16 attributes B16;
+} xCharInfo;
+
 #include "font.h"
-#include <X11/Xfuncproto.h>
-#include <X11/Xdefs.h>
+//#include <X11/Xfuncproto.h>
+//#include <X11/Xdefs.h>
+#include "Xdefs.h"
+/* Import declaration from Xdefs.h 
+#ifndef _XTYPEDEF_POINTER
+#  define _XTYPEDEF_POINTER
+typedef void *pointer;
+#endif
+
+#ifndef Bool
+#  ifndef _XTYPEDEF_BOOL
+#   define _XTYPEDEF_BOOL
+typedef int Bool;
+#  endif
+#endif
+*/
 
 /*
  * This version of the server font data strucutre is only for describing

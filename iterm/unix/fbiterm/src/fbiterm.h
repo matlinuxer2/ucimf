@@ -21,7 +21,9 @@
 #include <linux/fb.h>
 
 /* for X font access */
+#include "Xmd.h"
 #include "fontxlfd.h"
+#include "fontmisc.h"
 #include "fontstruct.h"
 #include "fntfil.h"
 #include "bitmap.h"

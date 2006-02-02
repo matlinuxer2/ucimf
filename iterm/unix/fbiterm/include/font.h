@@ -28,7 +28,11 @@ SOFTWARE.
 #define FONT_H
 
 #ifndef BitmapFormatByteOrderMask
-#include	"fsmasks.h"
+//#include	"fsmasks.h"
+
+typedef CARD32 fsBitmapFormat;
+typedef CARD32 fsBitmapFormatMask;
+
 #endif
 
 /* data structures */

@@ -10,10 +10,40 @@
 #include <sys/stat.h>
 #include <iconv.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "fbiterm.h"
 
 typedef int (readfontfunc) __P ((FontPtr, FontFilePtr, int, int, int, int));
 unsigned char *get_glyph ();
+
+typedef struct _Node {
+  struct _Node   *left,   *right;
+  Atom a;
+  unsigned int fingerPrint;
+  char   *string;
+} NodeRec;
+
+typedef NodeRec *NodePtr;
+
+static Atom lastAtom = None;
+
+static NodePtr *nodeTable;
+
+char *
+NameForAtom(Atom atom)
+{
+  NodePtr node;
+  
+  if (atom > lastAtom) 
+    return 0;
+  
+  if ((node = nodeTable[atom]) == (NodePtr)NULL) 
+    return 0;
+  
+  return node->string;
+}
 
 /* get encoding name */
 char *
@@ -193,9 +223,11 @@ load_font (char *input_filename)
   if (strlen (input_filename) > 0)
     {
       /* choose suitable function */
-      readfont = strstr (input_filename, ".bdf") ||
-	strstr (input_filename, ".BDF") ? bdfReadFont : pcfReadFont;
-
+      //readfont = strstr (input_filename, ".bdf") ||
+	//strstr (input_filename, ".BDF") ? bdfReadFont : pcfReadFont;
+ 
+      readfont = pcfReadFont;
+      
       input = FontFileOpen (input_filename);
       if (input == NULL)
 	return (TermFont *) NULL;

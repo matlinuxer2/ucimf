@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
  * Author:  Keith Packard, MIT X Consortium
  */
 
-#include    <bufio.h>
+#include    "bufio.h"
 
 typedef BufFilePtr  FontFilePtr;
 

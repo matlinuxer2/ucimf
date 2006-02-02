@@ -28,7 +28,7 @@ from The Open Group.
 #ifndef ___BUFIO_H___
 #define ___BUFIO_H___ 1
 
-#include <X11/Xfuncproto.h>
+//#include <X11/Xfuncproto.h>
 
 #ifdef TEST
 
@@ -46,6 +46,7 @@ typedef struct _buffile *BufFilePtr;
 typedef struct _buffile {
     BufChar *bufp;
     int	    left;
+    int     eof;
     BufChar buffer[BUFFILESIZE];
     int	    (*input)( BufFilePtr /* f */);
     int     (*output)( int /* c */, BufFilePtr /* f */);
