@@ -30,6 +30,10 @@
 #include "pcf.h"
 #include "bdfint.h"
 
+/* for FreeType access */
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 /* for VTcore access */
 #include <iterm/core.h>		/* for VTCorem */
 #include "VTScreenView.h"	/* for VTCore/VTScreenView */
@@ -94,6 +98,8 @@ typedef struct _TermFont
   FontRec *frec;		/* FontRec structure (defined by X11) */
   int cell_width;		/* cell width per character */
   int cell_height;		/* cell height per character */
+  FT_Library *library;
+  FT_Face *face;
 }
 TermFont;
 
