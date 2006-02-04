@@ -340,14 +340,14 @@ main (int argc, char *argv[])
   xmlDocPtr doc=NULL;
   xmlNodePtr cur;
   int ret;
+  int STR_SIZE=96;
 
-  char* homedir= getenv("HOME");
-  char* xmlconf= (char *)malloc( 128);
-  xmlconf = strcat( xmlconf, homedir );
+  char* xmlconf= (char *)malloc( STR_SIZE );
+  xmlconf = strcat( xmlconf, getenv("HOME") );
   xmlconf = strcat( xmlconf, "/fbiterm.conf.xml" );
-  char* Asc_fontpath= (char*)malloc(128);
-  char* MB_fontpath= (char*)malloc(128);
-  char* Font_fontpath= (char*)malloc(128);
+  char* Asc_fontpath= (char*)malloc(STR_SIZE);
+  char* MB_fontpath= (char*)malloc(STR_SIZE);
+  char* Font_fontpath= (char*)malloc(STR_SIZE);
  
   reader = xmlReaderForFile( xmlconf, NULL, 0 );
   if( reader != NULL ){
@@ -363,14 +363,7 @@ main (int argc, char *argv[])
       }
 
       value = (xmlChar*) xmlTextReaderConstValue(reader);
-
-      printf( "%d %d %s %d %d", 
-	  xmlTextReaderDepth(reader),
-	  xmlTextReaderNodeType(reader),
-	  name,
-	  xmlTextReaderIsEmptyElement(reader),
-	  xmlTextReaderHasValue(reader) );
-
+      
       if( xmlTextReaderNodeType(reader) != 15 ){
 	
 	if( !xmlStrcmp( name, (const xmlChar*)"DefaultAsc" ) ){
@@ -390,27 +383,19 @@ main (int argc, char *argv[])
 	}
       }
       
-      if( value == NULL ){
-	printf( "\n");
-      }
-      else
-      {
-	printf( " %s\n", value );
-      }
-      
-      printf( "DefaultMB: %s\n", MB_fontpath );
-      printf( "DefaultAsc: %s\n", Asc_fontpath );
-      printf( "DefaultFont: %s\n", Font_fontpath );
-      
       ret = xmlTextReaderRead(reader);
-      //xmlFree( value );
-      //xmlFree( name );
     }
     xmlFreeTextReader(reader);
+
     if( ret !=0 )
     {
       fprintf( stderr, "%s: failed to parse\n", xmlconf );
     }
+
+    printf( "DefaultMB: %s\n", MB_fontpath );
+    printf( "DefaultAsc: %s\n", Asc_fontpath );
+    printf( "DefaultFont: %s\n", Font_fontpath );
+
   }
   else
   {
