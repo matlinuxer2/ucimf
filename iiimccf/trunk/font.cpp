@@ -111,16 +111,29 @@ void Font::draw()
     //error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
     error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
     unsigned char* tmp = slot->bitmap.buffer;
-    int pos_left = pos_x + slot->bitmap_left;
+    int pos_left = pos_x; + slot->bitmap_left;
     int pos_top = pos_y;// + slot->bitmap_top;
     int color = font_color;
 
+    // *** for (int i=0; i< slot->bitmap.rows; i++ )
+    // *** {
+    // ***   for( int j=0; j< slot->bitmap.width; j++ )
+    // ***   {
+    // ***     if ( tmp[ i * slot->bitmap.pitch + j/8] & (1 << ( 7- j%8)) )
+    // ***       gdev->PutPixel(pos_left+j, pos_top+i, color );
+    // ***   }
+    // *** }
+    
     for (int i=0; i< slot->bitmap.rows; i++ )
     {
-      for( int j=0; j< slot->bitmap.width; j++ )
+      for( int j=0; j< slot->bitmap.pitch; j++ )
       {
-	if ( tmp[ i * slot->bitmap.pitch + j/8] & (1 << ( 7- j%8)) )
-          gdev->PutPixel(pos_left+j, pos_top+i, color );
+	for( int k=7; k>=0; k-- )
+	{
+	  if ( ( tmp[i*(slot->bitmap.pitch)+j] >> k ) & 0x01)
+	    gdev->PutPixel(pos_left+j*8+k, pos_top+i, color );
+
+	}
       }
     }
 }
