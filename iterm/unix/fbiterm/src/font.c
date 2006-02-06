@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <iconv.h>
 #include "fbiterm.h"
+#include <stdio.h>
 
 typedef int (readfontfunc) __P ((FontPtr, FontFilePtr, int, int, int, int));
 unsigned char *get_glyph ();
@@ -149,14 +150,15 @@ get_glyph (TermFont * fs, int codepoint, unsigned int *height)
   FT_Error   error;
   FT_UInt    glyph_index;
   
-  //* int index=get_glyph_codepoint( fs, codepoint );
-  //* glyph_index = FT_Get_Char_Index( face, index);
-  //* glyph_index--;
-  //* error = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
-  //* if( error )
-  //* {
-  //*   /* error handling */
-  //* }
+  // int index=get_glyph_codepoint( fs, codepoint );
+  // glyph_index = FT_Get_Char_Index( face, (FT_UInt) index);
+  // //glyph_index--;
+  // error = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
+  // if( error )
+  // {
+  //   /* error handling */
+  // }
+  fprintf( stderr, "codepoint: [%d]\t index: [%d]\t glyph_index: [%d]\n", codepoint, index, glyph_index );
   error = FT_Load_Char( face, (FT_ULong)codepoint, FT_LOAD_DEFAULT );
   if( error )
   {
@@ -212,6 +214,8 @@ load_font (char *input_filename)
 	return (TermFont *) NULL;
       }
 
+      error = FT_Set_Charmap( *pFace, (*pFace)->charmaps[0] );
+
       error = FT_Set_Pixel_Sizes( *pFace,  /* handle to Face object */  
 				       0,  /* pixel_width */  
 				      16); /* pixel_height */
@@ -243,7 +247,7 @@ load_font (char *input_filename)
    * if width == 0, then width = height ;
    */
   pFs->cell_height = (*pFace)->available_sizes[0].height;
-  pFs->cell_width = ( !(*pFace)->available_sizes[0].width ? (*pFace)->available_sizes[0].height : (*pFace)->available_sizes[0].width );
+  pFs->cell_width = ( !(*pFace)->available_sizes[0].width ? (*pFace)->available_sizes[0].height*18/29 : (*pFace)->available_sizes[0].width );
   pFs->frec = font;
 
   /* check width and height of char */
@@ -259,8 +263,9 @@ load_font (char *input_filename)
   {
     char *p;
     if ((p = get_encoding_name (font)) == NULL)
-      p = "iso10646"; //"none";
+      p = "utf8"; //"none";
 
+    p="iso10646";
     pFs->encoding_name = malloc (strlen (p) + 1);
     memset (pFs->encoding_name, 0x0, strlen (p) + 1);
     strcpy (pFs->encoding_name, p);
