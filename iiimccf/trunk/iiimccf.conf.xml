@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <iiimf>
     <console>
-        <fontpath>/usr/share/fonts/truetype/arphic/ukai.ttf</fontpath>
+        <fontpath>/usr/share/fonts/misc/b16.pcf</fontpath>
     </console>
 </iiimf>
