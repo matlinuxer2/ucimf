@@ -9,11 +9,37 @@
 
 #include <sys/stat.h>
 #include <iconv.h>
-
 #include "fbiterm.h"
 
 typedef int (readfontfunc) __P ((FontPtr, FontFilePtr, int, int, int, int));
 unsigned char *get_glyph ();
+
+typedef struct _Node {
+  struct _Node   *left,   *right;
+  Atom a;
+  unsigned int fingerPrint;
+  char   *string;
+} NodeRec;
+
+typedef NodeRec *NodePtr;
+
+static Atom lastAtom = None;
+
+static NodePtr *nodeTable;
+
+char *
+NameForAtom(Atom atom)
+{
+  NodePtr node;
+  
+  if (atom > lastAtom) 
+    return 0;
+  
+  if ((node = nodeTable[atom]) == (NodePtr)NULL) 
+    return 0;
+  
+  return node->string;
+}
 
 /* get encoding name */
 char *
@@ -68,7 +94,9 @@ static CodesetName lookup_tbl[] = {
   {"jisx0208.1990", "ISO-2022-JP"},
   {"jisx0212.1990", "ISO-2022-JP"},
   {"ksc5601.1987", "ISO-2022-KR"},
-  {NULL, NULL}
+  {"utf8","ISO-10646/UTF-8"},
+  {"utf16","UTF-16"},
+  {NULL, NULL},
 };
 
 #define TMP_BUFSIZ 10
@@ -116,66 +144,39 @@ get_glyph_codepoint (TermFont * fs, int codepoint)
 unsigned char *
 get_glyph (TermFont * fs, int codepoint, unsigned int *height)
 {
-  unsigned short firstCol, lastCol, firstRow, lastRow;
-  unsigned short col, row, numCols, numRows;
-  unsigned int can_num, codep;
-  int r, c, n;
-  unsigned char *bits;
-  xCharInfo *metric;
-
-  BitmapFontPtr bp = (BitmapFontPtr) (fs->frec->fontPrivate);
-  CharInfoPtr cp = (CharInfoPtr) (bp->metrics);
-  CharInfoPtr dp = (CharInfoPtr) (bp->pDefault);
-  CharInfoPtr **ep = (CharInfoPtr **) (bp->encoding);
-
-  firstCol = fs->frec->info.firstCol;
-  lastCol = fs->frec->info.lastCol;
-  firstRow = fs->frec->info.firstRow;
-  lastRow = fs->frec->info.lastRow;
-  numCols = lastCol - firstCol + 1;
-  numRows = lastRow - firstRow + 1;
-
-  /* set default glyph */
-  bits = dp->bits;
-  metric = &(dp->metrics);
-  *height = (metric->ascent + metric->descent);
-
-  can_num = codep = get_glyph_codepoint (fs, codepoint);
-
-  if (can_num > 0)
-    {
-      row = (codep >> 8) & 0x000000ff;
-      r = row - firstRow;
-
-      col = codep & 0x000000ff;
-      c = col - firstCol;
-
-      can_num = (r < 0 ? 0 : r) * numCols + c;
-
-      if (r < numRows && c < numCols && can_num != 0)
-	{
-	  n = ACCESSENCODING (ep, can_num) - cp;
-	  if (n > 0)
-	    {
-	      bits = cp[n].bits;
-	      metric = &(cp[n].metrics);
-	      *height = (metric->ascent + metric->descent);
-	    }
-	  return bits;
-	}
-    }
-
-  return bits;
+  FT_Library lib = *(fs->library);
+  FT_Face    face= *(fs->face);
+  FT_Error   error;
+  FT_UInt    glyph_index;
+  
+  //* int index=get_glyph_codepoint( fs, codepoint );
+  //* glyph_index = FT_Get_Char_Index( face, index);
+  //* glyph_index--;
+  //* error = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
+  //* if( error )
+  //* {
+  //*   /* error handling */
+  //* }
+  error = FT_Load_Char( face, (FT_ULong)codepoint, FT_LOAD_DEFAULT );
+  if( error )
+  {
+    /* error handling */
+  }
+  
+  *height = face->glyph->bitmap.rows; //face->glyph->metrics.ascent + face->glyph->metrics.descent;
+  
+  return  face->glyph->bitmap.buffer;//( face->glyph->metrics + glyph_index );
 }
 
 /* load font */
 TermFont *
 load_font (char *input_filename)
 {
+  FT_Library *pLibrary=malloc(sizeof(FT_Library));
+  FT_Face    *pFace=malloc(sizeof(FT_Face));
+  FT_Error   error;
   FontRec *font = NULL;
   TermFont *pFs = NULL;
-  FontFilePtr input = NULL;
-  readfontfunc *readfont = NULL;
 
   /* allocate TermFont structure area */
   pFs = (TermFont *) malloc (sizeof (TermFont));
@@ -192,18 +193,33 @@ load_font (char *input_filename)
   /* open font file */
   if (strlen (input_filename) > 0)
     {
-      /* choose suitable function */
-      readfont = strstr (input_filename, ".bdf") ||
-	strstr (input_filename, ".BDF") ? bdfReadFont : pcfReadFont;
-
-      input = FontFileOpen (input_filename);
-      if (input == NULL)
+      error = FT_Init_FreeType( pLibrary );
+      if( error )
+      {
 	return (TermFont *) NULL;
+      }
+
+      error = FT_New_Face( *pLibrary, input_filename, 0, pFace );
+      if ( error == FT_Err_Unknown_File_Format ) 
+      { 
+	/*... the font file could be opened and read, but it appears 
+	  ... that its font format is unsupported */ 
+	return (TermFont *) NULL;
+      } 
+      else if( error )
+      {
+	/* error handling */
+	return (TermFont *) NULL;
+      }
+
+      error = FT_Set_Pixel_Sizes( *pFace,  /* handle to Face object */  
+				       0,  /* pixel_width */  
+				      16); /* pixel_height */
 
       pFs->filename = malloc (strlen (input_filename) + 1);
       if (pFs->filename == NULL)
 	{
-	  FontFileClose (input);
+	  FT_Done_FreeType( *pLibrary );
 	  return (TermFont *) NULL;
 	}
 
@@ -211,41 +227,31 @@ load_font (char *input_filename)
       strcpy (pFs->filename, input_filename);
     }
 
-  /* read font data */
-  if ((readfont) != NULL)
-    if ((readfont) (font, input, MSBFirst, MSBFirst, 4, 4) != Successful)
-      {
-	fprintf (stderr, "font file, %s, corrupt\n", input_filename);
-	FontFileClose (input);
-	return (TermFont *) NULL;
-      }
+
 
   /* set global variable */
 #ifdef _DEBUG
   fprintf (stdout, "ascent  [%d]\n", font->info.maxbounds.ascent);
   fprintf (stdout, "descent [%d]\n", font->info.maxbounds.descent);
 #endif
-  pFs->cell_width = font->info.maxbounds.characterWidth;
-  pFs->cell_height =
-    font->info.maxbounds.ascent + font->info.maxbounds.descent;
+  /*
+   * pFs->cell_width = font->info.maxbounds.characterWidth;
+   * pFs->cell_height = font->info.maxbounds.ascent + font->info.maxbounds.descent;
+   */
 
-#ifdef STRICT_DEF
-  /* check terminal font */
-  if (!font->info.terminalFont)
-    {
-      fprintf (stderr, "not terminal font\n", input_filename);
-      FontFileClose (input);
-      return (TermFont *) NULL;
-    }
-#endif
-
+  /*
+   * if width == 0, then width = height ;
+   */
+  pFs->cell_height = (*pFace)->available_sizes[0].height;
+  pFs->cell_width = ( !(*pFace)->available_sizes[0].width ? (*pFace)->available_sizes[0].height : (*pFace)->available_sizes[0].width );
   pFs->frec = font;
+
   /* check width and height of char */
-  if (font->info.maxbounds.characterWidth > 32 ||
-      font->info.maxbounds.ascent + font->info.maxbounds.descent > 32)
+  if ( pFs->cell_width > 32 ||
+       pFs->cell_height > 32)
     {
       fprintf (stderr, "font %s too big size\n", input_filename);
-      FontFileClose (input);
+      FT_Done_FreeType( *pLibrary );
       return (TermFont *) NULL;
     }
 
@@ -253,7 +259,7 @@ load_font (char *input_filename)
   {
     char *p;
     if ((p = get_encoding_name (font)) == NULL)
-      p = "none";
+      p = "iso10646"; //"none";
 
     pFs->encoding_name = malloc (strlen (p) + 1);
     memset (pFs->encoding_name, 0x0, strlen (p) + 1);
@@ -262,6 +268,13 @@ load_font (char *input_filename)
     printf ("encoding name is [%s]\n", pFs->encoding_name);
 #endif
   }
+
+  /* part of freetype */
+  {
+    pFs->library = pLibrary;
+    pFs->face    = pFace;
+  }
+  
   return pFs;
 }
 
@@ -359,9 +372,7 @@ InitFont (char *ascfontfile, char *mbfontfile)
 	   pIterm->asc_font->frec->info.lastRow, pIterm->asc_font->filename);
 #endif
 
-  pIterm->cell_width =
-    min (pIterm->asc_font->cell_width, pIterm->mb_font->cell_width);
-  pIterm->cell_height =
-    max (pIterm->asc_font->cell_height, pIterm->mb_font->cell_height);
+  pIterm->cell_width = min (pIterm->asc_font->cell_width, pIterm->mb_font->cell_width);
+  pIterm->cell_height = max (pIterm->asc_font->cell_height, pIterm->mb_font->cell_height);
   return rc;
 }
