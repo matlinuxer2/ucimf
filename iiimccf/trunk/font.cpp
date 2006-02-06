@@ -36,6 +36,7 @@ Font::Font()
 
 	FT_Init_FreeType( &library ); 
 	FT_New_Face( library, fontpath.c_str(), 0, &face);
+        FT_Set_Charmap( face, face->charmaps[0] );
 	slot = face->glyph;
 
 	GraphDev::Open();
@@ -61,6 +62,7 @@ Font::Font( string fpath )
 
   FT_Init_FreeType( &library ); 
   FT_New_Face( library, fontpath.c_str(), 0, &face);
+  FT_Set_Charmap( face, face->charmaps[0] );
   slot = face->glyph;
 
   GraphDev::Open();
@@ -131,7 +133,7 @@ void Font::draw()
 	for( int k=7; k>=0; k-- )
 	{
 	  if ( ( tmp[i*(slot->bitmap.pitch)+j] >> k ) & 0x01)
-	    gdev->PutPixel(pos_left+j*8+k, pos_top+i, color );
+	    gdev->PutPixel(pos_left+j*8+7-k, pos_top+i, color );
 
 	}
       }
