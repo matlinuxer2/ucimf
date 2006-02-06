@@ -102,7 +102,7 @@ void Font::load( int code, int x, int y, int fw, int fh, int c )
   pos_y = y;
   font_width = fw;
   font_height = fh;
-  //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
+  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   encoding = FT_ENCODING_UNICODE;
   charcode = (FT_ULong) code;
   font_color = c;
@@ -117,23 +117,14 @@ void Font::draw()
     int pos_top = pos_y;// + slot->bitmap_top;
     int color = font_color;
 
-    // *** for (int i=0; i< slot->bitmap.rows; i++ )
-    // *** {
-    // ***   for( int j=0; j< slot->bitmap.width; j++ )
-    // ***   {
-    // ***     if ( tmp[ i * slot->bitmap.pitch + j/8] & (1 << ( 7- j%8)) )
-    // ***       gdev->PutPixel(pos_left+j, pos_top+i, color );
-    // ***   }
-    // *** }
-    
     for (int i=0; i< slot->bitmap.rows; i++ )
     {
       for( int j=0; j< slot->bitmap.pitch; j++ )
       {
-	for( int k=7; k>=0; k-- )
+	for( int k=0; k<7; k++ )
 	{
-	  if ( ( tmp[i*(slot->bitmap.pitch)+j] >> k ) & 0x01)
-	    gdev->PutPixel(pos_left+j*8+7-k, pos_top+i, color );
+	  if ( ( tmp[i*(slot->bitmap.pitch)+j] >> (7-k) ) & 0x01)
+	    gdev->PutPixel(pos_left+j*8+k, pos_top+i, color );
 
 	}
       }

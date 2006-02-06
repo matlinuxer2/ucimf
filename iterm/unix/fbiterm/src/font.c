@@ -10,7 +10,6 @@
 #include <sys/stat.h>
 #include <iconv.h>
 #include "fbiterm.h"
-#include <stdio.h>
 
 typedef int (readfontfunc) __P ((FontPtr, FontFilePtr, int, int, int, int));
 unsigned char *get_glyph ();
@@ -100,65 +99,13 @@ static CodesetName lookup_tbl[] = {
   {NULL, NULL},
 };
 
-#define TMP_BUFSIZ 10
-unsigned int
-get_glyph_codepoint (TermFont * fs, int codepoint)
-{
-  char *FROM = "ISO-10646/UCS2";
-  CodesetName *cn = lookup_tbl;
-  iconv_t cd;
-  char *inp, *outp;
-  char in[TMP_BUFSIZ], out[TMP_BUFSIZ];
-  size_t in_len, out_len;
-  unsigned int ret, tmp;
-
-  if (!strcasecmp (fs->encoding_name, "iso10646"))
-    return (codepoint);
-
-  while (cn->font_codesetname)
-    {
-      if (!strcasecmp (fs->encoding_name, cn->font_codesetname))
-	{
-	  if ((cd =
-	       iconv_open (cn->iconv_codesetname, FROM)) == (iconv_t) - 1)
-	    return (codepoint);
-
-	  bzero (out, TMP_BUFSIZ);
-	  bzero (in, TMP_BUFSIZ);
-	  out_len = TMP_BUFSIZ;
-	  outp = out;
-	  in[0] = (char) (codepoint & 0x000000ff);
-	  in[1] = (char) ((codepoint >> 8) & 0x000000ff);
-	  inp = in;
-	  in_len = 3;
-	  iconv (cd, &inp, &in_len, &outp, &out_len);	/* ISO-10646 to font's codeset */
-	  tmp = out[3] & 0x000000ff;
-	  ret = (tmp << 8) | out[4];
-	  iconv_close (cd);
-	  return (ret);
-	}
-      cn++;
-    }
-  return (codepoint);
-}
-
 unsigned char *
 get_glyph (TermFont * fs, int codepoint, unsigned int *height)
 {
   FT_Library lib = *(fs->library);
   FT_Face    face= *(fs->face);
   FT_Error   error;
-  FT_UInt    glyph_index;
   
-  // int index=get_glyph_codepoint( fs, codepoint );
-  // glyph_index = FT_Get_Char_Index( face, (FT_UInt) index);
-  // //glyph_index--;
-  // error = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
-  // if( error )
-  // {
-  //   /* error handling */
-  // }
-  fprintf( stderr, "codepoint: [%d]\t index: [%d]\t glyph_index: [%d]\n", codepoint, index, glyph_index );
   error = FT_Load_Char( face, (FT_ULong)codepoint, FT_LOAD_DEFAULT );
   if( error )
   {
