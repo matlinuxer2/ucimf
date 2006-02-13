@@ -1,0 +1,30 @@
+
+        JFBTERM      ----- J Framebuffer terminal -----
+
+  JFBTERM は Linux の framebuffer 上で漢字を表示するためのプログラムです。
+KON 同様に疑似端末を使ってコンソール出力をフックしますが、VGA ではなく、
+framebuffer に展開しています。
+
+
+特徴
+	* フォントファイルとして PCF 形式のものを使用します。X で使われいる
+	  適当なフォントファイルを用意してください。
+
+	* JIS/EUC/UTF-8などに対応しています。iconv(3)をつかって
+          SHIFT_JISにも対応できます。
+
+	* pty を使って出力をフックし、framebuffer でテキスト画面をエミュ
+	  レートしています。
+
+プログラムについて
+
+  JFBTERM を使ってハードウェアや他のソフトウェアに問題が発生しても、作者は
+責任をとることはできません。
+
+  バグや意見などがありましたら下記までご連絡ください。
+
+		http://sourceforge.jp/projects/jfbterm
+		E-Mail: jfbterm-dev@linux.or.jp
+		Current Maintainer: ukai@debian.or.jp
+                Original Author: nmasu@ma3.justnet.ne.jp.
+
