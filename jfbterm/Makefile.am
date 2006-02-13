@@ -13,8 +13,10 @@ jfbterm_SOURCES = \
 		term.c term.h \
 		util.c util.h \
 		csv.c csv.h \
-		vterm.c vtermlow.c vterm.h
-jfbterm_LDADD = -lutil
+		vterm.c vtermlow.c vterm.h\
+		input.c input.h
+jfbterm_LDADD = -L$(libdir) -lutil -liiimccf
+AM_CFLAGS = -I$(includedir)
 
 JFBTERM_CONFIG_FILE = jfbterm.conf.sample
 

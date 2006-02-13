@@ -55,6 +55,9 @@
 
 #include "config.h"
 
+#include <iiimccf.h>
+#include "input.h"
+
 int gChildProcessId = 0;
 
 TTerm gTerm;
@@ -175,7 +178,10 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 	tterm_set_utmp(p);
 	signal(SIGCHLD, sigchld);
 	atexit(application_final);
-
+			  
+	/* IIIMCCf */
+	static int SWITCH_TO_IIIMCCF=0;
+        iiimccf_init();
 	/* not available
 	 * VtInit();
 	 * VtStart();
@@ -216,7 +222,55 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			}
 #endif
 			if (ret > 0) {
+			  
+			  /* "203" has been registed for "Ctrl-Space" in input.c */    	    
+			  if( buf[0] == 203 )
+			  {
+			     if( SWITCH_TO_IIIMCCF == 0 ){
+			       SWITCH_TO_IIIMCCF = 1;
+			       iiimccf_on();
+			     }else{
+			       SWITCH_TO_IIIMCCF = 0;
+			       iiimccf_off();
+			     }
+			     continue;
+			  }
+			 
+			  /* "204" has been registed for "Ctrl-Shift" in input.c */
+			  if( buf[0] == 204 )
+			  {
+			     if( SWITCH_TO_IIIMCCF == 0 ){
+			       SWITCH_TO_IIIMCCF = 1;
+			       iiimccf_on();
+			     }else{
+			       iiimccf_change_ims();
+			     }
+			     continue;
+			  }
+			  
+			  if( SWITCH_TO_IIIMCCF == 1 )
+			  {
+			      iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
+			      
+			      int keycode, keychar, modifier;
+			      
+			      keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
+			      iiimccf_proc( keycode, keychar, modifier );
+			      
+			      char* committed_buf;
+			      int committed_buf_len=0 ;
+			      committed_buf_len = iiimccf_result( &committed_buf );
+			      if ( committed_buf_len > 0 ){
+				write( p->ptyfd, committed_buf, committed_buf_len );
+			      }else{
+					      continue;
+			      }
+			  }
+			  else
+			  {
 				write(p->ptyfd, buf, ret);
+			  }
+			  
 			}
 		} else if (FD_ISSET(p->ptyfd,&fds)) {
 			ret = read(p->ptyfd, buf, BUF_SIZE);
@@ -227,6 +281,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			}
 		}
 	}
+	iiimccf_exit();
 }
 
 void tterm_wakeup_shell(TTerm* p, const char* tn)
