@@ -1,0 +1,32 @@
+
+        JFBTERM      ----- J Framebuffer terminal -----
+
+  JFBTERM is a program to print several character sets, such as Japanese
+Kanji, on Linux framebuffer device.  It takes advantage of peudo tty
+mechanisms to hook console output in the same way as KON. It renders
+font on framebuffer device instead of VGA that is used by KON.
+
+Features
+
+	* It uses PCF format of font file. So, you need some bitmap font used
+	  in X window system.
+
+	* It supports ISO-2022 encodings and UTF-8 encoding.
+          It also supports other coding system such as SHIFT_JIS by using
+          iconv(3).
+
+ 	* It hooks output by using pty and emulate terminal on framebuffer
+	  device.
+
+NO WARRANTY
+
+This is free software; you can redistribute it and/or modify it under
+the license written in COPYRING file.
+
+If you find a bug or have any comments, contact to
+
+		http://sourceforge.jp/projects/jfbterm
+		E-Mail: jfbterm-dev@linux.or.jp
+		Current maintainer: ukai@debian.or.jp
+                Original Author: nmasu@ma3.justnet.ne.jp.
+

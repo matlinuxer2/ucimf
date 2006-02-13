@@ -1,0 +1,699 @@
+2005-03-12  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* fix some lockup problem, reported by Kenshi Muto
+	* main.c (tapp_init): SIGCHLD to wait for gunzip processes.
+	* term.h (sigchld): used in main.c:tapp_init
+
+2005-02-24  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.7 released
+
+2005-02-24  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* font.c (font_open): dont use popen(3) to fix local exploit.
+
+2004-05-29  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.6 released
+
+2004-05-11  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* sf.jp #4269
+	* vterm.c (tvterm_pop_pen_and_set_currnt_pen): should be kept
+		at the bottom line if pen is at the bottom line.
+
+2004-05-11  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* main.c (tapp_get_options): rest of the arguments after -e will be
+		passed for the commend specified by -e options
+	* jfbterm.1: updated
+
+2004-03-06  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.5 released
+
+2004-02-22  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* font.c (tfont_setup_font): use print_message instead of printf
+
+2003-12-27  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vterm.c (tvterm_put_otherCS_char): fix alt charset (iconv,UTF-8)
+
+2003-09-30  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.4 released
+
+2003-09-30  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* fix segfault by resize(1) 
+	* vterm.c (tvterm_esc_report): report should be written to ptyfd
+		(tvterm_esc_bracket): 'r' if no parameter passed,
+				set default region size as xterm does.
+	* vtermlow.c (tvterm_refresh): if pen position is out of screen
+				don't write cursor.
+
+2003-09-20  Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+
+	* jfbterm.1 jfbterm.conf.5: patch to manpages
+
+2003-09-16  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.3 released
+
+2003-09-16  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vtermlow.c (tvterm_clear): fill background color
+		(tvterm_refresh): don't draw glyph where no character
+	
+	* main.c (tapp_change_to_new_console): remove unused variable `parent'
+		fflush stdout, stderr
+		(tapp_setup_encoding): fix segfault when encoding is NULL
+		(main): do tfont_setup_fontlist more early (before vc switch)
+	* term.c (tterm_wakeup_shell): add sleep
+	* vterm.h (TVterm): add altCs
+	* vterm.c (tvterm_init): initialize p->altCs
+		(tvterm_set_default_invoke_and_designate): reset p->altCs
+		(tvterm_start): initialize p->altCs
+		(tvterm_put_utf8_char): use vt100-graphics for rule character
+		(tvterm_esc_set_attr): p->altCs
+	
+	* jfbterm.conf.sample: fix vt100-graphics entry
+	* jfbterm.conf.sample.ja: add vt100-graphics entry
+
+2003-09-15  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vtermlow.c: remove old i386 inline asm codes.
+	    use bits/string.h instead by "#define __USE_STRING_INLINES".
+
+2003-09-14  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.2 released
+
+2003-09-14  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* Makefile.am (install-data-local): install fonts
+
+	* fonts: added
+	* fonts/vt100-graphics.pcf.gz: 
+	   provided by Toshio Kasuga <tk75@hcc1.bai.ne.jp>
+
+	* jfbterm.conf.sample: add vt100-graphics
+
+	* merge patch by Toshio Kasuga <tk75@hcc1.bai.ne.jp>
+	  [jfbterm-dev:00302] 
+	
+	* vtermlow.c (memset2): added
+		(lset): added
+		(tvterm_clear): renamed from tvterm_bzero2
+			attr should be cleared by p->pen.bcol
+		(tvterm_lclear): renamed from rvterm_lzero
+			attr should be cleared by p->pen.bcol
+	* terminfo.jfbterm (sgr0): \E[0m - tpen_off_all_attribute()
+	* terminfo.jfbterm (rmso): \E[27m - tpen_no_reverse()
+	* terminfo.jfbterm (op): \E[37;40m - tpen_set_color() white/black
+	
+	* vterm.c (tvterm_esc_set_attr): implements smacs,smpch
+		(tvterm_find_font_index): added
+		(tvterm_esc_designate_font): use tvterm_find_font_index
+	* terminfo.jfbterm (acsc): updated
+	
+	* font.c (gFont): add jisx0213-2000-1, jisx0213-2000-2, vt100-graphics
+	
+	* terminfo.jfbterm (el1): added (clr_bol)
+
+2003-09-05  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vterm.h (TCodingSystem): add saved state
+	* vterm.c (tvterm_finish_otherCS): restore old state
+		(tvterm_switch_to_otherCS): save current state
+	
+	* tvterm.h tvterm.c: code cleanup
+	
+	* util.c: include <sys/io.h> ifdef HAVE_IOPERM
+
+	* jfbterm.conf.sample jfbterm.conf.sample: fix typo KOI8-R
+		other encodings are commented out, because these are
+		default configurations.
+
+2003-09-04  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* jfbterm.conf.sample jfbterm.conf.sample: delete other-coding-system
+	* main.c (tapp_setup_encoding): default to other,<encname>,iconv,UTF-8
+			delete code about "other-coding-system"
+	* vterm.c (tvterm_esc_rbracket): added
+		(gOtherCodingSystem): deleted
+		(tvterm_parse_other): don't free here
+		(tvterm_codingSystem_final): free old fromcode,tocode
+		(tvterm_switch_to_other): use static TCodingSystem
+		(tvterm_esc_start): add tvterm_esc_rbracket for 1/11 5/13
+		(tvterm_esc_designate_other_coding_system): 
+			delete gOtherCodingSystem
+		(tvterm_show_sequence): rewrite to use 1/11 5/13 encode 0/5
+	* vterm.h (tvterm_setup_otherCodingSystem): deleted
+
+	* jfbterm.conf.sample jfbterm.conf.sample.ja: add SUPPORTED encodings
+
+	* util.h (util_privilege_open): ifdef HAVE_IOPERM
+	* util.c (util_privilege_open): ifdef HAVE_IOPERM
+
+2003-09-04  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.1 released
+
+2003-09-04  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* README README.ja: other coding system support
+	
+	* main.c (ShowCaps): add OTHER-CODING-SYSTEM
+		(tapp_setup_encoding): use tcaps_find_entry
+				initialize other-coding-system
+		(main): s/tfont_show_sequence/tvterm_show_sequence/
+	* term.c (tterm_init): pass gApp.gCaps to tvterm
+	* vterm.h (TCodingSystem): added
+		(TVterm.utf8DefaultIdx): added
+		(TVterm.codingSystem): added
+		(TVterm.caps): added
+		(tvterm_init): update
+		(tvterm_show_sequence): added
+	* vterm.c (tvterm_is_ISO2022) added
+		(tvterm_codingSystem_final): added
+		(tvterm_switch_to_other): added
+		(tvterm_is_otherCodingSystem): added
+		(gOtherCodingSystem): added
+		(tvterm_init): update
+		(tvterm_parse_encoding): added
+		(tvterm_switch_to_ISO2022): added
+		(tvterm_UTF8index): added
+		(tvterm_parse_other): added
+		(tvterm_setup_otherCodingSystem): added
+		(tvterm_set_default_encoding): update
+		(tvterm_put_uchar): update
+		(tvterm_iso_C0_set): update
+		(tvterm_put_utf8_char): added
+		(tvterm_put_other_char): added
+		(tvterm_emulate): update
+		(tvterm_esc_start): update
+		(tvterm_esc_designate_font): update
+		(tvterm_esc_designate_other_coding_system): update
+		(tvterm_show_sequence): added
+	* font.h (TFONT_FT_UNICODE): obsoleted
+		(TFONT_FT_OTHER): added
+		(FONTSET_HALF): add FH_UNI
+		(tfont_show_sequence): deleted
+	* font.c (gFont): TFONT_FT_OTHER, FH_UNI
+		(tfont_ary_show_list): FH_UNI
+		(tfont_setup_fontlist): add "U" to sides
+		(tfont_show_sequence): move to vterm.c
+	* getcap.h (tcaps_find_entry): added
+	* getcap.c (tcaps_find_entry): added
+	* jfbterm.conf.5: updated
+	* jfbterm.conf.sample jfbterm.conf.sample.ja: updated
+
+2003-09-03  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.4.0 released
+	
+2003-09-03  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* README README.ja: add UTF-8 encoding
+
+	* acconfig.h: add JFB_UTF8
+	* config.h.in: add JFB_UTF8
+	* configure.h.in: add --enable-utf8
+
+	* jfbterm.conf.5: add UTF-8 
+	* jfbterm.conf.sample jfbterm.conf.sample.ja:
+		add fontset iso10646.1
+		add encoding.UTF-8
+	* vtermlow.c (tvterm_refresh): multi width font support
+		(tvterm_uput1): added
+		(tvterm_uput2): added
+	* vterm.c (tvterm_switch_to_UTF8): added
+		(tvterm_switch_to_ISO2022): added
+		(tvterm_is_UTF8): added
+		(tvterm_init): initialize UTF-8 state
+		(tvterm_set_default_encoding): add UTF-8 support
+		(tvterm_put_normal_char): delete *buff param
+		(tvterm_put_uchar): added
+		(tvterm_emulate): add UTF-8 support
+		(tvterm_esc_designate_other_coding_system): UTF-8 support
+	* vterm.h (TVterm): add utf8Idx, utf8remain, utf8ch
+		(tvterm_uput1): added
+		(tvterm_uput2): added
+
+	* font.c: C99 initialization
+		add UTF-8 font
+		(tfont_ary_show_list): unicode
+		(tfont_default_glyph): add *width param
+		(tfont_standard_glyph): add *width param
+		(tfont_alias): glyph_width
+		(tfont_is_loaded): added
+		(tfont_setup_fontlist): check ASCII and unicode font
+		(tfont_show_sequence): UTF-8 support
+	* font.h (TFONT_FT_UNICODE): added
+		(TFont.conv): add *width param
+		(TFont.glyph_width): added
+		(tfont_default_glyph): add *width param
+		(font_standard_glyph): add *width param
+		(tfont_is_loaded): added
+	
+	* pcf.c (tpcfformat_load): verbose debug message
+		(tpcfindex_debug): verbose debug message
+		(tpcfcmetric_load): added
+		(tpcfmetrics_init): added
+		(tpcfmetrics_final): added
+		(tpcfmetrics_load): added
+		(tpcfaccel_load): accept non terminal font (for unifont)
+		(tpcfaccel_debug): verbose debug message
+		(tpcfbitmap_load): verbose debug message
+		(tpcfencode_debug): added
+		(tpcf_init): metrics init
+		(tpcf_final): metrics final
+		(tpcf_load): verbose debug message
+			load metrics
+		(tpcf_as_tfont): initialize glyph_width
+		(main): debug program
+	* pcf.h (TPcfMetrics): added
+		(TPcf): add metrics
+
+	* term.c (tterm_start): already drop privilege
+	* main.c (tapp_change_to_original_console): fix VC bug
+		(tapp_final): VC change is done in parent process
+		(tapp_change_to_new_console): fix VC bug
+		(ShowCaps): add UTF-8
+		(main): drop privilege after device initialized
+	* main.h (TApplication): delete gOrigVirtualConsoleQ
+
+	* fbcommon.c (tfbm_set_blank): use gFrameBuffer.ttyfd
+		(tfbm_init): remember gFramebuffer.ttyfd
+	* fbcommon.h (TFrameBufferMemory): add ttyfd
+
+2003-09-02  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.16 released
+
+2003-09-01  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vterm.c (tvterm_esc_designate_other_coding_system): added
+		(tvterm_esc_start): add ISO_DOCS
+	* font.c (tfont_show_sequence): ESC % @
+	
+	* main.h (TApplication): add gOptQuiet, gOptReset
+	* message.c (print_message): quiet flag
+	* getcap.c (tcaps_read): use print_message
+	* font.h (tfont_show_sequence): added
+	* font.c (tfont_show_sequence): added
+	* main.c (tapp_get_options): add --reset, --quiet
+		(main): support --reset
+
+	* main.c (tapp_setup_encoding): change jfbterm.conf format
+	* jfbterm.conf.sample: update
+
+	* Makefile.am (install-exec-hook): added
+	* term.h (TTerm): delete ttygid, ttygidQ
+	* term.c (tterm_init): delete ttygid, ttygidQ
+		(tterm_set_utmp): no need to get "tty" group
+		(tterm_reset_utmp): no need to reset slave pty device
+	
+	* term.c (tterm_start): use tterm_wakeup_shell
+		(tterm_wakeup_shell_as_child): deleted
+		(tterm_wakeup_shell): added, use login_pty(3)
+	
+	* Makefile.am (jfbterm_LDADD): -lutil
+	* Makefile.in: ditto
+	* term.c (tterm_get_ptytty): use openpty(3)
+
+2003-09-01  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.15 released
+
+2003-08-31  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vterm.c (tvterm_esc_start): implement ISO_LS[23],_LS[123]R
+		implement ISO_G[23]D[46]
+		disable TERM_CAH, because it conflicts with ISO_G2D4.
+
+	* fbcommon.c (tfbm_open): ioperm requires root privilege
+	* util.h (util_privilege_ioperm): added
+	* util.c (util_privilege_ioperm): added
+
+2003-08-31  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* vterm.c: typo
+	  s/tvterm_esc_desginate_font/tvterm_esc_designate_font/
+	  s/tvterm_esc_traditional_mulitbyte_fix/tvterm_esc_traditional_multibyte_fix/
+
+2003-08-31  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.14 released
+
+2003-08-31  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* main.h (TApplication): add gConfFile, gConfEncoding
+		patch from Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+	* main.c (tapp_get_options): add --config, --encoding/charmap options
+		 	requested by Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+		(tapp_change_to_original): use print_warn
+		(tapp_init): init gConfFile, gConfEncoding
+		(tapp_change_to_new_console): use print_message
+		(tapp_setup_encoding): added
+			based on patch from Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+		(main): use print_message, print_error
+			use gApp.gConfFile
+			encoding setup
+			print encoding and exec
+	* font.c (gFont): add iso8859.{11-16} entries
+		contributed by Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+	* font.c (tfont_setup_font): check font file existence
+	* util.c: add missing includes
+	* term.c (tterm_start): drop privilege
+	* jfbterm.conf.sample jfbterm.conf.sample.ja: update 
+		based on patch from Tomohiro KUBOTA <debian@tmail.plala.or.jp>
+	* jfbterm.1 jfbterm.conf.5: updated
+
+2003-08-30  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.13 released
+
+2003-08-30  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* AUTHORS: update, currently maintained on sourceforge.jp
+	* COPYRIGHT: add copyright 
+	* INSTALL: english version
+	* INSTALL.ja: japanese version
+	* NEWS: translated to english
+	* README: english version
+	* README.ja: japanese version
+	* jfbterm.conf.sample: english version
+	* jfbterm.conf.sample.ja: japanese version
+	* jfbterm.1: added
+	* jfbterm.conf.5: added
+	* main.c (main): copyright
+		gamma -> color.gamma
+		default TERM should be "jfbterm"
+	* main.c (ShowCaps): help message should go to stdout instead of stderr
+	* #include "..." instead of #include <....>
+	* util.h util.c (util_privilege_init 
+		util_privilege_on util_privilege_off
+		util_privilege_open util_getuid util_privilege_drop): added
+	* fbcommon.c (tfbm_set_blank): use util_privilege_open()
+			close filedescriptor
+		(tfbm_init): use util_privilege_open()
+		(tfbm_open): use util_privilege_open()
+	* main.c (tapp_change_to_original_console): use util_privilege_open()
+		(tapp_change_to_new_console): ditto
+		(main): util_privilege_init()
+	* message.c (tterm_wakeup_shell_as_child): util_privilege_drop()
+		(tterm_set_utmp): use util_getuid(), 
+				util_privilege_on(), util_privilege_off()
+
+2002-12-11  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* Makefile.am (install-data-local): DESTDIR
+
+2002-11-26  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.12 released
+
+2002-11-25  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* 7bit SS2, SS3 support
+	* vterm.c (tvterm_esc_start): support SS2, SS3
+
+2002-11-23  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* jfbterm-dev:00277: SS2, SS3 support
+	* vterm.c (IS_GR_AREA): typo? tgl.type->tgr.type
+		(tvterm_put_normal_char): typo? tgl.idx -> tgr.idx
+				GR, LEFT plane font should mask & ~0x80
+		(tvterm_iso_C1_set): support SS2, SS3
+		(tvterm_emulate): ws_ypixel = 0?
+	* jfbterm.conf.sample: encoding for EUC-JP
+
+2002-08-02  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* util.c: #include <string.h>
+	* configure.in: check ioperm to enable vga16fb
+	* fbcommon.c: #include <sys/io.h> for only ifdef JFB_VGA16FB
+		fixes portability issues
+
+2002-07-28  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* version 0.3.11 released
+
+2002-07-27  Ichiya KAMIKI <kensyu@y.email.ne.jp>
+
+	* jfbterm-dev:00268
+	* vtermlow.c (tvterm_refresh): speedup patch.
+
+2002-07-23  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* NEWS: update
+
+	* .cvsignore: added
+
+	* aclocal.m4: aclocal 1.4-p5
+	* config.h.in: autoheader 2.13
+
+	* fix compiler warnings:
+	* fbcommon.c: add #include <sys/io.h>
+	* font.c (tfont_setup_font): fix size check
+	* term.c: add #include <time.h>
+
+2002-07-20  Hiroshi Kawashima <kawashima@iname.com>
+	* ported from Linux-VR/Linux-ARM work.
+	* contributed by Ichiya Kamiki, Hiroshi Kawashima, new feature:
+		* 1bpp/2bpp support
+		* Dimmer support (after 3 minutes no event, screen blank)
+		* Reverse color support (only work on 2bpp)
+
+2002-07-17  Fumitoshi UKAI  <ukai@debian.or.jp>
+
+	* font.c (tfont_setup_font):
+		check font path length
+	
+	* backport jfbterm 0.3.10-3.deb
+	* fbcommon.c:
+		applied mmap patch by AMANO Kazuhiro.
+	* fbdpsp.c: add min define
+		(tfbm_reverse_16bpp_packed): check height
+	* term.c (tterm_start): change timing of wakeup shell
+	* vtermlow.c (tvterm_unregister_signal): dont TIOCSWINSZ
+		(tvterm_register_signal): dont TIOCSWINSZ
+		(tvterm_text_clear_eos): fix comment
+	
+	* backport jfbterm 0.3.10-2.deb
+	* main.c (tapp_init): fix shell buffer overrun
+	* jfbterm.conf.sample (encoding): prefer jisx0208
+
+	* backport jfbterm 0.3.10-1.deb
+	* Makefile.in (TAR): s/gtar/tar/
+		(distdir): fix s/$$/$$d/
+	* configure.in: check progs gunzip instead of gzip
+	* font.c (tfont_setup_font): JFB_GZIP_PATH is gunzip, so -d not needed
+	* jfbterm.conf.sample (term): default is jfbterm
+			(fontset): s/.Z/.gz/
+	* terminfo.jfbterm: added
+
+	* import sourceforge.jp repository
+
+2000-01-23  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+        * Version 0.3.10
+	    認識可能な文字集合を大幅に追加した。	(Masuichi)
+	    韓国語(KSC5601-1987)に対応できなくなっていたのを
+	  修正した。					(Masuichi)
+
+2000-01-11  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+        * Version 0.3.9 (欠番です。)
+
+2000-01-11  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+        * Version 0.3.8
+	    --help オプションを追加した。		(Masuichi)
+	    --exec(--shell) オプションを追加した。あまの さんの
+	  バッチを元に作成した。			(Amano)
+
+1999-11-28  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+        * Version 0.3.7
+            コンパイル時の警告を厳しくた。
+          以下の環境で、発生する警告を除去した。
+                A. AMD K6 233MHz
+                   linux kernel 2.2.13ac2
+                   gcc 2.3.2.3
+                   libc 5.4.46
+          以下の環境では、ioperm() のプロトタイプが無いと警告される。
+                B. AMD K6-2 300MHz
+                   linux kernel 2.2.13
+                   egcs 2.91.66 19990314 (egcs-1.1.2 release)
+                   glibc 2.0.7
+          以下の環境では、void* 型のポインタを計算に使用しているという、警告が
+          多数でる。ただし、標準インクルードファイル中でそのほとんどが発生する。
+          ioperm() のプロトタイプが無いとも警告される。
+                B. AMD K6-2 300MHz
+                   linux kernel 2.2.13ac3
+                   gcc 2.95.2 19991024 (release)
+                   glibc 2.1.2
+
+          ioperm() の警告は libc の違いが原因のようである。
+
+          なお、./configure にはオプションをつけていない。
+                                                        (Masuichi)
+
+1999-11-24  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.6.
+	    jfbtermの終了手順を改善した。		(Amano)
+	    brmove@vtermlow.c の x86 代替コードを修正した。
+							(Amano)
+	    DIRECTCOLORの時に強制的に 8bppにするためのコードを追加した。
+	  ./configure --enable-force-8bit で有効になる。
+							(Amano)(Oe)
+	    内部処理の問題ですが、各種の制御コードの define 値を ISO 風に
+	  改めました。					(Masuichi)
+
+1999-11-17  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.5.
+	    一般ユーザがルート権限で任意のコマンドを実行できてしまうという
+	  セキュリティホールを塞いだ。			(Mausichi)
+
+1999-11-07  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.4.
+	    0.3.3 での w3m のための回避策が不十分であるようなので修正。
+							(Oike)
+
+1999-10-30  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.3.
+	    jfbterm.conf.sample のインストール先を /etc 固定から
+	  $(sysconfdir)で指定できるように変更した。(鵜飼さんから
+	    示唆を頂きました。あわせて、実行ファイルが、jfbterm.conf を
+	  読み取るディレクトリを変更した。		(Masuichi)
+	    void main(..) となっていたのを、int main(..)に訂正。
+	  egcs でコンパイル時に発覚。gcc 2.7.2.3 だと警告されなかった。
+							(Masuichi)
+	    main.c の改行コードが DOS 的であったの訂正した。
+							(Ukai)
+	    独自に定義していた major() と同様のものが sys/sysmacros.h に
+	  あるのでそちらを使用するようにした。		(Ukai)
+	    tvterm_final が2回(sigchld->tterm_final->tvterm_final と
+	  exit()->atexitされてるapplication_final->tterm_final->tvterm_final)
+	  呼ばれるので p->savedPen, p->savedPenSL が2回free()することに
+	  なってしまい(運がわるいと)seg faultする事があるのを修正。
+							(Ukai)
+	    w3mでmouse を有効にしていた場合に使われるエスケープシーケンスに
+	  対応していない事による不具合を回避。		(Ukai)
+	  …現在は回避処置ですが、将来的には正しく解釈するようにする予定。
+							(Masuichi)
+	    Version 0.3.2 の修正では、やはり gcc2.95以降でコンパイルできない
+	  ので、その修正。				(Ukai) (Hatta)
+	    環境変数 TERM に設定する値を、jfbterm.conf で指定できるように
+	  訂正。					(Masuichi)
+	    エンコーディングを指定できなかったのを修正。(Masuichi)
+
+1999-10-24  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.2.
+	    vga16fb 対応(横幅が 8 の倍数の場合以外は不完全)、
+							(Nagano)
+	    上記の vga16fb 用のコードの改良。		(Noritoshi Masuichi)
+	    gcc2.95以降でコンパイルできない事の指摘と、修正。
+							(Yoshii) (Hatta)
+		(同時期にお二人の方から頂きました。順不同)
+					
+
+1999-10-18  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.3.1.
+	    tvterm_coord_to_index() が 最下行右端+1 の値を 1行目左端と
+	  誤認する問題を修正した。TVterm::xcap4 を 若干大きくとるように
+	  修正することにより対処した。			(Noritoshi Masuichi)
+	    ISO-2022-* 相当に対応した。ただし、アナウンサに未対応。
+	  また、初期状態は ISO-2022-JP と EUC-JP の混合状態で固定。
+	  次バージョンで初期状態を可変にする予定。	(Noritoshi Masuichi)
+	    jfbterm.conf 内のフォント指定の書式を変更した。
+							(Noritoshi Masuichi)
+            FB_VISUAL_DIRECT とデファイン値名がまちがっていたのを訂正。
+							(Amano)
+            vga16fbの無い古いカーネルヘッダに対応するための#if - #endif を追加。
+							(Amano)
+            フォントをcompressで圧縮している場合への対処。
+							(Amamo)
+							
+
+1999-09-26  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.2.0.
+	  autoconf/automake 化しました。
+	  RGB の各分色のサイズをきちんと調べるようにしました。
+
+1999-09-15  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-6.
+	  コードを若干見直しました。
+	  フレームバッファの判定を厳しくしました(pre-5 までは、DIRECTCOLOR
+	  でも起動していましたがTRUECOLORだとして動いていました)。
+	  32bpp PACKED-PIXELS TRUECOLOR に対応しました。
+
+1999-09-15  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-5.
+	  mmap(mmio)のコードを変更してみました。 
+	  水平解像度と1ラインのバイト数を混同していたのを修正しました。
+    
+1999-08-31  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-4.
+	  "Cannot mmap(mmio)."が発生しても無視する事ができるようにしてみ
+	  ました。jfbterm では確保した領域にアクセスしていませんので、お
+	  そらく不要なコードだと思うのです。 
+	  popen("...", "r<B>b</B>") となっていて、標準的な仕様のpopen(3)
+	  ではパイプをオープンできないという不具合を修正しました。
+    
+1999-08-25  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-3.
+	  15,16,24bpp 対応のパッチをいただきましたので、取り込みました。
+	  動作確認はしていません。パッチを作られた方によると、
+		  15、16、24 bpp は TRUECOLOR として決め打ちになっています。
+		  16 bpp の bitfield を (r,g,b)=(5,6,5) として決め打ちになっ
+		  ています。
+		  VESA モードのみのテストしかできていません。
+		  bpp 毎の関数振り分けを無理矢理やっています。
+		  16 色のテーブルが適当で、表示されるべき色が出ないことが
+		  あります。
+	  とのことです。
+    
+1999-??-??  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-2.
+	  pre-1のアーカイブが間違っていたので作り直しました。
+
+1999-??-??  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-pre-1.
+	  Virtual Console に対応しました。X 上の kterm から起動しても
+	  別の仮想コンソールで動作します。(私のところの開発環境でのみ確認)
+	  /etc/jfbterm.conf から設定を読み込むようにしました。
+
+1999-??-??  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-alpha-3.
+	  Linux/PPC でも make できるようになりました。
+
+1999-??-??  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-alpha-2.
+	  フォントファイルで *.pcf.gz なものが読めるようになりました。
+	  (要、gzip)
+	  制御コードの不具合を修正しました。(jvim が動きます。)
+
+1999-??-??  Noritoshi Masuichi <nmasu@ma3.justnet.ne.jp>
+
+	* Version 0.1.0-alpha-1.
+	  試験公開初版

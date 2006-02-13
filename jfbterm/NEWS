@@ -1,0 +1,80 @@
+2005-02-24 Version 0.4.7
+
+  - SECURITY: fix local exploit
+
+2004-05-29 Version 0.4.6
+
+  - fix save_cursor(sc)/restore_cursor(rc) at bottom line
+  - change -e options behavior
+
+2004-03-06 Version 0.4.5
+
+  - don't print message in quiet mode
+  - fix alternative charset in iconv,UTF-8 mode
+
+2003-09-29 Version 0.4.4
+
+  - fix segfault by resize(1)
+  - manual page updated
+
+2003-09-15 Version 0.4.3
+
+  - fix line graphics handling bug in UTF-8
+  - fix clear: clear by background color
+
+2003-09-14 Version 0.4.2
+
+  - fix line graphics handling
+
+2003-09-04 Version 0.4.1
+
+  - other-coding-system support (experimental)
+
+2003-09-03 Version 0.4.0
+
+  - UTF-8 support (experimental)
+  - fix bug in switching VC
+
+2003-09-02 Version 0.3.16
+
+  - jfbterm: 
+    fix pty problems
+    add --reset, --queit option
+  - jfbterm.conf: change format: obsolete enctable, new encoding.<codeset>
+
+2003-09-01 Version 0.3.15
+
+  - implements ISO_LS[23], LSO_LS[23]R, ISO_G[23]D[46]
+  - remove TERM_CAH (private escape sequence, confclits with ISO_G2D4)
+  - fix vga16fb problem
+
+2003-08-31 Version 0.3.14
+
+  - jfbterm: new option: --config, --encoding/charmap
+  - jfbterm.conf: new: enctable
+
+2003-08-30 Version 0.3.13
+
+  - English manuals
+  - run with privilege as less as possible
+
+2002-11-26 Version 0.3.12
+
+  - SS2, SS3 support (you can use so-call half-width kana in EUC-JP)
+
+2002-07-28 Version 0.3.11
+
+  - 1bpp/2bpp support
+  - Dimmer support (after 3 minutes no event, screen blank)
+  - Reverse color support (only work on 2bpp)
+
+2002-07-17 maintain on sourceforge.jp
+
+Changes in version 0.3.10
+
+- add character sets supports
+- fixed KSC5601-1987 support
+
+See also ChangeLog
+
+
