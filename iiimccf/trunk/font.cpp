@@ -78,10 +78,6 @@ void Font::status()
 {
   cout << "fontpath: " << fontpath << endl;
   cout << "encoding: " << "UTF-16" << endl;
-  PCF_Public_Face pcfface = (PCF_Public_Face)face ;
-  cout << "encoding: " << pcfface->charset_encoding << endl;
-  cout << "registry: " << pcfface->charset_registry << endl;
-
 }
 
 void Font::info()

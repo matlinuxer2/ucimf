@@ -1,6 +1,5 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <freetype/internal/pcftypes.h>
 
 #include "graphdev.h"
 //#include <string>

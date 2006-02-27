@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(iiimccf, 0.8 , BUG-REPORT-ADDRESS)
+AC_INIT(iiimccf,0.9.3, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([overspot.h])
 AC_CONFIG_HEADER([config.h])
