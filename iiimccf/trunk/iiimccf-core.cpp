@@ -70,7 +70,6 @@ IIIMCCF::~IIIMCCF()
 
 bool IIIMCCF::on()
 {
-    debug(" iiimccf_on started! ");
     IIIMF_status st;
     IIIMCF_input_method *pims;
     const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
@@ -78,24 +77,18 @@ bool IIIMCCF::on()
     int num_of_ims;
 
     st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
-    debug(" iiimccf_on started! ");
     iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
-    debug(" iiimccf_on started! ");
     idname = iiimcf_string_to_utf8(u16idname);
     
     IIIMCF_attr attr;
     st = iiimcf_create_attr( &attr );
     st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
-    debug(" iiimccf_on started! ");
     
     st = iiimcf_create_context( handle,attr, &context );
-    debug(" iiimccf_on started! ");
 	
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 1, &event);
-    debug(" iiimccf_on started! ");
 	iiimcf_forward_event( context, event);
-    debug(" iiimccf_on started! ");
 	return true;
 }
 
