@@ -17,6 +17,7 @@ iiimccf_status(
     IIIMCF_component current,
     IIIMCF_component parent
 ){
+	IIIMCF_text text; 
 	IIIMF_status st;
 	IIIMCF_event_type type;
 	st = iiimcf_get_event_type( event, &type );
@@ -30,6 +31,19 @@ iiimccf_status(
 		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_CHANGE:
+		  
+		  st = iiimcf_get_status_text(context, &text);
+		  if (st == IIIMF_STATUS_SUCCESS) {
+		      char* str = iiimcf_text_to_utf8(text);
+		      debug("Status:");
+		      debug( str );
+
+		  } else if (st == IIIMF_STATUS_NO_STATUS_TEXT) {
+		      debug( "Status is disabled." );
+		  } else {
+		      debug( "Status error." );
+		  }
+
 		  break;
 		  
 		case IIIMCF_EVENT_TYPE_UI_STATUS_DONE:
@@ -39,7 +53,20 @@ iiimccf_status(
 		  break;
 		  
 		default: 
-		  debug(" !!status!! "); 
+		  debug(" !!status2!! "); 
+		  
+		  st = iiimcf_get_status_text(context, &text);
+		  if (st == IIIMF_STATUS_SUCCESS) {
+		      char* str = iiimcf_text_to_utf8(text);
+		      debug("Status:");
+		      debug( str );
+
+		  } else if (st == IIIMF_STATUS_NO_STATUS_TEXT) {
+		      debug( "Status is disabled." );
+		  } else {
+		      debug( "Status error." );
+		  }
+
 		  break; 
 	}
 	return IIIMF_STATUS_SUCCESS;

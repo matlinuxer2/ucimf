@@ -40,7 +40,7 @@ class IIIMCCF {
     
     /* bitmap block for overspot elements */
 
-  private:
+//  private:
 
     // IIIMCF Object
     IIIMCF_handle 	handle;
