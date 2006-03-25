@@ -42,9 +42,13 @@ class Stts : public Observer{
     ~Stts();
     
     void update();
+    bool isVisible();
+    void setShow();
+    void setHide();
     void show();
     void hide();
   private:
+    bool visible;
     Rectangle* div;
     Text* title;
     BitMap tmp;

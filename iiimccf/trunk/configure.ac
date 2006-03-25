@@ -4,7 +4,6 @@
 AC_PREREQ(2.59)
 AC_INIT(iiimccf,0.9.3, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([overspot.h])
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
 AC_PROG_CXX
