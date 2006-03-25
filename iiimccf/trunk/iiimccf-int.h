@@ -1,10 +1,16 @@
 #include "iiimcf.h"
-#include "overspot.h"
 #include "graphdev.h"
 #include <cstdlib>
+#include <vector>
+using namespace std;
 
 class Prdt;
 class Lkc;
+class TrackPoint;
+class Stts;
+class Text;
+class Rectangle;
+class BitMap;
 
 class IIIMCCF {
     //friend class Cmt;
@@ -33,8 +39,11 @@ class IIIMCCF {
 
     /* current cursor position */
     int x,y;
+    TrackPoint* trkpt;
+    
 
     /* pointers to overspot elements */
+    Stts *stts;
     Prdt *prdt;
     Lkc  *lkc;
     

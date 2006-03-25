@@ -1,4 +1,5 @@
 #include "iiimccf-int.h"
+#include "layer.h"
 #include <iostream>
 
 extern IIIMCCF* iiimccf;
@@ -138,6 +139,7 @@ bool Prdt::update()
   
   String buf3( buf_utf16 );
   
+  /*
   IIIMCF_input_method *pims;
   const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
   int num_of_ims;
@@ -159,11 +161,11 @@ bool Prdt::update()
   std::cout << "vec_u16_len_real: " << vec_len << std::endl;
   std::cout << "vec_u16_len_fact: " << vec_len << std::endl;
   String buf4( vec_u16hrn );
-
+  */
   prdt_text = new Text;
  
   prdt_text->append( buf3 );
-  prdt_text->append( buf4 );
+  //prdt_text->append( buf4 );
   prdt_text->x(cur_x);
   prdt_text->y(cur_y);
   prdt_text->fh(16);
