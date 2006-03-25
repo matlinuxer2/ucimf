@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
+#include "observer.h"
 using namespace std;
 
 IIIMCCF::IIIMCCF()
@@ -60,10 +61,17 @@ IIIMCCF::IIIMCCF()
 	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
 	iiimcf_create_context( handle, attr , &context );
 	cur_ims_id = 0;
+	
+	trkpt = new TrackPoint;
+	stts = new Stts;
+	trkpt->attach( stts );
 }
 
 IIIMCCF::~IIIMCCF()
 {
+  delete trkpt;
+  delete stts;
+
 	iiimcf_destroy_handle( handle );
 	iiimcf_finalize();  
 }
@@ -86,14 +94,19 @@ bool IIIMCCF::on()
     
     st = iiimcf_create_context( handle,attr, &context );
 	
-	IIIMCF_event event;
-	iiimcf_create_trigger_notify_event( 1, &event);
-	iiimcf_forward_event( context, event);
-	return true;
+    IIIMCF_event event;
+    iiimcf_create_trigger_notify_event( 1, &event);
+    iiimcf_forward_event( context, event);
+
+    stts->show();
+    
+    return true;
 }
 
 bool IIIMCCF::off()
 {
+        stts->hide();
+
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 0, &event );
 	iiimcf_forward_event( context, event );
@@ -215,16 +228,21 @@ bool IIIMCCF::ims_chg()
     
     IIIMCF_attr attr;
 
-    off();
+    //off();
+    IIIMCF_event event;
+    iiimcf_create_trigger_notify_event( 0, &event );
+    iiimcf_forward_event( context, event );
+    iiimcf_destroy_context( context );
     
     st = iiimcf_create_attr( &attr );
     st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
-    
     st = iiimcf_create_context( handle,attr, &context );
-    IIIMCF_event event;
+    
     st = iiimcf_create_trigger_notify_event( 1, &event);
     st = iiimcf_forward_event( context, event);
     
+    stts->update();
+
     return true;
 }
 
@@ -296,6 +314,7 @@ void IIIMCCF::pos( int new_x, int new_y )
 {
   x = new_x;
   y = new_y;
+  trkpt->set_position( new_x, new_y );
 }
 
 void IIIMCCF::refresh()

@@ -51,19 +51,27 @@ void Rectangle::render()
 
 void Rectangle::push( BitMap& tmp )
 {
-  GraphDev *gdev;
-  GraphDev::Open();
-  gdev = GraphDev::mpGraphDev;
-  gdev->SaveRect( x(), y(), x()+w(), y()+h(), tmp );
+  if( w()!=0 || h()!=0 )
+  {
+    GraphDev *gdev;
+    GraphDev::Open();
+    gdev = GraphDev::mpGraphDev;
+    gdev->SaveRect( x(), y(), x()+w(), y()+h(), tmp );
+
+  }
 }
 
 
 void Rectangle::pop( BitMap& tmp )
 {
-  GraphDev *gdev;
-  GraphDev::Open();
-  gdev = GraphDev::mpGraphDev;
-  gdev->RstrRect( x(), y(), x()+w(), y()+h(), tmp );
+  if( w()!=0 || h()!=0 )
+  {
+    GraphDev *gdev;
+    GraphDev::Open();
+    gdev = GraphDev::mpGraphDev;
+    gdev->RstrRect( x(), y(), x()+w(), y()+h(), tmp );
+
+  }
 }
 
 /* 
