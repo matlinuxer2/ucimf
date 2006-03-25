@@ -1,5 +1,6 @@
 #include "iiimccf-int.h"
 #include "layer.h"
+#include "preedit.h"
 #include <iostream>
 
 extern IIIMCCF* iiimccf;
@@ -25,29 +26,22 @@ iiimccf_preedit(
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
 		  iiimccf->prdt = new Prdt( context );
-		  iiimccf->prdt->push();
+		  iiimccf->prdt->update();
 		  iiimccf->prdt->show();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
-		  iiimccf->prdt->pop();
-		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
 		  iiimccf->prdt->update();
-		  iiimccf->prdt->push();
-		  iiimccf->prdt->draw();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
-		  iiimccf->prdt->pop();
-		  iiimccf->prdt->position(iiimccf->x, iiimccf->y);
-		  iiimccf->prdt->update();
+		  iiimccf->prdt->hide();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
 		  mesg("preedit end");
-		  iiimccf->prdt->hide();
 		  delete iiimccf->prdt;
 		  iiimccf->prdt = NULL;
 		  break;
@@ -62,13 +56,24 @@ iiimccf_preedit(
 
 
 
+Prdt::Prdt()
+{
+  context = NULL; 
+  visible = false;
+  rect = new Rectangle;
+  prdt_text = new Text;
+  cur_x =0;
+  cur_y =0;
+}
 
 Prdt::Prdt( IIIMCF_context new_context)
 {
   context = new_context;
+  visible = false;
+  rect = new Rectangle;
+  prdt_text = new Text;
   cur_x =0;
   cur_y =0;
-  rect = new Rectangle;
 }
 
 void Prdt::info()
@@ -88,23 +93,19 @@ void Prdt::info()
     }
 }
 
-void Prdt::show()
-{
-  if( visible == true ) return;
-  visible = true;
-  //update();
-  return;
-}
-
-void Prdt::hide()
-{
-  visible = false;
-  return;
-}
 
 bool Prdt::update()
 {
-  if( visible == false ) return true;
+  if( context == NULL )
+  {
+    return true;
+  }
+  
+  hide();
+  
+  cur_x = iiimccf->x;
+  cur_y = iiimccf->y;
+  
   IIIMF_status st;
   IIIMCF_text buf0;
   st = iiimcf_get_preedit_text( context, &buf0 , &cur_pos);
@@ -139,37 +140,15 @@ bool Prdt::update()
   
   String buf3( buf_utf16 );
   
-  /*
-  IIIMCF_input_method *pims;
-  const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
-  int num_of_ims;
-  int cur_ims_id=iiimccf->cur_ims_id;
-  
-  st = iiimcf_get_supported_input_methods(iiimccf->handle, &num_of_ims, &pims);
-  iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
-  
-  vector<IIIMP_card16> vec_u16hrn(20);
-  IIIMP_card16* pr=(IIIMP_card16*)u16hrn;
-  int vec_len=0;
-  for( int i=0 ; (*(char*)pr) ; i++ )
-  {
-    vec_u16hrn[i]=*pr;
-    vec_len++;
-    pr++; 
-  }
-  vec_u16hrn.resize(vec_len);
-  std::cout << "vec_u16_len_real: " << vec_len << std::endl;
-  std::cout << "vec_u16_len_fact: " << vec_len << std::endl;
-  String buf4( vec_u16hrn );
-  */
   prdt_text = new Text;
+  
  
   prdt_text->append( buf3 );
-  //prdt_text->append( buf4 );
-  prdt_text->x(cur_x);
-  prdt_text->y(cur_y);
   prdt_text->fh(16);
   prdt_text->fw(16);
+  prdt_text->x(cur_x);
+  prdt_text->y(cur_y);
+  prdt_text->fc(4);
   prdt_text->info();
   
   rect->update( prdt_text->x() , 
@@ -177,39 +156,54 @@ bool Prdt::update()
                prdt_text->x() + prdt_text->w() ,
 	       prdt_text->y() + prdt_text->h() -1 ,
 	       0 );
-  cout << "--end of update--" << endl;
-  cout << "-----------------" << endl; 
-  //return draw();
-}
-
-bool Prdt::position( int x, int y )
-{
-  //if( x < X_MIN | x > X_MAX | y < Y_MIN | y > Y_MAX ) return false;
-  cur_x = x;
-  cur_y = y;
-  cout << "( CUR_X, CUR_Y ) => ( "<< cur_x << " , " << cur_y << " )" << endl;
-  //return draw();
-}
-
-void Prdt::push()
-{
-  
-  rect->push( prdt_tmp );
-}
-
-void Prdt::pop()
-{
-  rect->pop( prdt_tmp );
-}
-
-bool Prdt::draw()
-{
-  cout << "---start of render---" << endl;
   rect->c(0);
-  rect->render();
-  prdt_text->fc(4);
-  prdt_text->render();
-  cout << "---end of render-----" << endl;
-  
-  return true; 
+ 
+  show();
+}
+
+
+bool Prdt::isVisible()
+{
+  return visible;
+}
+
+void Prdt::setShow()
+{
+  visible = true;
+  return;
+}
+
+void Prdt::setHide()
+{
+  visible = false;
+  return;
+}
+
+void Prdt::show()
+{
+  if( isVisible() || context == NULL )
+  {
+    return;
+  }
+  else
+  {
+    rect->push( prdt_tmp );
+    rect->render();
+    prdt_text->render();
+    setShow();
+  }
+
+}
+
+void Prdt::hide()
+{
+  if( isVisible() && context != NULL )
+  {
+    setHide();
+    rect->pop( prdt_tmp );
+  }
+  else
+  {
+    return;
+  }
 }

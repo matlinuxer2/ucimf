@@ -1,5 +1,6 @@
 #include "iiimccf-int.h"
 #include "layer.h"
+#include "lookupchoice.h"
 #include <iostream>
 
 
@@ -29,30 +30,23 @@ iiimccf_lookup_choice(
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
 		  iiimccf->lkc = new Lkc( context );
-		  iiimccf->lkc->push();
+		  iiimccf->lkc->update();
 		  iiimccf->lkc->show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
-		  iiimccf->lkc->pop();
-		  iiimccf->lkc->position( iiimccf->x, iiimccf->y );
 		  iiimccf->lkc->update();
-		  iiimccf->lkc->push();
-		  iiimccf->lkc->draw();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
 		  debug( "lookup done" );
-		  iiimccf->lkc->pop();
-		  iiimccf->lkc->position( iiimccf->x, iiimccf->y );
-		  iiimccf->lkc->update();
+		  iiimccf->lkc->hide();
+		  iiimccf->lkc->empty();
 		  break;
+
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
 		  debug( "lookup end" );
-		  iiimccf->lkc->hide();
-		  delete iiimccf->lkc;
-		  iiimccf->lkc = NULL;
 		  break;
 		  
 	  default:
@@ -62,44 +56,99 @@ iiimccf_lookup_choice(
   return IIIMF_STATUS_SUCCESS;
 }
 
+void Lkc::empty()
+{
+  context = NULL;
+  delete rect;
+  rect = NULL;
+  delete lkc_text;
+  lkc_text = NULL;
+}
 
+Lkc::Lkc()
+{
+  context = NULL;
+  visible = false;
+  rect = new Rectangle;
+  lkc_text = new Text;
+  cur_x=20;
+  cur_y=20;
 
-
+}
 
 Lkc::Lkc( IIIMCF_context new_context)
 {
   context = new_context;
-  cur_x=0;
-  cur_y=0;
+  visible = false;
+  cur_x=20;
+  cur_y=20;
+  lkc_text = new Text;
   rect = new Rectangle;
 }
 
 void Lkc::info()
 {
-  cout << " visible: " << visible << endl;
-  cout << " cur_x:" << cur_x << " cur_y:" << cur_y << endl;
-  cout << " current index:" << cur_idx << endl;
+  cout << " visible: " << visible 
+       << " cur_x:" << cur_x 
+       << " cur_y:" << cur_y 
+       << " current index:" << cur_idx 
+       << endl;
   lkc_text->info();
 }
 
-void Lkc::show()
+bool Lkc::isVisible()
 {
-  if( visible == true ) return;
+  return visible;
+}
+
+void Lkc::setShow()
+{
   visible = true;
-  //update();
   return;
 }
 
-void Lkc::hide()
+void Lkc::setHide()
 {
   visible = false;
   return;
 }
 
+void Lkc::show()
+{
+  if( isVisible()  || context == NULL )
+  {
+    return;
+  }
+  else
+  {
+    setShow();
+    rect->push( lkc_tmp );
+    draw();
+  }
+}
+
+void Lkc::hide()
+{
+  if( isVisible() && context != NULL )
+  {
+    rect->pop( lkc_tmp );
+    setHide();
+  }
+  else
+  {
+    return;
+  }
+}
+
 bool Lkc::update()
 {
+  if( context == NULL )
+  {
+    return true;
+  }
 
-  if( visible == false ) return true;
+  hide();
+
   IIIMF_status st;
   IIIMCF_lookup_choice ilc;
   st = iiimcf_get_lookup_choice( context, &ilc );
@@ -114,6 +163,7 @@ bool Lkc::update()
   if( st!= IIIMF_STATUS_SUCCESS ) return false;
 
   // lkc_text clear?;
+  delete lkc_text;
   lkc_text = new Text;
   for( int i=0; i< lkc_size; i++ )
   { 
@@ -135,8 +185,12 @@ bool Lkc::update()
     
   }
 
+  cur_x = iiimccf->x;
+  cur_y = iiimccf->y;
+  
   lkc_text->fw(24);
   lkc_text->fh(24);
+
   
   shift();
   
@@ -149,16 +203,10 @@ bool Lkc::update()
 	       lkc_text->y() + lkc_text->h() +6,
 	       7);
 
-  //return draw();
+  info();
+  show();
 }
 
-bool Lkc::position( int x, int y )
-{
-  //if( x < X_MIN | x > X_MAX | y < Y_MIN | y > Y_MAX ) return false;
-  cur_x = x;
-  cur_y = y;
-  //return draw();
-}
 
 #define X_MIN 0
 #define X_MAX 800
@@ -191,19 +239,10 @@ void Lkc::shift()
 
 }
 
-void Lkc::push()
-{
-  rect->push( lkc_tmp );
-}
 
-void Lkc::pop()
-{
-  rect->pop( lkc_tmp );
-}
 
 bool Lkc::draw()
 {
-  cout << "---start of render---" << endl;
   rect->render();
   Rectangle up,left,right,bottom;
   int u,l,r,b;
@@ -211,6 +250,10 @@ bool Lkc::draw()
   l=lkc_text->x() -3;
   r=lkc_text->x() + lkc_text->w() +3;
   b=lkc_text->y() + lkc_text->h() +3;
+  cout << " u:" << u
+       << " l:" << l
+       << " r:" << r
+       << " b:" << b << endl;
   up.update( l, u, r, u,8);
   left.update( l,u,l,b ,8);
   right.update( r,u,r,b,15);

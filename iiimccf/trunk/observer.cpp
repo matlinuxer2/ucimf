@@ -4,15 +4,22 @@
 #include "iiimccf-int.h"
 #include "layer.h"
 #include "graphdev.h"
+#include <iostream>
+using namespace std;
+
+extern IIIMCCF* iiimccf;
 
 Subject::Subject(){}
 Subject::~Subject(){}
 
 void Subject::notify()
 {
+  cout << "enter notify" << endl;
   for(int i=0; i< observers.size(); i++ )
   {
+    cout << "enter observer 1" << endl;
     observers[i]->update();
+    cout << "enter observer 2" << endl;
   }
 }
 
@@ -56,6 +63,7 @@ void TrackPoint::set_position( int new_x, int new_y)
 
 Stts::Stts()
 {
+  visible = false;
   div = new Rectangle;
   title = new Text;
 }
@@ -69,7 +77,15 @@ extern IIIMCCF* iiimccf;
 
 void Stts::update()
 {
+  if( !isVisible() )
+  {
+    return;
+  }
+    
   hide();
+
+  int pos_x,pos_y;
+  iiimccf->trkpt->get_position( pos_x, pos_y );
   
   IIIMF_status st; 
   IIIMCF_input_method *pims;
@@ -96,10 +112,13 @@ void Stts::update()
   title = new Text;
   title->append( buf4 );
 
-  title->x(200);
-  title->y(400);
   title->fh(16);
   title->fw(16);
+  title->x( pos_x - title->w() );
+  title->y( pos_y + title->fh() );
+  title->fh(16);
+  title->fw(16);
+  title->fc(4);
   title->info();
 
   div->update( title->x(),
@@ -107,21 +126,51 @@ void Stts::update()
 	       title->x() + title->w(),
 	       title->y() + title->h(),
 	       0 );
+  div->c(1);
   
   show();
 }
 
+bool Stts::isVisible()
+{
+  return visible;
+}
+
+void Stts::setShow()
+{
+  visible = true;
+}
+
+void Stts::setHide()
+{
+  visible = false;
+}
 
 void Stts::show()
 {
-  div->push( tmp );
-  div->c(1);
-  div->render();
-  title->fc(4);
-  title->render();
+  if( isVisible() )
+  {
+    return;
+  }
+  else
+  { 
+    div->push( tmp );
+    div->render();
+    title->render();
+    setShow();
+  }
+
 }
 
 void Stts::hide()
 {
-  div->pop( tmp );
+  if( isVisible() )
+  {
+    setHide();
+    div->pop( tmp );
+  }
+  else
+  {
+    return;
+  }
 }

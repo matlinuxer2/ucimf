@@ -75,64 +75,9 @@ IIIMF_status iiimccf_trigger_notify( IIIMCF_context, IIIMCF_event, IIIMCF_compon
 IIIMF_status iiimccf_aux( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF_component );
 
 /** Preedit Object **/
-class Prdt
-{
-  public:
-    Prdt( IIIMCF_context context );
-    ~Prdt(){};
-
-    void info(); // for text-mode checking.
-
-    void show();
-    void hide();
-    bool update();
-    bool position(int x, int y);
-    void push();
-    void pop();
-    bool draw();
-    
-  private:
-
-    IIIMCF_context context;
-    vector<IIIMP_card16> buf_utf16;
-    bool visible;
-    int cur_x, cur_y;
-    int cur_pos;
-    Text* prdt_text;
-    Rectangle* rect;
-    BitMap prdt_tmp;
-};
 
 
 /** LookupChoice Object **/
-class Lkc
-{
-  public:
-    Lkc( IIIMCF_context context );
-    ~Lkc(){};
-
-    void info(); // for text-mode checking.
-
-    void show();
-    void hide();
-    bool update();
-    bool position(int x, int y);
-    void push();
-    void pop();
-    bool draw();
-    void shift();
-
-  private:
-
-    IIIMCF_context context;
-    bool visible;
-    int cur_x, cur_y;
-    int shift_x, shift_y;
-    int cur_idx;
-    Text* lkc_text;
-    Rectangle* rect;
-    BitMap lkc_tmp;
-};
 
 /** Commit Object **/
 class Cmt
