@@ -43,11 +43,14 @@ class Stts : public Observer{
     
     void update();
     bool isVisible();
+    void shift();
     void setShow();
     void setHide();
     void show();
     void hide();
   private:
+    int shift_x, shift_y;
+    int pos_x, pos_y;
     bool visible;
     Rectangle* div;
     Text* title;

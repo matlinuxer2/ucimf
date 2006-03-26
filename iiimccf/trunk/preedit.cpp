@@ -5,56 +5,14 @@
 
 extern IIIMCCF* iiimccf;
 
-IIIMF_status
-iiimccf_preedit(
-    IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
-){
-
-  IIIMF_status st;
-  IIIMCF_event_type type;
-  st = iiimcf_get_event_type( event, &type );
-  if( st != IIIMF_STATUS_SUCCESS ) return st;
-   
-  switch( type ){
-	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
-		  mesg("preedit");
-		  break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
-		  mesg("preedit start");
-		  iiimccf->prdt = new Prdt( context );
-		  iiimccf->prdt->update();
-		  iiimccf->prdt->show();
-		  break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
-		  mesg("preedit changed");
-		  iiimccf->prdt->update();
-		  break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
-		  mesg("preedit done");
-		  iiimccf->prdt->hide();
-		  break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
-		  mesg("preedit end");
-		  delete iiimccf->prdt;
-		  iiimccf->prdt = NULL;
-		  break;
-		  
-	  default:
-		  mesg("preedit none");
-		  break;
-  }
-  return IIIMF_STATUS_SUCCESS;
+void Prdt::empty()
+{
+  context = NULL;
+  delete rect;
+  rect = NULL;
+  delete prdt_text;
+  prdt_text = NULL;
 }
-
-
-
 
 Prdt::Prdt()
 {
@@ -64,6 +22,8 @@ Prdt::Prdt()
   prdt_text = new Text;
   cur_x =0;
   cur_y =0;
+  shift_x = 0;
+  shift_y = 0;
 }
 
 Prdt::Prdt( IIIMCF_context new_context)
@@ -74,6 +34,8 @@ Prdt::Prdt( IIIMCF_context new_context)
   prdt_text = new Text;
   cur_x =0;
   cur_y =0;
+  shift_x = 0;
+  shift_y = 0;
 }
 
 void Prdt::info()
@@ -146,8 +108,11 @@ bool Prdt::update()
   prdt_text->append( buf3 );
   prdt_text->fh(16);
   prdt_text->fw(16);
-  prdt_text->x(cur_x);
-  prdt_text->y(cur_y);
+
+  shift();
+  
+  prdt_text->x(cur_x - shift_x);
+  prdt_text->y(cur_y - shift_y);
   prdt_text->fc(4);
   prdt_text->info();
   
@@ -161,6 +126,35 @@ bool Prdt::update()
   show();
 }
 
+#define X_MIN 0
+#define X_MAX 800
+#define Y_MIN 0
+#define Y_MAX 600
+
+void Prdt::shift()
+{
+  shift_x = (cur_x + prdt_text->w()) - X_MAX ;
+  if ( shift_x < -8 )
+  {
+    shift_x = 0 ;
+  }
+  else
+  {
+    shift_x = shift_x + 8 ; // shift back
+  }
+
+  shift_y = (cur_y + prdt_text->h() ) - Y_MAX ;
+  if ( shift_y < -2*prdt_text->h() )
+  {
+    shift_y = -2*prdt_text->fh() - 2;
+  }
+  else
+  {
+    shift_y = prdt_text->fh() + prdt_text->h() + 2;
+  }
+
+
+}
 
 bool Prdt::isVisible()
 {

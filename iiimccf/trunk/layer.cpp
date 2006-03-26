@@ -132,7 +132,7 @@ void String::render( int x, int y, int fw, int fh, int color )
  
   if( font2 == NULL )
   font2=new Font();
-  font2->status();
+  //font2->status();
 
   for( int i= 0; i < num ; i++ )
   { 
@@ -187,18 +187,11 @@ void Text::append( String str )
 
 void Text::info()
 {
-  cout << "--------Text info--------" << endl;
-  cout << "font_width: " << fw() << endl;
-  cout << "font height: " << fh() << endl;
-  cout << "( X, Y ) == (" << x() << ", " << y() <<" )"<< endl;
-  cout << "W: " << w() << " H: " << h() << endl;
-  int num=Strings.size();
-  cout << "row: " << num << endl;   
-  for( int i = 0; i < num ; i++ )
-  {
-    Strings[i].info();
-  }
-  cout << "-------------------------" << endl;
+  cout << "Text Info::[" 
+       << "Font HxW:"  << fw() << "x" << fh() 
+       << " (X,Y)_WxH:" << "(" << x() << "," << y() <<")_"<< w() << "x" << h()  
+       << " Number of Rows:" << Strings.size() 
+       << " ]" << endl;
 }
   
 int Text::fw(){ return FontWidth; }

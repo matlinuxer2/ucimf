@@ -21,19 +21,13 @@ int iiimccf_proc( int keycode, int keychar, int modifier );
 int iiimccf_result( char* *buf_out );
 
 /* show input methods */
-void iiimccf_show_ims();
 void iiimccf_change_ims();
-
-/* current screen setting */
-void iiimccf_scrn( int height, int width, int resolution );
 
 /* current position */
 void iiimccf_pos( int x, int y);
 
 /* request refresh */
 void iiimccf_refresh();
-void iiimccf_push(); 
-void iiimccf_pop();
 
 #ifdef __cplusplus
 }

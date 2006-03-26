@@ -42,19 +42,9 @@ int iiimccf_result( char* *buf_out )
   return buf_len;
 }
 
-void iiimccf_show_ims()
-{
-  iiimccf->ims_show();
-}
-
 void iiimccf_change_ims()
 {
   iiimccf->ims_chg();
-}
-
-void iiimccf_scrn( int height, int width, int resolution )
-{
-  iiimccf->scrn( height, width, resolution );
 }
 
 void iiimccf_pos( int x, int y)
@@ -67,14 +57,3 @@ void iiimccf_refresh()
   iiimccf->refresh();
 }
 
-void iiimccf_push()
-{
-  //iiimccf->prdt->push();
-//  iiimccf->lkc->push();
-}
-
-void iiimccf_pop()
-{
-  //iiimccf->prdt->pop();
-//  iiimccf->lkc->pop();
-}

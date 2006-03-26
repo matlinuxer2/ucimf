@@ -1,11 +1,194 @@
 #include "iiimccf-int.h"
+#include "preedit.h"
+#include "lookupchoice.h"
 #include <iostream>
+
 using namespace std;
+
+extern IIIMCCF* iiimccf;
+
 /*
  * Preedit
  */
+IIIMF_status
+iiimccf_preedit(
+    IIIMCF_context context,
+    IIIMCF_event event,
+    IIIMCF_component current,
+    IIIMCF_component parent
+){
 
-extern IIIMCCF* iiimccf;
+  IIIMF_status st;
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+   
+  switch( type ){
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
+		  mesg("preedit");
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
+		  mesg("preedit start");
+		  iiimccf->prdt = new Prdt( context );
+		  iiimccf->prdt->update();
+		  iiimccf->prdt->show();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
+		  mesg("preedit changed");
+		  iiimccf->prdt->update();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
+		  mesg("preedit done");
+		  iiimccf->prdt->hide();
+		  iiimccf->prdt->empty();
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
+		  mesg("preedit end");
+		  break;
+		  
+	  default:
+		  mesg("preedit none");
+		  break;
+  }
+  return IIIMF_STATUS_SUCCESS;
+}
+
+/* 
+ * Lookup Choice 
+ * */
+IIIMF_status
+iiimccf_lookup_choice(
+    IIIMCF_context context,
+    IIIMCF_event event,
+    IIIMCF_component current,
+    IIIMCF_component parent
+){
+
+  IIIMF_status st;
+  IIIMCF_event_type type;
+  st = iiimcf_get_event_type( event, &type );
+  if( st != IIIMF_STATUS_SUCCESS ) return st;
+  
+  switch( type ){	
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
+		  debug( "lookup" );
+		  break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
+		  debug( "lookup start" );
+		  iiimccf->lkc = new Lkc( context );
+		  iiimccf->lkc->update();
+		  iiimccf->lkc->show();
+		  break;
+	  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
+		  debug( "lookup change" );
+		  iiimccf->lkc->update();
+		  break;
+	  
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
+		  debug( "lookup done" );
+		  iiimccf->lkc->hide();
+		  iiimccf->lkc->empty();
+		  break;
+
+	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
+		  debug( "lookup end" );
+		  break;
+		  
+	  default:
+		  break;
+  }
+  
+  return IIIMF_STATUS_SUCCESS;
+}
+
+/* 
+ * Commit
+ */
+//void cmt_update(IIIMCF_context);
+
+IIIMF_status
+iiimccf_commit(
+    IIIMCF_context context,
+    IIIMCF_event event,
+    IIIMCF_component current,
+    IIIMCF_component parent
+){
+    //Cmt cmt( context );
+    IIIMF_status st;
+    IIIMCF_event_type type;
+    st = iiimcf_get_event_type( event, &type );
+    if( st != IIIMF_STATUS_SUCCESS ) return st;
+
+    if ((type >= IIIMCF_EVENT_TYPE_UI_COMMIT)
+	    && (type < IIIMCF_EVENT_TYPE_UI_COMMIT_END))
+    {
+	switch( type ){	
+	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
+	      debug("commit");
+	      //cmt_update(context);
+	      IIIMCF_text text;
+	      
+	      st = iiimcf_get_committed_text( context, &text );
+	      
+	      if( st != IIIMF_STATUS_SUCCESS )
+	      { 
+		iiimccf->cmt_buf_len = 0;
+	      }
+	      else
+	      {
+		iiimccf->cmt_buf = iiimcf_text_to_utf8( text );
+		iiimccf->cmt_buf_len = strlen( iiimccf->cmt_buf );
+	      }
+	      break;
+		  
+	  case IIIMCF_EVENT_TYPE_UI_COMMIT_END:
+	      debug("commit_end");
+	      break;
+	      
+	  default: 
+	      debug(" !!commit!! ");
+	      cout << " !! " ;
+	      cout.setf( ios_base::hex, ios_base::basefield );
+	      cout << type;
+	      cout << " !! " << endl;
+	      break;	
+	}
+	return IIIMF_STATUS_SUCCESS;
+    }
+
+    return IIIMF_STATUS_COMPONENT_INDIFFERENT;
+}
+
+/*
+void cmt_update( IIIMCF_context ctx )
+{
+		IIIMF_status st;
+		IIIMCF_text text;
+		
+		st = iiimcf_get_committed_text( ctx, &text );
+		
+		cout << "=====================================================pppp===" << endl;
+		if( st != IIIMF_STATUS_SUCCESS )
+		{ 
+		  iiimccf->cmt_buf_len = 0;
+		}
+		else
+		{
+		  iiimccf->cmt_buf = iiimcf_text_to_utf8( text );
+		  iiimccf->cmt_buf_len = strlen( iiimccf->cmt_buf );
+		  cout << "=====================================================yyyy===" << endl;
+		}
+
+
+}
+*/
+
 
 /*
  * Status

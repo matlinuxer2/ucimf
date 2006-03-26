@@ -6,56 +6,6 @@
 
 extern IIIMCCF* iiimccf;
 
-/* 
- * Lookup Choice 
- * */
-IIIMF_status
-iiimccf_lookup_choice(
-    IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
-){
-
-  IIIMF_status st;
-  IIIMCF_event_type type;
-  st = iiimcf_get_event_type( event, &type );
-  if( st != IIIMF_STATUS_SUCCESS ) return st;
-  
-  switch( type ){	
-	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
-		  debug( "lookup" );
-		  break;
-		  
-	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
-		  debug( "lookup start" );
-		  iiimccf->lkc = new Lkc( context );
-		  iiimccf->lkc->update();
-		  iiimccf->lkc->show();
-		  break;
-	  
-	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
-		  debug( "lookup change" );
-		  iiimccf->lkc->update();
-		  break;
-	  
-	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
-		  debug( "lookup done" );
-		  iiimccf->lkc->hide();
-		  iiimccf->lkc->empty();
-		  break;
-
-	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
-		  debug( "lookup end" );
-		  break;
-		  
-	  default:
-		  break;
-  }
-  
-  return IIIMF_STATUS_SUCCESS;
-}
-
 void Lkc::empty()
 {
   context = NULL;
@@ -188,8 +138,8 @@ bool Lkc::update()
   cur_x = iiimccf->x;
   cur_y = iiimccf->y;
   
-  lkc_text->fw(24);
-  lkc_text->fh(24);
+  lkc_text->fw(16);
+  lkc_text->fh(16);
 
   
   shift();
@@ -217,23 +167,23 @@ bool Lkc::update()
 void Lkc::shift()
 {
   shift_x = (cur_x + lkc_text->w()) - X_MAX ;
-  if ( shift_x < -20 )
+  if ( shift_x < -8 )
   {
-    shift_x = -20 ;
+    shift_x = 0 ;
   }
   else
   {
-    shift_x = shift_x + ( X_MAX - cur_x ) + 20 ; // shift back
+    shift_x = shift_x + 8 ; // shift back
   }
 
   shift_y = (cur_y + lkc_text->h() ) - Y_MAX ;
-  if ( shift_y < -30 )
+  if ( shift_y < -3*lkc_text->h() )
   {
-    shift_y = -30;
-  }
+    shift_y = -3*lkc_text->fh() - 9 ;
+ }
   else
   {
-    shift_y = shift_y + ( Y_MAX - cur_y ) + 30 ;
+    shift_y = 3*lkc_text->fh() + lkc_text->h() + 9;
 
   }
 
