@@ -156,6 +156,7 @@ iiimccf_commit(
 	      cout << " !! " ;
 	      cout.setf( ios_base::hex, ios_base::basefield );
 	      cout << type;
+	      cout.setf( ios_base::dec, ios_base::basefield );
 	      cout << " !! " << endl;
 	      break;	
 	}
@@ -333,6 +334,7 @@ iiimccf_trigger_notify(
 	          cout << " !! " ;
 		  cout.setf( ios_base::hex, ios_base::basefield );
 		  cout << type;
+	          cout.setf( ios_base::dec, ios_base::basefield );
 		  cout << " !! " << endl;
 		  break;
 		
