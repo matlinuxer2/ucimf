@@ -52,7 +52,7 @@ void TrackPoint::get_position( int& old_x, int& old_y)
 
 void TrackPoint::set_position( int new_x, int new_y)
 {
-  if( x != new_x && y != new_y )
+  if( x != new_x || y != new_y )
   {
     x = new_x;
     y = new_y;
@@ -66,6 +66,8 @@ Stts::Stts()
   visible = false;
   div = new Rectangle;
   title = new Text;
+  pos_x = pos_y =0;
+  shift_x = shift_y = 0;
 }
 Stts::~Stts()
 {
@@ -77,14 +79,15 @@ extern IIIMCCF* iiimccf;
 
 void Stts::update()
 {
-  if( !isVisible() )
+  if( isVisible() )
   {
-    return;
+    div->pop( tmp );
   }
-    
-  hide();
-
-  int pos_x,pos_y;
+  else
+  {
+    ;
+  }
+  
   iiimccf->trkpt->get_position( pos_x, pos_y );
   
   IIIMF_status st; 
@@ -114,8 +117,11 @@ void Stts::update()
 
   title->fh(16);
   title->fw(16);
-  title->x( pos_x - title->w() );
-  title->y( pos_y + title->fh() );
+
+  shift();
+  
+  title->x( pos_x - shift_x );
+  title->y( pos_y - shift_y );
   title->fh(16);
   title->fw(16);
   title->fc(4);
@@ -127,8 +133,50 @@ void Stts::update()
 	       title->y() + title->h(),
 	       0 );
   div->c(1);
-  
-  show();
+ 
+  if( isVisible() )
+  {
+    div->push( tmp );
+    div->render();
+    title->render();
+  }
+  else
+  { 
+    ;
+  }
+
+}
+
+
+#define X_MIN 0
+#define X_MAX 800
+#define Y_MIN 0
+#define Y_MAX 600
+
+void Stts::shift()
+{
+  shift_x = (pos_x + title->w()) - X_MAX ;
+  if ( shift_x < -8 )
+  {
+    shift_x = 0 ;
+  }
+  else
+  {
+    shift_x = shift_x + 8 ; // shift back
+  }
+
+  shift_y = (pos_y + title->h() ) - Y_MAX ;
+  if ( shift_y < - title->h() )
+  {
+    shift_y = - title->h() -1 ;
+  }
+  else
+  {
+    shift_y = title->h() +1 ;
+
+  }
+
+
 }
 
 bool Stts::isVisible()

@@ -22,7 +22,6 @@ IIIMCCF::IIIMCCF()
 
 	
 	/*  Register new component */
-	
 	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.preedit",&parent);
 	if( st != IIIMF_STATUS_SUCCESS ) check(st);
 	st = iiimcf_register_component( handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
@@ -75,9 +74,9 @@ IIIMCCF::IIIMCCF()
 	
 	st = iiimcf_create_context( handle,attr, &context );
     
-    IIIMCF_event event;
-    iiimcf_create_trigger_notify_event( 1, &event);
-    iiimcf_forward_event( context, event);
+	IIIMCF_event event;
+	iiimcf_create_trigger_notify_event( 1, &event);
+	iiimcf_forward_event( context, event);
 	
 	trkpt = new TrackPoint;
 	stts = new Stts;
@@ -312,13 +311,6 @@ bool IIIMCCF::ims_set ( )
   st = iiimcf_destroy_attr( attr );
   
   return true;
-}
-
-void IIIMCCF::scrn(int w, int h, int r)
-{
-  width=w;
-  height=h;
-  resolution=r;
 }
 
 void IIIMCCF::pos( int new_x, int new_y )

@@ -13,7 +13,6 @@ class Rectangle;
 class BitMap;
 
 class IIIMCCF {
-    //friend class Cmt;
   public:
     IIIMCCF();
     ~IIIMCCF();
@@ -29,7 +28,6 @@ class IIIMCCF {
     bool ims_set();
     bool ims_chg();
     
-    void scrn( int, int ,int );
     void pos( int, int );
     void refresh();
     
@@ -78,20 +76,6 @@ IIIMF_status iiimccf_aux( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF
 
 
 /** LookupChoice Object **/
-
-/** Commit Object **/
-class Cmt
-{
-  public:
-    Cmt( IIIMCF_context );
-    ~Cmt(){};
-    bool query( char** );
-    void update();
-  private:
-    IIIMCF_context context;
-    char* cmt_utf8_str;
-    bool valid;
-};
 
 /** Utilities functions **/
 

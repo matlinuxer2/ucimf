@@ -10,9 +10,9 @@ lib_LTLIBRARIES = libiiimccf.la
 iiimccfincludedir = $(includedir)
 iiimccfinclude_HEADERS = iiimccf.h
 
-libiiimccf_la_SOURCES = iiimccf.cpp observer.cpp\
+libiiimccf_la_SOURCES = iiimccf.cpp observer.cpp \
                         iiimccf-core.cpp iiimccf-component.cpp iiimccf-util.cpp \
-			iiimccf-preedit.cpp iiimccf-lookup_choice.cpp iiimccf-commit.cpp\
+			preedit.cpp lookupchoice.cpp \
                         layer.cpp font.cpp graphdev.cpp 
 libiiimccf_la_LDFLAGS = 
 libiiimccf_la_LIBADD = \
