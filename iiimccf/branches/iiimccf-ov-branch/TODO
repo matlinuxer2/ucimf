@@ -1,0 +1,14 @@
+1. Keyboard Map
+   a. why "page-up" cannot scroll the lookup-choice?
+   Ans: The "newpy" ignore the "page-up", and use ".", and "," instead.
+   
+   b. how to scroll the lookup-choice?
+   Ans: use "." and ",". They share the same key with ">" and "<".
+
+2. InputMethod Switch
+   a. how to install imput-method ?
+   
+
+3. Over Spot style
+   a. how to get the position?
+   b. how to refresh the screen?
