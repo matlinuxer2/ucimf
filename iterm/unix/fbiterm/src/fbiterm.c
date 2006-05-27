@@ -274,14 +274,7 @@ int keyinput_to_keyevent( char* buf, int buf_len, int* p_keycode, int* p_keychar
 int get_cursor_position()
 {
   int pos_x, pos_y;
-  int var=1; // vary with depth 8=1,16=2,24=3,32=4
-  
-  /*
-  int col = pIterm->vtcore_ptr->screen->cursor_x;
-  int row = pIterm->vtcore_ptr->screen->cursor_y;
-  */
-
-  pos_x = var * cur_col * (pIterm->asc_font->cell_width);
+  pos_x = cur_col * (pIterm->asc_font->cell_width);
   pos_y = cur_row * (pIterm->asc_font->cell_height);
   //pos_y = cur_row * (pIterm->fb->line_length) * (pIterm->asc_font->cell_height);
   
@@ -389,12 +382,12 @@ main (int argc, char *argv[])
 
     if( ret !=0 )
     {
-      fprintf( stderr, "%s: failed to parse\n", xmlconf );
+      fprintf( stderr, "%s: failed to parse fbiterm.conf\n", xmlconf );
     }
 
-    printf( "DefaultMB: %s\n", MB_fontpath );
-    printf( "DefaultAsc: %s\n", Asc_fontpath );
-    printf( "DefaultFont: %s\n", Font_fontpath );
+    printf( "Default Multibyte font: %s\n", MB_fontpath );
+    printf( "Default Ascii font: %s\n", Asc_fontpath );
+    printf( "Default font: %s\n", Font_fontpath );
 
   }
   else

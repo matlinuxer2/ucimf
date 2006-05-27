@@ -1,0 +1,226 @@
+PCF FILE FORMAT                                                                                 
+PCF files, 1ike SNF files, are binary files, but the format is portable across 
+architectures. The data is stored in an MSBFirst (Most Significant Byte First) 
+format. The table of contents is written first, followed by each of the tables
+needed. Tables of variable length are preceeded by a count for the number of 
+entries for that particular table. Tables are zero-padded to be a multiple of 
+32 bits. Here is the list of possible tables:
+
+	o table of contents
+
+	o pcf properties
+
+	o pcf accelerators
+
+	o pcf metrics
+
+	o pcf bitmaps
+
+	o pcf ink metrics
+
+	o pcf bdf encodings
+
+	o pcf swidths
+
+	o pcf glyph names
+
+	o pcf bdf accelerators
+
+The following sections describe each of these tables.                                            
+TABLE OF CONTENTS                                                                               
+The TOC consists of two 32-bit fields and a variable number of TOC entry fields.
+
+file version 	# currently "pcf1"
+TOC_entries 	# number of entries to follow
+TOC entry 	# up to TOC_entries of these
+
+Each TOC entry consists of 4 32-bit fields.
+
+type		# type of table entry (see below)
+format		# format of table
+size		# size in 32-bit words of this table
+offset		# offset into file of this table
+
+Some tables may have a special format associated with them.The default format
+treats all data as 32-bit words. A format has meaning in relationship to a type.
+
+format				value
+DEFAULT        			0x00000000
+INKBOUNDS             		0x00000200
+ACCELERATORS_W_INKBOUNDS 	0x00000l00
+COMPRESSED_METRICS		0x00000l00
+
+If another format is available for a type, use of the DEFAULT format with that
+type may indicate that type's table is empty. Only four types use anything 
+besides the DEFAULT format in pcf1 files. Accelerators are basically a set of 
+hints about the font layout which allow certain parts of the font drawing 
+process to take p1ace faster.
+
+type				format
+pcf accelerators		ACCELERATORS_W_INKBOUNDS
+pcf metrics			COMPRESSED_METRICS
+pcf ink metrics			COMPRESSED METRICS
+pcf bdf accelerators		ACCELERATORS_W_INKBOUNDS
+
+PCF PROPERTIES
+
+The properties table consists of the number of properties and the properties 
+themselves, followed by the string table for the properties.
+
+format			32 bits 	# format of property table
+num-props               32 bits 	# number of properties
+property		72 bits 	# property data (num_props entries)
+string table size 	32 bits 	# length of strin table in 8-bit chars
+string table 		variable 	# property names and values
+
+The property data consists of three fields and is zero-padded to be a multiple 
+of 32 bits.
+
+name		32 bits 	# property atom
+is_string 	 8 bits  	# true if the property value is a string
+value 		32 bits 	# property value (string or int)
+
+The string table includes all property names and their values (when those 
+values are strings). The strings are NULL-terminated.
+
+PCF ACCELERATORS
+
+The accelerators consist of 8 8-bit fields, 3 32 bit fields, 2 metric fields
+(described below) and (if format is ACCELERATORS_W_INKBOUNDS) 2 optional metric
+fields. Metric field formats are discussed later.
+
+noOverlap		8 bits
+constantMetrics 	8 bits
+terminalFont 		8 bits
+constantWidth 		8 bits
+inkInside 		8 bits
+inkMetrics 		8 bits
+drawDirection 		8 bits	
+pad 			8 bits # always 0
+fontAscent 		32 bits
+fontDescent 		32 bits
+maxOverlap 		32 bits
+minbounds 		96 bits # (metric field type)
+maxbounds 		96 bits # (metric field type)
+ink_minbounds 		96 bits # (optional metric field type)
+ink_maxbounds 		96 bits # (optional metric field type)
+
+ETRIC FIELD FORMATS
+
+Uncompressed metric fields require 96 bits each. Compressed metric fields 
+require 56 bytes.
+
+size
+field 	compressed/uncompressed
+num chars 		16/32 # number of characters in font
+leftSideBearing 	8[16] # left-most filled pixel x coordinate
+rightSideBearing	8[16] # right-most fiIIed pixel y coordinate
+characterWidth 		8[l6] # character width
+ascent			8[l6] # height above baseline
+descent 		8[l6] # depth below baseline
+attributes		N/A[l6]
+
+PCF METRICS
+
+If the metrics can be compressed, the format is COMPRESSED_METRICS. Otherwise 
+the format is DEFAULT.
+
+size
+field 		compressed/uncompressed
+num_chars 	l6/32 	# number of characters
+metric field 	56[96]  # per character
+
+PCF BIIMAPS
+
+num_chars 	32bits 	 # number of glyphs
+offsets		32bits 	 # offset into glyph bitmap data (l per character)
+bitmap_size 	32bits 	 # extra bitmap size info (1, 2, 4 or 8 (4 in pcfl)
+bitmaps 	variable # bitmap data
+
+PCF INK METRICES
+
+These are formated like the pcf metrics referenced above. Uncompressed metric 
+fields require 96 bits each. Compressed metric fields require 56 bytes.
+
+size
+field	compressed/uncompressed
+
+num_chars 		16/32 	# number of characters
+leftSideBearing 	8[16]   # left_most filled pixel x coordinate
+rightSideBearing 	8[16]   # right_most filled pixel x coordinate
+characterWidth 		8[16]   # character cell width
+ascent			8[l6]   # height above baseline
+descent			8[16]   # depth below baseline
+attributes 		N/A[l6] 
+
+PCF INK METRICS
+
+If the metrics can be compressed, the format is COMPRESSED-MEIRICS. Otherwise
+the format is DEFALUT.
+
+size
+field 	compressed/uncompressed
+num_chars	16/32 	# number of characters
+metric field 	56[96]  # 1 per character
+
+PCF BDF ENCODINGS
+
+These are related to the bdf format. They relate to characters in the 
+Row/column matrix which are actually used.
+
+firstCol 	l6 bits # 1st character column (typ. 0)
+lastCol         16 bits # last character column (typ. l27)
+firstRow 	16 bits # last character row (typ. 0)
+lastRow         l6 bits # last character row (typ. 0)
+			# most ISO-Latin fonts are l row of chars,
+			# but most large oriental fonts have
+			# many rows Typical values are for
+			# ISO-Latin fonts on the mit tapes.
+defaultCh	16 bits # default character
+nencodings      l6 bits # number of encoded characters 
+encoding metrics 16 bits # 1 per encoded character, defaults to 0xFFFF
+
+PCF SWIDTHS
+
+These are the same as the BDF scalable widths.
+
+num chars	32 bits # number of characters
+swidths         32 bits # 1 per character
+
+PCF GLYPH NAMES
+
+Yet another string table, this contains the names of the glyphs as described 
+under the BDF glyph_names field.
+
+num_chars 	32 bits # number of characters in font
+offsets         32 bits # offsets into strings, l per character
+strings size    32 bits # size of string table in 8 bit characters
+strings variable 	# NULL_delineated glyph names
+
+PCF BDF ACCELERATORS                                                                              
+Formatted like the pcf accelerators, this data includes the same information
+but as included  in the BDF file. Accelerators consist of 8 8-bit fields, 3 32
+bit fields, 2 metric fields and (if format is ACCELERATORS_W_INKBOUNDS) 2 
+optional
+
+MEIRTIC FIELD
+
+noOverlap 	8 bits # true if characters don't overlap
+constantMetrics 8 bits # metrics apply to all characters
+terminalFont 	8 bits # outdated - true if font metrics
+		       # work well with a terminal
+constantWidth 	8bits  # true if all characters have the same width
+inkInside 	8bits  # true if all ink inside bounding box                                             
+inkMetrics 	8bits  # true if ink metrics != font metrics
+		       # (used with terminal fonts)
+drawDirection   8 bits # direction to draw (eg, Left To Right)
+pad		8 bits # always 0
+fontAscent 	32bits # minimum for quality typography
+fontDescent 	32bits # minimum for quality typography
+maxOverlap 	32bits # maximum this character may be overlapped
+minbounds 	96bits # (metric field type)
+maxbounds 	96bits # (metric field type)
+ink_minbounds 	96bits # (optional metric field type)
+ink maxbounds 	96bits # (optional metric field type)                                               
+
+
