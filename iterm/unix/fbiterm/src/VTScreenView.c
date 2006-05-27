@@ -8,10 +8,8 @@
    from url http://oss.software.ibm.com/developer/opensource/license-cpl.html */
 
 #include "fbiterm.h"
-#include "stdio.h"
 
 extern int cur_col,cur_row;
-
 static void 
 VTScreenView_update_cursor_position(VTScreenView *view, int col, int row )
 {

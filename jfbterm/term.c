@@ -179,9 +179,10 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 	signal(SIGCHLD, sigchld);
 	atexit(application_final);
 			  
-	/* IIIMCCf */
+	/* IIIMCCF */
 	static int SWITCH_TO_IIIMCCF=0;
         iiimccf_init();
+
 	/* not available
 	 * VtInit();
 	 * VtStart();
@@ -224,7 +225,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			if (ret > 0) {
 			  
 			  /* "203" has been registed for "Ctrl-Space" in input.c */    	    
-			  if( buf[0] == 203 )
+			  if( ret==1 && buf[0] == 203 )
 			  {
 			     if( SWITCH_TO_IIIMCCF == 0 ){
 			       SWITCH_TO_IIIMCCF = 1;
@@ -237,7 +238,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			  }
 			 
 			  /* "204" has been registed for "Ctrl-Shift" in input.c */
-			  if( buf[0] == 204 )
+			  if( ret == 1 && buf[0] == 204 )
 			  {
 			     if( SWITCH_TO_IIIMCCF == 0 ){
 			       SWITCH_TO_IIIMCCF = 1;
