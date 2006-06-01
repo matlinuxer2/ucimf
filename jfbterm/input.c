@@ -251,8 +251,8 @@ new_key;
 
 static new_key nkeys[] = {
   /* [table]        [key]         [new_key] */
-  {(1 << KG_CTRL), KEY_SPACE, K (KT_LATIN, CTRL_SPACE)},	/* Ctrl + Space */
-  {(1 << KG_CTRL), KEY_LEFTSHIFT, K (KT_LATIN, CTRL_SHIFT)},	/* Ctrl + Shift */
+  {(1 << KG_CTRL), KEY_SPACE, K(KT_LATIN, CTRL_SPACE)},	/* Ctrl + Space */
+  {(1 << KG_CTRL), KEY_LEFTSHIFT, K(KT_LATIN, CTRL_SHIFT)},	/* Ctrl + Shift */
 };
 
 int setup_keys(void)
