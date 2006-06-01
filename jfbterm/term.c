@@ -180,7 +180,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 	atexit(application_final);
 			  
 	/* IIIMCCF */
-	static int SWITCH_TO_IIIMCCF=0;
+	int SWITCH_TO_IIIMCCF=0;
         iiimccf_init();
 
 	/* not available
@@ -223,23 +223,28 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			}
 #endif
 			if (ret > 0) {
+			  //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
+			  //iiimccf_pos( p->vterm.pen.x * gFontsWidth, p->vterm.pen.y*gFontsHeight);
 			  
 			  /* "203" has been registed for "Ctrl-Space" in input.c */    	    
 			  if( ret==1 && buf[0] == 203 )
 			  {
-			     if( SWITCH_TO_IIIMCCF == 0 ){
-			       SWITCH_TO_IIIMCCF = 1;
-			       iiimccf_on();
-			     }else{
-			       SWITCH_TO_IIIMCCF = 0;
-			       iiimccf_off();
-			     }
+
+			      if( SWITCH_TO_IIIMCCF == 0 ){
+			        SWITCH_TO_IIIMCCF = 1;
+				//iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
+			        iiimccf_on();
+			      }else{
+			        SWITCH_TO_IIIMCCF = 0;
+			        iiimccf_off();
+			      }
 			     continue;
 			  }
 			 
 			  /* "204" has been registed for "Ctrl-Shift" in input.c */
 			  if( ret == 1 && buf[0] == 204 )
-			  {
+			  {  
+			     //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
 			     if( SWITCH_TO_IIIMCCF == 0 ){
 			       SWITCH_TO_IIIMCCF = 1;
 			       iiimccf_on();
@@ -251,7 +256,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			  
 			  if( SWITCH_TO_IIIMCCF == 1 )
 			  {
-			      iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
+			      //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
 			      
 			      int keycode, keychar, modifier;
 			      
@@ -279,6 +284,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 				/* write(1, buf, ret); */
 				tvterm_emulate(&(p->vterm), buf, ret);
 				tvterm_refresh(&(p->vterm));
+			  iiimccf_pos( p->vterm.pen.x * gFontsWidth, p->vterm.pen.y*gFontsHeight);
 			}
 		}
 	}
