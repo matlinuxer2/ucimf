@@ -7,7 +7,15 @@
 using namespace std;
 using namespace xmlpp;
 
-GraphDev* gdev;
+Font* Font::_instance = 0;
+Font* Font::Instance()
+{
+  if ( _instance == 0 )
+  {
+    _instance = new Font;
+  }
+  return _instance;
+}
 
 Font::Font()
 {
@@ -74,6 +82,7 @@ Font::~Font()
 
 }
 
+/*
 void Font::status()
 {
   cout << "fontpath: " << fontpath << endl;
@@ -91,8 +100,9 @@ void Font::info()
   cout << "font_color: " << font_color << endl;
   cout << "--info end---" << endl;
 }
+*/
 
-void Font::load( int code, int x, int y, int fw, int fh, int c )
+void Font::load( int code, int fw, int fh, int c )
 {
   pos_x = x;
   pos_y = y;
@@ -102,11 +112,9 @@ void Font::load( int code, int x, int y, int fw, int fh, int c )
   encoding = FT_ENCODING_UNICODE;
   charcode = (FT_ULong) code;
   font_color = c;
-}
+    
   
-void Font::draw()
-{
-    //error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
+  //error = FT_Load_Char( face, charcode, FT_LOAD_RENDER );
     error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
     unsigned char* tmp = slot->bitmap.buffer;
     int pos_left = pos_x; + slot->bitmap_left;

@@ -55,12 +55,8 @@ class GraphDev {
 
         static GraphDev *mpGraphDev;
 
-        int Height() {
-            return mYres;
-        }
-        int Width() {
-            return mXres;
-        }
+        int Height() { return mYres; }
+        int Width() { return mXres; }
 
         // font
 	/*
@@ -72,12 +68,8 @@ class GraphDev {
 
         // char display
         virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;
-        static int BlockHeight() {
-            return mBlockHeight;
-        }
-        static int BlockWidth() {
-            return mBlockWidth;
-        }
+        static int BlockHeight() { return mBlockHeight; }
+        static int BlockWidth() { return mBlockWidth; }
         static int mBlankLineHeight;
 
         void ClearScr();
