@@ -42,11 +42,6 @@ AC_CHECK_LIB(freetype,
 	[AC_MSG_ERROR([freetype2 is required to build iiimccf])])
 dnl .........................................................................
 
-dnl Checking for libxml++
-PKG_CHECK_MODULES([XMLPP], [libxml++-2.6])
-AC_SUBST([XMLPP_LIBS])
-AC_SUBST([XMLPP_CFLAGS])
-
 # FIXME: Replace `main' with a function in `-lgraphdev':
 AC_CHECK_LIB([graphdev], [main])
 # FIXME: Replace `main' with a function in `-liiimccf':
