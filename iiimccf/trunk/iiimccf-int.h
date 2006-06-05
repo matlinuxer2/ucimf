@@ -86,7 +86,5 @@ int wchar_to_utf8( wchar_t c, char * outbuf, int bufsize);
 bool  get_committed_text( IIIMCF_context, IIIMCCF& );
 char* iiimcf_text_to_utf8( IIIMCF_text t);
 char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 );
-void show_lookup_choice( IIIMCF_context context );
-void show_preedit_info( IIIMCF_context context );
 void show_incoming_event( IIIMCF_event ev );
 vector<IIIMP_card16> text_to_vector( IIIMCF_text t );

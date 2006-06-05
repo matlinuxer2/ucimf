@@ -1,8 +1,0 @@
-To compile terminfo please commit following command
-
- $ tic iterm.terminfo
-
-NOTE: tic automatically installs compiled terminfo to
-/usr/lib/terminfo directory if it's writable.  Otherwise,
-tic installs to ~/.terminfo.  If you want to change the directory
-you have to give "-o <direname>" option.

@@ -9,13 +9,11 @@ class Font{
    ~Font();
    static Font* Instance();
 
-   void info();
-   void status();
    bool setFontHeidht(int fontheight );
    bool setFontWidth( int fontwidth );
    int  getFontHeight();
    int  getFontWidth();
-   void render( int code, int fw, int fh, CharBitMap& tmp );
+   void render( int code, CharBitMap& tmp );
    
  protected:
    Font();
@@ -24,18 +22,12 @@ class Font{
  private:
    static Font* _instance;
    string fontpath;
+   int font_width;
+   int font_height;
 
    /* freetype parameter */
    FT_Library library;
    FT_Face face;
-   //FT_GlyphSlot slot;
 
-   /* temporary */
-   //FT_ULong charcode;
-   //FT_Encoding encoding;
-
-   int font_width;
-   int font_height;
-   //int font_color;
 };
 
