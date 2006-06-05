@@ -32,27 +32,10 @@ Font::~Font()
 
 }
 
-/*
-   void Font::status()
-   {
-   cout << "fontpath: " << fontpath << endl;
-   cout << "encoding: " << "UTF-16" << endl;
-   }
-
-   void Font::info()
-   {
-   cout << "--Font info--" << endl;
-   cout << "font_width: " << font_width << endl;
-   cout << "font_height: " << font_height << endl;
-   cout << "font_color: " << font_color << endl;
-   cout << "--info end---" << endl;
-   }
-   */
-
-void Font::load( int code, int fw, int fh, CharBitMap& bitmap )
+void Font::load( int code, CharBitMap& charbitmap )
 {
   FT_Error error;
-  FT_Set_Char_Size( face, fw*64 , fh*64, 0, 0 );
+  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   encoding = FT_ENCODING_UNICODE;
   charcode = static_cast<FT_ULong> code;
   /*
@@ -63,10 +46,10 @@ void Font::load( int code, int fw, int fh, CharBitMap& bitmap )
 
   error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
 
-  bitmap.pBuf = face->glyph->bitmap.buffer;
-  bitmap.h = face->glyph->bitmap.rows;
-  bitmap.w = face->glyph->bitmap.width;
-  bitmap.isMulti8 = true;
+  charbitmap.pBuf = face->glyph->charbitmap.buffer;
+  charbitmap.h = face->glyph->charbitmap.rows;
+  charbitmap.w = face->glyph->charbitmap.width;
+  charbitmap.isMulti8 = true;
 }
 
 

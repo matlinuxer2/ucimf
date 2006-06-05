@@ -1,8 +1,0 @@
-- since version 0.5
-	* fixed a spelling mistake
-		Chris Heath <chris@heathens.co.nz>
-	* fixed two function keys in terminfo (kf13 and kf16)
-		Chris Heath <chris@heathens.co.nz>
-	* added entries to terminfo for home, end, insert, delete keys
-		Chris Heath <chris@heathens.co.nz>
-	* added Makefile

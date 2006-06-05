@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Iterm>
-  <font>
-    <DefaultAsc>/usr/lib/X11/fonts/misc/h16.pcf.gz</DefaultAsc>
-    <DefaultMB>/usr/lib/X11/fonts/misc/b16.pcf.gz</DefaultMB>
-    <DefaultFont>/usr/lib/X11/fonts/misc/b16.pcf.gz</DefaultFont>
-  </font>
-</Iterm>
