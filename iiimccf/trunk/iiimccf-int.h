@@ -1,4 +1,4 @@
-#include "iiimcf.h"
+#include "imf.h"
 #include "graphdev.h"
 #include <cstdlib>
 #include <vector>
@@ -12,7 +12,7 @@ class Text;
 class Rectangle;
 class BitMap;
 
-class IIIMCCF {
+class IIIMCCF : public Imf {
   public:
     IIIMCCF();
     ~IIIMCCF();

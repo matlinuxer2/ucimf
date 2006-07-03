@@ -5,27 +5,23 @@
 extern "C" {
 #endif
 
-/* initialization */
-int ucimf_init();
-int ucimf_exit();
+enum IMF_NAME{ 
+  IIIMF, 
+  OVIME, 
+  SCIM 
+};
 
 /* status switching */
 int ucimf_focus_on();
 int ucimf_focus_off();
+int ucimf_change_im();
+int ucimf_switch_imf( IMF_NAME );
 
 /* keyboard input */
 char* ucimf_process_key( int keycode, int keychar, int modifier );
 
-/* switch input mehtod frameworks */
-enum IMF{ IIIMF, OVIME, SCIM };
-
-int ucimf_switch_imf( IMF );
-
-/* show input methods */
-void ucimf_change_im();
-
-/* current position */
-void ucimf_pos( int x, int y);
+/* cursor position */
+void ucimf_cursor_position( int x, int y);
 
 
 #ifdef __cplusplus
