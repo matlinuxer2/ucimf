@@ -1,15 +1,12 @@
 #include <OpenVanilla/OpenVanilla.h>
-#include "imf.h"
+//#include "imf.h"
 #include <vector>
-
-#include "layer.h"
-#include "preedit.h"
-#include "lookupchoice.h"
-#include "observer.h"
+#include <dlfcn.h>
 
 typedef OVModule* (*TypeGetModule)(int);
 typedef int (*TypeInitLibrary)(OVService*, const char*);
 typedef unsigned int (*TypeGetLibVersion)();
+typedef void* dlhandle;
 struct OVLibrary {
      dlhandle handle;
      TypeGetModule getModule;
@@ -17,32 +14,10 @@ struct OVLibrary {
      TypeGetLibVersion getLibVersion;
 };
 
-class OVImf::Imf
-{
-  public:
-    OVImf();
-    ~OVImf(); 
-    //OVIIIMCCF(OVInputMethodContext *c, OVSCIMFactory *factory, const String& encoding, int id=-1);
-
-    char* process_keyevent( int keychar, int keycode, int modifier );
-    switch_im();
-    switch_lang();
-    switch_im_per_lang();
-    switch_im_custom();
-    
-    // important 
-    std::vector<OVModule*> mod_vector; 
-
-    OVInputMethodContext *cxt;
-    OVBuffer preedit;
-    OVCandidate lookupchoice;
-    OVService srv;
-    OVDictionary dict;
-};
 
 class OVImfKeyCode : public OVKeyCode  {
 public:
-    OVImfKeyCode (int p=0);
+    OVImfKeyCode (int p);
     virtual int code();          
     virtual int isShift();       
     virtual int isCapslock();    
@@ -64,7 +39,7 @@ protected:
 // Abstract interface for the pre-edit and composing buffer.
 class OVImfBuffer : public OVBuffer {
 public:
-    OVImfBuffer(DIMEInstance *i);
+    OVImfBuffer();
     virtual OVBuffer* clear(); 
     virtual OVBuffer* append(const char *s);
     virtual OVBuffer* send();
@@ -74,13 +49,11 @@ public:
 
 protected:
     char buf[512];
-    Prdt *prdt;
-    //DIMEInstance *im;
 };
 
-class OVImfCandidate : public OVCandidate ;
+class OVImfCandidate : public OVCandidate {
 public:
-    OVImfCandidate(DIMEInstance *i);
+    OVImfCandidate();
     virtual OVCandidate* clear();
     virtual OVCandidate* append(const char *s);
     virtual OVCandidate* hide();
@@ -89,7 +62,6 @@ public:
     virtual int onScreen();
 
 protected:
-    //DIMEInstance *im;
     char buf[512];
     int onscreen;
 };
@@ -105,5 +77,76 @@ public:
     virtual const char *fromUTF8(const char *encoding, const char *src);
     virtual const char *UTF16ToUTF8(unsigned short *src, int len);
     virtual int UTF8ToUTF16(const char *src, unsigned short **rcvr);
+private:
+    char internal[1024];
+    unsigned short u_internal[1024];
 };
 
+#include<map>
+#include<string>
+#include<sstream>
+#include<cctype>
+
+// Abstract interface for a simple dictionary. It is recommended that this
+// dictionary be implemented as a type-free dictionary, i.e. you can replace
+// the key with any value of any type, and type conversion between integer and
+// string is done transparently, like what is done in e.g. sqlite3.
+class OVImfDictionary : public OVDictionary {
+protected:
+   std::map<std::string, std::string> _dict;
+public:
+    virtual int keyExist(const char *key) {
+       return _dict.find(key) != _dict.end();
+    }
+    virtual int getInteger(const char *key) {
+        return atoi(_dict[key].c_str());
+    }
+    virtual int setInteger(const char *key, int value) {
+       std::stringstream ss;
+       ss << value;
+       _dict.insert( std::make_pair(key, ss.str()) );
+        return value;
+    }
+    virtual const char* getString(const char *key) {
+        return _dict[key].c_str();
+    }
+    virtual const char* setString(const char *key, const char *value) {
+       _dict.insert( std::make_pair(key, value) );
+       return value;
+    }
+};
+
+
+class Imf
+{
+  public:
+    virtual char* process_keyevent( int keychar, int keycode, int modifier )=0;
+    // virtual bool switch_im();
+    // virtual bool switch_lang();
+    // virtual bool switch_im_per_lang();
+    // virtual bool switch_im_custom();
+};
+
+
+class OVImf : public Imf
+{
+  public:
+    OVImf();
+    ~OVImf(); 
+    //OVIIIMCCF(OVInputMethodContext *c, OVSCIMFactory *factory, const String& encoding, int id=-1);
+
+    virtual char* process_keyevent( int keychar, int keycode, int modifier );
+    // virtual bool switch_im();
+    // virtual bool switch_lang();
+    // virtual bool switch_im_per_lang();
+    // virtual bool switch_im_custom();
+    
+    // important 
+    std::vector<OVModule*> mod_vector; 
+
+    OVInputMethodContext *cxt;
+    OVBuffer *preedit;
+    OVCandidate *lookupchoice;
+    OVService *srv;
+    OVImfDictionary dict;
+};
