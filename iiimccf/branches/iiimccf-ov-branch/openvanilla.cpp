@@ -16,8 +16,8 @@ OVImf::OVImf()
   preedit = new OVImfBuffer;
   lookupchoice = new OVImfCandidate;
   srv = new OVImfService;
+  dict = new OVImfDictionary;
   
-  std::cout << module_filename << std::endl;
   mod->handle = dlopen(module_filename, RTLD_LAZY);
   if(mod->handle == NULL){
     fprintf(stderr, "dlopen %s failed\n", module_filename);
@@ -33,12 +33,12 @@ OVImf::OVImf()
      fprintf(stderr, "dlsym %s failed\n", module_filename);
      delete mod;
   }
-  /*
+  
   if( mod->getLibVersion() < OV_VERSION ){
      fprintf(stderr, "%s %d is too old\n", module_filename, mod->getLibVersion());
      delete mod;
   }
-  */
+  
 
   if(mod){
      mod->initLibrary(srv, OV_MODULEDIR);
@@ -47,13 +47,9 @@ OVImf::OVImf()
      delete mod;
   }
 
-  //OVModule m;
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[0]);
   OVInputMethod* im = static_cast<OVInputMethod*>(mod_vector[0]);
-  //OVInputMethod *im = new OVIMArray;
-  //dict = new OVImfDictionary;
-  //OVImfDictionary dict2;
-  im->initialize(&dict, srv, OV_MODULEDIR);
+  im->initialize(dict, srv, OV_MODULEDIR);
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
 }
@@ -209,8 +205,8 @@ OVCandidate* OVImfCandidate::hide() {
 }
 
 OVCandidate* OVImfCandidate::show() {
-      std::cout << buf << std::endl;
     if (!onscreen) {
+      std::cout << buf << std::endl;
 	//im->show_aux_string();
 	onscreen=1;
     }
@@ -219,6 +215,7 @@ OVCandidate* OVImfCandidate::show() {
 
 OVCandidate* OVImfCandidate::update() {
     //im->update_aux_string(utf8_mbstowcs(buf));
+      std::cout << buf << std::endl;
     return this;
 }
 

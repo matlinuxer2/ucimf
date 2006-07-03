@@ -148,5 +148,5 @@ class OVImf : public Imf
     OVBuffer *preedit;
     OVCandidate *lookupchoice;
     OVService *srv;
-    OVImfDictionary dict;
+    OVImfDictionary *dict;
 };
