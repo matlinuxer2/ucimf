@@ -7,12 +7,11 @@ struct CharBitMap;
 class Font{
  public:
    ~Font();
-   static Font* Instance();
-
-   bool setFontHeidht(int fontheight );
-   bool setFontWidth( int fontwidth );
-   int  getFontHeight();
-   int  getFontWidth();
+   static Font* getInstance();
+   bool Heidht(int fontheight );
+   bool Width( int fontwidth );
+   int  Height();
+   int  Width();
    void render( int code, CharBitMap& tmp );
    
  protected:
@@ -21,7 +20,7 @@ class Font{
 
  private:
    static Font* _instance;
-   string fontpath;
+   char* font_path;
    int font_width;
    int font_height;
 

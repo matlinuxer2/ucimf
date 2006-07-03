@@ -1,12 +1,8 @@
 #include "font.h"
-#include <iostream>
-#include <string>
-#include <cstdlib>
-using namespace std;
 
 Font* Font::_instance = 0;
 
-Font* Font::Instance()
+Font* Font::getInstance()
 {
   if ( _instance == 0 )
   {
@@ -17,26 +13,26 @@ Font* Font::Instance()
 
 Font::Font()
 {
-  fontpath = getenv("UCIMF_FONTPATH");
-
+  font_path = getenv("UCIMF_FONTPATH");
   font_width = 0;
   font_height = 0;
 
   FT_Init_FreeType( &library ); 
-  FT_New_Face( library, fontpath.c_str(), 0, &face);
+  FT_New_Face( library, font_path, 0, &face);
+  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   FT_Set_Charmap( face, face->charmaps[0] );
+  //FT_Select_Charmap( face, FT_ENCODING_UNICODE );
 }
 
 Font::~Font()
 {
-
+  FT_Done_Face(face);
+  FT_Done_FreeType(library);
 }
 
-void Font::load( int code, CharBitMap& charbitmap )
+void Font::render( int code, CharBitMap& charbitmap )
 {
   FT_Error error;
-  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
-  encoding = FT_ENCODING_UNICODE;
   charcode = static_cast<FT_ULong> code;
   /*
   cout.setf(ios_base::hex, ios_base::basefield );

@@ -59,12 +59,7 @@ class GraphDev {
         int Width() { return mXres; }
 
         // font
-	/*
-        static void SetAscFont(BaseFont *pAscFont);
-        static void SetDblFont(BaseFont *pDblFont);
-        void OutChar(int x, int y, int fg, int bg, char c);
-        void OutChar(int x, int y, int fg, int bg, char c1, char c2);
-	*/
+        void OutChar(int x, int y, int fg, int bg, unsigned int c);
 
         // char display
         virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;
@@ -82,20 +77,11 @@ class GraphDev {
         virtual void SaveRect(int x1, int y1, int x2, int y2, BitMap& pBuffer ) = 0;
         virtual void RstrRect(int x1, int y1, int x2, int y2, BitMap& pBuffer ) = 0;
         
-        virtual void SwitchToGraph() {};
-        virtual void SwitchToText() {};
     protected:
         static int mXres, mYres;
-        // font
-	/*
-	static BaseFont *mpAscFont;
-        static BaseFont *mpDblFont;
-	*/
-
         static int mBlockWidth;
         static int mBlockHeight;
         static struct CharBitMap mAsc;
-        static struct CharBitMap mDbl;
 };
 
 #define fb_readb(addr) (*(volatile __u8 *) (addr))

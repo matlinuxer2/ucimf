@@ -34,23 +34,22 @@
     #endif
 #endif
 
+#include "font.h"
+
 // mmap framebuffer address
 GraphDev *GraphDev::mpGraphDev = NULL;
 
 // font
 int GraphDev::mXres = 0;
 int GraphDev::mYres = 0;
-/*
-BaseFont *GraphDev::mpAscFont = NULL;
-BaseFont *GraphDev::mpDblFont = NULL;
-*/
+
+Font* font = Font.getInstance();
 
 // char display
 int GraphDev::mBlockWidth = 0;
 int GraphDev::mBlockHeight = 0;
 int GraphDev::mBlankLineHeight = 0;
 struct CharBitMap GraphDev::mAsc = {0};
-struct CharBitMap GraphDev::mDbl = {0};
 
 bool GraphDev::Open() {
 #ifdef HAVE_GGI_LIB
@@ -103,8 +102,6 @@ void GraphDev::Close() {
         mpGraphDev->ClearScr();
     if (mAsc.pBuf)
         delete[] mAsc.pBuf;
-    if (mDbl.pBuf)
-        delete[] mDbl.pBuf;
     delete mpGraphDev;
 }
 
@@ -162,74 +159,12 @@ void GraphDev::DrawRect(int x1,int y1,int x2,int y2,int color) {
     DrawLine(x2,y1,x2,y2,color);
 }
 
-/*
-void GraphDev::SetAscFont(BaseFont *pAscFont) {
-    mpAscFont = pAscFont;
-
-    mBlockWidth = pAscFont->Width();
-    mBlockHeight = pAscFont->Height() + mBlankLineHeight;
-    
-    mAsc.h = pAscFont->Height();
-    mAsc.w = pAscFont->Width();
-    mAsc.wBytes = pAscFont->WidthBytes();
-    mAsc.BufLen = mBlockHeight * mAsc.wBytes;
-    if (mAsc.pBuf)
-        delete[] mAsc.pBuf;
-    mAsc.pBuf = (char *) new char[mAsc.BufLen];
-    mAsc.pLast = mAsc.pBuf + (mAsc.h  - 1)* mAsc.wBytes;
-    mAsc.ExtLen = mBlankLineHeight * mAsc.wBytes;
-    mAsc.isMulti8 = (mAsc.w % 8) ? false : true;
-}
-
-void GraphDev::SetDblFont(BaseFont *pDblFont) {
-    mpDblFont = pDblFont;
-
-    mDbl.h = pDblFont->Height();
-    mDbl.w = pDblFont->Width();
-    mDbl.wBytes = pDblFont->WidthBytes();
-    mDbl.BufLen = (mDbl.h + mBlankLineHeight) * mDbl.wBytes;
-    if (mDbl.pBuf)
-        delete[] mDbl.pBuf;
-    mDbl.pBuf = (char *) new char[mDbl.BufLen];
-    mDbl.pLast = mDbl.pBuf + (mDbl.h  - 1) * mDbl.wBytes;
-    mDbl.ExtLen = mBlankLineHeight * mDbl.wBytes;
-    mDbl.isMulti8 = (mDbl.w % 8) ? false : true;
-}
 
 //draw a ascii char
-void GraphDev::OutChar(int x, int y, int fg, int bg, char c) {
-    assert( x >= 0 && x + mBlockWidth <= Width()
-            && y >=0 && y + mBlockHeight <= Height());
-    char *p = mpAscFont->GetChar(c);
-    memcpy(mAsc.pBuf, p, mAsc.BufLen);
-    if (mBlankLineHeight > 0) {
-        if (c >= 0xb0 && c <= 0xdf) {
-            char *pExt = mAsc.pLast + mAsc.wBytes;
-            int row = mBlankLineHeight;
-            for(; row--; pExt += mAsc.wBytes) {
-                memcpy(pExt, mAsc.pLast, mAsc.wBytes);
-            }
-        } else {
-            memset(mAsc.pLast + mAsc.wBytes, 0, mAsc.ExtLen);
-        }
-    }
+void GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
+    assert( x >= 0 && x + font->Width() <= Width()
+            && y >=0 && y + font->Height() <= Height());
+    font->load(c, &mAsc);
     DrawChar(x,y,fg,bg,&mAsc);  // true set extend to blank
 }
 
-// draw a hz at (x,y) and fill bottom with blank
-// note:this routine can draw half hz at (x,y)
-// depend on the value of tag
-void GraphDev::OutChar(int x, int y, int fg, int bg, char c1, char c2) {
-    assert(c1);
-    assert(c2);
-    assert( x >= 0 && x + mBlockWidth * 2 <= Width() && y >=0 &&
-            y + mBlockHeight <= Height());
-
-    char *p = mpDblFont->GetChar(c1, c2);
-    memcpy(mDbl.pBuf, p, mDbl.BufLen);
-    if (mBlankLineHeight > 0) {
-        memset(mDbl.pLast + mDbl.wBytes, 0, mDbl.ExtLen);
-    }
-    DrawChar(x,y,fg,bg,&mDbl);
-}
-*/
