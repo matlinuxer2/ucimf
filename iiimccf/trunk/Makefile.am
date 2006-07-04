@@ -1,21 +1,19 @@
 SUBDIRS = display
+OV_MODULEDIR= /home/mat/usr/lib/openvanilla/
 
-EXTRA_INCS =
-EXTRA_LIBS = -Ldisplay/ -ldisplay
+EXTRA_INCS = -I/usr/include/iiim/ -I/usr/include/OpenVanilla/
+EXTRA_LIBS = -Ldisplay/ -ldisplay -liiimcf -lltdl
 
-AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS) -I/usr/include/iiim
+AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS) 
 
-lib_LTLIBRARIES = libiiimccf.la
+lib_LTLIBRARIES = libucimf.la
 
-iiimccfincludedir = $(includedir)
-iiimccfinclude_HEADERS = iiimccf.h
+ucimfincludedir = $(includedir)
+ucimfinclude_HEADERS = ucimf.h
 
-libiiimccf_la_SOURCES = iiimccf.cpp observer.cpp \
-                        iiimccf-core.cpp iiimccf-util.cpp \
-			preedit.cpp lookupchoice.cpp \
-                        layer.cpp graphdev.cpp 
-libiiimccf_la_LDFLAGS = 
-libiiimccf_la_LIBADD = \
-	-L$(libdir) \
-	$(EXTRA_LIBS) \
-	-liiimcf 
+libucimf_la_SOURCES = ucimf.cpp \
+			iiimccf.cpp openvanilla.cpp \
+			widget.cpp layer.cpp\
+                        font.cpp graphdev.cpp 
+libucimf_la_LDFLAGS = 
+libucimf_la_LIBADD = -L$(libdir) $(EXTRA_LIBS) 

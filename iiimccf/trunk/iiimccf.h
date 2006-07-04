@@ -10,26 +10,22 @@ class TrackPoint;
 class Stts;
 class Text;
 class Rectangle;
-class BitMap;
 
 class IIIMCCF : public Imf {
   public:
     IIIMCCF();
     ~IIIMCCF();
 
-    bool on();
-    bool off();
-    int proc( int, int, int );
-    int result( char** );
+    int process_input( char* buf );
    
-    void lkc_show();
-
-    bool ims_show();
-    bool ims_set();
-    bool ims_chg();
+    bool switch_im();
     
-    void pos( int, int );
-    void refresh();
+    void update_cursor_position( int, int );
+   
+  protected:
+    // IIIMCF Object
+    IIIMCF_handle 	handle;
+    IIIMCF_context 	context;
     
     /* committed text */
     char* cmt_buf;
@@ -47,21 +43,10 @@ class IIIMCCF : public Imf {
     
     /* bitmap block for overspot elements */
 
-//  private:
-
-    // IIIMCF Object
-    IIIMCF_handle 	handle;
-    IIIMCF_context 	context;
-   
     /* current imput method id */
     int cur_ims_id;
     
-    /* current screen infomation */
-    int height, width, resolution;
- 
 };
-
-extern IIIMCCF* iiimccf;
 
 /** Registed component functions **/
 IIIMF_status iiimccf_preedit( IIIMCF_context, IIIMCF_event, IIIMCF_component, IIIMCF_component );

@@ -32,8 +32,8 @@ class FBLinear24 : public FBDev {
         void PutPixel(int x,int y,int color);
         void FillRect(int x1,int y1,int x2,int y2,int color);
         void RevRect(int x1,int y1,int x2,int y2);
-        void SaveRect(int x1, int y1, int x2, int y2, BitMap& pBuffer );
-        void RstrRect(int x1, int y1, int x2, int y2, BitMap& pBuffer );
+        void SaveRect(int x1, int y1, int x2, int y2, CharBitMap& pBuffer );
+        void RstrRect(int x1, int y1, int x2, int y2, CharBitMap& pBuffer );
         void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont);
 
     private:

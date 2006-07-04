@@ -17,8 +17,8 @@ int ucimf_focus_off();
 int ucimf_change_im();
 int ucimf_switch_imf( IMF_NAME );
 
-/* keyboard input */
-char* ucimf_process_key( int keycode, int keychar, int modifier );
+/* stdin(keyboard) input */
+char* ucimf_process_stdin( char* buf );
 
 /* cursor position */
 void ucimf_cursor_position( int x, int y);

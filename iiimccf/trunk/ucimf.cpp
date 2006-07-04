@@ -4,6 +4,7 @@
 
 int ucimf_focus_on()
 {
+  Imf* imf = new Imf;
 }
 
 int ucimf_focus_off()
@@ -18,9 +19,9 @@ int ucimf_switch_imf( IMF_NAME )
 {
 }
 
-char* ucimf_process_key( int keycode, int keychar, int modifier )
+char* ucimf_process_stdin( char* buf )
 {
-  return imf->process_keyevent( keycode, keychar, modifier );
+  return imf->process_input( buf  );
 }
 
 

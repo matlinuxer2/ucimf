@@ -1,9 +1,6 @@
 #include <iiimcf.h>
 #include <iiimp.h>
-#include "observer.h"
 #include "graphdev.h"
-#include "iiimccf-int.h"
-#include "layer.h"
 #include "widget.h"
 #include <iostream>
 using namespace std;
@@ -16,56 +13,6 @@ using namespace std;
 
 extern IIIMCCF* iiimccf;
 
-Subject::Subject(){}
-Subject::~Subject(){}
-
-void Subject::notify()
-{
-  cout << "enter notify" << endl;
-  for(int i=0; i< observers.size(); i++ )
-  {
-    cout << "enter observer 1" << endl;
-    observers[i]->update();
-    cout << "enter observer 2" << endl;
-  }
-}
-
-void Subject::attach( Observer* obsr )
-{
-  observers.push_back( obsr );
-}
-
-
-void Subject::detach( Observer* obsr )
-{
-  observers.erase( find( observers.begin(), observers.end(), obsr) );
-}
-
-Observer::Observer(){}
-Observer::~Observer(){}
-
-TrackPoint::TrackPoint()
-{
-  x = 0;
-  y = 0;
-}
-TrackPoint::~TrackPoint(){}
-
-void TrackPoint::get_position( int& old_x, int& old_y)
-{
-  old_x = x;
-  old_y = y;
-}
-
-void TrackPoint::set_position( int new_x, int new_y)
-{
-  if( x != new_x || y != new_y )
-  {
-    x = new_x;
-    y = new_y;
-    this->notify();
-  }
-}
 
 
 Stts::Stts()
