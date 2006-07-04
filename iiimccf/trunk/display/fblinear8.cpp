@@ -70,7 +70,7 @@ void FBLinear8::RevRect(int x1,int y1,int x2,int y2) {
     }
 }
 
-void FBLinear8::SaveRect(int x1,int y1,int x2,int y2, BitMap& pBuffer) {
+void FBLinear8::SaveRect(int x1,int y1,int x2,int y2, CharBitMap& pBuffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -101,7 +101,7 @@ void FBLinear8::SaveRect(int x1,int y1,int x2,int y2, BitMap& pBuffer) {
     
 }
 
-void FBLinear8::RstrRect(int x1,int y1,int x2,int y2, BitMap& pBuffer) {
+void FBLinear8::RstrRect(int x1,int y1,int x2,int y2, CharBitMap& pBuffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);

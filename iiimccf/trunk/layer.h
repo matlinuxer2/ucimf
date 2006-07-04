@@ -1,11 +1,57 @@
 #include <stdint.h>
 #include <iiimp.h>
 #include <vector>
-#include <ft2build.h> 
-#include FT_FREETYPE_H 
 using namespace std;
 
-struct BitMap;
+struct CharBitMap;
+
+class Observer{
+  public:
+    Observer();
+    ~Observer();
+    virtual void update()=NULL;
+};
+
+class Subject{
+  public:
+    Subject();
+    ~Subject();
+   
+    void attach( Observer* obsr );
+    void detach( Observer* obsr );
+    void notify();
+  private:
+    vector<Observer*> observers;
+};
+
+class TrackPoint : public Subject{
+  public:
+    TrackPoint();
+    ~TrackPoint();
+    void get_position( int& x, int& y);
+    void set_position( int x, int y);
+  private:
+    int x,y;
+};
+
+
+class Window
+{
+  public:
+    bool position(int x, int y);
+    bool isVisible();
+    void shift();
+    void setShow();
+    void setHide();
+    void show();
+    void hide();
+
+  private:
+    bool visible;
+    int cur_x, cur_y;
+    int shift_x, shift_y;
+    CharBitMap tmp;
+}
 
 /* Basic Object */
 
@@ -52,8 +98,8 @@ class Rectangle: public Layer
     Rectangle(int pos_x, int pos_y, int pos_xx, int pos_yy, int color );
     ~Rectangle(){ };
     void update(int pos_x, int pos_y, int pos_xx, int pos_yy, int color );
-    void push( BitMap& tmp );
-    void pop(  BitMap& tmp );
+    void push( CharBitMap& tmp );
+    void pop(  CharBitMap& tmp );
 
     
     virtual void render();	

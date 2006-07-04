@@ -1,58 +1,6 @@
 #include <vector>
+#include "layer.h"
 using std::vector;
-
-class Text;
-class Rectangle;
-class BitMap;
-
-class Observer{
-  public:
-    Observer();
-    ~Observer();
-    virtual void update()=NULL;
-};
-
-class Subject{
-  public:
-    Subject();
-    ~Subject();
-   
-    void attach( Observer* obsr );
-    void detach( Observer* obsr );
-    void notify();
-  private:
-    vector<Observer*> observers;
-};
-
-
-class TrackPoint : public Subject{
-  public:
-    TrackPoint();
-    ~TrackPoint();
-    void get_position( int& x, int& y);
-    void set_position( int x, int y);
-  private:
-    int x,y;
-};
-
-
-class Window
-{
-  public:
-    bool position(int x, int y);
-    bool isVisible();
-    void shift();
-    void setShow();
-    void setHide();
-    void show();
-    void hide();
-
-  private:
-    bool visible;
-    int cur_x, cur_y;
-    int shift_x, shift_y;
-    BitMap tmp;
-}
 
 class Stts : public Window, public Observer{
   public:

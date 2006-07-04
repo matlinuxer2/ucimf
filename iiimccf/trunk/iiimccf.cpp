@@ -1,10 +1,9 @@
-#include "iiimccf-int.h"
+#include "iiimccf.h"
 #include <iostream>
 #include <ctime>
 #include <cstring>
-#include "observer.h"
-#include "preedit.h"
-#include "lookupchoice.h"
+#include "widget.h"
+
 using namespace std;
 
 #define CONVERT_BUFSIZE 48
@@ -128,11 +127,14 @@ bool IIIMCCF::off()
 	return true;
 }
 
-int IIIMCCF::proc( int keycode, int keychar, int modifier )
+void stdin_to_iiimcf_keyevent( char* buf, IIIMCF_keyevent& kev );
+//int IIIMCCF::proc( int keycode, int keychar, int modifier )
+int IIIMCCF::proc( char* buf_input )
 {
 	IIIMCF_event event,ev ;
 	IIIMCF_keyevent kev;
 	IIIMCF_event_type event_type;
+  	stdin_to_iiimcf_keyevent( buf_input, kev );
 
 	/* sent the keyevent to iiimcf */
 	kev.keycode = keycode;
@@ -316,7 +318,7 @@ bool IIIMCCF::ims_set ( )
   return true;
 }
 
-void IIIMCCF::pos( int new_x, int new_y )
+void IIIMCCF::update_cursor_position( int new_x, int new_y )
 {
   cout << "change position " << endl;
   x = new_x;
