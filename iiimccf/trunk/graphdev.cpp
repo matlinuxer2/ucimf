@@ -46,8 +46,8 @@ int GraphDev::mYres = 0;
 Font* font = Font.getInstance();
 
 // char display
-int GraphDev::mBlockWidth = 0;
-int GraphDev::mBlockHeight = 0;
+int GraphDev::mBlockWidth = font->Width();
+int GraphDev::mBlockHeight = font->Height();
 int GraphDev::mBlankLineHeight = 0;
 struct CharBitMap GraphDev::mAsc = {0};
 

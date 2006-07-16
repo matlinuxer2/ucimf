@@ -1,5 +1,6 @@
 #include <OpenVanilla/OpenVanilla.h>
 #include "imf.h"
+#include "widget.h"
 #include <vector>
 
 typedef OVModule* (*TypeGetModule)(int);
@@ -47,7 +48,8 @@ public:
     virtual int isEmpty();
 
 protected:
-    char buf[512];
+    //char buf[512];
+    Prdt prdt;
 };
 
 class OVImfCandidate : public OVCandidate {
@@ -61,8 +63,9 @@ public:
     virtual int onScreen();
 
 protected:
-    char buf[512];
-    int onscreen;
+    Lkc lkc;
+    //char buf[512];
+    //int onscreen;
 };
 
 class OVImfService : public OVService {

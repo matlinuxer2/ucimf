@@ -8,44 +8,34 @@ class Stts : public Window, public Observer{
     ~Stts();
     void update();
   private:
-    Rectangle* div;
-    Text* title;
+    String title;
 };
 
-class Prdt : Window
+class Prdt : public Window, public Observer
 {
   public:
     Prdt();
-    ~Prdt(){};
+    ~Prdt();
 
-    void info(); // for text-mode checking.
     bool update();
+    void append( const char* s);
     bool draw();
-    void empty();
     
   private:
-    IIIMCF_context context;
-    vector<IIIMP_card16> buf_utf16;
-    Text* prdt_text;
-    Rectangle* rect;
+    String title;
 };
 
 
-class Lkc : Window
+class Lkc : public Window, public Observer
 {
   public:
     Lkc();
-    ~Lkc(){};
+    ~Lkc();
 
-    void info(); // for text-mode checking.
     bool update();
+    void append( const char* s );
     bool draw();
-    void empty();
 
   private:
-
-    IIIMCF_context context;
-    int cur_idx;
-    Text* lkc_text;
-    Rectangle* rect;
+    vector<String> title;
 };

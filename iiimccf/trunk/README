@@ -1,4 +1,24 @@
 
+---Application Programmable Interface---
+
+ * ucimf.h ucimf.cpp
+
+---Input Method Framework Object---
+
+ * openvanilla.h openvanilla.cpp
+ * iiimccf.h iiimccf.cpp
+
+---Widget, Layer Objects---
+ * layer.h layer.cpp
+ * widget.h widget.cpp
+
+---Graphical Implementation---
+ * font.h font.cpp
+ * graphdev.h graphdev.cpp
+ * display/*.cpp
+
+
+
 
 Problem when building the Fbiterm+iiimccf:
 

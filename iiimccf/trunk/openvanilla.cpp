@@ -56,7 +56,7 @@ OVImf::OVImf()
 }
 
 
-char* OVImf::process_keyevent( int keychar, int keycode, int modifier )
+char* OVImf::process_keyevent( char* buf )
 {
   
   OVImfKeyCode* keyevent=new OVImfKeyCode(keychar);
@@ -134,24 +134,28 @@ void OVImfKeyCode::setAlt(int x)      { alt=x; }
 
 OVImfBuffer::OVImfBuffer() {
     //im=i;
-    strcpy(buf, "i");
+    //strcpy(buf, "i");
+    prdt = new Prdt;
 }
 
 OVBuffer* OVImfBuffer::clear() {
-    strcpy(buf, "");
+  prdt->clear();  
+  //strcpy(buf, "");
     //im->update_preedit_string(WideString());
     //im->hide_preedit_string();
     return this;
 }
 
 OVBuffer* OVImfBuffer::append(const char *s) {
-    strcat(buf, s);
+  prdt->append(s);
+  
+  //strcat(buf, s);
     return this;
 }
 
 OVBuffer* OVImfBuffer::send() {
     //WideString bs=utf8_mbstowcs(buf);
-    std::cout << buf << std::endl;
+    //std::cout << buf << std::endl;
     clear();
     //im->commit_string(bs);
     return this;
@@ -182,23 +186,26 @@ int OVImfBuffer::isEmpty() {
  */
 
 OVImfCandidate::OVImfCandidate() {
-    //im=i;
     onscreen=0;
-    strcpy(buf, "");
+    lkc = new Lkc;
+    //strcpy(buf, "");
 }
 
 OVCandidate* OVImfCandidate::clear() {
-    strcpy(buf, "");
+    lkc->clear();
+    //strcpy(buf, "");
     return this;
 }
 
 OVCandidate* OVImfCandidate::append(const char *s) {
-    strcat(buf, s);
+    lkc->append( s );
+    //strcat(buf, s);
     return this;
 }
 
 OVCandidate* OVImfCandidate::hide() {
     if (onscreen) {
+        lkc->hide();
 	//im->hide_aux_string();
 	onscreen=0;
     }
@@ -207,7 +214,8 @@ OVCandidate* OVImfCandidate::hide() {
 
 OVCandidate* OVImfCandidate::show() {
     if (!onscreen) {
-      std::cout << buf << std::endl;
+        lkc->draw();
+        //std::cout << buf << std::endl;
 	//im->show_aux_string();
 	onscreen=1;
     }
@@ -216,7 +224,8 @@ OVCandidate* OVImfCandidate::show() {
 
 OVCandidate* OVImfCandidate::update() {
     //im->update_aux_string(utf8_mbstowcs(buf));
-      std::cout << buf << std::endl;
+    lkc->update();
+      //std::cout << buf << std::endl;
     return this;
 }
 
