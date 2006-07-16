@@ -1,31 +1,47 @@
 #include <ucimf.h>
 #include "imf.h"
+#include "openvanilla.h"
 
+int FOCUS;
+Imf* imf=NULL;
 
-int ucimf_focus_on()
+char* ucimf_process_stdin( char** buf, int* ret )
 {
-  Imf* imf = new Imf;
-}
+  if( ret == 0 )
+    return;
+  
+  /* The input method on/off switch */
+  if( *buf == CTRL_SPACE ) //!?
+  {
+    switch( FOCUS )
+    {
+      case 0:
+	FOCUS = 1;
+	break;
+      case 1:
+	FOCUS = 0;
+	break;
+      default:
+	FOCUS = 0;
+	break;
+    }
+    return;
+  }
 
-int ucimf_focus_off()
-{
-}
+  if( FOCUS == 0 )
+    return;
 
-int ucimf_change_im()
-{
-}
-
-int ucimf_switch_imf( IMF_NAME )
-{
-}
-
-char* ucimf_process_stdin( char* buf )
-{
+  if( imf == NULL )
+    imf = new OVImf;  //!?
+  
   return imf->process_input( buf  );
 }
 
 
 void ucimf_cursor_position( int x, int y)
 {
+  if( imf == NULL )
+    return; 
+
   imf->update_cursor_position(x, y);
 }
