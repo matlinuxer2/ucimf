@@ -1,21 +1,3 @@
-// vi:ts=4:shiftwidth=4:expandtab
-/***************************************************************************
-                          graphdev.cpp  -  description
-                             -------------------
-    begin                : Sun Auguest 26 2001
-    copyright            : (C) 2001 by huyong, rick
-    email                : ccpaging@online.sh.cn
-                           rick@chinaren.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -43,13 +25,12 @@ GraphDev *GraphDev::mpGraphDev = NULL;
 int GraphDev::mXres = 0;
 int GraphDev::mYres = 0;
 
-Font* font = Font.getInstance();
+Font* font = Font::getInstance();
 
 // char display
 int GraphDev::mBlockWidth = font->Width();
 int GraphDev::mBlockHeight = font->Height();
 int GraphDev::mBlankLineHeight = 0;
-struct CharBitMap GraphDev::mAsc = {0};
 
 bool GraphDev::Open() {
 #ifdef HAVE_GGI_LIB
@@ -100,8 +81,6 @@ bool GraphDev::Open(int xres, int yres, int depth) {
 void GraphDev::Close() {
     if (mpGraphDev)
         mpGraphDev->ClearScr();
-    if (mAsc.pBuf)
-        delete[] mAsc.pBuf;
     delete mpGraphDev;
 }
 
@@ -164,7 +143,8 @@ void GraphDev::DrawRect(int x1,int y1,int x2,int y2,int color) {
 void GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
     assert( x >= 0 && x + font->Width() <= Width()
             && y >=0 && y + font->Height() <= Height());
-    font->load(c, &mAsc);
-    DrawChar(x,y,fg,bg,&mAsc);  // true set extend to blank
+    CharBitMap tmpFont;
+    font->render(c, tmpFont);
+    DrawChar(x,y,fg,bg,&tmpFont);  // true set extend to blank
 }
 

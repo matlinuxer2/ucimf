@@ -2,12 +2,18 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(iiimccf,0.9.3, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf,1.9.0, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([openvanilla.h])
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ldisplay':
@@ -48,6 +54,8 @@ AC_CHECK_LIB([graphdev], [main])
 AC_CHECK_LIB([iiimccf], [main])
 # FIXME: Replace `main' with a function in `-liiimcf':
 AC_CHECK_LIB([iiimcf], [main])
+# FIXME: Replace `main' with a function in `-lltdl':
+AC_CHECK_LIB([ltdl], [main])
 
 # Checks for header files.
 AC_HEADER_STDC

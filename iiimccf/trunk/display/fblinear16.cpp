@@ -141,10 +141,9 @@ void FBLinear16::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
     __u8* dest = ((__u8*)mpBuf + mNextLine * y + x * 2);
     __u32* dest32;
 
-    char* cdat = pFont->pBuf;
     int row, cnt;
-    //for (row = mBlockHeight; row--; dest += mNextLine ) {
     for ( row = pFont->h ; row--; dest += mNextLine ) {
+	char* cdat = pFont->pBuf+ (pFont->h - row) * pFont->wBytes;
         dest32 = (__u32*)dest;
         for (cnt = (pFont->w)/8; cnt--;) {
             fb_writel((tab_cfb16[*cdat >> 6] & eorx) ^ bgx, dest32++);

@@ -1,4 +1,4 @@
-#include <OpenVanilla/OpenVanilla.h>
+#include <OpenVanilla.h>
 #include "imf.h"
 #include "widget.h"
 #include <vector>
@@ -137,5 +137,5 @@ class OVImf : public Imf
     OVBuffer *preedit;
     OVCandidate *lookupchoice;
     OVService *srv;
-    OVImfDictionary *dict;
+    OVDictionary *dict;
 };

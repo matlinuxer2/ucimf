@@ -65,20 +65,6 @@ int wchar_to_utf8(wchar_t c, char * outbuf, int bufsize)
 	return len;
 }
 
-bool  get_committed_text(IIIMCF_context context, IIIMCCF& iiimccf)
-{
-	IIIMF_status st;
-	IIIMCF_text text;
-	
-	iiimcf_get_committed_text( context , &text);
-	//iiimcf_get_text_length( text, buf_len );
-
-	char* buf_utf8 = iiimcf_text_to_utf8( text );
-	int buf_utf8_len = strlen( buf_utf8 );
-	
-	return 0;
-}
-
 
 char* iiimcf_text_to_utf8( IIIMCF_text t)
 {
@@ -125,6 +111,19 @@ char* iiimcf_text_to_utf8( IIIMCF_text t)
 	return pr;
 }
 
+bool  get_committed_text(IIIMCF_context context, IIIMCCF& iiimccf)
+{
+	IIIMF_status st;
+	IIIMCF_text text;
+	
+	iiimcf_get_committed_text( context , &text);
+	//iiimcf_get_text_length( text, buf_len );
+
+	char* buf_utf8 = iiimcf_text_to_utf8( text );
+	int buf_utf8_len = strlen( buf_utf8 );
+	
+	return 0;
+}
 
 char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 )
 {
@@ -866,13 +865,5 @@ bool IIIMCCF::ims_set ( )
   st = iiimcf_destroy_attr( attr );
   
   return true;
-}
-
-void IIIMCCF::update_cursor_position( int new_x, int new_y )
-{
-  cout << "change position " << endl;
-  x = new_x;
-  y = new_y;
-  trkpt->set_position( new_x, new_y );
 }
 
