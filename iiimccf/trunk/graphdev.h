@@ -55,7 +55,6 @@ class GraphDev {
         static int mXres, mYres;
         static int mBlockWidth;
         static int mBlockHeight;
-        static struct CharBitMap mAsc;
 };
 
 #define fb_readb(addr) (*(volatile __u8 *) (addr))

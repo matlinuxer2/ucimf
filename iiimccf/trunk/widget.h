@@ -2,40 +2,40 @@
 #include "layer.h"
 using std::vector;
 
-class Stts : public Window, public Observer{
+class Stts : public Window{
   public:
     Stts();
     ~Stts();
-    void update();
+
   private:
-    String title;
+    utf_string title;
 };
 
-class Prdt : public Window, public Observer
+class Prdt : public Window
 {
   public:
     Prdt();
     ~Prdt();
 
-    bool update();
     void append( const char* s);
-    bool draw();
+    void draw();
+    void clear();
     
   private:
-    String title;
+    utf_string title;
 };
 
 
-class Lkc : public Window, public Observer
+class Lkc : public Window
 {
   public:
     Lkc();
     ~Lkc();
 
-    bool update();
     void append( const char* s );
-    bool draw();
+    void draw();
+    void clear();
 
   private:
-    vector<String> title;
+    vector<utf_string> title;
 };

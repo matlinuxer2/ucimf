@@ -1,22 +1,14 @@
+#include <iiimcf.h>
 #include "imf.h"
 
-class Prdt;
-class Lkc;
-class TrackPoint;
-class Stts;
-class Text;
-class Rectangle;
 
 class IIIMCCF : public Imf {
   public:
     IIIMCCF();
     ~IIIMCCF();
 
-    int process_input( char* buf );
-   
+    char* process_input( char* buf );
     bool switch_im();
-    
-    void update_cursor_position( int, int );
    
   protected:
     // IIIMCF Object
@@ -27,16 +19,6 @@ class IIIMCCF : public Imf {
     char* cmt_buf;
     int cmt_buf_len;
 
-    /* current cursor position */
-    int x,y;
-    TrackPoint* trkpt;
-    
-
-    /* pointers to overspot elements */
-    Stts *stts;
-    Prdt *prdt;
-    Lkc  *lkc;
-    
     /* current imput method id */
     int cur_ims_id;
     

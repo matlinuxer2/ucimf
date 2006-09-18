@@ -46,21 +46,6 @@ Prdt::~Prdt()
 bool Prdt::update()
 {
   hide();
-  /*
-  
-  cur_x = iiimccf->x;
-  cur_y = iiimccf->y;
-  
-  prdt_text->fh(16);
-  prdt_text->fw(16);
-
-  shift();
-  
-  prdt_text->x(cur_x - shift_x);
-  prdt_text->y(cur_y - shift_y);
-  prdt_text->fc(4);
-  
- */
   show();
 }
 
@@ -76,7 +61,6 @@ Lkc::Lkc()
   lkc_text = new Text;
   cur_x=20;
   cur_y=20;
-
 }
 
 
@@ -88,19 +72,6 @@ Lkc::~Lkc()
 bool Lkc::update()
 {
   hide();
-  /*
-  cur_x = iiimccf->x;
-  cur_y = iiimccf->y;
-  
-  lkc_text->fw(16);
-  lkc_text->fh(16);
-
-  
-  shift();
-  
-  lkc_text->x(cur_x - shift_x);
-  lkc_text->y(cur_y - shift_y);
-*/
   show();
 }
 

@@ -1,6 +1,5 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
-using namespace std;
 
 struct CharBitMap;
 
@@ -8,15 +7,14 @@ class Font{
  public:
    ~Font();
    static Font* getInstance();
-   bool Heidht(int fontheight );
-   bool Width( int fontwidth );
    int  Height();
    int  Width();
    void render( int code, CharBitMap& tmp );
+ private:
+   void info();
    
  protected:
    Font();
-
 
  private:
    static Font* _instance;
