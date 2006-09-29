@@ -1,52 +1,93 @@
 #include "openvanilla.h"
 #include <iconv.h>
-#include <dlfcn.h>
 #include <iostream>
+#include <sstream>
+#include <dirent.h>
+
+
 
 /* 
  * implementation of OVImf
  */
+
+Imf* OVImf::_instance = 0;
+
+Imf* OVImf::getInstance()
+{
+  if( _instance == 0 )
+    _instance = new OVImf;
+
+  return _instance;
+}
+
+char* OVImf::commit_buf="\0";
+int OVImf::commit_buf_len=0;
+
+void OVImf::commitBuffer( char* input )
+{
+  commit_buf = input;
+  commit_buf_len = strlen( commit_buf );
+}
+
 OVImf::OVImf()
 {
-
-  // OV_MODULEDIR is defined in Makefile.am !!
-  char* OV_MODULEDIR=getenv("OVMODULE_DIR");
-  char* module_filename=getenv("OVMODULE_FILEPATH");
-
-  OVLibrary* mod = new OVLibrary();
+  current_module = 0;
+  
   preedit = new OVImfBuffer;
   lookupchoice = new OVImfCandidate;
   srv = new OVImfService;
   dict = new OVImfDictionary;
-  
-  mod->handle = dlopen(module_filename, RTLD_LAZY);
-  if(mod->handle == NULL){
-    fprintf(stderr, "dlopen %s failed\n", module_filename);
-    delete mod;
-  }
-  else{ 
-    mod->getModule = (TypeGetModule)dlsym( mod->handle, "OVGetModuleFromLibrary" );
-    mod->getLibVersion = (TypeGetLibVersion)dlsym( mod->handle, "OVGetLibraryVersion" );
-    mod->initLibrary = (TypeInitLibrary)dlsym( mod->handle, "OVInitializeLibrary" );
-  }
 
-  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
-     fprintf(stderr, "dlsym %s failed\n", module_filename);
-     delete mod;
-  }
-  
-  if( mod->getLibVersion() < OV_VERSION ){
-     fprintf(stderr, "%s %d is too old\n", module_filename, mod->getLibVersion());
-     delete mod;
-  }
-  
+  // OV_MODULEDIR is defined in Makefile.am !!
+  OV_MODULEDIR=getenv("OVMODULE_DIR");
+  lt_dlinit();
+  lt_dlsetsearchpath( OV_MODULEDIR );
+  //char* module_filename=getenv("OVMODULE_FILEPATH");
 
-  if(mod){
-     mod->initLibrary(srv, OV_MODULEDIR);
-     for(int i=0; OVModule* m = mod->getModule(i); i++)
-	mod_vector.push_back(m);
-     delete mod;
+  DIR *dir = opendir( OV_MODULEDIR );
+  if( dir )
+  {
+    struct dirent *d_ent;
+    while( ( d_ent = readdir(dir) ) != NULL )
+    {
+      if( strstr( d_ent->d_name, ".so") )
+      {
+	  OVLibrary* mod = new OVLibrary();
+	  
+	  mod->handle = lt_dlopen( d_ent->d_name );
+	  if(mod->handle == NULL){
+	    fprintf(stderr, "lt_dlopen %s failed\n", d_ent->d_name );
+	    delete mod;
+	  }
+	  else{ 
+	    mod->getModule = (TypeGetModule)lt_dlsym( mod->handle, "OVGetModuleFromLibrary" );
+	    mod->getLibVersion = (TypeGetLibVersion)lt_dlsym( mod->handle, "OVGetLibraryVersion" );
+	    mod->initLibrary = (TypeInitLibrary)lt_dlsym( mod->handle, "OVInitializeLibrary" );
+	  }
+
+	  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
+	     fprintf(stderr, "lt_dlsym %s failed\n", d_ent->d_name );
+	     delete mod;
+	  }
+	  
+	  if( mod->getLibVersion() < OV_VERSION ){
+	     fprintf(stderr, "%s %d is too old\n", d_ent->d_name, mod->getLibVersion());
+	     delete mod;
+	  }
+
+	  if(mod){
+	     OVModule* m;
+	     mod->initLibrary(srv, OV_MODULEDIR);
+	     for(int i=0; m = mod->getModule(i); i++)
+		mod_vector.push_back(m);
+	     delete mod;
+	  }
+
+      }
+    }
+    closedir(dir);
   }
+    
 
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[0]);
   OVInputMethod* im = static_cast<OVInputMethod*>(mod_vector[0]);
@@ -55,36 +96,102 @@ OVImf::OVImf()
   cxt->start( preedit, lookupchoice, srv );
 }
 
-
-char* OVImf::process_keyevent( char* buf )
+OVImf::~OVImf()
 {
-  
-  OVImfKeyCode* keyevent=new OVImfKeyCode(keychar);
-  // setup keyevent's values responding keychar, keycode, modifier
-  int ovkeycode=keychar;
-  /*
-  switch (keycode) {
-      case SCIM_KEY_Shift_L:
-      case SCIM_KEY_Control_L:
-      case SCIM_KEY_Alt_L:
-      case SCIM_KEY_Left:      ovkeycode=ovkLeft; break;
-      case SCIM_KEY_Shift_R:
-      case SCIM_KEY_Control_R:
-      case SCIM_KEY_Alt_R:
-      case SCIM_KEY_Right:     ovkeycode=ovkRight; break;
-      case SCIM_KEY_Up:        ovkeycode=ovkUp; break;
-      case SCIM_KEY_Down:      ovkeycode=ovkDown; break;
-      case SCIM_KEY_Delete:    ovkeycode=ovkDelete; break;
-      case SCIM_KEY_Home:      ovkeycode=ovkHome; break;
-      case SCIM_KEY_End:       ovkeycode=ovkEnd; break;
-      case SCIM_KEY_Tab:       ovkeycode=ovkTab; break;            
-      case SCIM_KEY_BackSpace: ovkeycode=ovkBackspace; break;
-      case SCIM_KEY_Escape:    ovkeycode=ovkEsc; break;
-      case SCIM_KEY_space:     ovkeycode=ovkSpace; break;
-      case SCIM_KEY_Return:    ovkeycode=ovkReturn; break;
+  lt_dlexit();
+
+}
+
+int stdin_to_openvanila_keycode( int keychar ) 
+{
+  int keycode;
+  switch( keychar )
+  {
+
+    case 9: keycode=ovkTab; break;
+    case 13: keycode=ovkReturn; break;
+    case 27: keycode=ovkEsc; break;
+    case 32: keycode=ovkSpace; break;
+    case 126: keycode=ovkDelete; break;
+    case 127: keycode=ovkBackspace; break;
+    default: 
+	      keycode = 0; break;
+  };
+  return keycode;
+}
+
+
+char* OVImf::process_input( char* buf )
+{
+  int keychar,keycode,modifier;
+  int buf_len = strlen( buf );
+
+  if( buf_len == 1 )
+  {
+    keychar = (int)buf[0];
+    keycode = stdin_to_openvanila_keycode(keychar);
+    modifier = 0;
   }
-  */
-  keyevent->setCode(ovkeycode);
+  else if( buf_len == 3 && buf[0]==27 && buf[1]==91 )
+  {
+    switch( buf[2] )
+    {
+      case 65:
+	keychar = 0;
+	keycode = ovkUp;
+	modifier = 0; // default as zero.
+	break;
+
+      case 66:
+	keychar = 0;
+	keycode = ovkDown;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 67:
+	keychar = 0;
+	keycode = ovkRight;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 68:
+	keychar = 0;
+	keycode = ovkLeft;
+	modifier = 0; // default as zero.
+	break;
+
+      default:
+	break;
+    }
+  }
+  else if( buf_len == 4 && buf[0]==27 && buf[1]==91 && buf[4]==126 )
+  {
+    switch( buf[3] )
+    {
+      case 53:
+	keychar = 0;
+	keycode = ovkPageUp;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 54:
+	keychar = 0;
+	keycode = ovkPageDown;
+	modifier = 0; // default as zero.
+	break;
+      default:
+	break;
+    }
+  }
+  else
+  {
+    keychar = 0;
+    keycode = 0;
+    modifier = 0; // default as zero.
+  }
+
+  OVImfKeyCode* keyevent=new OVImfKeyCode( keychar);
+  keyevent->setCode(keycode);
   switch(modifier)
   {
     case 0:
@@ -107,6 +214,33 @@ char* OVImf::process_keyevent( char* buf )
   
   cxt->keyEvent( keyevent, preedit, lookupchoice, srv);
 
+  if( commit_buf_len > 0 )
+    return commit_buf;
+  else
+    return "\0";
+}
+
+void OVImf::switch_lang()
+{
+  // most are zh_TW, zh_CN
+}
+
+void OVImf::switch_im()
+{
+  int next_module = current_module + 1;
+  if( next_module >= mod_vector.size() ){
+    next_module = 0;
+  }
+  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ next_module ] );
+  im->initialize(dict, srv, OV_MODULEDIR);
+  delete cxt; // clean old data
+  cxt = im->newContext();
+  cxt->start( preedit, lookupchoice, srv );
+}
+
+void OVImf::switch_im_per_lang()
+{
+  switch_im();
 }
 
 /*
@@ -133,40 +267,33 @@ void OVImfKeyCode::setAlt(int x)      { alt=x; }
  */
 
 OVImfBuffer::OVImfBuffer() {
-    //im=i;
-    //strcpy(buf, "i");
-    prdt = new Prdt;
+    strcpy(buf, "Init!!");
+    //Prdt* prdt = new Prdt;
 }
 
 OVBuffer* OVImfBuffer::clear() {
-  prdt->clear();  
-  //strcpy(buf, "");
-    //im->update_preedit_string(WideString());
-    //im->hide_preedit_string();
-    return this;
+  //prdt->clear();  
+  strcpy(buf, "");
+  return this;
 }
 
 OVBuffer* OVImfBuffer::append(const char *s) {
-  prdt->append(s);
-  
-  //strcat(buf, s);
-    return this;
+  //prdt->append(s);
+  strcat(buf, s);
+  return this;
 }
 
 OVBuffer* OVImfBuffer::send() {
-    //WideString bs=utf8_mbstowcs(buf);
-    //std::cout << buf << std::endl;
+    OVImf::commitBuffer( buf );
     clear();
-    //im->commit_string(bs);
     return this;
 }
 
 OVBuffer* OVImfBuffer::update() {
-    //im->update_preedit_string(utf8_mbstowcs(buf));
     if (strlen(buf)) 
-      ;//im->show_preedit_string();
+      ;
     else 
-      ;//im->hide_preedit_string();     
+      ;
     
     return this;
 }
@@ -176,7 +303,9 @@ OVBuffer* OVImfBuffer::update(int cursorPos, int markFrom, int markTo) {
 }
 
 int OVImfBuffer::isEmpty() {
-    if (!strlen(buf)) return 1;
+    if (!strlen(buf)) 
+      return 1;
+    
     return 0;
 }
 
@@ -187,26 +316,25 @@ int OVImfBuffer::isEmpty() {
 
 OVImfCandidate::OVImfCandidate() {
     onscreen=0;
-    lkc = new Lkc;
-    //strcpy(buf, "");
+    //Lkc* lkc = new Lkc;
+    strcpy(buf, "");
 }
 
 OVCandidate* OVImfCandidate::clear() {
-    lkc->clear();
-    //strcpy(buf, "");
+    //lkc->clear();
+    strcpy(buf, "");
     return this;
 }
 
 OVCandidate* OVImfCandidate::append(const char *s) {
-    lkc->append( s );
-    //strcat(buf, s);
+    //lkc->append( s );
+    strcat(buf, s);
     return this;
 }
 
 OVCandidate* OVImfCandidate::hide() {
     if (onscreen) {
-        lkc->hide();
-	//im->hide_aux_string();
+        //lkc->hide();
 	onscreen=0;
     }
     return this;
@@ -214,18 +342,16 @@ OVCandidate* OVImfCandidate::hide() {
 
 OVCandidate* OVImfCandidate::show() {
     if (!onscreen) {
-        lkc->draw();
-        //std::cout << buf << std::endl;
-	//im->show_aux_string();
+        //lkc->draw();
+        std::cout << buf << std::endl;
 	onscreen=1;
     }
     return this;
 }
 
 OVCandidate* OVImfCandidate::update() {
-    //im->update_aux_string(utf8_mbstowcs(buf));
-    lkc->update();
-      //std::cout << buf << std::endl;
+    //lkc->update();
+    std::cout << buf << std::endl;
     return this;
 }
 
@@ -237,12 +363,11 @@ int OVImfCandidate::onScreen() {
 /*
  * implementation of OVImfService
  */
-#define UserSpacePath "/home/mat"
 
 void OVImfService::beep() { }
 void OVImfService::notify(const char *msg) { fprintf(stderr, "%s\n", msg); }
 const char *OVImfService::locale(){ return "zh_TW"; }
-const char *OVImfService::userSpacePath(const char *modid) { return UserSpacePath; }
+const char *OVImfService::userSpacePath(const char *modid){ return "/tmp"; }
 const char *OVImfService::pathSeparator() { return "/"; }
 
 const char *OVImfService::toUTF8(const char *encoding, const char *src) { 
@@ -344,3 +469,30 @@ int OVImfService::UTF8ToUTF16(const char *src, unsigned short **rcvr) {
 }
 
 
+/*
+ * Implementation of OVImfDictionary
+ */
+
+int OVImfDictionary::keyExist(const char *key) {
+   return _dict.find(key) != _dict.end();
+}
+
+int OVImfDictionary::getInteger(const char *key) {
+    return atoi(_dict[key].c_str());
+}
+
+int OVImfDictionary::setInteger(const char *key, int value) {
+   std::stringstream ss;
+   ss << value;
+   _dict.insert( std::make_pair(key, ss.str()) );
+    return value;
+}
+
+const char* OVImfDictionary::getString(const char *key) {
+    return _dict[key].c_str();
+}
+
+const char* OVImfDictionary::setString(const char *key, const char *value) {
+   _dict.insert( std::make_pair(key, value) );
+   return value;
+}

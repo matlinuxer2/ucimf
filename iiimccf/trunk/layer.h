@@ -1,3 +1,4 @@
+#include <vector>
 
 typedef unsigned long Word;
 struct CharBitMap;
@@ -57,7 +58,7 @@ class utf_string
     char* utf16();
     char* utf8();
   private:
-    vector<Word> CharCodes;
+    std::vector<Word> CharCodes;
   
 };
 
