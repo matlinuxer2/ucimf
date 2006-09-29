@@ -1,3 +1,6 @@
+#include "subject_observer.h"
+#include <iterator>
+
 /*
  * implementation of Subject
  */

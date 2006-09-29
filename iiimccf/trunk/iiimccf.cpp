@@ -2,12 +2,16 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
-#include "widget.h"
+//#include "widget.h"
+#include "subject_observer.h"
 
 using namespace std;
-
 #define CONVERT_BUFSIZE 48
 
+// Prdt *prdt;
+// Lkc *lkc;
+// Stts *stts;
+// TrackPoint *trkpt;
 
 /*
  * Definition of utilities functions.
@@ -111,19 +115,6 @@ char* iiimcf_text_to_utf8( IIIMCF_text t)
 	return pr;
 }
 
-bool  get_committed_text(IIIMCF_context context, IIIMCCF& iiimccf)
-{
-	IIIMF_status st;
-	IIIMCF_text text;
-	
-	iiimcf_get_committed_text( context , &text);
-	//iiimcf_get_text_length( text, buf_len );
-
-	char* buf_utf8 = iiimcf_text_to_utf8( text );
-	int buf_utf8_len = strlen( buf_utf8 );
-	
-	return 0;
-}
 
 char* iiimcf_string_to_utf8( const IIIMP_card16 *pu16 )
 {
@@ -323,24 +314,384 @@ vector<IIIMP_card16> text_to_vector( IIIMCF_text text )
 
 
 
-/* 
- * Definition of iiimcf_components
+
+
+
+
+/*
+ * Implementation of IIIMCCF
  */
 
+Imf* IIIMCCF::_instance = 0;
+
+Imf* IIIMCCF::getInstance()
+{
+  if( _instance == 0 )
+    _instance = new IIIMCCF;
+
+  return _instance;
+}
+  
+
+IIIMCCF::IIIMCCF()
+{
+	IIIMF_status st;
+    	IIIMCF_attr attr;
+
+    	st = iiimcf_initialize( IIIMCF_ATTR_NULL );
+    	st = iiimcf_create_attr(&attr);
+    	st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
+	                                      "IIIM Console Client Framework");
+	st = iiimcf_create_handle(attr, &handle );
+    	st = iiimcf_destroy_attr(attr);
+
+	cur_ims_id = 0;
+    
+	const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
+	char *idname, *hrn, *domain;
+
+	st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
+	iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
+	idname = iiimcf_string_to_utf8(u16idname);
+
+	st = iiimcf_create_attr( &attr );
+	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
+	
+	st = iiimcf_create_context( handle,attr, &context );
+    
+	IIIMCF_event event;
+	iiimcf_create_trigger_notify_event( 1, &event);
+	iiimcf_forward_event( context, event);
+	
+	//trkpt = new TrackPoint;
+	//stts = new Stts;
+	//prdt = new Prdt;
+	//lkc = new Lkc;
+	//trkpt->attach( stts );
+}
+
+
+IIIMCCF::~IIIMCCF()
+{
+	//delete trkpt;
+	//delete stts;
+	
+	IIIMCF_event event;
+	iiimcf_create_trigger_notify_event( 0, &event );
+	iiimcf_forward_event( context, event );
+
+	iiimcf_destroy_handle( handle );
+	iiimcf_finalize();  
+}
+
+
+void IIIMCCF::switch_lang()
+{
+
+}
+
+void IIIMCCF::switch_im()
+{
+    IIIMF_status st;
+    IIIMCF_attr attr;
+    IIIMCF_event event;
+    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
+    char *idname, *hrn, *domain;
+
+    
+    if ( cur_ims_id >= (num_of_ims - 1) )
+    {  
+      cur_ims_id =0;
+    }
+    else
+    {
+      cur_ims_id++;
+    }
+
+    iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
+    idname = iiimcf_string_to_utf8(u16idname);
+    
+
+    // destruct
+    iiimcf_create_trigger_notify_event( 0, &event );
+    iiimcf_forward_event( context, event );
+    iiimcf_destroy_context( context );
+   
+    // construct
+    st = iiimcf_create_attr( &attr );
+    st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
+    st = iiimcf_create_context( handle,attr, &context );
+    st = iiimcf_create_trigger_notify_event( 1, &event);
+    st = iiimcf_forward_event( context, event);
+    
+    //stts->update();
+    cout << idname << endl;
+    cmt_buf = idname;
+    cmt_buf_len = strlen( cmt_buf );
+}
+
+void IIIMCCF::switch_im_per_lang()
+{
+
+
+}
+
+
+static const int stdin_to_iiimf_keycode[] = {
+  // ascii code 00-0
+	IIIMF_KEYCODE_UNDEFINED, 
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_TAB,	 
+
+        // 10-19
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_CLEAR,
+	IIIMF_KEYCODE_ENTER,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+
+  	// 20-29
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_ESCAPE,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+
+        // 30-39
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_UNDEFINED,
+	IIIMF_KEYCODE_SPACE,
+	IIIMF_KEYCODE_EXCLAMATION_MARK,
+	IIIMF_KEYCODE_QUOTEDBL,
+	IIIMF_KEYCODE_NUMBER_SIGN,
+	IIIMF_KEYCODE_DOLLAR,
+	IIIMF_KEYCODE_UNDEFINED, 		/* % */
+	IIIMF_KEYCODE_AMPERSAND,
+	IIIMF_KEYCODE_QUOTE,
+
+	// 40-49
+	IIIMF_KEYCODE_LEFT_PARENTHESIS,
+	IIIMF_KEYCODE_RIGHT_PARENTHESIS,
+	IIIMF_KEYCODE_ASTERISK,
+	IIIMF_KEYCODE_PLUS,
+	IIIMF_KEYCODE_COMMA,
+	IIIMF_KEYCODE_MINUS,
+	IIIMF_KEYCODE_PERIOD,
+	IIIMF_KEYCODE_SLASH,
+	IIIMF_KEYCODE_0,
+	IIIMF_KEYCODE_1,
+
+	// 50-59
+	IIIMF_KEYCODE_2,
+	IIIMF_KEYCODE_3,
+	IIIMF_KEYCODE_4,
+	IIIMF_KEYCODE_5,
+	IIIMF_KEYCODE_6,
+	IIIMF_KEYCODE_7,
+	IIIMF_KEYCODE_8,
+	IIIMF_KEYCODE_9,
+	IIIMF_KEYCODE_COLON,
+	IIIMF_KEYCODE_SEMICOLON,
+
+	// 60-69
+	IIIMF_KEYCODE_LESS,
+	IIIMF_KEYCODE_EQUALS,
+	IIIMF_KEYCODE_GREATER,
+	IIIMF_KEYCODE_UNDEFINED,		/* ? */
+	IIIMF_KEYCODE_AT,
+	IIIMF_KEYCODE_A,
+	IIIMF_KEYCODE_B,
+	IIIMF_KEYCODE_C,
+	IIIMF_KEYCODE_D,
+	IIIMF_KEYCODE_E,
+
+	// 70-79
+	IIIMF_KEYCODE_F,
+	IIIMF_KEYCODE_G,
+	IIIMF_KEYCODE_H,
+	IIIMF_KEYCODE_I,
+	IIIMF_KEYCODE_J,
+	IIIMF_KEYCODE_K,
+	IIIMF_KEYCODE_L,
+	IIIMF_KEYCODE_M,
+	IIIMF_KEYCODE_N,
+	IIIMF_KEYCODE_O,
+
+	// 80-89
+	IIIMF_KEYCODE_P,
+	IIIMF_KEYCODE_Q,
+	IIIMF_KEYCODE_R,
+	IIIMF_KEYCODE_S,
+	IIIMF_KEYCODE_T,
+	IIIMF_KEYCODE_U,
+	IIIMF_KEYCODE_V,
+	IIIMF_KEYCODE_W,
+	IIIMF_KEYCODE_X,
+	IIIMF_KEYCODE_Y,
+
+	// 90-99
+	IIIMF_KEYCODE_Z,
+	IIIMF_KEYCODE_OPEN_BRACKET,
+	IIIMF_KEYCODE_BACK_SLASH,
+	IIIMF_KEYCODE_CLOSE_BRACKET,
+	IIIMF_KEYCODE_CIRCUMFLEX,
+	IIIMF_KEYCODE_UNDERSCORE,
+	IIIMF_KEYCODE_BACK_QUOTE,
+	IIIMF_KEYCODE_A,
+	IIIMF_KEYCODE_B,
+	IIIMF_KEYCODE_C,
+
+	// 100-109
+	IIIMF_KEYCODE_D,
+	IIIMF_KEYCODE_E,
+	IIIMF_KEYCODE_F,
+	IIIMF_KEYCODE_G,
+	IIIMF_KEYCODE_H,
+	IIIMF_KEYCODE_I,
+	IIIMF_KEYCODE_J,
+	IIIMF_KEYCODE_K,
+	IIIMF_KEYCODE_L,
+	IIIMF_KEYCODE_M,
+
+	// 110-119
+	IIIMF_KEYCODE_N,
+	IIIMF_KEYCODE_O,
+	IIIMF_KEYCODE_P,
+	IIIMF_KEYCODE_Q,
+	IIIMF_KEYCODE_R,
+	IIIMF_KEYCODE_S,
+	IIIMF_KEYCODE_T,
+	IIIMF_KEYCODE_U,
+	IIIMF_KEYCODE_V,
+	IIIMF_KEYCODE_W,
+
+	// 120-126
+	IIIMF_KEYCODE_X,
+	IIIMF_KEYCODE_Y,
+	IIIMF_KEYCODE_Z,
+	IIIMF_KEYCODE_BRACELEFT,
+	IIIMF_KEYCODE_UNDEFINED,		/* | */
+	IIIMF_KEYCODE_BRACERIGHT,
+	IIIMF_KEYCODE_DELETE,		/* ~ */
+	IIIMF_KEYCODE_BACK_SPACE,		/* BACKSPACE */
+};
+
+void stdin_to_iiimcf_keyevent( char* buf, IIIMCF_keyevent& kev )
+{
+  int buf_len = strlen( buf );
+  int keychar,keycode,modifier;
+
+  if( buf_len== 1 )
+  {
+    keychar = (int)buf[0];
+    keycode = stdin_to_iiimf_keycode[keychar];
+    modifier = 0; // default as zero.
+  }
+  else if( buf_len == 3 && buf[0]==27 && buf[1]==91 )
+  {
+    switch( buf[2] )
+    {
+      case 65:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_UP;
+	modifier = 0; // default as zero.
+	break;
+
+      case 66:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_DOWN;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 67:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_RIGHT;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 68:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_LEFT;
+	modifier = 0; // default as zero.
+	break;
+
+      default:
+	break;
+    }
+  }
+  else if( buf_len == 4 && buf[0]==27 && buf[1]==91 && buf[4]==126 )
+  {
+    switch( buf[3] )
+    {
+      case 53:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_PAGE_UP;
+	modifier = 0; // default as zero.
+	break;
+	
+      case 54:
+	keychar = 0;
+	keycode = IIIMF_KEYCODE_PAGE_DOWN;
+	modifier = 0; // default as zero.
+	break;
+      default:
+	break;
+    }
+  }
+  else
+  {
+    keychar = 0;
+    keycode = 0;
+    modifier = 0; // default as zero.
+  }
+  
+  kev.keycode = keycode;
+  kev.keychar = keychar;
+  kev.modifier = modifier;
+  kev.time_stamp = time( NULL );
+
+}
+
+
 IIIMF_status
-iiimccf_preedit(
+IIIMCCF::iiimccf_preedit(
     IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
+    IIIMCF_event event
 ){
 
   IIIMF_status st;
   IIIMCF_event_type type;
+  
   IIIMCF_text buf0;
+  vector<IIIMP_card16> buf_utf16;
+  IIIMP_card16* buf1;
+  int buf1_len=0;
+  IIIMP_card16 ch;
+  int nfb;
+  const IIIMP_card32 *pids, *pfbs;
+
   st = iiimcf_get_event_type( event, &type );
   if( st != IIIMF_STATUS_SUCCESS ) return st;
-   
+  
+  if( type < IIIMCF_EVENT_TYPE_UI_PREEDIT || type > IIIMCF_EVENT_TYPE_UI_PREEDIT_END )
+    return IIIMF_STATUS_COMPONENT_INDIFFERENT;
+  
   switch( type ){
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
 		  mesg("preedit");
@@ -348,50 +699,39 @@ iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
-		  iiimccf->prdt = new Prdt( context );
-		  iiimccf->prdt->update();
-		  iiimccf->prdt->show();
+		  //prdt = new Prdt;
+		  //prdt->update();
+		  //prdt->show();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
 		  mesg("preedit changed");
 		  
-		  IIIMP_card16* buf1;
-		  int buf1_len;
-		  vector<IIIMP_card16> buf_utf16(buf1_len);
-		  IIIMP_card16 ch;
-		  int nfb;
-		  const IIIMP_card32 *pids, *pfbs;
-		  
 		  st = iiimcf_get_preedit_text( context, &buf0 , &cur_pos);
-		  if( st != IIIMF_STATUS_SUCCESS )
-		  {
-		    return false;
-		  }
+		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
 
 		  st = iiimcf_get_text_utf16string( buf0, ( const IIIMP_card16** ) &buf1 );
-		  if( st != IIIMF_STATUS_SUCCESS )
-		  {
-		    return false;
-		  }
+		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
 
 		  st = iiimcf_get_text_length( buf0, &buf1_len ); 
-		  if( st != IIIMF_STATUS_SUCCESS ) return false;
-
+		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
+		  
+		  buf_utf16.resize(buf1_len);
+		  
 		  for( int i=0; i < buf1_len; i++ )
 		  {
 		    st = iiimcf_get_char_with_feedback( buf0, i, &ch, &nfb, &pids, &pfbs );
-		    if( st != IIIMF_STATUS_SUCCESS ) return false;
+		    if( st != IIIMF_STATUS_SUCCESS ) check(st);
+
 		    buf_utf16[i] = ch;
 		  }
-		  prdt->append( buf_utf16 );
-
+		  //prdt->append( buf_utf16 );
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
-		  iiimccf->prdt->hide();
-		  iiimccf->prdt->empty();
+		  //prdt->hide();
+		  //prdt->empty();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
@@ -406,11 +746,9 @@ iiimccf_preedit(
 }
 
 IIIMF_status
-iiimccf_lookup_choice(
+IIIMCCF::iiimccf_lookup_choice(
     IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
+    IIIMCF_event event
 ){
 
   IIIMF_status st;
@@ -420,6 +758,9 @@ iiimccf_lookup_choice(
   st = iiimcf_get_event_type( event, &type );
   if( st != IIIMF_STATUS_SUCCESS ) return st;
   
+  if( type < IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE || type > IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END )
+    return IIIMF_STATUS_COMPONENT_INDIFFERENT;
+  
   switch( type ){	
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE: 
 		  debug( "lookup" );
@@ -427,24 +768,20 @@ iiimccf_lookup_choice(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  iiimccf->lkc = new Lkc( context );
-		  iiimccf->lkc->update();
-		  iiimccf->lkc->show();
+		  //lkc = new Lkc;
+		  //lkc->update();
+		  //lkc->show();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
 
 		  st = iiimcf_get_lookup_choice( context, &ilc );
-		  if( st != IIIMF_STATUS_SUCCESS )
-		  {
-		    // throw error
-		    return false;
-		  }
+		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
 		  
 		  int lkc_size, idx_first, idx_last;
 		  st = iiimcf_get_lookup_choice_size( ilc, &lkc_size, &idx_first, &idx_last, &cur_idx );
-		  if( st!= IIIMF_STATUS_SUCCESS ) return false;
+		  if( st!= IIIMF_STATUS_SUCCESS ) check(st);
 
 		  for( int i=0; i< lkc_size; i++ )
 		  { 
@@ -453,7 +790,7 @@ iiimccf_lookup_choice(
 		    iiimcf_get_lookup_choice_item( ilc, i, &cand, &label, &flag );
 		    if( flag & IIIMCF_LOOKUP_CHOICE_ITEM_ENABLED )
 		    {
-		      lkc->append( text_to_vector(label) + text_to_vector(cand) );
+		      //lkc->append( text_to_vector(label) + text_to_vector(cand) );
 		    }
 		  }
 		  
@@ -461,8 +798,8 @@ iiimccf_lookup_choice(
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
 		  debug( "lookup done" );
-		  iiimccf->lkc->hide();
-		  iiimccf->lkc->empty();
+		  //lkc->hide();
+		  //lkc->empty();
 		  break;
 
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
@@ -477,11 +814,9 @@ iiimccf_lookup_choice(
 }
 
 IIIMF_status
-iiimccf_commit(
+IIIMCCF::iiimccf_commit(
     IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
+    IIIMCF_event event
 ){
     IIIMF_status st;
     IIIMCF_event_type type;
@@ -494,19 +829,18 @@ iiimccf_commit(
 	switch( type ){	
 	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
 	      debug("commit");
-	      //cmt_update(context);
 	      IIIMCF_text text;
 	      
 	      st = iiimcf_get_committed_text( context, &text );
 	      
 	      if( st != IIIMF_STATUS_SUCCESS )
 	      { 
-		iiimccf->cmt_buf_len = 0;
+		cmt_buf_len = 0;
 	      }
 	      else
 	      {
-		iiimccf->cmt_buf = iiimcf_text_to_utf8( text );
-		iiimccf->cmt_buf_len = strlen( iiimccf->cmt_buf );
+		cmt_buf = iiimcf_text_to_utf8( text );
+		cmt_buf_len = strlen( cmt_buf );
 	      }
 	      break;
 		  
@@ -530,11 +864,9 @@ iiimccf_commit(
 }
 
 IIIMF_status
-iiimccf_status(
+IIIMCCF::iiimccf_status(
     IIIMCF_context context,
-    IIIMCF_event event,
-    IIIMCF_component current,
-    IIIMCF_component parent
+    IIIMCF_event event
 ){
 	IIIMCF_text text; 
 	IIIMF_status st;
@@ -542,6 +874,10 @@ iiimccf_status(
 	st = iiimcf_get_event_type( event, &type );
 	if( st != IIIMF_STATUS_SUCCESS ) return st;
 	
+        if ( type < IIIMCF_EVENT_TYPE_UI_COMMIT || type > IIIMCF_EVENT_TYPE_UI_COMMIT_END )
+	  return IIIMF_STATUS_COMPONENT_INDIFFERENT;
+
+
 	switch( type ){	
 		case IIIMCF_EVENT_TYPE_UI_STATUS:
 		  break;
@@ -592,128 +928,23 @@ iiimccf_status(
 }
 
 
-
-
-IIIMF_status regist_component( IIIMCF_handle handle )
+IIIMF_status IIIMCCF::dispatch_event(IIIMCF_context context, IIIMCF_event event)
 {
-	IIIMCF_component parent, child;
-	IIIMF_status st;
-
-	/*  Register new component */
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.preedit",&parent);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-	st = iiimcf_register_component( handle,"iiimccf-preedit",iiimccf_preedit,parent,&child);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-         
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.status",&parent);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-	st = iiimcf_register_component( handle,"iiimccf-status",iiimccf_status,parent,&child);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-        
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.lookup_choice",&parent);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-	st = iiimcf_register_component( handle,"iiimccf-lookup_choice",iiimccf_lookup_choice,parent,&child);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-
-	// st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI.commit",&parent);
-	st = iiimcf_get_component( handle,"org.OpenI18N.IIIMCF.UI",&parent);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
-	st = iiimcf_register_component( handle,"iiimccf-commit",iiimccf_commit,parent,&child);
-	if( st != IIIMF_STATUS_SUCCESS ) return st;
+  IIIMF_status st;
+  if( iiimccf_preedit( context, event ) == IIIMF_STATUS_SUCCESS )
+    return IIIMF_STATUS_SUCCESS;
+  if( iiimccf_lookup_choice( context, event ) == IIIMF_STATUS_SUCCESS )
+    return IIIMF_STATUS_SUCCESS;
+  if( iiimccf_commit( context, event ) == IIIMF_STATUS_SUCCESS )
+    return IIIMF_STATUS_SUCCESS;
+  if( iiimccf_status( context, event ) == IIIMF_STATUS_SUCCESS )
+    return IIIMF_STATUS_SUCCESS;
+  
+  return iiimcf_dispatch_event( context, event );
 
 }
 
-
-
-/*
- * Implementation of IIIMCCF
- */
-IIIMCCF::IIIMCCF()
-{
-	IIIMF_status st;
-    	IIIMCF_attr attr;
-
-    	st = iiimcf_initialize( IIIMCF_ATTR_NULL );
-    	st = iiimcf_create_attr(&attr);
-    	st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
-	                                      "IIIM Console Client Framework");
-	st = iiimcf_create_handle(attr, &handle );
-    	st = iiimcf_destroy_attr(attr);
-
-	check( regist_component(handle) );
-        
-	/*
-	cur_ims_id = 0;
-    
-	IIIMCF_input_method *pims;
-	const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
-	char *idname, *hrn, *domain;
-	int num_of_ims;
-
-	st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
-	iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
-	idname = iiimcf_string_to_utf8(u16idname);
-	*/
-
-	st = iiimcf_create_attr( &attr );
-	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
-	
-	st = iiimcf_create_context( handle,attr, &context );
-    
-	IIIMCF_event event;
-	iiimcf_create_trigger_notify_event( 1, &event);
-	iiimcf_forward_event( context, event);
-	
-	trkpt = new TrackPoint;
-	stts = new Stts;
-	prdt = new Prdt;
-	lkc = new Lkc;
-	trkpt->attach( stts );
-}
-
-IIIMCCF::~IIIMCCF()
-{
-  delete trkpt;
-  delete stts;
-	IIIMCF_event event;
-	iiimcf_create_trigger_notify_event( 0, &event );
-	iiimcf_forward_event( context, event );
-
-	iiimcf_destroy_handle( handle );
-	iiimcf_finalize();  
-}
-
-bool IIIMCCF::on()
-{
-    IIIMF_status st;
-	
-    // IIIMCF_event event;
-    // iiimcf_create_trigger_notify_event( 1, &event);
-    // iiimcf_forward_event( context, event);
-    
-    stts->show();
-    prdt->show();
-    lkc->show();
-    
-    return true;
-}
-
-bool IIIMCCF::off()
-{
-        stts->hide();
-	prdt->hide();
-	lkc->hide();
-
-	// IIIMCF_event event;
-	// iiimcf_create_trigger_notify_event( 0, &event );
-	// iiimcf_forward_event( context, event );
-
-	return true;
-}
-
-void stdin_to_iiimcf_keyevent( char* buf, IIIMCF_keyevent& kev );
-//int IIIMCCF::proc( int keycode, int keychar, int modifier )
-int IIIMCCF::proc( char* buf_input )
+char* IIIMCCF::process_input( char* buf_input )
 {
 	IIIMCF_event event,ev ;
 	IIIMCF_keyevent kev;
@@ -721,10 +952,6 @@ int IIIMCCF::proc( char* buf_input )
   	stdin_to_iiimcf_keyevent( buf_input, kev );
 
 	/* sent the keyevent to iiimcf */
-	kev.keycode = keycode;
-    	kev.keychar = keychar;
-        kev.modifier = modifier;
-    	kev.time_stamp = time( NULL );
         iiimcf_create_keyevent( &kev, &ev );
         iiimcf_forward_event( context, ev );
 
@@ -732,7 +959,7 @@ int IIIMCCF::proc( char* buf_input )
 	while( iiimcf_get_next_event( context, &event ) == IIIMF_STATUS_SUCCESS ){
 		
 	    IIIMF_status st;
-	    st = iiimcf_dispatch_event( context , event );
+	    st = dispatch_event( context , event );
 	    
 	    if (st != IIIMF_STATUS_SUCCESS) {
 			if (st == IIIMF_STATUS_COMPONENT_FAIL) {
@@ -750,22 +977,13 @@ int IIIMCCF::proc( char* buf_input )
 	    iiimcf_ignore_event( event );
 
     	}
+	
+	if( cmt_buf_len > 0 )
+	  return cmt_buf;
+	else
+	  return "\0";
 }
-
-int IIIMCCF::result( char* *buf_out )
-{
-  int buf_len=0;
-  if( cmt_buf_len > 0 )
-  {
-    (*buf_out) = cmt_buf ;
-    buf_len=strlen( (*buf_out) );
-    cmt_buf_len = 0;
-    cmt_buf = 0 ;
-  }
-
-  return buf_len;
-}
-
+/*
 
 bool IIIMCCF::ims_chg()
 {
@@ -851,6 +1069,7 @@ bool IIIMCCF::ims_show()
     return true;
 }
 
+
 bool IIIMCCF::ims_set ( )
 {
   IIIMF_status st;
@@ -859,11 +1078,11 @@ bool IIIMCCF::ims_set ( )
   st = iiimcf_create_attr( &attr );
   
   st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
-  /* libiiimcf.a doesn't define the iiimcf_icsetvalues function*/
+  // libiiimcf.a doesn't define the iiimcf_icsetvalues function 
   //st = iiimcf_seticvalues( context, attr );
   
   st = iiimcf_destroy_attr( attr );
   
   return true;
 }
-
+*/

@@ -1,14 +1,15 @@
 #include <OpenVanilla.h>
 #include "imf.h"
-#include "widget.h"
 #include <vector>
+#include <map>
+#include <string>
+#include <ltdl.h>
 
 typedef OVModule* (*TypeGetModule)(int);
 typedef int (*TypeInitLibrary)(OVService*, const char*);
 typedef unsigned int (*TypeGetLibVersion)();
-typedef void* dlhandle;
 struct OVLibrary {
-     dlhandle handle;
+     lt_dlhandle handle;
      TypeGetModule getModule;
      TypeInitLibrary initLibrary;
      TypeGetLibVersion getLibVersion;
@@ -48,8 +49,7 @@ public:
     virtual int isEmpty();
 
 protected:
-    //char buf[512];
-    Prdt prdt;
+    char buf[512];
 };
 
 class OVImfCandidate : public OVCandidate {
@@ -63,9 +63,8 @@ public:
     virtual int onScreen();
 
 protected:
-    Lkc lkc;
-    //char buf[512];
-    //int onscreen;
+    char buf[512];
+    int onscreen;
 };
 
 class OVImfService : public OVService {
@@ -84,54 +83,45 @@ private:
     unsigned short u_internal[1024];
 };
 
-#include<map>
-#include<string>
-#include<sstream>
-#include<cctype>
 
 // Abstract interface for a simple dictionary. It is recommended that this
 // dictionary be implemented as a type-free dictionary, i.e. you can replace
 // the key with any value of any type, and type conversion between integer and
 // string is done transparently, like what is done in e.g. sqlite3.
 class OVImfDictionary : public OVDictionary {
-protected:
+  public:
+    virtual int keyExist(const char *key);
+    virtual int getInteger(const char *key);
+    virtual int setInteger(const char *key, int value);
+    virtual const char* getString(const char *key);
+    virtual const char* setString(const char *key, const char *value);
+  protected:
    std::map<std::string, std::string> _dict;
-public:
-    virtual int keyExist(const char *key) {
-       return _dict.find(key) != _dict.end();
-    }
-    virtual int getInteger(const char *key) {
-        return atoi(_dict[key].c_str());
-    }
-    virtual int setInteger(const char *key, int value) {
-       std::stringstream ss;
-       ss << value;
-       _dict.insert( std::make_pair(key, ss.str()) );
-        return value;
-    }
-    virtual const char* getString(const char *key) {
-        return _dict[key].c_str();
-    }
-    virtual const char* setString(const char *key, const char *value) {
-       _dict.insert( std::make_pair(key, value) );
-       return value;
-    }
+
 };
 
 
 class OVImf : public Imf
 {
   public:
-    OVImf();
-    ~OVImf(); 
-    virtual char* process_input( char* buf );
-    virtual bool switch_im()=0;
-    virtual bool switch_lang()=0;
-    virtual bool switch_im_per_lang()=0;
-    virtual bool switch_im_custom()=0;
+    ~OVImf();
+    static Imf* getInstance();
+    static void commitBuffer( char* );
+
+    char* process_input( char* buf );
+    void switch_im();
+    void switch_lang();
+    void switch_im_per_lang();
     
   protected:
+    OVImf();
+    static Imf* _instance;
+    static char* commit_buf;
+    static int commit_buf_len;
+
+    char* OV_MODULEDIR;
     std::vector<OVModule*> mod_vector; 
+    int current_module;
 
     OVInputMethodContext *cxt;
     OVBuffer *preedit;
