@@ -59,7 +59,6 @@
 #include "util.h"
 #include "csv.h"
 #include "main.h"
-#include "input.h"
 
 #ifdef SYSCONFDIR
 #define	FILE_JFBTERM_CONF	SYSCONFDIR"/jfbterm.conf"
@@ -436,11 +435,9 @@ int main(int argc, char *argv[])
 	if (!tn) {
 		tn = "jfbterm";
 	}
-	setup_keys();
 	
 	tterm_start(&gTerm, tn, en);
-        
-	restore_keys();
+	
 	tfbm_close(&gFramebuffer);
 	tfont_ary_final();
 	exit(EXIT_SUCCESS);
