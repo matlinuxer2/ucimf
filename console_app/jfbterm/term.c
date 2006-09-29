@@ -55,8 +55,7 @@
 
 #include "config.h"
 
-#include <iiimccf.h>
-#include "input.h"
+#include <ucimf.h>
 
 int gChildProcessId = 0;
 
@@ -179,9 +178,8 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 	signal(SIGCHLD, sigchld);
 	atexit(application_final);
 			  
-	/* IIIMCCF */
-	int SWITCH_TO_IIIMCCF=0;
-        iiimccf_init();
+	/* Ucimf initialization */
+        ucimf_init();
 
 	/* not available
 	 * VtInit();
@@ -214,6 +212,10 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 		}
 		if (FD_ISSET(0, &fds)) {
 			ret = read(0, buf, BUF_SIZE);
+			
+			// ucimf input method framework switch on/off 
+			ucimf_switch( buf, &ret );
+			
 #ifdef JFB_ENABLE_DIMMER
 			idle_time = 0;
 			if (blank) {
@@ -223,59 +225,9 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			}
 #endif
 			if (ret > 0) {
-			  //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
-			  //iiimccf_pos( p->vterm.pen.x * gFontsWidth, p->vterm.pen.y*gFontsHeight);
-			  
-			  /* "203" has been registed for "Ctrl-Space" in input.c */    	    
-			  if( ret==1 && buf[0] == 203 )
-			  {
-
-			      if( SWITCH_TO_IIIMCCF == 0 ){
-			        SWITCH_TO_IIIMCCF = 1;
-				//iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
-			        iiimccf_on();
-			      }else{
-			        SWITCH_TO_IIIMCCF = 0;
-			        iiimccf_off();
-			      }
-			     continue;
-			  }
-			 
-			  /* "204" has been registed for "Ctrl-Shift" in input.c */
-			  if( ret == 1 && buf[0] == 204 )
-			  {  
-			     //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
-			     if( SWITCH_TO_IIIMCCF == 0 ){
-			       SWITCH_TO_IIIMCCF = 1;
-			       iiimccf_on();
-			     }else{
-			       iiimccf_change_ims();
-			     }
-			     continue;
-			  }
-			  
-			  if( SWITCH_TO_IIIMCCF == 1 )
-			  {
-			      //iiimccf_pos( p->vterm.cursor.x * gFontsWidth, p->vterm.cursor.y*gFontsHeight);
-			      
-			      int keycode, keychar, modifier;
-			      
-			      keyinput_to_keyevent( buf, ret, &keycode, &keychar, &modifier ); 
-			      iiimccf_proc( keycode, keychar, modifier );
-			      
-			      char* committed_buf;
-			      int committed_buf_len=0 ;
-			      committed_buf_len = iiimccf_result( &committed_buf );
-			      if ( committed_buf_len > 0 ){
-				write( p->ptyfd, committed_buf, committed_buf_len );
-			      }else{
-					      continue;
-			      }
-			  }
-			  else
-			  {
-				write(p->ptyfd, buf, ret);
-			  }
+			    //write(p->ptyfd, buf, ret);
+			    char *ucimf_result = ucimf_process_stdin( buf, &ret );
+			    write( p->ptyfd, ucimf_result , strlen(ucimf_result) );
 			  
 			}
 		} else if (FD_ISSET(p->ptyfd,&fds)) {
@@ -283,12 +235,14 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			if (ret > 0) {
 				/* write(1, buf, ret); */
 				tvterm_emulate(&(p->vterm), buf, ret);
+			  	ucimf_refresh_begin();
 				tvterm_refresh(&(p->vterm));
-			  iiimccf_pos( p->vterm.pen.x * gFontsWidth, p->vterm.pen.y*gFontsHeight);
+				ucimf_cursor_position( p->vterm.pen.x * gFontsWidth, p->vterm.pen.y*gFontsHeight);
+				ucimf_refresh_end();
 			}
 		}
 	}
-	iiimccf_exit();
+	ucimf_exit();
 }
 
 void tterm_wakeup_shell(TTerm* p, const char* tn)
