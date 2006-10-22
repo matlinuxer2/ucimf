@@ -1,41 +1,72 @@
+#include "window.h"
+#include "graphport.h"
+#include "type.h"
+
 #include <vector>
-#include "layer.h"
 using std::vector;
 
-class Stts : public Window{
+
+class Widget
+{
   public:
-    Stts();
-    ~Stts();
+    virtual void draw()=0;
+    void render();
+    
+  protected:
+    GraphPort *gp;
 
   private:
-    utf_string title;
+    Window *win;
 };
 
-class Prdt : public Window
+class Status : public Widget{
+  public:
+    static Status* getInstance();
+    
+    void draw();
+    void set_imf_name( char* );
+    void set_im_name( char* );
+    void set_lang_name( char* );
+
+  protected:
+    Status();
+
+  private:
+    static Status* _instance;
+   
+    ustring imf_name;
+    ustring im_name;
+    ustring lang_name;
+};
+
+
+/*
+class Prdt : public Widget
 {
   public:
     Prdt();
     ~Prdt();
 
-    void append( const char* s);
     void draw();
+    void append( const char* s);
     void clear();
     
   private:
-    utf_string title;
+    char* title;
 };
 
 
-class Lkc : public Window
+class Lkc : public Widget
 {
   public:
     Lkc();
     ~Lkc();
 
-    void append( const char* s );
     void draw();
+    void append( const char* s );
     void clear();
 
   private:
-    vector<utf_string> title;
+    vector<char*> title;
 };
+*/

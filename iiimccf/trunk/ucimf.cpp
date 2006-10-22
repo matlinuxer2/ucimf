@@ -6,11 +6,20 @@
 #include <sys/ioctl.h>
 #include <linux/kd.h>
 #include <linux/keyboard.h>
+#include <stdlib.h>
+#include "widget.h"
+#include "cwm.h"
 
+bool prev_focus;
+//ConsoleFocus *focus = ConsoleFocus::getInstance();
+//CursorPosition *pos = CursorPosition::getInstance();
+//CurrentImfStatus *sts = CurrentImfStatus::getInstance();
+Status *stts = Status::getInstance();
+Cwm *cwm = Cwm::getInstance();
 
-int focus,prev_focus;
-TrackPoint *cursor_position;
 Imf *imf;
+char *input,*output;
+int input_len, output_len;
 
 enum
 {
@@ -78,18 +87,22 @@ void restore_keys()
 void ucimf_init()
 {
   setup_keys();
-  focus = 0;
-  prev_focus =0;
-  cursor_position = new TrackPoint;
+  prev_focus = false;
   imf = new DummyImf;
+
+  input =  (char*)malloc(sizeof(char)*10);
+  output = (char*)malloc(sizeof(char)*10);
+  input_len = 10;
+  output_len = 10;
 
 }
 
 void ucimf_exit()
 {
   restore_keys();
-  delete cursor_position;
   delete imf;
+  free(input);
+  free(output);
 }
 
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
@@ -103,25 +116,27 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
   {
       if(  buf[0] == 203 )
       {
-	if( focus == 0 )
-	  focus =1;
+	if( !cwm->get_focus() )
+	  cwm->set_focus( true );
 	else
-	  focus =0;
+	  cwm->set_focus( false );
       }
       else if( buf[0] == 204 )
       {
-	if( focus == 1)
+	if( cwm->get_focus() )
 	  imf->switch_im(); 
 	else
-	  focus = 1;
+	  cwm->set_focus( true );
       }
       else if( buf[0] == 205 )
       {
 	imf = IIIMCCF::getInstance();
+	stts->set_imf_name("IIIMF");
       }
       else if( buf[0] == 206 )
       {
 	imf = OVImf::getInstance();
+	stts->set_imf_name("OpenVanilla");
 
       }
       else if( buf[0] == 207 )
@@ -129,6 +144,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	// This is preserved for the future
 	//imf = SCIMF::getInstance();
 	imf = new DummyImf;
+	stts->set_imf_name("Dummy");
       }
       else
       {
@@ -147,38 +163,51 @@ char* ucimf_process_stdin( char *buf, int *p_ret )
 {
   buf[*p_ret]='\0';
 
-  if( focus == 0 || *p_ret == 0 || imf == 0) 
+  if( cwm->get_focus() == false || *p_ret == 0 || imf == 0  ) 
   {
     return buf;
   }
 
-  char *result= imf->process_input( buf );
+  if( input_len < *p_ret )
+  {
+    free(input);
+    input_len = sizeof(char) * (*p_ret);
+    input = (char*) malloc( input_len );
+  }
 
+  strcpy( input, buf );
   // clean input buffer
-  *p_ret=0;
-  strcpy(buf,"\0");
+  (*p_ret)=0;
+  strcpy(buf,"");
 
-  return result;
+  char *result= imf->process_input( input );
+  if( output_len < strlen(result) )
+  {
+    free(output);
+    output_len = sizeof(char) * strlen(result);
+    output = (char*) malloc( output_len );
+  }
+  strcpy( output, result );
+  //strcpy( result, "\0");
+
+  return output;
 }
 
 
 void ucimf_cursor_position( int x, int y)
 {
-  if( cursor_position == 0 )
-    TrackPoint *cursor_position = new TrackPoint;
-
-  cursor_position->set_position( x, y );
+  cwm->set_position( x, y );
 }
 
 void ucimf_refresh_begin()
 {
-  prev_focus = focus;
-  focus = 0;
-  // notify to push
+  prev_focus = cwm->get_focus();
+  cwm->set_focus( false );
+
 }
 
 void ucimf_refresh_end()
 {
-  focus = prev_focus;
-  // notify to pop
+  cwm->set_focus( true );
+  cwm->set_focus( prev_focus );
 }

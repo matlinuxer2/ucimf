@@ -20,7 +20,7 @@ Imf* OVImf::getInstance()
   return _instance;
 }
 
-char* OVImf::commit_buf="\0";
+char* OVImf::commit_buf="";
 int OVImf::commit_buf_len=0;
 
 void OVImf::commitBuffer( char* input )
@@ -79,7 +79,10 @@ OVImf::OVImf()
 	     OVModule* m;
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
-		mod_vector.push_back(m);
+	     {
+	       std::cout << m->identifier() << std::endl; 
+		 mod_vector.push_back(m);
+	     }
 	     delete mod;
 	  }
 
@@ -90,7 +93,7 @@ OVImf::OVImf()
     
 
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[0]);
-  OVInputMethod* im = static_cast<OVInputMethod*>(mod_vector[0]);
+  OVInputMethod* im = static_cast<OVInputMethod*>(mod_vector[ current_module ]);
   im->initialize(dict, srv, OV_MODULEDIR);
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
@@ -217,7 +220,7 @@ char* OVImf::process_input( char* buf )
   if( commit_buf_len > 0 )
     return commit_buf;
   else
-    return "\0";
+    return "";
 }
 
 void OVImf::switch_lang()
