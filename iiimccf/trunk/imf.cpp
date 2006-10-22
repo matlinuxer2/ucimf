@@ -1,4 +1,6 @@
 #include "imf.h"
+#include <iostream>
+using std::cout;
 
 Imf* Imf::current_imf = 0;
 
@@ -19,7 +21,6 @@ DummyImf::~DummyImf()
 
 char* DummyImf::process_input( char* buf )
 {
-  //char *result="\033\13320;20H [DummyImf]"; 
-  char *result="[DummyImf]"; 
+  char* result = "\0";
   return result;
 }

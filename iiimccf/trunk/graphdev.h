@@ -48,8 +48,8 @@ class GraphDev {
         virtual void PutPixel(int x,int y,int color) = 0;
         virtual void FillRect(int x1,int y1,int x2,int y2,int color) = 0;
         virtual void RevRect(int x1,int y1,int x2,int y2) = 0;
-        virtual void SaveRect(int x1, int y1, int x2, int y2, CharBitMap& pBuffer ) = 0;
-        virtual void RstrRect(int x1, int y1, int x2, int y2, CharBitMap& pBuffer ) = 0;
+        virtual void SaveRect(int x1, int y1, int x2, int y2, char* buffer ) = 0;
+        virtual void RstrRect(int x1, int y1, int x2, int y2, char* buffer ) = 0;
         
     protected:
         static int mXres, mYres;

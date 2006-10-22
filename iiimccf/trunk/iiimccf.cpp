@@ -2,16 +2,23 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
-//#include "widget.h"
 #include "subject_observer.h"
 
 using namespace std;
 #define CONVERT_BUFSIZE 48
 
-// Prdt *prdt;
-// Lkc *lkc;
-// Stts *stts;
-// TrackPoint *trkpt;
+//CursorPosition *pos = CursorPosition::getInstance();
+//ConsoleFocus *focus = ConsoleFocus::getInstance();
+// LookupChoice *lkc;
+// Preedit *prdt;
+// Status *stts;
+// pos->attach(lkc);
+// pos->attach(prdt);
+// pos->attach(stts);
+// focus->attach(lkc);
+// focus->attach(prdt);
+// focus->attach(stts);
+
 
 /*
  * Definition of utilities functions.
@@ -313,11 +320,6 @@ vector<IIIMP_card16> text_to_vector( IIIMCF_text text )
 }
 
 
-
-
-
-
-
 /*
  * Implementation of IIIMCCF
  */
@@ -363,18 +365,11 @@ IIIMCCF::IIIMCCF()
 	iiimcf_create_trigger_notify_event( 1, &event);
 	iiimcf_forward_event( context, event);
 	
-	//trkpt = new TrackPoint;
-	//stts = new Stts;
-	//prdt = new Prdt;
-	//lkc = new Lkc;
-	//trkpt->attach( stts );
 }
 
 
 IIIMCCF::~IIIMCCF()
 {
-	//delete trkpt;
-	//delete stts;
 	
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 0, &event );
@@ -424,10 +419,7 @@ void IIIMCCF::switch_im()
     st = iiimcf_create_trigger_notify_event( 1, &event);
     st = iiimcf_forward_event( context, event);
     
-    //stts->update();
-    cout << idname << endl;
-    cmt_buf = idname;
-    cmt_buf_len = strlen( cmt_buf );
+    // stts->change_im_name( idname );
 }
 
 void IIIMCCF::switch_im_per_lang()
@@ -730,8 +722,7 @@ IIIMCCF::iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
-		  //prdt->hide();
-		  //prdt->empty();
+		  //prdt->clear();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
@@ -768,7 +759,7 @@ IIIMCCF::iiimccf_lookup_choice(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  //lkc = new Lkc;
+		  //lkc = LookupChoice::getInstance();
 		  //lkc->update();
 		  //lkc->show();
 		  break;
@@ -979,54 +970,15 @@ char* IIIMCCF::process_input( char* buf_input )
     	}
 	
 	if( cmt_buf_len > 0 )
+	{
+	  cmt_buf_len = 0;
 	  return cmt_buf;
+	}
 	else
-	  return "\0";
+	  return "";
 }
 /*
 
-bool IIIMCCF::ims_chg()
-{
-
-    IIIMF_status st;
-    IIIMCF_input_method *pims;
-    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
-    char *idname, *hrn, *domain;
-    int num_of_ims;
-
-    st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
-    
-    if ( cur_ims_id == (num_of_ims - 1) )
-    {  
-      cur_ims_id =0;
-    }
-    else
-    {
-      cur_ims_id++;
-    }
-
-    iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
-    idname = iiimcf_string_to_utf8(u16idname);
-    
-    IIIMCF_attr attr;
-
-    //off();
-    IIIMCF_event event;
-    iiimcf_create_trigger_notify_event( 0, &event );
-    iiimcf_forward_event( context, event );
-    iiimcf_destroy_context( context );
-    
-    st = iiimcf_create_attr( &attr );
-    st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, idname );
-    st = iiimcf_create_context( handle,attr, &context );
-    
-    st = iiimcf_create_trigger_notify_event( 1, &event);
-    st = iiimcf_forward_event( context, event);
-    
-    stts->update();
-
-    return true;
-}
 
 bool IIIMCCF::ims_show()
 {
@@ -1070,19 +1022,4 @@ bool IIIMCCF::ims_show()
 }
 
 
-bool IIIMCCF::ims_set ( )
-{
-  IIIMF_status st;
-  IIIMCF_attr attr;
-
-  st = iiimcf_create_attr( &attr );
-  
-  st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, "newpy");
-  // libiiimcf.a doesn't define the iiimcf_icsetvalues function 
-  //st = iiimcf_seticvalues( context, attr );
-  
-  st = iiimcf_destroy_attr( attr );
-  
-  return true;
-}
 */
