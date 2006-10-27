@@ -89,6 +89,7 @@ void ucimf_init()
   setup_keys();
   prev_focus = false;
   imf = new DummyImf;
+  //cwm->attachWindow( stts->getWindow() );
 
   input =  (char*)malloc(sizeof(char)*10);
   output = (char*)malloc(sizeof(char)*10);
@@ -124,7 +125,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       else if( buf[0] == 204 )
       {
 	if( cwm->get_focus() )
-	  imf->switch_im(); 
+	  imf->switch_im();
 	else
 	  cwm->set_focus( true );
       }
@@ -132,11 +133,13 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       {
 	imf = IIIMCCF::getInstance();
 	stts->set_imf_name("IIIMF");
+	stts->render();
       }
       else if( buf[0] == 206 )
       {
 	imf = OVImf::getInstance();
 	stts->set_imf_name("OpenVanilla");
+	stts->render();
 
       }
       else if( buf[0] == 207 )
@@ -145,6 +148,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	//imf = SCIMF::getInstance();
 	imf = new DummyImf;
 	stts->set_imf_name("Dummy");
+	stts->render();
       }
       else
       {

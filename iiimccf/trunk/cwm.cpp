@@ -21,7 +21,7 @@ Cwm::Cwm()
   GraphDev* gdev=GraphDev::mpGraphDev;
   _xres= gdev->Width();
   _yres= gdev->Height();
-
+  
   wins.clear();
   cwmmap.clear();
 }
@@ -34,10 +34,13 @@ void Cwm::set_position( int new_x, int new_y )
     _cursor_x = new_x;
     _cursor_y = new_y;
 
-    for( int i=0; i< wins.size(); i++ )
+    if( !wins.empty() )
     {
-      Shift *s = cwmmap[ wins[i] ];
-      s->update( wins[i] );
+      for( int i=0; i< wins.size(); i++ )
+      {
+	//Shift *s = cwmmap[ wins[i] ];
+	//s->update( wins[i] );
+      }
     }
   }
 }
@@ -47,19 +50,27 @@ void Cwm::set_focus( bool new_focus )
 {
   if( new_focus )
   {
-    for( int i=0; i< wins.size(); i++ )
-    {
-      wins[i]->show();
-    }
     _focus = true;
+
+    if( !wins.empty() )
+    {
+      for( int i=0; i< wins.size(); i++ )
+      {
+	wins[i]->show();
+      }
+    }
   }
   else
   {
-    for( int i=0; i< wins.size(); i++ )
-    {
-      wins[i]->hide();
-    }
     _focus = false;
+
+    if( !wins.empty() )
+    {
+      for( int i=0; i< wins.size(); i++ )
+      {
+	wins[i]->hide();
+      }
+    }
   }
 }
 
@@ -69,10 +80,10 @@ void Cwm::windowChanged( Window* cw )
   s->update( cw );
 }
 
-void Cwm::attachWindow( Window* new_win, Shift* new_shift )
+void Cwm::attachWindow( Window* new_win)
 {
   wins.push_back( new_win );
-  cwmmap[new_win]=new_shift;
+  //cwmmap[new_win]=new_shift;
 }
 
 

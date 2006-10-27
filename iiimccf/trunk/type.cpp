@@ -21,7 +21,8 @@ ustring::ustring(const char* encoding, const char* data)
   iconv_close( conv_codec );
   
   udata.clear();
-  for( int i=0; i< nconv; i+= sizeof(unsigned long) )
+  int count = ( sizeof(tmp) - outbytesleft )/sizeof(unsigned long);
+  for( int i=0; i< count; i++)
   {
     udata.push_back( tmp[i] );
   }

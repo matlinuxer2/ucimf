@@ -3,22 +3,18 @@
 #include <iostream>
 using namespace std;
 
-/*
 Widget::Widget()
 {
-  win = new Window;
-  gp = win->getGraphPort();
-
-  isPseudo = true;
+  gp = new GraphPort;
+  win = new Window(gp);
 }
 
 Widget::~Widget()
 {
-  delete win;
+  //delete win;
   win = 0;
   gp = 0;
 }
-*/
 
 void Widget::render()
 {
@@ -52,7 +48,8 @@ Status* Status::_instance = 0;
 
 Status::Status()
 { 
-
+  gp = new GraphPort;
+  win = new Window(gp);
 }
 
 Status* Status::getInstance()
@@ -89,8 +86,8 @@ void Status::draw()
   t.append( imf_name );
   t.append( im_name );
   t.append( lang_name );
-  t.bgColor( 0 );
-  t.fgColor( 1 );
+  t.bgColor( 3 );
+  t.fgColor( 5 );
   gp->draw( 0,0, &t );
   
 }

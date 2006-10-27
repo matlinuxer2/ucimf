@@ -3,6 +3,7 @@
 #include <ctime>
 #include <cstring>
 #include "subject_observer.h"
+#include "widget.h"
 
 using namespace std;
 #define CONVERT_BUFSIZE 48
@@ -11,7 +12,6 @@ using namespace std;
 //ConsoleFocus *focus = ConsoleFocus::getInstance();
 // LookupChoice *lkc;
 // Preedit *prdt;
-// Status *stts;
 // pos->attach(lkc);
 // pos->attach(prdt);
 // pos->attach(stts);
@@ -392,6 +392,7 @@ void IIIMCCF::switch_im()
     IIIMCF_event event;
     const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
     char *idname, *hrn, *domain;
+    Status *stts = Status::getInstance();
 
     
     if ( cur_ims_id >= (num_of_ims - 1) )
@@ -419,7 +420,8 @@ void IIIMCCF::switch_im()
     st = iiimcf_create_trigger_notify_event( 1, &event);
     st = iiimcf_forward_event( context, event);
     
-    // stts->change_im_name( idname );
+    stts->set_im_name( idname );
+    stts->render();
 }
 
 void IIIMCCF::switch_im_per_lang()
