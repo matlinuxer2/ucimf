@@ -5,15 +5,15 @@ AC_PREREQ(2.59)
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([console.cpp])
-AC_CONFIG_HEADER([config.h])
+#AM_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CXX
+AC_PROG_CC
 
 # Checks for libraries.
-PKG_CHECK_MODULES([FREETYPE], [freetype2])
-AC_SUBST([FREETYPE_CFLAGS])
-AC_SUBST([FREETYPE_LIBS])
+# FIXME: Replace `main' with a function in `-lucimf':
+AC_CHECK_LIB([ucimf], [main])
 
 # Checks for header files.
 
