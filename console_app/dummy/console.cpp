@@ -1,28 +1,32 @@
-#include "graphdev.h"
+#include "widget.h"
 
 int main( int argc, char* argv[])
 {
-  GraphDev::Open();
-  GraphDev* gdev = GraphDev::mpGraphDev;
-  
-  gdev->FillRect( 10,20,100,100,7);  
-  gdev->PutPixel( 100,200,7);  
-  int base = 0x4e00;
-  for( int i=0; i<1; i++ )
-  {
-      gdev->OutChar( 206, 206, 7,9, base + i );
-  }
-  base = 0x5341;
-  for( int i=0; i<1; i++ )
-  {
-      gdev->OutChar( 250, 206, 7,9, base + i );
-  }
+  // Rect rect;
+  // rect.w(100);
+  // rect.h(100);
+  // rect.c(3);
 
-  gdev->OutChar( 0, 300, 7,9, 43 );
-  gdev->OutChar( 32, 300, 7,9, 47);
-  gdev->OutChar( 64, 300, 7,9, 48);
-  gdev->OutChar( 96, 300, 7,9, 49);
-  gdev->OutChar( 128, 300, 7,9,124 );
-  gdev->OutChar( 160, 300, 7,9,0x6211 );
+  // ustring str("UTF-8", "test char drawing...");
+  // ustring str2( "UTF-8", "我可以打中文嗎?");
+  // 
+  // Text txt;
+  // txt.append( str );
+  // txt.append( str2 );
+  // txt.bgColor( 3 );
+  // txt.fgColor( 5 );
+
+
+  Status *stts = Status::getInstance();
+  // GraphPort gp;
+  // Window win(&gp);
+  stts->set_imf_name("iiimf");
+  stts->set_im_name("newpy");
+  stts->set_lang_name("zh");
+  stts->render();
+
+  stts->set_imf_name("scim");
+  stts->render();
+
 
 } 
