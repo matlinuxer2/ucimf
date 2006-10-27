@@ -1,4 +1,4 @@
-#SUBDIRS = display 
+SUBDIRS = display 
 OV_MODULEDIR= $(prefix)/lib/openvanilla/
 
 EXTRA_INCS = -I$(prefix)/include/iiim/ -I$(prefix)/include/OpenVanilla/

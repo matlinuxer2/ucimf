@@ -6,7 +6,7 @@ class GraphPort
 {
   public:
     GraphPort();
-    ~GraphPort();
+    ~GraphPort(){};
     void OutChar(  int x, int y, int fg, int bg, unsigned int charcode );
     void PutPixel( int x, int y, int color);
     void FillRect( int x, int y, int width, int height, int color);
@@ -22,6 +22,7 @@ class GraphPort
     void setPseudo( bool flag ){ pseudo = flag; };
     void drop_fg_buf();
     void drop_bg_buf();
+    friend class Window;
     
   protected:
     int x_tmp, y_tmp;

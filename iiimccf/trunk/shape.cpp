@@ -36,7 +36,7 @@ void Text::draw( GraphPort* gp)
   {
     for( int j=0; j<data[i].length() ; j++ )
     {
-      gp->OutChar( j*font_width, j*font_height, color_fg, color_bg, data[i][j] );
+      gp->OutChar( j*font_width, i*font_height, color_fg, color_bg, data[i][j] );
     }
   }
 }

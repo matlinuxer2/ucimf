@@ -1,17 +1,38 @@
 #include "window.h"
 #include "graphport.h"
 
+Window::Window()
+{
+  visible = false;
+  pos_x = pos_y = width = height =0;
+  gp = new GraphPort;
+}
+
+Window::Window( GraphPort *new_gp )
+{
+  visible = false;
+  pos_x = pos_y = width = height =0;
+  gp = new_gp;
+  gp->win = this;
+}
 
 void Window::show()
 {
-  visible = true;
-  gp->pop_fg_buf();
+  if( this != 0)
+  {
+    visible = true;
+    gp->pop_fg_buf();
+  }
 }
 
 void Window::hide()
 {
-  gp->pop_bg_buf();
-  visible = false;
+  if( this !=0 )
+  {
+    visible = false;
+    gp->pop_bg_buf();
+  }
+
 }
 
 void Window::x( int new_x )
@@ -76,5 +97,19 @@ void Window::h( int new_height)
 
 
 
+void Window::measure( int x1, int y1, int x2, int y2 )
+{
+  if( x1 < pos_x )
+    pos_x = x1;
+
+  if( y1 < pos_y )
+    pos_y = y1;
+
+  if( x2 > pos_x + width )
+    width = x2 - pos_x ;
+
+  if( y2 > pos_y + height )
+    height = y2 - pos_y;
+}
 
 

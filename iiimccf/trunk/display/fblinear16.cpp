@@ -72,7 +72,7 @@ void FBLinear16::RevRect(int x1,int y1,int x2,int y2) {
     }
 }
 
-void FBLinear16::SaveRect(int x1,int y1,int x2,int y2, char* buffer) {
+void FBLinear16::SaveRect(int x1,int y1,int x2,int y2, char** buffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -82,16 +82,16 @@ void FBLinear16::SaveRect(int x1,int y1,int x2,int y2, char* buffer) {
     int buffer_bytes = height * width * 2;
     
     // allocate memory for saving
-    if( buffer != NULL )
+    if( *buffer != NULL )
     {
-      delete [] buffer;
-      buffer = NULL;
+      delete [] (*buffer);
+      *buffer = NULL;
     }
 
-    buffer = (char*) new char[buffer_bytes];
+    *buffer = (char*) new char[buffer_bytes];
     
     __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 2;
-    __u16* buf = (__u16*)buffer;
+    __u16* buf = (__u16*)(*buffer);
     
     for(; height--; dest += mNextLine) {
         __u16* dest16 = (__u16*)dest;
@@ -102,16 +102,19 @@ void FBLinear16::SaveRect(int x1,int y1,int x2,int y2, char* buffer) {
     
 }
 
-void FBLinear16::RstrRect(int x1,int y1,int x2,int y2, char* buffer) {
+void FBLinear16::RstrRect(int x1,int y1,int x2,int y2, char** buffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
 
-    assert ( buffer != NULL );
+    assert ( *buffer != NULL );
     
-    __u16* buf = (__u16*)buffer;
+    __u16* buf = (__u16*)(*buffer);
     __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 2;
+    
 
+    int height = y2 - y1 + 1;
+    int width = x2 - x1 + 1;
     for(; height--; dest += mNextLine) {
         __u16* dest16 = (__u16*)dest;
         for ( int cnt = width ; cnt--;) {
@@ -120,8 +123,8 @@ void FBLinear16::RstrRect(int x1,int y1,int x2,int y2, char* buffer) {
     }
     
     // release memory 
-    delete [] buffer;
-    buffer = NULL;
+    delete [] (*buffer);
+    *buffer = NULL;
 }
 
 inline void FBLinear16::PutPixel(int x,int y,int color) {

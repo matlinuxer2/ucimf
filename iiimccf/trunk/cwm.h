@@ -14,7 +14,7 @@ class Cwm
     void set_focus( bool new_focus );
     bool get_focus(){ return _focus; };
     void windowChanged( Window* changed_win );
-    void attachWindow( Window* new_win, Shift* new_shift );
+    void attachWindow( Window* new_win);
 
     int xres(){ return _xres; };
     int yres(){ return _yres; };

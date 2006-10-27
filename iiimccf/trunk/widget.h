@@ -9,13 +9,14 @@ using std::vector;
 class Widget
 {
   public:
+    Widget();
+    ~Widget();
+    Window* getWindow(){ return win; };
     virtual void draw()=0;
     void render();
     
   protected:
     GraphPort *gp;
-
-  private:
     Window *win;
 };
 
