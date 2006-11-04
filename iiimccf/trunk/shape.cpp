@@ -19,6 +19,28 @@ Text::Text()
 
 void Text::append( const ustring& ustr )
 {
+  ustring orig_str;
+
+  if( !data.empty() )
+  {
+    orig_str = data.back();
+    data.pop_back();
+  }
+  
+  ustring new_str = orig_str + ustr ;
+  data.push_back( new_str );
+  
+  height = font_height * data.size();
+
+  if( new_str.size() * font_width > width )
+  {
+    width = new_str.size() * font_width;
+  }
+
+}
+
+void Text::append_next( const ustring& ustr )
+{
   data.push_back( ustr );
   
   height = font_height * data.size();

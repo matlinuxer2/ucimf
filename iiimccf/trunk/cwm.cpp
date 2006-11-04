@@ -22,7 +22,6 @@ Cwm::Cwm()
   _xres= gdev->Width();
   _yres= gdev->Height();
   
-  wins.clear();
   cwmmap.clear();
 }
 
@@ -31,17 +30,22 @@ void Cwm::set_position( int new_x, int new_y )
 {
   if( new_x != _cursor_x || new_y != _cursor_y )
   {
+    bool p_focus = _focus;
+    
     _cursor_x = new_x;
     _cursor_y = new_y;
 
-    if( !wins.empty() )
+    if( !cwmmap.empty() )
     {
-      for( int i=0; i< wins.size(); i++ )
+      map<Window*, Shift*>::iterator iter;
+      for( iter = cwmmap.begin(); iter != cwmmap.end(); iter++ )
       {
-	//Shift *s = cwmmap[ wins[i] ];
-	//s->update( wins[i] );
+	Window *w = (*iter).first;
+	Shift *s = (*iter).second;
+	s->update( w );
       }
     }
+
   }
 }
 
@@ -52,11 +56,13 @@ void Cwm::set_focus( bool new_focus )
   {
     _focus = true;
 
-    if( !wins.empty() )
+    if( !cwmmap.empty() )
     {
-      for( int i=0; i< wins.size(); i++ )
+      map<Window*, Shift*>::iterator iter;
+      for( iter = cwmmap.begin(); iter != cwmmap.end(); iter++ )
       {
-	wins[i]->show();
+	Window *w = (*iter).first;
+	w->show();
       }
     }
   }
@@ -64,40 +70,35 @@ void Cwm::set_focus( bool new_focus )
   {
     _focus = false;
 
-    if( !wins.empty() )
+    if( !cwmmap.empty() )
     {
-      for( int i=0; i< wins.size(); i++ )
+      map<Window*, Shift*>::iterator iter;
+      for( iter = cwmmap.begin(); iter != cwmmap.end(); iter++ )
       {
-	wins[i]->hide();
+	Window *w = (*iter).first;
+	w->hide();
       }
     }
   }
 }
 
-void Cwm::windowChanged( Window* cw )
+void Cwm::update( Window* cw )
 {
-  Shift *s=cwmmap[cw];
+  Shift *s = cwmmap[cw];
   s->update( cw );
 }
 
-void Cwm::attachWindow( Window* new_win)
+void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 {
-  wins.push_back( new_win );
-  //cwmmap[new_win]=new_shift;
+  cwmmap[new_win]=new_shift;
+  new_win->wm = this;
 }
 
 
 
 void StatusShift::update( Window* win )
 {
-  if( cwm->get_focus() == false )
-  {
-    win->hide();
-  }
-  else
-  {
-    win->show();
-  }
+  cwm = Cwm::getInstance();
 
   int Xres= cwm->xres();
   int Yres= cwm->yres();
@@ -109,59 +110,72 @@ void StatusShift::update( Window* win )
   int shift_x = ( x + width ) - Xres;
   int shift_y = ( y + height ) - Yres;
  
-  if( shift_x < 0  )
+  if( shift_x >= 0  )
+  {
+    shift_x = 0 - shift_x;
+    shift_x -= 16;
+  }
+  else
   {
     shift_x = 0;
   }
 
-  if ( shift_y  < 0 )
+  if ( shift_y >= 0 )
+  {
+    shift_y  = 0 - shift_y;
+    shift_y -= height ;
+  }
+  else
+  {
+    if( y >= height )
+    {
+      shift_y = (-1)*height;
+    }
+    else{
+      shift_y = height;
+    }
+  }
+  x+=shift_x;
+  y+=shift_y;
+
+  win->x(x);
+  win->y(y);
+
+}
+
+void PreeditShift::update( Window* win )
+{
+  cwm = Cwm::getInstance();
+  int Xres= cwm->xres();
+  int Yres= cwm->yres();
+  int x = cwm->cursor_x();
+  int y = cwm->cursor_y();
+  
+  
+  int height = win->h();
+  int width = win->w();
+  
+  
+  int shift_x = ( x + width ) - Xres;
+  int shift_y = ( y + height ) - Yres;
+ 
+  if( shift_x >= -16 )
+  {
+    shift_x = 0 - shift_x - 16;
+  }
+  else
+  {
+    shift_x = 16 ;
+  }
+
+  if ( shift_y  >= 0 )
+  {
+    shift_y = 0 - shift_y -1 ;
+  }
+  else
   {
     shift_y = 0;
   }
-  else
-  {
-    shift_y = (-1)*height;
-  }
-  x+=shift_x;
-  y+=shift_y;
-
-  win->x(x);
-  win->y(y);
-}
-
-/*
-void PreeditShift::update( Window* win )
-{
-  int Xres= cwm->xres();
-  int Yres= cwm->yres();
-  int x = cwm->cursor_x();
-  int y = cwm->cursor_y();
-  
-  
-  int height = win->h();
-  int width = win->w();
-  
-  
-  int shift_x = ( x + width ) - Xres;
-  int shift_y = ( y + height ) - Yres;
- 
-  if( shift_x + font_width < 0 )
-  {
-    shift_x = 0;
-  }
-  else
-  {
-    shift_x += font_width;
-  }
-
-  if ( shift_y + 2*font_height < 0 )
-  {
-    shift_y = -2 * font_height ;
-  }
-  else
-  {
-    shift_y = font_height + height;
-  }
 
   x+=shift_x;
   y+=shift_y;
@@ -170,4 +184,3 @@ void PreeditShift::update( Window* win )
   win->y(y);
 
 }
-*/

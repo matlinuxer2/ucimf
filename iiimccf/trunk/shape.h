@@ -38,8 +38,9 @@ class Text : public Shape
     Text();
     void draw( GraphPort* gp );
     void append( const ustring& ustr);
-    void bgColor( int new_bg_color ){ color_fg = new_bg_color; };
-    void fgColor( int new_fg_color ){ color_bg = new_fg_color; }; 
+    void append_next( const ustring& ustr);
+    void bgColor( int new_bg_color ){ color_bg = new_bg_color; };
+    void fgColor( int new_fg_color ){ color_fg = new_fg_color; }; 
 
     int x_max(){ return width; };
     int y_max(){ return height; };

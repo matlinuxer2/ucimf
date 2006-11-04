@@ -9,9 +9,8 @@ using std::vector;
 class Widget
 {
   public:
-    Widget();
-    ~Widget();
-    Window* getWindow(){ return win; };
+    Window* getWindow();
+    GraphPort* getGraphPort();
     virtual void draw()=0;
     void render();
     
@@ -40,22 +39,25 @@ class Status : public Widget{
     ustring lang_name;
 };
 
-
-/*
-class Prdt : public Widget
+class Preedit : public Widget
 {
   public:
-    Prdt();
-    ~Prdt();
+    static Preedit* getInstance();
 
     void draw();
-    void append( const char* s);
+    void append( char* s);
+    void append( char* s, const char* encoding);
     void clear();
     
+  protected: 
+    Preedit();
+
   private:
-    char* title;
+    static Preedit* _instance;
+    ustring buf;
 };
 
+/*
 
 class Lkc : public Widget
 {

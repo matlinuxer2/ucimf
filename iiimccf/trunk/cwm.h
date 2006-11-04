@@ -1,11 +1,10 @@
 #include "window.h"
-#include <vector>
 #include <map>
 using namespace std;
 
 class Shift;
 
-class Cwm 
+class Cwm : Wm
 {
   public:
     static Cwm* getInstance();
@@ -13,8 +12,9 @@ class Cwm
     void set_position( int new_x, int new_y );
     void set_focus( bool new_focus );
     bool get_focus(){ return _focus; };
-    void windowChanged( Window* changed_win );
-    void attachWindow( Window* new_win);
+    void update( Window* changed_win );
+
+    void attachWindow( Window* new_win, Shift* new_shift);
 
     int xres(){ return _xres; };
     int yres(){ return _yres; };
@@ -31,7 +31,6 @@ class Cwm
     int _cursor_x, _cursor_y;
     bool _focus;
     
-    vector<Window*> wins;
     map<Window*,Shift*> cwmmap;
 };
 
@@ -45,20 +44,20 @@ class Shift
     Cwm* cwm;
 };
 
-class StatusShift : Shift
+class StatusShift : public Shift
 {
   public:
     void update( Window* );
 
 };
 
-/*
-class PreeditShift : Shift
+class PreeditShift : public Shift
 {
   public:
     void update( Window* );
 
-}
+};
+/*
 
 class LookupChoiceShift : Shift
 {

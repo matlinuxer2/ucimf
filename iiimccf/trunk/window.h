@@ -2,12 +2,20 @@
 #define __Window
 
 class GraphPort;
+class Widget;
+class Window;
+
+class Wm
+{
+  public:
+    virtual void update( Window* changed_window )=0;
+};
 
 class Window
 {
+    friend class Widget;
+
   public:
-    Window();
-    Window( GraphPort *new_gp );
     int x(){ return pos_x; };
     int y(){ return pos_y; };
     int w(){ return width; };
@@ -16,17 +24,22 @@ class Window
     void y( int new_y );
     void w( int new_width );
     void h( int new_height );
-    void measure( int x1, int y1, int x2, int y2 );
+    void measure( int max_x, int max_y );
 
     bool isVisible(){ return visible; };
     void show();
     void hide();
     GraphPort* getGraphPort(){ return gp; };
     
-  private:
+    
+    Wm *wm;
+    
+  protected:
+    Window();
     bool visible;
     int pos_x, pos_y, width, height;
     GraphPort *gp;
+    Widget *wd;
 };
 
 #endif
