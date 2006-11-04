@@ -3,38 +3,49 @@
 #include <iostream>
 using namespace std;
 
-Widget::Widget()
+
+Window* Widget::getWindow()
 {
-  gp = new GraphPort;
-  win = new Window(gp);
+  if( win == 0 )
+  {
+    win = new Window;
+    win->wd = this;
+  }
+  return win;
 }
 
-Widget::~Widget()
+GraphPort* Widget::getGraphPort()
 {
-  //delete win;
-  win = 0;
-  gp = 0;
+  if( gp == 0 )
+  {
+    win = getWindow();
+    gp = win->gp;
+  }
+
+  return gp;
 }
 
 void Widget::render()
 {
+  bool prev_visible = win->isVisible();
   // Estimate the width, height first
-  gp->push_fg_buf();
-  gp->pop_bg_buf();
-  gp->setPseudo(true);
+  win->hide();
+
+  win->gp->setPseudo(true);
   draw();
 
   // Adjust geometrical parameters..
 
   // Real Draw 
-  gp->push_bg_buf();
-  gp->setPseudo(false);
+  win->gp->push_bg_buf();
+  win->gp->setPseudo(false);
   draw();
-  gp->push_fg_buf();
+  win->gp->push_fg_buf();
+  win->gp->pop_bg_buf();
 
-  if( win->isVisible() == true )
+  if( prev_visible == true )
   {
-    gp->pop_bg_buf();
+    win->show();
   }
 
 }
@@ -48,8 +59,10 @@ Status* Status::_instance = 0;
 
 Status::Status()
 { 
-  gp = new GraphPort;
-  win = new Window(gp);
+  win = 0;
+  gp = 0;
+  win = getWindow();
+  gp = getGraphPort();
 }
 
 Status* Status::getInstance()
@@ -65,62 +78,108 @@ void Status::set_imf_name( char* new_imf_name )
 {
   ustring input( "UTF-8", new_imf_name );
   imf_name = input;
+  render();
 }
 
 void Status::set_im_name( char* new_im_name )
 {
   ustring input( "UTF-8", new_im_name );
   im_name = input;
+  render();
 }
 
 void Status::set_lang_name( char* new_lang_name )
 {
   ustring input( "UTF-8", new_lang_name );
   lang_name = input;
+  render();
 }
 
 void Status::draw()
 {
  
+  int border = 0;
+
   Text t;
   t.append( imf_name );
   t.append( im_name );
   t.append( lang_name );
   t.bgColor( 3 );
   t.fgColor( 5 );
-  gp->draw( 0,0, &t );
+
+  Rect r;
+  r.w( t.x_max() + 2*border );
+  r.h( t.y_max() + 2*border );
+  r.c(3);
   
+  gp->draw( 0, 0, &r);
+  gp->draw( border , border , &t );
 }
-  
+
 /*
+ * Implementation of Preedit
+ */
 
+Preedit* Preedit::_instance = 0;
 
-
-
-Prdt::Prdt()
-{
-  prdt_text = new Text;
-  cur_x =0;
-  cur_y =0;
-  shift_x = 0;
-  shift_y = 0;
+Preedit::Preedit()
+{ 
+  win = 0;
+  gp = 0;
+  win = getWindow();
+  gp = getGraphPort();
 }
 
-Prdt::~Prdt()
+Preedit* Preedit::getInstance()
 {
-  hide();
+  if( _instance == 0 )
+  {
+    _instance = new Preedit;
+  }
+  return _instance;
 }
 
-
-bool Prdt::update()
+void Preedit::append( char* s)
 {
-  hide();
-  show();
+  append( s, "UTF-8" );
 }
 
+void Preedit::append( char* s, const char* encoding)
+{
+  ustring input( encoding , s );
+  ustring result = buf + input;
+  buf = result;
+  render();
+}
+
+void Preedit::clear()
+{
+  buf.clear();
+  render();
+}
+
+void Preedit::draw()
+{
+ 
+  int border = 0;
+
+  Text t;
+  t.append( buf );
+  t.bgColor( 3 );
+  t.fgColor( 5 );
+
+  Rect r;
+  r.w( t.x_max() + 2*border );
+  r.h( t.y_max() + 2*border );
+  r.c(3);
+  
+  gp->draw( 0, 0, &r);
+  gp->draw( border , border , &t );
+}
+  
 
 
-
+/*
 
 Lkc::Lkc()
 {

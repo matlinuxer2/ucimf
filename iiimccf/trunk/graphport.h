@@ -1,12 +1,15 @@
+#ifndef _GraphPort_
+#define _GraphPort_
+
 class GraphDev;
 class Window;
 class Shape;
 
 class GraphPort 
 {
+    friend class Window;
+
   public:
-    GraphPort();
-    ~GraphPort(){};
     void OutChar(  int x, int y, int fg, int bg, unsigned int charcode );
     void PutPixel( int x, int y, int color);
     void FillRect( int x, int y, int width, int height, int color);
@@ -22,9 +25,11 @@ class GraphPort
     void setPseudo( bool flag ){ pseudo = flag; };
     void drop_fg_buf();
     void drop_bg_buf();
-    friend class Window;
     
   protected:
+    GraphPort();
+    ~GraphPort(){};
+    
     int x_tmp, y_tmp;
     bool pseudo;
     char *buf_bg, *buf_fg;
@@ -33,3 +38,4 @@ class GraphPort
     GraphDev *gdev;
 };
 
+#endif

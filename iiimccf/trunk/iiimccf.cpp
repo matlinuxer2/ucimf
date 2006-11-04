@@ -8,17 +8,6 @@
 using namespace std;
 #define CONVERT_BUFSIZE 48
 
-//CursorPosition *pos = CursorPosition::getInstance();
-//ConsoleFocus *focus = ConsoleFocus::getInstance();
-// LookupChoice *lkc;
-// Preedit *prdt;
-// pos->attach(lkc);
-// pos->attach(prdt);
-// pos->attach(stts);
-// focus->attach(lkc);
-// focus->attach(prdt);
-// focus->attach(stts);
-
 
 /*
  * Definition of utilities functions.
@@ -387,12 +376,14 @@ void IIIMCCF::switch_lang()
 
 void IIIMCCF::switch_im()
 {
+    Status *stts = Status::getInstance();
+    Preedit *prdt = Preedit::getInstance();
+
     IIIMF_status st;
     IIIMCF_attr attr;
     IIIMCF_event event;
     const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
     char *idname, *hrn, *domain;
-    Status *stts = Status::getInstance();
 
     
     if ( cur_ims_id >= (num_of_ims - 1) )
@@ -421,7 +412,7 @@ void IIIMCCF::switch_im()
     st = iiimcf_forward_event( context, event);
     
     stts->set_im_name( idname );
-    stts->render();
+    prdt->clear();
 }
 
 void IIIMCCF::switch_im_per_lang()
@@ -668,6 +659,7 @@ IIIMCCF::iiimccf_preedit(
     IIIMCF_context context,
     IIIMCF_event event
 ){
+  Preedit *prdt = Preedit::getInstance();
 
   IIIMF_status st;
   IIIMCF_event_type type;
@@ -686,6 +678,7 @@ IIIMCCF::iiimccf_preedit(
   if( type < IIIMCF_EVENT_TYPE_UI_PREEDIT || type > IIIMCF_EVENT_TYPE_UI_PREEDIT_END )
     return IIIMF_STATUS_COMPONENT_INDIFFERENT;
   
+ 
   switch( type ){
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
 		  mesg("preedit");
@@ -693,9 +686,8 @@ IIIMCCF::iiimccf_preedit(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
 		  mesg("preedit start");
-		  //prdt = new Prdt;
-		  //prdt->update();
-		  //prdt->show();
+		  prdt->clear();
+
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
@@ -703,28 +695,14 @@ IIIMCCF::iiimccf_preedit(
 		  
 		  st = iiimcf_get_preedit_text( context, &buf0 , &cur_pos);
 		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
-
-		  st = iiimcf_get_text_utf16string( buf0, ( const IIIMP_card16** ) &buf1 );
-		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
-
-		  st = iiimcf_get_text_length( buf0, &buf1_len ); 
-		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
-		  
-		  buf_utf16.resize(buf1_len);
-		  
-		  for( int i=0; i < buf1_len; i++ )
-		  {
-		    st = iiimcf_get_char_with_feedback( buf0, i, &ch, &nfb, &pids, &pfbs );
-		    if( st != IIIMF_STATUS_SUCCESS ) check(st);
-
-		    buf_utf16[i] = ch;
-		  }
-		  //prdt->append( buf_utf16 );
+		 
+		  prdt->clear();
+		  prdt->append( iiimcf_text_to_utf8(buf0) );
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
 		  mesg("preedit done");
-		  //prdt->clear();
+		  prdt->clear();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
@@ -737,6 +715,8 @@ IIIMCCF::iiimccf_preedit(
   }
   return IIIMF_STATUS_SUCCESS;
 }
+
+
 
 IIIMF_status
 IIIMCCF::iiimccf_lookup_choice(

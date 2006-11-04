@@ -15,6 +15,9 @@ bool prev_focus;
 //CursorPosition *pos = CursorPosition::getInstance();
 //CurrentImfStatus *sts = CurrentImfStatus::getInstance();
 Status *stts = Status::getInstance();
+Shift *status_shift = new StatusShift;
+Preedit *prdt = Preedit::getInstance();
+Shift *preedit_shift = new PreeditShift;
 Cwm *cwm = Cwm::getInstance();
 
 Imf *imf;
@@ -89,7 +92,8 @@ void ucimf_init()
   setup_keys();
   prev_focus = false;
   imf = new DummyImf;
-  //cwm->attachWindow( stts->getWindow() );
+  cwm->attachWindow( stts->getWindow(), status_shift );
+  cwm->attachWindow( prdt->getWindow(), preedit_shift );
 
   input =  (char*)malloc(sizeof(char)*10);
   output = (char*)malloc(sizeof(char)*10);
@@ -117,10 +121,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
   {
       if(  buf[0] == 203 )
       {
-	if( !cwm->get_focus() )
-	  cwm->set_focus( true );
-	else
-	  cwm->set_focus( false );
+	cwm->set_focus( !cwm->get_focus() );
       }
       else if( buf[0] == 204 )
       {
@@ -133,13 +134,11 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       {
 	imf = IIIMCCF::getInstance();
 	stts->set_imf_name("IIIMF");
-	stts->render();
       }
       else if( buf[0] == 206 )
       {
 	imf = OVImf::getInstance();
 	stts->set_imf_name("OpenVanilla");
-	stts->render();
 
       }
       else if( buf[0] == 207 )
@@ -148,7 +147,6 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	//imf = SCIMF::getInstance();
 	imf = new DummyImf;
 	stts->set_imf_name("Dummy");
-	stts->render();
       }
       else
       {
@@ -207,7 +205,6 @@ void ucimf_refresh_begin()
 {
   prev_focus = cwm->get_focus();
   cwm->set_focus( false );
-
 }
 
 void ucimf_refresh_end()

@@ -22,7 +22,8 @@ ustring::ustring(const char* encoding, const char* data)
   
   udata.clear();
   int count = ( sizeof(tmp) - outbytesleft )/sizeof(unsigned long);
-  for( int i=0; i< count; i++)
+  //for( int i=0; i< count; i++)
+  for( int i=1; i< count; i++)
   {
     udata.push_back( tmp[i] );
   }

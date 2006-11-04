@@ -135,6 +135,7 @@ char* OVImf::process_input( char* buf )
     keycode = stdin_to_openvanila_keycode(keychar);
     modifier = 0;
   }
+
   else if( buf_len == 3 && buf[0]==27 && buf[1]==91 )
   {
     switch( buf[2] )
@@ -201,17 +202,28 @@ char* OVImf::process_input( char* buf )
       break;
     case 1:
       keyevent->setShift(1);
+      keyevent->setAlt(0);
+      keyevent->setCtrl(0);
       break;
     case 2:
+      keyevent->setShift(0);
       keyevent->setAlt(1);
+      keyevent->setCtrl(0);
       break;
     case 4:
+      keyevent->setShift(0);
+      keyevent->setAlt(1);
       keyevent->setCtrl(1);
       break;
     case 8:
+      keyevent->setShift(0);
       keyevent->setAlt(1);
+      keyevent->setCtrl(0);
       break;
     default:
+      keyevent->setShift(0);
+      keyevent->setAlt(0);
+      keyevent->setCtrl(0);
       break;
   }
   

@@ -9,8 +9,8 @@ GraphPort::GraphPort()
   pseudo = true ;
   win = 0;
 
-  gdev = GraphDev::mpGraphDev;
   GraphDev::Open();
+  gdev = GraphDev::mpGraphDev;
 }
 
 void GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
@@ -40,12 +40,12 @@ void GraphPort::draw( int x, int y, Shape* sp )
   {
     if( win !=0 )
     {
-      win->measure( x, y, x + sp->x_max(), y+ sp->y_max() );
+      win->measure( x + sp->x_max(), y+ sp->y_max() );
     }
   }
   else
   {
-    setXY( x, y );
+    setXY( win->x() +x , win->y()+y );
     sp->draw( this );
   }
 }
@@ -64,8 +64,9 @@ void GraphPort::push_fg_buf()
 {
   if( buf_fg != 0 )
   {
-    gdev->SaveRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_fg );
+    buf_fg = 0;
   }
+  gdev->SaveRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_fg );
 }
 
 void GraphPort::pop_bg_buf()
