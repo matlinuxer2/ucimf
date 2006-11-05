@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <ltdl.h>
+#include "widget.h"
 
 typedef OVModule* (*TypeGetModule)(int);
 typedef int (*TypeInitLibrary)(OVService*, const char*);
@@ -49,7 +50,8 @@ public:
     virtual int isEmpty();
 
 protected:
-    char buf[512];
+    Preedit *prdt;
+    string buf;
 };
 
 class OVImfCandidate : public OVCandidate {
@@ -65,6 +67,7 @@ public:
 protected:
     char buf[512];
     int onscreen;
+    LookupChoice *lkc;
 };
 
 class OVImfService : public OVService {
@@ -106,9 +109,9 @@ class OVImf : public Imf
   public:
     ~OVImf();
     static Imf* getInstance();
-    static void commitBuffer( char* );
+    static void commitBuffer( string );
 
-    char* process_input( char* buf );
+    string process_input( const string& input );
     void switch_im();
     void switch_lang();
     void switch_im_per_lang();
@@ -116,8 +119,7 @@ class OVImf : public Imf
   protected:
     OVImf();
     static Imf* _instance;
-    static char* commit_buf;
-    static int commit_buf_len;
+    static string commit_buf;
 
     char* OV_MODULEDIR;
     std::vector<OVModule*> mod_vector; 

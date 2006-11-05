@@ -15,7 +15,7 @@ ucimfinclude_HEADERS = ucimf.h
 libucimf_la_SOURCES = \
                         graphdev.cpp font.cpp\
 			type.cpp graphport.cpp\
-			window.cpp widget.cpp shape.cpp subject_observer.cpp cwm.cpp\
+			window.cpp widget.cpp shape.cpp cwm.cpp\
 			iiimccf.cpp openvanilla.cpp\
 			imf.cpp ucimf.cpp
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <dirent.h>
+#include <locale.h>
 
 
 
@@ -20,13 +21,11 @@ Imf* OVImf::getInstance()
   return _instance;
 }
 
-char* OVImf::commit_buf="";
-int OVImf::commit_buf_len=0;
+string OVImf::commit_buf="";
 
-void OVImf::commitBuffer( char* input )
+void OVImf::commitBuffer( string input )
 {
   commit_buf = input;
-  commit_buf_len = strlen( commit_buf );
 }
 
 OVImf::OVImf()
@@ -80,7 +79,7 @@ OVImf::OVImf()
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
 	     {
-	       std::cout << m->identifier() << std::endl; 
+	         std::cout << m->identifier() << std::endl; 
 		 mod_vector.push_back(m);
 	     }
 	     delete mod;
@@ -97,6 +96,13 @@ OVImf::OVImf()
   im->initialize(dict, srv, OV_MODULEDIR);
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
+  
+  Status *stts = Status::getInstance();
+  stts->set_im_name( (char*) im->identifier() );
+  Preedit *prdt = Preedit::getInstance();
+  prdt->clear();
+  LookupChoice *lkc = LookupChoice::getInstance();
+  lkc->clear();
 }
 
 OVImf::~OVImf()
@@ -118,16 +124,16 @@ int stdin_to_openvanila_keycode( int keychar )
     case 126: keycode=ovkDelete; break;
     case 127: keycode=ovkBackspace; break;
     default: 
-	      keycode = 0; break;
+	      keycode = keychar; break;
   };
   return keycode;
 }
 
 
-char* OVImf::process_input( char* buf )
+string OVImf::process_input( const string& buf )
 {
   int keychar,keycode,modifier;
-  int buf_len = strlen( buf );
+  int buf_len = buf.size();
 
   if( buf_len == 1 )
   {
@@ -229,10 +235,16 @@ char* OVImf::process_input( char* buf )
   
   cxt->keyEvent( keyevent, preedit, lookupchoice, srv);
 
-  if( commit_buf_len > 0 )
-    return commit_buf;
-  else
-    return "";
+  string result;
+
+  if( commit_buf.size() > 0 )
+  {
+    result = commit_buf;
+    commit_buf.clear();
+  }
+  
+  return result;
+
 }
 
 void OVImf::switch_lang()
@@ -242,15 +254,23 @@ void OVImf::switch_lang()
 
 void OVImf::switch_im()
 {
-  int next_module = current_module + 1;
-  if( next_module >= mod_vector.size() ){
-    next_module = 0;
+
+  current_module += 1;
+  if( current_module >= mod_vector.size() ){
+    current_module = 0;
   }
-  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ next_module ] );
+  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
   im->initialize(dict, srv, OV_MODULEDIR);
   delete cxt; // clean old data
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
+  
+  Status *stts = Status::getInstance();
+  stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
+  Preedit *prdt = Preedit::getInstance();
+  prdt->clear();
+  LookupChoice *lkc = LookupChoice::getInstance();
+  lkc->clear();
 }
 
 void OVImf::switch_im_per_lang()
@@ -282,19 +302,20 @@ void OVImfKeyCode::setAlt(int x)      { alt=x; }
  */
 
 OVImfBuffer::OVImfBuffer() {
-    strcpy(buf, "Init!!");
-    //Prdt* prdt = new Prdt;
+  prdt = Preedit::getInstance();
+  buf.clear();
 }
 
 OVBuffer* OVImfBuffer::clear() {
-  //prdt->clear();  
-  strcpy(buf, "");
+  prdt->clear();  
+  buf.clear();
   return this;
 }
 
 OVBuffer* OVImfBuffer::append(const char *s) {
-  //prdt->append(s);
-  strcat(buf, s);
+  prdt->append( (char*)s );
+  prdt->render();
+  buf+= s;
   return this;
 }
 
@@ -305,11 +326,7 @@ OVBuffer* OVImfBuffer::send() {
 }
 
 OVBuffer* OVImfBuffer::update() {
-    if (strlen(buf)) 
-      ;
-    else 
-      ;
-    
+    prdt->render();
     return this;
 }
 
@@ -318,10 +335,14 @@ OVBuffer* OVImfBuffer::update(int cursorPos, int markFrom, int markTo) {
 }
 
 int OVImfBuffer::isEmpty() {
-    if (!strlen(buf)) 
-      return 1;
-    
-    return 0;
+  if ( buf.empty() )
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 
@@ -331,25 +352,40 @@ int OVImfBuffer::isEmpty() {
 
 OVImfCandidate::OVImfCandidate() {
     onscreen=0;
-    //Lkc* lkc = new Lkc;
-    strcpy(buf, "");
+    lkc = LookupChoice::getInstance();
+    lkc->clear();
 }
 
 OVCandidate* OVImfCandidate::clear() {
-    //lkc->clear();
-    strcpy(buf, "");
+    lkc->clear();
     return this;
 }
 
 OVCandidate* OVImfCandidate::append(const char *s) {
-    //lkc->append( s );
-    strcat(buf, s);
+    static bool next_line = false;
+
+    if( next_line )
+    {
+      lkc->append_next( (char*) s );
+    }
+    else{
+      lkc->append( (char*) s);
+    }
+
+    if( s == " " )
+    {
+      next_line = true;
+    }
+    else
+    {
+      next_line = false;
+    }
+
     return this;
 }
 
 OVCandidate* OVImfCandidate::hide() {
     if (onscreen) {
-        //lkc->hide();
 	onscreen=0;
     }
     return this;
@@ -357,16 +393,13 @@ OVCandidate* OVImfCandidate::hide() {
 
 OVCandidate* OVImfCandidate::show() {
     if (!onscreen) {
-        //lkc->draw();
-        std::cout << buf << std::endl;
 	onscreen=1;
     }
     return this;
 }
 
 OVCandidate* OVImfCandidate::update() {
-    //lkc->update();
-    std::cout << buf << std::endl;
+    lkc->render();
     return this;
 }
 
@@ -381,7 +414,20 @@ int OVImfCandidate::onScreen() {
 
 void OVImfService::beep() { }
 void OVImfService::notify(const char *msg) { fprintf(stderr, "%s\n", msg); }
-const char *OVImfService::locale(){ return "zh_TW"; }
+const char *OVImfService::locale(){
+  setlocale( LC_CTYPE, "" );
+  string lc_ctype = setlocale( LC_CTYPE, NULL );
+  string current_locale;
+  if( lc_ctype.find(".") == string::npos )
+  {
+    current_locale = lc_ctype;
+  }
+  else
+  {
+    current_locale = lc_ctype.substr( 0, lc_ctype.find(".") );
+  }
+  return current_locale.c_str(); 
+}
 const char *OVImfService::userSpacePath(const char *modid){ return "/tmp"; }
 const char *OVImfService::pathSeparator() { return "/"; }
 

@@ -1,12 +1,14 @@
 #include <iiimcf.h>
 #include "imf.h"
+#include <string>
+using std::string;
 
 
 class IIIMCCF : public Imf {
   public:
     static Imf* getInstance();
 
-    char* process_input( char* buf );
+    string process_input( const string& input );
     void switch_lang();
     void switch_im();
     void switch_im_per_lang();
@@ -28,8 +30,7 @@ class IIIMCCF : public Imf {
     IIIMCF_context 	context;
     
     /* committed text */
-    char* cmt_buf;
-    int cmt_buf_len;
+    string cmt_buf;
 
     /* for input methods */
     int cur_ims_id; // current imput method id 

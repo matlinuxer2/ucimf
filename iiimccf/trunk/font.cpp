@@ -27,6 +27,26 @@ Font::Font()
   FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   FT_Set_Charmap( face, face->charmaps[0] );
   //FT_Select_Charmap( face, FT_ENCODING_UNICODE );
+  int fh = face->available_sizes->height;
+  int fw = face->available_sizes->width;
+  if( fh == 0 )
+  {
+    font_height = fw;
+  }
+  else
+  {
+    font_height = fh;
+  }
+  
+  if( fw == 0 )
+  {
+    font_width = fh;
+  }
+  else
+  {
+    font_width = fw;
+  }
+  
 }
 
 Font::~Font()

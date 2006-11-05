@@ -100,61 +100,66 @@ void StatusShift::update( Window* win )
 {
   cwm = Cwm::getInstance();
 
-  int Xres= cwm->xres();
-  int Yres= cwm->yres();
+  int Xres= cwm->xres() - 16;
+  int Yres= cwm->yres() - 16 ;
   int x = cwm->cursor_x();
   int y = cwm->cursor_y();
   int height = win->h();
   int width = win->w();
   
-  int shift_x = ( x + width ) - Xres;
-  int shift_y = ( y + height ) - Yres;
+  int over_x = ( x + width ) - Xres;
+  int over_y = ( y + height ) - Yres;
+  int shift_x =0;
+  int shift_y = 20;
  
-  if( shift_x >= 0  )
+  if( over_x + shift_x > 0  )
   {
-    shift_x = 0 - shift_x;
-    shift_x -= 16;
-  }
-  else
-  {
-    shift_x = 0;
+      shift_x = -1 * over_x ;
   }
 
-  if ( shift_y >= 0 )
+  if ( over_y + shift_y > 0 )
   {
-    shift_y  = 0 - shift_y;
-    shift_y -= height ;
+    shift_y *= -1;
+    shift_y -= height;
   }
-  else
-  {
-    if( y >= height )
-    {
-      shift_y = (-1)*height;
-    }
-    else{
-      shift_y = height;
-    }
-  }
-  x+=shift_x;
-  y+=shift_y;
 
-  win->x(x);
-  win->y(y);
+  win->x( x + shift_x );
+  win->y( y + shift_y );
 
 }
 
 void PreeditShift::update( Window* win )
 {
   cwm = Cwm::getInstance();
-  int Xres= cwm->xres();
-  int Yres= cwm->yres();
+  int Xres= cwm->xres() -16;
+  int Yres= cwm->yres() -16;
   int x = cwm->cursor_x();
   int y = cwm->cursor_y();
   
   
   int height = win->h();
   int width = win->w();
+
+  int over_x = ( x + width ) - Xres;
+  int over_y = ( y + height ) - Yres;
+  int shift_x =0;
+  int shift_y = 40;
+ 
+  if( over_x + shift_x > 0  )
+  {
+    shift_x = -1 * over_x ;
+  }
+
+  if ( over_y + shift_y > 0 )
+  {
+    shift_y *= -1;
+    shift_y -= height;
+  }
+
+  win->x( x + shift_x );
+  win->y( y + shift_y );
   
+/*  
   
   int shift_x = ( x + width ) - Xres;
   int shift_y = ( y + height ) - Yres;
@@ -182,5 +187,68 @@ void PreeditShift::update( Window* win )
 
   win->x(x);
   win->y(y);
+*/
+}
+
+void LookupChoiceShift::update( Window* win )
+{
+  cwm = Cwm::getInstance();
+  int Xres= cwm->xres()-16;
+  int Yres= cwm->yres()-16;
+  int x = cwm->cursor_x();
+  int y = cwm->cursor_y();
+  int height = win->h();
+  int width = win->w();
+  
+  int over_x = ( x + width ) - Xres;
+  int over_y = ( y + height ) - Yres;
+  int shift_x =0;
+  int shift_y = 60;
+ 
+  if( over_x + shift_x > 0  )
+  {
+    shift_x = -1 * over_x ;
+  }
+
+  if ( over_y + shift_y > 0 )
+  {
+    shift_y *= -1;
+    shift_y -= height;
+  }
+
+  win->x( x + shift_x );
+  win->y( y + shift_y );
+ 
+  /*
+  
+  int shift_x = ( x + width ) - Xres;
+  int shift_y = ( y + height ) - Yres;
+ 
+  if( shift_x >= 0  )
+  {
+    shift_x = 0 - shift_x;
+    shift_x -= 16;
+  }
+  else
+  {
+    shift_x = 0;
+  }
+
+  if ( shift_y  >= -64 )
+  {
+    shift_y = 0 - height;
+    shift_y -= 64 ;
+  }
+  else
+  {
+    shift_y = 64;
+  }
+
+  x+=shift_x;
+  y+=shift_y;
+
+  win->x(x);
+  win->y(y);
+  */
 
 }

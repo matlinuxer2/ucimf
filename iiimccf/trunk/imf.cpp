@@ -19,8 +19,8 @@ DummyImf::~DummyImf()
   current_imf = 0;
 }
 
-char* DummyImf::process_input( char* buf )
+string DummyImf::process_input( const string& input  )
 {
-  char* result = "\0";
+  string result = input;
   return result;
 }
