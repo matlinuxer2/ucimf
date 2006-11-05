@@ -2,27 +2,31 @@
 #include "imf.h"
 #include "openvanilla.h"
 #include "iiimccf.h"
-#include "subject_observer.h"
 #include <sys/ioctl.h>
 #include <linux/kd.h>
 #include <linux/keyboard.h>
 #include <stdlib.h>
 #include "widget.h"
 #include "cwm.h"
+#include <string>
+
+using namespace std;
 
 bool prev_focus;
 //ConsoleFocus *focus = ConsoleFocus::getInstance();
 //CursorPosition *pos = CursorPosition::getInstance();
 //CurrentImfStatus *sts = CurrentImfStatus::getInstance();
 Status *stts = Status::getInstance();
-Shift *status_shift = new StatusShift;
 Preedit *prdt = Preedit::getInstance();
+LookupChoice *lkc = LookupChoice::getInstance();
+
+Shift *status_shift = new StatusShift;
 Shift *preedit_shift = new PreeditShift;
+Shift *lookupchoice_shift = new LookupChoiceShift;
+
 Cwm *cwm = Cwm::getInstance();
 
 Imf *imf;
-char *input,*output;
-int input_len, output_len;
 
 enum
 {
@@ -94,20 +98,13 @@ void ucimf_init()
   imf = new DummyImf;
   cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->attachWindow( prdt->getWindow(), preedit_shift );
-
-  input =  (char*)malloc(sizeof(char)*10);
-  output = (char*)malloc(sizeof(char)*10);
-  input_len = 10;
-  output_len = 10;
-
+  cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
 }
 
 void ucimf_exit()
 {
   restore_keys();
   delete imf;
-  free(input);
-  free(output);
 }
 
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
@@ -132,21 +129,29 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       }
       else if( buf[0] == 205 )
       {
-	imf = IIIMCCF::getInstance();
+	prdt->clear();
+	lkc->clear();
+	stts->set_im_name("");
 	stts->set_imf_name("IIIMF");
+	imf = IIIMCCF::getInstance();
       }
       else if( buf[0] == 206 )
       {
-	imf = OVImf::getInstance();
+	prdt->clear();
+	lkc->clear();
+	stts->set_im_name("");
 	stts->set_imf_name("OpenVanilla");
-
+	imf = OVImf::getInstance();
       }
       else if( buf[0] == 207 )
       {
 	// This is preserved for the future
 	//imf = SCIMF::getInstance();
-	imf = new DummyImf;
+	prdt->clear();
+	lkc->clear();
+	stts->set_im_name("");
 	stts->set_imf_name("Dummy");
+	imf = new DummyImf;
       }
       else
       {
@@ -163,36 +168,24 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 
 char* ucimf_process_stdin( char *buf, int *p_ret )
 {
-  buf[*p_ret]='\0';
+  string input( buf, *p_ret );
+  string output;
 
-  if( cwm->get_focus() == false || *p_ret == 0 || imf == 0  ) 
+  if( cwm->get_focus() == false || input.size() == 0 || imf == 0  ) 
   {
-    return buf;
+    ; // do nothing...
+  }
+  else
+  {
+    // clean input buffer
+    (*p_ret)=0; 
+    strcpy(buf,"");
+
+    output = imf->process_input( input );
+    (*p_ret) = output.copy( buf, string::npos ); // need to be checked!
   }
 
-  if( input_len < *p_ret )
-  {
-    free(input);
-    input_len = sizeof(char) * (*p_ret);
-    input = (char*) malloc( input_len );
-  }
-
-  strcpy( input, buf );
-  // clean input buffer
-  (*p_ret)=0;
-  strcpy(buf,"");
-
-  char *result= imf->process_input( input );
-  if( output_len < strlen(result) )
-  {
-    free(output);
-    output_len = sizeof(char) * strlen(result);
-    output = (char*) malloc( output_len );
-  }
-  strcpy( output, result );
-  //strcpy( result, "\0");
-
-  return output;
+  return buf;
 }
 
 
@@ -209,6 +202,5 @@ void ucimf_refresh_begin()
 
 void ucimf_refresh_end()
 {
-  cwm->set_focus( true );
   cwm->set_focus( prev_focus );
 }

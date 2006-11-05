@@ -149,7 +149,6 @@ void Preedit::append( char* s, const char* encoding)
   ustring input( encoding , s );
   ustring result = buf + input;
   buf = result;
-  render();
 }
 
 void Preedit::clear()
@@ -164,7 +163,10 @@ void Preedit::draw()
   int border = 0;
 
   Text t;
-  t.append( buf );
+  if( buf.size() > 0 )
+  {
+    t.append( buf );
+  }
   t.bgColor( 3 );
   t.fgColor( 5 );
 
@@ -178,56 +180,82 @@ void Preedit::draw()
 }
   
 
+LookupChoice* LookupChoice::_instance = 0;
 
-/*
-
-Lkc::Lkc()
-{
-  lkc_text = new Text;
-  cur_x=20;
-  cur_y=20;
+LookupChoice::LookupChoice()
+{ 
+  win = 0;
+  gp = 0;
+  win = getWindow();
+  gp = getGraphPort();
 }
 
-
-Lkc::~Lkc()
+LookupChoice* LookupChoice::getInstance()
 {
-  hide();
+  if( _instance == 0 )
+  {
+    _instance = new LookupChoice;
+  }
+  return _instance;
 }
 
-bool Lkc::update()
+void LookupChoice::append( char* s)
 {
-  hide();
-  show();
+  append( s, "UTF-8" );
 }
 
-
-bool Lkc::draw()
+void LookupChoice::append( char* s, const char* encoding)
 {
-  Rectangle up,left,right,bottom;
-  int u,l,r,b;
-  u=lkc_text->y() -3;
-  l=lkc_text->x() -3;
-  r=lkc_text->x() + lkc_text->w() +3;
-  b=lkc_text->y() + lkc_text->h() +3;
-  cout << " u:" << u
-       << " l:" << l
-       << " r:" << r
-       << " b:" << b << endl;
-  up.update( l, u, r, u,8);
-  left.update( l,u,l,b ,8);
-  right.update( r,u,r,b,15);
-  bottom.update( l,b,r,b,15);
-  up.render();
-  left.render();
-  right.render();
-  bottom.render();
+  ustring input( encoding , s );
+  if( bufs.empty() )
+  {
+    bufs.push_back( input );
+  }
+  else
+  {
+    ustring last =  bufs.back();
+    ustring result = last + input;
+    bufs.pop_back();
+    bufs.push_back(result);
+  }
+}
 
-  lkc_text->fc(16);
-  lkc_text->render();
-  cout << "---end of render-----" << endl;
+void LookupChoice::append_next( char* s)
+{
+  append_next( s, "UTF-8" );
+}
+
+void LookupChoice::append_next( char* s, const char* encoding)
+{
+  ustring input( encoding , s );
+  bufs.push_back( input );
+}
+
+void LookupChoice::clear()
+{
+  bufs.clear();
+  render();
+}
+
+void LookupChoice::draw()
+{
+ 
+  int border = 0;
+
+  Text t;
+  for( int i=0 ; i<bufs.size(); i++ )
+  {
+    t.append_next( bufs[i] );
+  }
+  t.bgColor( 3 );
+  t.fgColor( 5 );
+
+  Rect r;
+  r.w( t.x_max() + 2*border );
+  r.h( t.y_max() + 2*border );
+  r.c(3);
   
-  return true; 
+  gp->draw( 0, 0, &r);
+  gp->draw( border , border , &t );
 }
-
-
-*/
+  

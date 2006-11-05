@@ -2,7 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
-#include "subject_observer.h"
+#include <string>
 #include "widget.h"
 
 using namespace std;
@@ -353,6 +353,9 @@ IIIMCCF::IIIMCCF()
 	IIIMCF_event event;
 	iiimcf_create_trigger_notify_event( 1, &event);
 	iiimcf_forward_event( context, event);
+
+    Status *stts = Status::getInstance();
+    stts->set_im_name(idname);
 	
 }
 
@@ -378,6 +381,7 @@ void IIIMCCF::switch_im()
 {
     Status *stts = Status::getInstance();
     Preedit *prdt = Preedit::getInstance();
+    LookupChoice *lkc = LookupChoice::getInstance();
 
     IIIMF_status st;
     IIIMCF_attr attr;
@@ -413,6 +417,7 @@ void IIIMCCF::switch_im()
     
     stts->set_im_name( idname );
     prdt->clear();
+    lkc->clear();
 }
 
 void IIIMCCF::switch_im_per_lang()
@@ -577,12 +582,12 @@ static const int stdin_to_iiimf_keycode[] = {
 	IIIMF_KEYCODE_BACK_SPACE,		/* BACKSPACE */
 };
 
-void stdin_to_iiimcf_keyevent( char* buf, IIIMCF_keyevent& kev )
+void stdin_to_iiimcf_keyevent( const string& buf, IIIMCF_keyevent& kev )
 {
-  int buf_len = strlen( buf );
+  int buf_len = buf.size();
   int keychar,keycode,modifier;
 
-  if( buf_len== 1 )
+  if( buf_len == 1 )
   {
     keychar = (int)buf[0];
     keycode = stdin_to_iiimf_keycode[keychar];
@@ -698,6 +703,7 @@ IIIMCCF::iiimccf_preedit(
 		 
 		  prdt->clear();
 		  prdt->append( iiimcf_text_to_utf8(buf0) );
+		  prdt->render();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
@@ -728,6 +734,9 @@ IIIMCCF::iiimccf_lookup_choice(
   IIIMCF_event_type type;
   IIIMCF_lookup_choice ilc;
 
+  LookupChoice *lkc = LookupChoice::getInstance();
+  static int cur_idx=0;
+
   st = iiimcf_get_event_type( event, &type );
   if( st != IIIMF_STATUS_SUCCESS ) return st;
   
@@ -741,13 +750,12 @@ IIIMCCF::iiimccf_lookup_choice(
 		  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_START:
 		  debug( "lookup start" );
-		  //lkc = LookupChoice::getInstance();
-		  //lkc->update();
-		  //lkc->show();
+		  lkc->clear();
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_CHANGE:
 		  debug( "lookup change" );
+		  lkc->clear();
 
 		  st = iiimcf_get_lookup_choice( context, &ilc );
 		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
@@ -763,16 +771,19 @@ IIIMCCF::iiimccf_lookup_choice(
 		    iiimcf_get_lookup_choice_item( ilc, i, &cand, &label, &flag );
 		    if( flag & IIIMCF_LOOKUP_CHOICE_ITEM_ENABLED )
 		    {
-		      //lkc->append( text_to_vector(label) + text_to_vector(cand) );
+		      string label_utf8 = iiimcf_text_to_utf8( label );
+		      string cand_utf8 = iiimcf_text_to_utf8( cand );
+		      string item = label_utf8 + cand_utf8;
+		      lkc->append_next( (char*) item.c_str() );
 		    }
 		  }
+		  lkc->render();
 		  
 		  break;
 	  
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_DONE:
 		  debug( "lookup done" );
-		  //lkc->hide();
-		  //lkc->empty();
+		  lkc->clear();
 		  break;
 
 	  case IIIMCF_EVENT_TYPE_UI_LOOKUP_CHOICE_END: 
@@ -793,6 +804,8 @@ IIIMCCF::iiimccf_commit(
 ){
     IIIMF_status st;
     IIIMCF_event_type type;
+    IIIMCF_text text;
+
     st = iiimcf_get_event_type( event, &type );
     if( st != IIIMF_STATUS_SUCCESS ) return st;
 
@@ -802,18 +815,10 @@ IIIMCCF::iiimccf_commit(
 	switch( type ){	
 	  case IIIMCF_EVENT_TYPE_UI_COMMIT: 
 	      debug("commit");
-	      IIIMCF_text text;
-	      
 	      st = iiimcf_get_committed_text( context, &text );
-	      
-	      if( st != IIIMF_STATUS_SUCCESS )
-	      { 
-		cmt_buf_len = 0;
-	      }
-	      else
+	      if( st == IIIMF_STATUS_SUCCESS )
 	      {
 		cmt_buf = iiimcf_text_to_utf8( text );
-		cmt_buf_len = strlen( cmt_buf );
 	      }
 	      break;
 		  
@@ -823,11 +828,6 @@ IIIMCCF::iiimccf_commit(
 	      
 	  default: 
 	      debug(" !!commit!! ");
-	      cout << " !! " ;
-	      cout.setf( ios_base::hex, ios_base::basefield );
-	      cout << type;
-	      cout.setf( ios_base::dec, ios_base::basefield );
-	      cout << " !! " << endl;
 	      break;	
 	}
 	return IIIMF_STATUS_SUCCESS;
@@ -917,12 +917,12 @@ IIIMF_status IIIMCCF::dispatch_event(IIIMCF_context context, IIIMCF_event event)
 
 }
 
-char* IIIMCCF::process_input( char* buf_input )
+string IIIMCCF::process_input( const string& input )
 {
 	IIIMCF_event event,ev ;
 	IIIMCF_keyevent kev;
 	IIIMCF_event_type event_type;
-  	stdin_to_iiimcf_keyevent( buf_input, kev );
+  	stdin_to_iiimcf_keyevent( input, kev );
 
 	/* sent the keyevent to iiimcf */
         iiimcf_create_keyevent( &kev, &ev );
@@ -951,13 +951,14 @@ char* IIIMCCF::process_input( char* buf_input )
 
     	}
 	
-	if( cmt_buf_len > 0 )
+	string result;
+	if( cmt_buf.size() > 0 )
 	{
-	  cmt_buf_len = 0;
-	  return cmt_buf;
+	  result = cmt_buf;
+	  cmt_buf.clear();
 	}
-	else
-	  return "";
+
+	return result;
 }
 /*
 

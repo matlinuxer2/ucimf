@@ -1,3 +1,6 @@
+#ifndef __Widget
+#define __Widget
+
 #include "window.h"
 #include "graphport.h"
 #include "type.h"
@@ -57,6 +60,25 @@ class Preedit : public Widget
     ustring buf;
 };
 
+class LookupChoice : public Widget
+{
+  public:
+    static LookupChoice* getInstance();
+
+    void draw();
+    void append( char* s);
+    void append( char* s, const char* encoding);
+    void append_next( char* s);
+    void append_next( char* s, const char* encoding);
+    void clear();
+    
+  protected: 
+    LookupChoice();
+
+  private:
+    static LookupChoice* _instance;
+    vector<ustring> bufs;
+};
 /*
 
 class Lkc : public Widget
@@ -73,3 +95,4 @@ class Lkc : public Widget
     vector<char*> title;
 };
 */
+#endif

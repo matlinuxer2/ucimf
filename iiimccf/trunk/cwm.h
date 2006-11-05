@@ -57,12 +57,10 @@ class PreeditShift : public Shift
     void update( Window* );
 
 };
-/*
 
-class LookupChoiceShift : Shift
+class LookupChoiceShift : public Shift
 {
   public:
-    void update( Windows* );
+    void update( Window* );
 
-}
-*/
+};
