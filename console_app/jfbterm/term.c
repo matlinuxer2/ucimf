@@ -215,6 +215,7 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			
 			// ucimf input method framework switch on/off 
 			ucimf_switch( buf, &ret );
+			ucimf_process_stdin( buf, &ret );
 			
 #ifdef JFB_ENABLE_DIMMER
 			idle_time = 0;
@@ -225,9 +226,9 @@ void tterm_start(TTerm* p, const char* tn, const char* en)
 			}
 #endif
 			if (ret > 0) {
-			    //write(p->ptyfd, buf, ret);
-			    char *ucimf_result = ucimf_process_stdin( buf, &ret );
-			    write( p->ptyfd, ucimf_result , strlen(ucimf_result) );
+			    write(p->ptyfd, buf, ret);
+			    //char *ucimf_result = ucimf_process_stdin( buf, &ret );
+			    //write( p->ptyfd, ucimf_result , strlen(ucimf_result) );
 			  
 			}
 		} else if (FD_ISSET(p->ptyfd,&fds)) {
