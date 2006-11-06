@@ -110,7 +110,7 @@ void StatusShift::update( Window* win )
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
   int shift_x =0;
-  int shift_y = 20;
+  int shift_y = 24;
  
   if( over_x + shift_x > 0  )
   {
@@ -143,7 +143,7 @@ void PreeditShift::update( Window* win )
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
   int shift_x =0;
-  int shift_y = 40;
+  int shift_y = 48;
  
   if( over_x + shift_x > 0  )
   {
@@ -203,7 +203,7 @@ void LookupChoiceShift::update( Window* win )
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
   int shift_x =0;
-  int shift_y = 60;
+  int shift_y = 72;
  
   if( over_x + shift_x > 0  )
   {

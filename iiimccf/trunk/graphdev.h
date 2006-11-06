@@ -33,7 +33,7 @@ class GraphDev {
         int Width() { return mXres; }
 
         // font
-        void OutChar(int x, int y, int fg, int bg, unsigned int c);
+        int OutChar(int x, int y, int fg, int bg, unsigned int c);
 
         // char display
         virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;

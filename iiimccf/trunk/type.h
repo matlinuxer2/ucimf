@@ -21,9 +21,11 @@ class ustring
     ustring operator+(const ustring& str) const;
     bool operator==(const ustring& ustr) const;
 
-    int length() const{ return udata.size(); };
     int size() const{ return udata.size(); };
     void clear(){ udata.clear(); };
+    
+    // !! temporary for hacking. return the string length in PIXEl!!
+    int length() const; 
     
   private:
     vector<unsigned long> udata;

@@ -26,10 +26,11 @@ class Rect : public Shape
     void w( int new_width ){ width = new_width; };
     void h( int new_height ){ height = new_height; };
     void c( int new_color ){ color = new_color; };
-
+    void toFill( bool flag ){ be_Filled = flag; };
   private:
     int width, height;
     int color;
+    bool be_Filled;
 };
 
 class Text : public Shape

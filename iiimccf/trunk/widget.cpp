@@ -3,6 +3,11 @@
 #include <iostream>
 using namespace std;
 
+#define BG_color 8
+#define FG_color 9
+#define BLACK_color 0
+#define BLUE_color 1 
+#define RED_color 5
 
 Window* Widget::getWindow()
 {
@@ -98,22 +103,42 @@ void Status::set_lang_name( char* new_lang_name )
 void Status::draw()
 {
  
-  int border = 0;
+  int border = 2;
 
   Text t;
   t.append( imf_name );
-  t.append( im_name );
-  t.append( lang_name );
-  t.bgColor( 3 );
-  t.fgColor( 5 );
+  t.bgColor( BLACK_color );
+  t.fgColor( BLUE_color );
+  
+  Text t2;
+  t2.append( im_name );
+  t2.bgColor( BLACK_color );
+  t2.fgColor( BLUE_color );
 
   Rect r;
-  r.w( t.x_max() + 2*border );
-  r.h( t.y_max() + 2*border );
-  r.c(3);
+  r.w( t.x_max() + t2.x_max() + 2*border );
+  r.h( max( t.y_max(), t2.y_max() ) + 1*border );
+  r.c( BLACK_color );
+  r.toFill(true);
+  
+  Rect r1;
+  r1.w( t.x_max() + 1*border );
+  r1.h( max( t.y_max(), t2.y_max() ) + 1*border );
+  r1.c( RED_color );
+  r1.toFill(false);
+  
+  Rect r2;
+  r2.w( t2.x_max() + 1*border );
+  r2.h( max( t.y_max(), t2.y_max() ) + 1*border );
+  r2.c( RED_color );
+  r2.toFill(false);
   
   gp->draw( 0, 0, &r);
+  gp->draw( 0, 0, &r1);
+  gp->draw( border + t.x_max() , 0, &r2);
+
   gp->draw( border , border , &t );
+  gp->draw( border + t.x_max() + border, border, &t2 );
 }
 
 /*
@@ -160,23 +185,32 @@ void Preedit::clear()
 void Preedit::draw()
 {
  
-  int border = 0;
+  int border = 2;
 
   Text t;
   if( buf.size() > 0 )
   {
     t.append( buf );
   }
-  t.bgColor( 3 );
-  t.fgColor( 5 );
+  t.bgColor( BG_color );
+  t.fgColor( FG_color );
 
   Rect r;
-  r.w( t.x_max() + 2*border );
-  r.h( t.y_max() + 2*border );
-  r.c(3);
+  r.w( t.x_max() + 1*border );
+  r.h( t.y_max() + 1*border );
+  r.c( BLACK_color );
+  r.toFill(true);
+  
+  Rect r2;
+  r2.w( t.x_max() + 1*border );
+  r2.h( t.y_max() + 1*border );
+  r2.toFill(false);
+  r2.c(RED_color);
   
   gp->draw( 0, 0, &r);
+  gp->draw( 0, 0, &r2);
   gp->draw( border , border , &t );
+
 }
   
 
@@ -240,22 +274,30 @@ void LookupChoice::clear()
 void LookupChoice::draw()
 {
  
-  int border = 0;
+  int border = 2;
 
   Text t;
   for( int i=0 ; i<bufs.size(); i++ )
   {
     t.append_next( bufs[i] );
   }
-  t.bgColor( 3 );
-  t.fgColor( 5 );
+  t.bgColor( BG_color );
+  t.fgColor( FG_color );
 
   Rect r;
-  r.w( t.x_max() + 2*border );
-  r.h( t.y_max() + 2*border );
-  r.c(3);
+  r.w( t.x_max() + 1*border );
+  r.h( t.y_max() + 1*border );
+  r.toFill(true);
+  r.c( BLACK_color );
+  
+  Rect r2;
+  r2.w( t.x_max() + 1*border );
+  r2.h( t.y_max() + 1*border );
+  r2.toFill(false);
+  r2.c(RED_color);
   
   gp->draw( 0, 0, &r);
+  gp->draw( 0, 0, &r2);
   gp->draw( border , border , &t );
 }
   

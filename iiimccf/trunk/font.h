@@ -10,6 +10,7 @@ class Font{
    int  Height();
    int  Width();
    void render( int code, CharBitMap& tmp );
+   int  length( int code );
  private:
    void info();
    

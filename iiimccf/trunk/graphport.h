@@ -10,9 +10,10 @@ class GraphPort
     friend class Window;
 
   public:
-    void OutChar(  int x, int y, int fg, int bg, unsigned int charcode );
+    int OutChar(  int x, int y, int fg, int bg, unsigned int charcode );
     void PutPixel( int x, int y, int color);
     void FillRect( int x, int y, int width, int height, int color);
+    void DrawRect( int x, int y, int width, int height, int color);
     void RevRect(  int x, int y, int width, int height);
     
     void draw( int x, int y, Shape* sp );
