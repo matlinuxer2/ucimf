@@ -5,7 +5,14 @@
 
 void Rect::draw( GraphPort* gp)
 {
-  gp->FillRect( 0, 0, width , height, color );
+  if( be_Filled )
+  {
+    gp->FillRect( 0, 0, width , height, color );
+  }
+  else
+  {
+    gp->DrawRect( 0, 0, width , height, color );
+  }
 }
 
 Text::Text()
@@ -31,10 +38,12 @@ void Text::append( const ustring& ustr )
   data.push_back( new_str );
   
   height = font_height * data.size();
-
-  if( new_str.size() * font_width > width )
+  
+  int new_length = new_str.length();
+  
+  if( new_length > width )
   {
-    width = new_str.size() * font_width;
+    width = new_length;
   }
 
 }
@@ -45,9 +54,10 @@ void Text::append_next( const ustring& ustr )
   
   height = font_height * data.size();
 
-  if( ustr.size() * font_width > width )
+  int new_length = ustr.length();
+  if( new_length > width )
   {
-    width = ustr.size() * font_width;
+    width = new_length;
   }
 
 }
@@ -56,9 +66,11 @@ void Text::draw( GraphPort* gp)
 {
   for( int i=0; i< data.size() ; i++ )
   {
-    for( int j=0; j < data[i].length() ; j++ )
+    int x = 0;
+    int font_h = font_height -1;
+    for( int j=0; j < data[i].size() ; j++ )
     {
-      gp->OutChar( j*font_width, i*font_height, color_fg, color_bg, data[i][j] );
+      x = gp->OutChar( x, i*font_h, color_fg, color_bg, data[i][j] );
     }
   }
 }

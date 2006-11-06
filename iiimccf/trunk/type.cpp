@@ -6,6 +6,7 @@
 
 #include "type.h"
 #include <iconv.h>
+#include "font.h"
 
 ustring::ustring(const char* encoding, const char* data)
 {
@@ -95,4 +96,21 @@ bool ustring::operator==(const ustring& ustr) const
   return false;
 }
 
+int ustring::length() const
+{
+  if( udata.empty() )
+  {
+    return 0;
+  }
 
+  Font* font= Font::getInstance();
+  int result = 0;
+
+  for( int i=0; i< udata.size(); i++ )
+  {
+    result += font->length( udata[i] );
+  }
+
+  return result;
+
+}

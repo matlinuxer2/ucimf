@@ -14,11 +14,11 @@ class IIIMCCF : public Imf {
     void switch_im_per_lang();
 
   protected:
-    IIIMF_status IIIMCCF::dispatch_event(IIIMCF_context context, IIIMCF_event event);
-    IIIMF_status IIIMCCF::iiimccf_preedit(IIIMCF_context context, IIIMCF_event event);
-    IIIMF_status IIIMCCF::iiimccf_lookup_choice(IIIMCF_context context, IIIMCF_event event);
-    IIIMF_status IIIMCCF::iiimccf_commit(IIIMCF_context context, IIIMCF_event event);
-    IIIMF_status IIIMCCF::iiimccf_status(IIIMCF_context context, IIIMCF_event event);
+    IIIMF_status dispatch_event(IIIMCF_context context, IIIMCF_event event);
+    IIIMF_status iiimccf_preedit(IIIMCF_context context, IIIMCF_event event);
+    IIIMF_status iiimccf_lookup_choice(IIIMCF_context context, IIIMCF_event event);
+    IIIMF_status iiimccf_commit(IIIMCF_context context, IIIMCF_event event);
+    IIIMF_status iiimccf_status(IIIMCF_context context, IIIMCF_event event);
     
   protected:
     IIIMCCF();

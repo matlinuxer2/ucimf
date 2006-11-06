@@ -13,10 +13,13 @@ GraphPort::GraphPort()
   gdev = GraphDev::mpGraphDev;
 }
 
-void GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
+int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 {
-    gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
+    int x_next = x+ x_tmp;
+    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
+    return x_next-x_tmp;
 }
+
 
 
 void GraphPort::PutPixel( int x, int y, int color)
@@ -27,6 +30,11 @@ void GraphPort::PutPixel( int x, int y, int color)
 void GraphPort::FillRect( int x, int y, int width, int height, int color) 
 {
     gdev->FillRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
+}
+
+void GraphPort::DrawRect( int x, int y, int width, int height, int color) 
+{
+    gdev->DrawRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
 }
 
 void GraphPort::RevRect( int x, int y, int width, int height)

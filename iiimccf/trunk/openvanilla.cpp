@@ -314,7 +314,7 @@ OVBuffer* OVImfBuffer::clear() {
 
 OVBuffer* OVImfBuffer::append(const char *s) {
   prdt->append( (char*)s );
-  prdt->render();
+  //prdt->render();
   buf+= s;
   return this;
 }
@@ -362,25 +362,7 @@ OVCandidate* OVImfCandidate::clear() {
 }
 
 OVCandidate* OVImfCandidate::append(const char *s) {
-    static bool next_line = false;
-
-    if( next_line )
-    {
-      lkc->append_next( (char*) s );
-    }
-    else{
-      lkc->append( (char*) s);
-    }
-
-    if( s == " " )
-    {
-      next_line = true;
-    }
-    else
-    {
-      next_line = false;
-    }
-
+    lkc->append( (char*) s);
     return this;
 }
 
@@ -388,6 +370,7 @@ OVCandidate* OVImfCandidate::hide() {
     if (onscreen) {
 	onscreen=0;
     }
+    lkc->clear();
     return this;
 }
 
@@ -395,6 +378,7 @@ OVCandidate* OVImfCandidate::show() {
     if (!onscreen) {
 	onscreen=1;
     }
+    //lkc->render();
     return this;
 }
 

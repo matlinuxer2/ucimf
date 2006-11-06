@@ -103,3 +103,18 @@ void Font::render( int code, CharBitMap& charbitmap )
 }
 
 
+int Font::length( int code )
+{
+  FT_Error error;
+  FT_ULong charcode = static_cast<FT_ULong>(code);
+  /*
+  cout.setf(ios_base::hex, ios_base::basefield );
+  cout << "charcode: [" << charcode << "] in UTF-16" << endl;
+  cout.setf(ios_base::dec, ios_base::basefield );
+  */
+
+  error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
+  int result = face->glyph->bitmap.width;
+  
+  return result;
+}
