@@ -46,8 +46,8 @@
 #endif
 #include <linux/vt.h>
 #include <linux/fb.h>
-#include <asm/page.h>
-
+//#include <asm/page.h>
+#include <sys/user.h>
 #include "mytypes.h"
 #include "fbcommon.h"
 #include "message.h"
