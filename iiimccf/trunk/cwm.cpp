@@ -52,33 +52,22 @@ void Cwm::set_position( int new_x, int new_y )
 
 void Cwm::set_focus( bool new_focus )
 {
-  if( new_focus )
+  if( new_focus != _focus && !cwmmap.empty() )
   {
-    _focus = true;
-
-    if( !cwmmap.empty() )
-    {
+      _focus = new_focus;
       map<Window*, Shift*>::iterator iter;
       for( iter = cwmmap.begin(); iter != cwmmap.end(); iter++ )
       {
 	Window *w = (*iter).first;
-	w->show();
+	if( new_focus == true )	
+	{
+	  w->show();
+	}
+	else
+	{
+	  w->hide();
+	}
       }
-    }
-  }
-  else
-  {
-    _focus = false;
-
-    if( !cwmmap.empty() )
-    {
-      map<Window*, Shift*>::iterator iter;
-      for( iter = cwmmap.begin(); iter != cwmmap.end(); iter++ )
-      {
-	Window *w = (*iter).first;
-	w->hide();
-      }
-    }
   }
 }
 
@@ -159,35 +148,6 @@ void PreeditShift::update( Window* win )
   win->x( x + shift_x );
   win->y( y + shift_y );
   
-/*  
-  
-  int shift_x = ( x + width ) - Xres;
-  int shift_y = ( y + height ) - Yres;
- 
-  if( shift_x >= -16 )
-  {
-    shift_x = 0 - shift_x - 16;
-  }
-  else
-  {
-    shift_x = 16 ;
-  }
-
-  if ( shift_y  >= 0 )
-  {
-    shift_y = 0 - shift_y -1 ;
-  }
-  else
-  {
-    shift_y = 0;
-  }
-
-  x+=shift_x;
-  y+=shift_y;
-
-  win->x(x);
-  win->y(y);
-*/
 }
 
 void LookupChoiceShift::update( Window* win )
@@ -218,37 +178,5 @@ void LookupChoiceShift::update( Window* win )
 
   win->x( x + shift_x );
   win->y( y + shift_y );
- 
-  /*
-  
-  int shift_x = ( x + width ) - Xres;
-  int shift_y = ( y + height ) - Yres;
- 
-  if( shift_x >= 0  )
-  {
-    shift_x = 0 - shift_x;
-    shift_x -= 16;
-  }
-  else
-  {
-    shift_x = 0;
-  }
-
-  if ( shift_y  >= -64 )
-  {
-    shift_y = 0 - height;
-    shift_y -= 64 ;
-  }
-  else
-  {
-    shift_y = 64;
-  }
-
-  x+=shift_x;
-  y+=shift_y;
-
-  win->x(x);
-  win->y(y);
-  */
 
 }

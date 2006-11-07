@@ -125,6 +125,8 @@ class OVImf : public Imf
     std::vector<OVModule*> mod_vector; 
     int current_module;
 
+    Status* stts;
+    
     OVInputMethodContext *cxt;
     OVBuffer *preedit;
     OVCandidate *lookupchoice;

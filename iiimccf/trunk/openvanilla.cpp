@@ -21,12 +21,6 @@ Imf* OVImf::getInstance()
   return _instance;
 }
 
-string OVImf::commit_buf="";
-
-void OVImf::commitBuffer( string input )
-{
-  commit_buf = input;
-}
 
 OVImf::OVImf()
 {
@@ -36,12 +30,12 @@ OVImf::OVImf()
   lookupchoice = new OVImfCandidate;
   srv = new OVImfService;
   dict = new OVImfDictionary;
+  stts = Status::getInstance();
 
   // OV_MODULEDIR is defined in Makefile.am !!
   OV_MODULEDIR=getenv("OVMODULE_DIR");
   lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
-  //char* module_filename=getenv("OVMODULE_FILEPATH");
 
   DIR *dir = opendir( OV_MODULEDIR );
   if( dir )
@@ -79,8 +73,17 @@ OVImf::OVImf()
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
 	     {
-	         std::cout << m->identifier() << std::endl; 
-		 mod_vector.push_back(m);
+	         //std::cerr << m->identifier() << std::endl; 
+		 string mtype( m->moduleType() );
+		 string mtype2( "OVOutputFilter");
+		 if( mtype != mtype2 )
+		 {
+		   //std::cerr << m->moduleType() << std::endl;
+		   OVInputMethod* im = static_cast<OVInputMethod*>(m);
+		   im->initialize( dict, srv, OV_MODULEDIR );
+		   m = static_cast<OVModule*>(im);
+		   mod_vector.push_back(m);
+		 }
 	     }
 	     delete mod;
 	  }
@@ -91,24 +94,31 @@ OVImf::OVImf()
   }
     
 
-  //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[0]);
-  OVInputMethod* im = static_cast<OVInputMethod*>(mod_vector[ current_module ]);
-  im->initialize(dict, srv, OV_MODULEDIR);
+  OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
+
+  if( cxt != 0 )
+  {
+    delete cxt;
+  }
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
   
-  Status *stts = Status::getInstance();
-  stts->set_im_name( (char*) im->identifier() );
-  Preedit *prdt = Preedit::getInstance();
-  prdt->clear();
-  LookupChoice *lkc = LookupChoice::getInstance();
-  lkc->clear();
+  stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
+  preedit->clear();
+  lookupchoice->clear();
 }
 
 OVImf::~OVImf()
 {
   lt_dlexit();
 
+}
+
+string OVImf::commit_buf="";
+
+void OVImf::commitBuffer( string input )
+{
+  commit_buf = input;
 }
 
 int stdin_to_openvanila_keycode( int keychar ) 
@@ -259,18 +269,18 @@ void OVImf::switch_im()
   if( current_module >= mod_vector.size() ){
     current_module = 0;
   }
-  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
-  im->initialize(dict, srv, OV_MODULEDIR);
-  delete cxt; // clean old data
+  //OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  OVInputMethod* im = dynamic_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  if( cxt != 0 )
+  {
+    delete cxt; // clean old data
+  }
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
   
-  Status *stts = Status::getInstance();
   stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
-  Preedit *prdt = Preedit::getInstance();
-  prdt->clear();
-  LookupChoice *lkc = LookupChoice::getInstance();
-  lkc->clear();
+  preedit->clear();
+  lookupchoice->clear();
 }
 
 void OVImf::switch_im_per_lang()

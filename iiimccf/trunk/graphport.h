@@ -23,7 +23,7 @@ class GraphPort
     void pop_fg_buf();
     void push_bg_buf();
     void pop_bg_buf();
-    void setPseudo( bool flag ){ pseudo = flag; };
+    void setPseudo( bool flag );
     void drop_fg_buf();
     void drop_bg_buf();
     
