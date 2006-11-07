@@ -42,6 +42,17 @@ void GraphPort::RevRect( int x, int y, int width, int height)
     gdev->RevRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height );
 }
 
+void GraphPort::setPseudo( bool flag)
+{
+  if( flag != pseudo && flag == true && win!=0)
+  {
+    win->w(0);
+    win->h(0);
+  }
+  pseudo = flag;
+
+}
+
 void GraphPort::draw( int x, int y, Shape* sp )
 {
   if( pseudo == true )
