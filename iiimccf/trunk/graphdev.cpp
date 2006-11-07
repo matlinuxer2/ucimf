@@ -153,26 +153,57 @@ int GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
             && y >=0 && y + font->Height() <= Height());
     CharBitMap tmpFont;
     font->render(c, tmpFont);
-  
+    
+    int FH = font->Height();
     int fh = tmpFont.h;
     int fw = tmpFont.w;
-    if( !tmpFont.isMulti8 )
-    {
-      fw /= 2;
-    }
+    int wbytes = tmpFont.wBytes;
     int i,j;
 
     for (i = 0; i < fh ; i++)
     {
       for (j = 0; j < fw ; j++)
       {
-        if( tmpFont.pBuf[ i*tmpFont.wBytes + j/8 ] & ( 1<< ( 7- j%8) ) )
+	unsigned char bmask=0;
+	
+	switch( j%8 )
 	{
-	  PutPixel( x+j, y+i, fg);
+	  case 0:
+	    bmask = 128;
+	    break;
+	  case 1:
+	    bmask = 64;
+	    break;
+	  case 2:
+	    bmask = 32;
+	    break;
+	  case 3:
+	    bmask = 16;
+	    break;
+	  case 4:
+	    bmask = 8;
+	    break;
+	  case 5:
+	    bmask = 4;
+	    break;
+	  case 6:
+	    bmask = 2;
+	    break;
+	  case 7:
+	    bmask = 1;
+	    break;
+	  default:
+	    // should never happen.
+	    break;
+	}
+	
+        if( tmpFont.pBuf[ i*wbytes + j/8 ] & bmask )
+	{
+	  PutPixel( x+j, y+i+FH-fh-1, fg);
 	}
 	else
 	{
-	  PutPixel( x+j, y+i, bg);
+	  PutPixel( x+j, y+i+FH-fh-1, bg);
 	}
       }
     }

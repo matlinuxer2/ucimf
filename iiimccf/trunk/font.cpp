@@ -1,5 +1,8 @@
 #include "graphdev.h"
 #include "font.h"
+#include <cstdlib>
+#include <iostream>
+using namespace std;
 
 Font* Font::_instance = 0;
 
@@ -20,31 +23,36 @@ Font::Font()
   FT_New_Face( library, font_path, 0, &face);
 
   /* get font size info */
-  info();
   font_width=16;
   font_height=16;
   
-  FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
-  FT_Set_Charmap( face, face->charmaps[0] );
+  //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
+  FT_Set_Pixel_Sizes( face, font_width, font_height);
   //FT_Select_Charmap( face, FT_ENCODING_UNICODE );
-  int fh = face->available_sizes->height;
-  int fw = face->available_sizes->width;
-  if( fh == 0 )
+
+  if( face->available_sizes !=0 ) // stand for the pcf font.
   {
-    font_height = fw;
-  }
-  else
-  {
-    font_height = fh;
-  }
-  
-  if( fw == 0 )
-  {
-    font_width = fh;
-  }
-  else
-  {
-    font_width = fw;
+    FT_Set_Charmap( face, face->charmaps[0] );
+
+    int fh = face->available_sizes->height;
+    int fw = face->available_sizes->width;
+    if( fh == 0 )
+    {
+      font_height = fw;
+    }
+    else
+    {
+      font_height = fh;
+    }
+    
+    if( fw == 0 )
+    {
+      font_width = fh;
+    }
+    else
+    {
+      font_width = fw;
+    }
   }
   
 }
@@ -65,24 +73,6 @@ int Font::Width()
   return font_width;
 }
 
-void Font::info()
-{
-  /*
-    num_faces
-    face_index
-    num_glyphs
-    family_name
-    style_name
-    num_fixed_sizes
-    available_sizes
-    num_charmaps
-    size
-    charmap
-
-     
-    */
-}
-
 void Font::render( int code, CharBitMap& charbitmap )
 {
   FT_Error error;
@@ -92,28 +82,36 @@ void Font::render( int code, CharBitMap& charbitmap )
   cout << "charcode: [" << charcode << "] in UTF-16" << endl;
   cout.setf(ios_base::dec, ios_base::basefield );
   */
+  
+  int glyph_index = FT_Get_Char_Index( face, charcode );
+  FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
+  FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+  
+  FT_Bitmap bmap=face->glyph->bitmap;
 
-  error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
 
-  charbitmap.pBuf = (char*)face->glyph->bitmap.buffer;
-  charbitmap.h = face->glyph->bitmap.rows;
-  charbitmap.w = face->glyph->bitmap.width;
-  charbitmap.wBytes = face->glyph->bitmap.pitch;
-  charbitmap.isMulti8 = (charbitmap.w % 8) ? false : true;
+  cerr << "rows:" << bmap.rows << endl;
+  cerr << "width:" << bmap.width << endl;
+  cerr << "pitch:" << bmap.pitch << endl << endl;
+
+  charbitmap.h = bmap.rows;
+  charbitmap.w = bmap.width;
+  charbitmap.wBytes = bmap.pitch;
+  int total_size = bmap.rows * bmap.pitch;
+  charbitmap.pBuf = new char[ total_size ];
+  memcpy( charbitmap.pBuf, bmap.buffer, total_size );
+  charbitmap.isMulti8 = (bmap.width % 8) ? false : true;
 }
 
 
 int Font::length( int code )
 {
-  FT_Error error;
   FT_ULong charcode = static_cast<FT_ULong>(code);
-  /*
-  cout.setf(ios_base::hex, ios_base::basefield );
-  cout << "charcode: [" << charcode << "] in UTF-16" << endl;
-  cout.setf(ios_base::dec, ios_base::basefield );
-  */
 
-  error = FT_Load_Char( face, charcode, FT_LOAD_DEFAULT );
+  int glyph_index = FT_Get_Char_Index( face, charcode );
+  FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
+  FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+  
   int result = face->glyph->bitmap.width;
   
   return result;
