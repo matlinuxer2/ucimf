@@ -11,8 +11,6 @@ class Font{
    int  Width();
    void render( int code, CharBitMap& tmp );
    int  length( int code );
- private:
-   void info();
    
  protected:
    Font();

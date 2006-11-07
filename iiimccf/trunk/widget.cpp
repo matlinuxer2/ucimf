@@ -103,7 +103,7 @@ void Status::set_lang_name( char* new_lang_name )
 void Status::draw()
 {
  
-  int border = 2;
+  int border = 3;
 
   Text t;
   t.append( imf_name );
@@ -185,7 +185,7 @@ void Preedit::clear()
 void Preedit::draw()
 {
  
-  int border = 2;
+  int border = 3;
 
   Text t;
   if( buf.size() > 0 )
@@ -274,7 +274,7 @@ void LookupChoice::clear()
 void LookupChoice::draw()
 {
  
-  int border = 2;
+  int border = 3;
 
   Text t;
   for( int i=0 ; i<bufs.size(); i++ )
