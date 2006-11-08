@@ -1,4 +1,6 @@
 
+==========[Main Program Structure]==========
+
 ---Application Programmable Interface---
 
  * ucimf.h ucimf.cpp
@@ -8,48 +10,19 @@
  * openvanilla.h openvanilla.cpp
  * iiimccf.h iiimccf.cpp
 
----Widget, Layer Objects---
- * layer.h layer.cpp
+---GUI Layout System---
+ * graphport.h graphport.cpp
+ * shape.h shape.cpp
+ * window.h window.cpp
  * widget.h widget.cpp
+ * cwm.h cwm.cpp
 
 ---Graphical Implementation---
  * font.h font.cpp
  * graphdev.h graphdev.cpp
  * display/*.cpp
 
+---Basic data type ---
+ * type.h type.cpp
 
 
-
-Problem when building the Fbiterm+iiimccf:
-
-Q: cannot find "FSproto.h" ...
-A: just install xlibs-static-dev relative libraries.
-
-
-
-Debug History:
-
-Bug:
-  rev 50
-  linking time error while compiling fbiterm:
-  /home/mat/usr//lib/libiiimccf.so: undefined reference to `typeinfo for GraphDev'
-  /home/mat/usr//lib/libiiimccf.so: undefined reference to `vtable for GraphDev'
-Woodpecker:
-  in iiimccf/graphdev.h
-    the virtual function SaveRect and RstrRect are not assigned to 0
-
-Bug: 
-  rev 79
-  when "make dist":
-      { test ! -d iiimccf-0.9.3  || { find iiimccf-0.9.3  -type d ! -perm -200 -exec chmod u+w {} ';' && rm -fr iiimccf-0.9.3 ; }; }
-      mkdir iiimccf-0.9.3
-      /bin/sh: line 0: test: iiimccf-0.9.3: binary operator expected
-      cp: `/README': specified destination directory does not exist
-      Try `cp --help' for more information.
-      make: *** [distdir] Error 1
-Woodpecker:
-  the version number in configure.ac has space left. 
-  use
-    AC_INIT(iiimccf,0.9.3, BUG-REPORT-ADDRESS)
-  instead of   
-    AC_INIT(iiimccf, 0.9.3, BUG-REPORT-ADDRESS)
