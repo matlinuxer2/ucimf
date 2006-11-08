@@ -1,23 +1,23 @@
 1. API Generalization.
-   * ucimf.h
-   * imf.h
+   * ucimf.h  [ok]
+   * imf.h [ok]
 
 2. Font handling
-   * graphdev.h
-   * font.h
-   * display/*.cpp
-   * DrawChar(), OutChar()
+   * graphdev.h [ok]
+   * font.h [ok]
+   * display/*.cpp [ok]
+   * DrawChar(), OutChar() [ok]
 
 3. Widget building.
-   * take off dependency of IIIMF
-   * widget.h
-   * layer.h ( plan to removed )
+   * take off dependency of IIIMF [done]
+   * widget.h [ok]
+   * layer.h ( plan to removed ) [done]
 
 4. Openvanilla support
-   * openvanilla.h
+   * openvanilla.h [done]
 
 5. Keyboard mapping
-   * iiimf keymap <--> stdin keymap
-   * openvanilla keymap <--> stdin keymap
-   * scim keymap <--> stdin keymap
+   * iiimf keymap <--> stdin keymap  [done]
+   * openvanilla keymap <--> stdin keymap [done]
+   * scim keymap <--> stdin keymap 
   
