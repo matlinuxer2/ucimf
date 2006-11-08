@@ -3,121 +3,124 @@
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type">
   <link rel="stylesheet" href="content.css" type="text/css">
-  <title>IIIMCCF -- IIIM Console Client Framework</title>
+  <title>UCIMF -- Unicode Console InputMethod Framework</title>
 </head>
 <body>
 <h1 class="title" style="font-weight: bold;">
-<center>IIIMCCF -- IIIM Console Client Framework</center>
+<center>UCIMF -- Unicode Console InputMethod Framework</center>
 </h1>
 
-<table border="0" cellspacing="0" width = 100%><tr>
-<td>
-引入 IIIMF 架構的 Unicode 終端機環境   Copyright &copy; 2005
-<p>
-授權方式： <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a> (GPL)</p>
-<p>
-開發者:
-</p>
-<ul>
-  <li>MatLinuxer2@gmail.com</li>
-</ul>
-</td>
-<td bgcolor="#DDDDDD">
-<ul>
-	<li><a href="#origin">緣起</a></li>
-	<li><a href="#howtoget">取得方式</a></li>
-	<li><a href="#compile">編譯方式</a></li>
-	<li><a href="#testing">測試方式</a></li>
-	<li><a href="#document">設計文件</a></li>
-</ul>
-</td>
-</tr></table>
+<table border="0" cellspacing="0" width = 100%>
+<tr>
+  <td>引入IIIMF, OpenVanilla輸入法架構的終端機輸入環境 Copyright &copy; 2005-2006
+    <p>授權方式： <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a> (GPL)</p>
+    <p>開發者:</p>
+    <ul>
+      <li>Mat   MatLinuxer2@gmail.com</li>
+    </ul>
+  </td>
+  <td bgcolor="#DDDDDD">
+    <ul>
+	    <li><a href="#news">最新消息</a></li>
+	    <li><a href="#origin">緣起</a></li>
+	    <li><a href="#howtoget">取得方式</a></li>
+	    <li><a href="#compile">編譯方式</a></li>
+	    <li><a href="#testing">測試方式</a></li>
+	    <li><a href="#document">設計文件</a></li>
+    </ul>
+  </td>
+</tr>
+</table>
 
-<a name="origin"><h2 class="title">貝塔貝塔</h2></a>
-<p>
-<ul><a href="./file/iiimccf-0.9.3.tar.gz">iiimccf-0.9.3.tar.gz</a></ul>
-<ul><a href="./file/jfbterm-0.4.7.tar.gz">jfbterm-0.4.7.tar.gz</a></ul>
-<br>
-irssi:
-<br><img width="480" src="./screenshot/001.png"><br>
-vim:
-<br><img width="480" src="./screenshot/002.png"><br>
-<br><img width="480" src="./screenshot/003.png"><br>
-<br>
-screen( big5<-> utf8 ) + telnet :
-<br><img width="480" src="./screenshot/004.png"><br>
-</p>
-<p>
-<ul>1. 解開iiimccf-0.9.3.tar.gz</ul>
-<ul>2. ./configure --prefix=/tmp/usr; make ; make install</ul>
-<ul>3. 把iiimccf.conf.xml複製到$HOME(個人家目錄)下</ul>
-<ul>4. 解開jfbterm-0.4.7.tar.gz</ul>
-<ul>5. ./configure --prefix=/tmp/usr; make ; make install</ul>
-<ul>6. LC_CTYPE=zh_TW.UTF-8 LD_LIBRARY_PATH=/tmp/usr/lib/ PATH=/tmp/usr/bin/:$PATH /bin/bash</ul>
-<ul>7. /etc/init.d/iiimf-server start</ul>
-<ul>8. jfbterm</ul>
-<ul></p>
-<p>
 
-歡迎+感謝任何的Bug Report或建議到我的信箱, 不過我可能沒辦法馬上回應. 因為...我又要收假了 orz<ul>Email: MatLinuxer2@gmail.com</ul>
+<a name="news"><h2 class="title">最新消息</h2></a>
+
+<h3 class="title">正式支援OpenVanilla輸入法架構</h3>
+<p>
+  <ul><a href="./file/ucimf-1.9.0.tar.gz">ucimf-1.9.0.tar.gz</a></ul>
+  <ul><a href="./file/jfbterm-0.4.7-patch.tar.gz">jfbterm-0.4.7-patch.tar.gz</a></ul>
 </p>
+<p>
+  <br><img width="480" src="./screenshot/ucimf_005.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_006.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_007.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_008.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_009.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_010.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_011.png"><br>
+  <br><img width="480" src="./screenshot/ucimf_012.png"><br>
+</p>
+    
+<br>
+
+<h3 class="title">iiimccf 0.9.3 測試版出爐</h3>
+<p>
+  <ul><a href="./file/iiimccf-0.9.3.tar.gz">iiimccf-0.9.3.tar.gz</a></ul>
+  <ul><a href="./file/jfbterm-0.4.7.tar.gz">jfbterm-0.4.7.tar.gz</a></ul>
+</p>
+<p>
+  <br><img width="480" src="./screenshot/001.png"><br>
+  <br><img width="480" src="./screenshot/002.png"><br>
+  <br><img width="480" src="./screenshot/003.png"><br>
+  <br><img width="480" src="./screenshot/004.png"><br>
+</p>
+
+<br>
+
+
 <br>
 
 <a name="origin"><h2 class="title">緣起</h2></a>
 <p>
-小弟常常在 console 弄東弄西，然而在 console 下遇到中文處理，總是一個頭兩個大。
-為此，我一直尋找一個完整的 Unicode console enviroment 的解決方案，感謝先人的努力，
-已經有 fbiterm、jfbterm、... 等 Unicode 的 console applications。然而，
-輸入法的支援上一直是一個缺憾，於是我開始著手嘗試將 IIIMF 的架構引入 console，
-也就是你現在看到的專案。
+  小弟常常在 console 弄東弄西，然而在 console 下遇到中文處理，總是一個頭兩個大。
+  為此，我一直尋找一個完整的 Unicode console enviroment 的解決方案，感謝先人的努力，
+  已經有 fbiterm、jfbterm、... 等 Unicode 的 console applications。然而，
+  輸入法的支援上一直是一個缺憾，於是我開始著手嘗試將 IIIMF 的架構引入 console，
+  也就是你現在看到的專案。
 </p>
 <p>
-目前這個專案還在發展當中，如你有任何想法與建議，歡迎與我聯絡：<ul>
-Email: MatLinuxer2@gmail.com</ul>
+  目前這個專案還在發展當中，如你有任何想法與建議，歡迎與我聯絡：
+  <ul>Email: MatLinuxer2@gmail.com</ul>
 </p>
+
 <br>
+
 <a name="howtoget"><h2 class="title">取得方式：</h2></a>
 <ul>
   <li>取得開發中的最新程式碼，請安裝 <a href="http://subversion.tigris.org/">Subversion</a>，並確保 https 連線正常。在終端機下輸入以下指令：
     
     <ul>
       <code><b>svn co https://svn.csie.net/iiimtcf</b></code>
-    
     </ul>
   </li>
 </ul>
+
 <br>
+
 <a name="compile"><h2 class="title">編譯方式：</h2></a>
+<p>
+  updating...
+</p>
 <ul>
-  <li>請先安裝好 iiimcf 和 iiimsf 等套件，以提供 IIIMF 的支援</li>
-  <li>./autogen.sh (只有從 Subversion 取出的開發版本需要)</li>
-  <li>./configure --help 查看編譯選項，因為功能持續開發中，項目隨時可能增減</li>
-  <li>./configure [編譯選項，請參閱上行]</li>
-  <li>make ; make install</li>
 </ul>
+
 <br>
+
 <a name="testing"><h2 class="title">測試方式</h2></a>
+<p>
+  updating...
+</p>
 <ul>
-  <li>先安裝 lib，然後再安裝 fbiterm</li>
-  <li>字型的路徑在 /iterm/unix/fbiterm/src/fbiterm.h 裡，參數: DefaultMB</li>
 </ul>
+
 <br>
+
 <a name="document"><h2 class="title">設計文件</h2></a>
+<p>
+  continue...
+</p>
+
 <br>
-<ul>
-There are several directories under the "iiimtcf/".
-The "iiimtcf/iiimccf/" is the main source. Files there will be built to a independent module.
-And "iiimtcf/iterm/" is an instance for IIIMCCF to apply.
-If you are interested in this project, just try to build "iiimtcf/iiimccf/" first.
-"iiimtcf/iterm/" doesn't affect the functionality of IIIMCCF, in fact.
-</ul>
-<br>
-<ul>
-關於程式的說明, 各位可以參考 <a href="document/">iiimccf/document</a> 下的圖檔。是手寫的筆記，字跡潦草，請大家多多包涵。
-</ul>
-<br>
-<br><img width="480" src="./screenshot/ov-dry-test.png"><br>
-<br><img width="480" src="./screenshot/ov-dry-test2.png"><br>
-<br><img width="480" src="./screenshot/ov-dry-test3.png"><br>
+
 </body>
 </html>
