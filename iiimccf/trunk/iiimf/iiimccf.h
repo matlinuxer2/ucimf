@@ -62,3 +62,7 @@ class IIIMCCF : public Imf {
     
 };
 
+extern "C" Imf* createImf(){ return new IIIMCF; }
+extern "C" void destroyImf( Imf* imf ){ delete imf; }
+
+

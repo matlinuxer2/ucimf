@@ -18,16 +18,18 @@
  */
 
 #include <ucimf.h>
-#include "imf.h"
-#include "openvanilla.h"
-#include "iiimccf.h"
 #include <sys/ioctl.h>
 #include <linux/kd.h>
 #include <linux/keyboard.h>
 #include <stdlib.h>
+#include <string>
+#include <dirent.h>
+#include <ltdl.h>
+#include <vector>
+
+#include "imf.h"
 #include "widget.h"
 #include "cwm.h"
-#include <string>
 
 using namespace std;
 
@@ -46,6 +48,8 @@ Shift *lookupchoice_shift = new LookupChoiceShift;
 Cwm *cwm = Cwm::getInstance();
 
 Imf *imf;
+vector<Imf*> imfs;
+int current_imf;
 
 enum
 {
@@ -110,11 +114,78 @@ void restore_keys()
 
 }
 
+void scanImf()
+{
+  
+  createImf_t* create_imf;
+  destroyImf_t* destroy_imf;
+
+  char* IMF_MODULEDIR=getenv("IMF_MODULE_DIR");
+  lt_dlinit();
+  lt_dlsetsearchpath( IMF_MODULEDIR );
+
+  DIR *dir = opendir( IMF_MODULEDIR );
+  if( dir )
+  {
+    struct dirent *d_ent;
+    while( ( d_ent = readdir(dir) ) != NULL )
+    {
+      if( strstr( d_ent->d_name, ".so") )
+      {
+	  
+	  lt_dlhandle handle = lt_dlopen( d_ent->d_name );
+	  if( handle == NULL){
+	    fprintf(stderr, "lt_dlopen %s failed\n", d_ent->d_name );
+	  }
+	  else{ 
+	    create_imf = (createImf_t*) lt_dlsym( handle, "createImf" );
+	    destroy_imf = (destroyImf_t*) lt_dlsym( handle, "destroyImf" );
+	  }
+
+	  if( !create_imf || !destroy_imf ){
+	     fprintf(stderr, "lt_dlsym %s failed\n", d_ent->d_name );
+	  }
+	  
+	  Imf* i;
+	  i=create_imf();
+	  imfs.push_back(i);
+
+      }
+    }
+    closedir(dir);
+  }
+
+
+}
+
+
+
+Imf* nextImf()
+{
+  if( imfs.empty() )
+  {
+    return 0;
+  }
+
+  current_imf+=1;
+
+  if( current_imf >= imfs.size() )
+  {
+    current_imf =0;
+  }
+
+  return imfs[current_imf];
+
+}
+
+
+
+
 void ucimf_init()
 {
   setup_keys();
   prev_focus = false;
-  imf = new DummyImf;
+  imf = 0;
   cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->attachWindow( prdt->getWindow(), preedit_shift );
   cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
@@ -123,7 +194,11 @@ void ucimf_init()
 void ucimf_exit()
 {
   restore_keys();
-  delete imf;
+  if( imf !=0 )
+  {
+    delete imf;
+    imf=0;
+  }
 }
 
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
@@ -141,36 +216,26 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       }
       else if( buf[0] == 204 )
       {
-	if( cwm->get_focus() )
+	if( cwm->get_focus() && imf !=0 )
 	  imf->switch_im();
 	else
 	  cwm->set_focus( true );
       }
       else if( buf[0] == 205 )
       {
-	prdt->clear();
-	lkc->clear();
-	stts->set_im_name("");
-	stts->set_imf_name("IIIMF");
-	imf = IIIMCCF::getInstance();
+	scanImf();
       }
       else if( buf[0] == 206 )
       {
-	prdt->clear();
-	lkc->clear();
-	stts->set_im_name("");
-	stts->set_imf_name("OpenVanilla");
-	imf = OVImf::getInstance();
-      }
-      else if( buf[0] == 207 )
-      {
-	// This is preserved for the future
-	//imf = SCIMF::getInstance();
-	prdt->clear();
-	lkc->clear();
-	stts->set_im_name("");
-	stts->set_imf_name("Dummy");
-	imf = new DummyImf;
+	imf = nextImf();
+	if( imf !=0 )
+	{
+	  prdt->clear();
+	  lkc->clear();
+	  stts->clear();
+	  char* name= (char*)imf->name().c_str();
+	  stts->set_imf_name( name );
+	}
       }
       else
       {

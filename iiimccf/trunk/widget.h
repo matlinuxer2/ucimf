@@ -47,6 +47,7 @@ class Status : public Widget{
     static Status* getInstance();
     
     void draw();
+    void clear();
     void set_imf_name( char* );
     void set_im_name( char* );
     void set_lang_name( char* );
