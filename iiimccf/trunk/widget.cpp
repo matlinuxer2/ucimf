@@ -100,6 +100,13 @@ Status* Status::getInstance()
   return _instance;
 }
 
+void Status::clear()
+{
+  set_imf_name("");
+  set_im_name("");
+  set_lang_name("");
+}
+
 void Status::set_imf_name( char* new_imf_name )
 {
   ustring input( "UTF-8", new_imf_name );
