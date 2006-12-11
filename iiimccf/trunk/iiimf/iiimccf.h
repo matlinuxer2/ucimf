@@ -27,7 +27,8 @@ using std::string;
 class IIIMCCF : public Imf {
   public:
     static Imf* getInstance();
-
+    
+    char* name();
     string process_input( const string& input );
     void switch_lang();
     void switch_im();
@@ -62,7 +63,7 @@ class IIIMCCF : public Imf {
     
 };
 
-extern "C" Imf* createImf(){ return new IIIMCF; }
+extern "C" Imf* createImf(){ return IIIMCCF::getInstance() ; }
 extern "C" void destroyImf( Imf* imf ){ delete imf; }
 
 
