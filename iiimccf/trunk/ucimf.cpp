@@ -116,7 +116,8 @@ void restore_keys()
 
 void scanImf()
 {
-  
+  current_imf =0;
+  imfs.clear();
   createImf_t* create_imf;
   destroyImf_t* destroy_imf;
 
@@ -148,13 +149,15 @@ void scanImf()
 	  
 	  Imf* i;
 	  i=create_imf();
-	  imfs.push_back(i);
+	  if( i!=0 )
+	  {
+	    imfs.push_back(i);
+	  }
 
       }
     }
     closedir(dir);
   }
-
 
 }
 
@@ -233,8 +236,8 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	  prdt->clear();
 	  lkc->clear();
 	  stts->clear();
-	  char* name= (char*)imf->name().c_str();
-	  stts->set_imf_name( name );
+	  
+	  stts->set_imf_name( imf->name() );
 	}
       }
       else

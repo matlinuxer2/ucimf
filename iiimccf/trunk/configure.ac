@@ -4,7 +4,6 @@
 AC_PREREQ(2.59)
 AC_INIT(ucimf,1.9.0, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([openvanilla.h])
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
 AC_PROG_CXX
@@ -14,6 +13,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
+AC_PROG_LIBTOOL
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ldisplay':
@@ -58,8 +58,9 @@ AC_CHECK_LIB([iiimcf], [main])
 AC_CHECK_LIB([ltdl], [main])
 
 # Checks for header files.
+AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h stdint.h string.h sys/ioctl.h unistd.h])
+AC_CHECK_HEADERS([stdint.h fcntl.h locale.h stdlib.h string.h sys/ioctl.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -68,16 +69,15 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
+AC_FUNC_CLOSEDIR_VOID
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([memmove memset munmap])
-#AC_PROG_RANLIB
-AC_PROG_LIBTOOL
+AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 
-AC_CONFIG_FILES([
-	Makefile
-	display/Makefile
-])
+AC_CONFIG_FILES([Makefile
+                 display/Makefile
+                 iiimf/Makefile
+                 openvanilla/Makefile])
 AC_OUTPUT

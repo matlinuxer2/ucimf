@@ -391,6 +391,12 @@ IIIMCCF::~IIIMCCF()
 }
 
 
+char* IIIMCCF::name()
+{
+  return "IIIMF";
+}
+
+
 void IIIMCCF::switch_lang()
 {
 

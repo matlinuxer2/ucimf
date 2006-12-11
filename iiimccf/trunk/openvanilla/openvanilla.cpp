@@ -53,8 +53,9 @@ OVImf::OVImf()
 
   // OV_MODULEDIR is defined in Makefile.am !!
   OV_MODULEDIR=getenv("OVMODULE_DIR");
-  lt_dlinit();
-  lt_dlsetsearchpath( OV_MODULEDIR );
+  //lt_dlinit();
+  //lt_dlsetsearchpath( OV_MODULEDIR );
+  lt_dladdsearchdir( OV_MODULEDIR );
 
   DIR *dir = opendir( OV_MODULEDIR );
   if( dir )
@@ -111,8 +112,8 @@ OVImf::OVImf()
     }
     closedir(dir);
   }
-    
 
+   
   OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
 
   if( cxt != 0 )
@@ -129,7 +130,6 @@ OVImf::OVImf()
 
 OVImf::~OVImf()
 {
-  lt_dlexit();
 
 }
 
@@ -158,6 +158,10 @@ int stdin_to_openvanila_keycode( int keychar )
   return keycode;
 }
 
+char* OVImf::name()
+{
+  return "OpenVanilla";
+}
 
 string OVImf::process_input( const string& buf )
 {

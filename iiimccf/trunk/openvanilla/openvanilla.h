@@ -132,6 +132,7 @@ class OVImf : public Imf
     static void commitBuffer( string );
 
     string process_input( const string& input );
+    char* name();
     void switch_im();
     void switch_lang();
     void switch_im_per_lang();
@@ -153,3 +154,7 @@ class OVImf : public Imf
     OVService *srv;
     OVDictionary *dict;
 };
+
+extern "C" Imf* createImf(){ return OVImf::getInstance(); }
+extern "C" void destroyImf( Imf* imf ){ delete imf; }
+
