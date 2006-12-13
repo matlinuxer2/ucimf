@@ -156,16 +156,6 @@ void GraphDev::DrawRect(int x1,int y1,int x2,int y2,int color) {
     DrawLine(x2,y1,x2,y2,color);
 }
 
-
-//    //draw a ascii char
-//    void GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
-//        assert( x >= 0 && x + font->Width() <= Width()
-//                && y >=0 && y + font->Height() <= Height());
-//        CharBitMap tmpFont;
-//        font->render(c, tmpFont);
-//        DrawChar(x,y,fg,bg,&tmpFont);  // true set extend to blank
-//    }
-
 int GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
     assert( x >= 0 && x + font->Width() <= Width()
             && y >=0 && y + font->Height() <= Height());
