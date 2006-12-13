@@ -1,11 +1,12 @@
 SUBDIRS = display dummy openvanilla iiimf
 
 #EXTRA_INCS = -I$(prefix)/include/iiim/ -I$(prefix)/include/OpenVanilla/
+EXTRA_INCS = -I$(prefix)/include/OpenVanilla/
 #EXTRA_LIBS = -Ldisplay/ -ldisplay -liiimcf -lltdl
 #EXTRA_LIBS = -liiimcf -lltdl -Ldisplay/ -ldisplay 
 EXTRA_LIBS = -lltdl -Ldisplay/ -ldisplay 
 
-AM_CPPFLAGS = -g -DDEBUG #$(EXTRA_INCS) 
+AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS) 
 
 lib_LTLIBRARIES = libucimf.la
 

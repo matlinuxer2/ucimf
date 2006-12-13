@@ -3,7 +3,7 @@
 class DummyImf : public Imf
 {
   public:
-    char* name();
+    void refresh();
     string process_input( const string& input );
     void  switch_lang(){};
     void  switch_im(){};

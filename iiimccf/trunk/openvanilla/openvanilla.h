@@ -133,7 +133,7 @@ class OVImf : public Imf
     static OVInputMethod* im;
 
     string process_input( const string& input );
-    char* name();
+    void refresh();
     void switch_im();
     void switch_lang();
     void switch_im_per_lang();
@@ -147,7 +147,7 @@ class OVImf : public Imf
     char* OV_MODULEDIR;
     std::vector<OVModule*> mod_vector; 
     int current_module;
-
+    char* current_im_name;
     Status* stts;
     
     OVInputMethodContext *cxt;

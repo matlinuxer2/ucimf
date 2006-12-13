@@ -1,8 +1,11 @@
 #include "dummy.h"
+#include "widget.h"
 
-char* DummyImf::name()
+void DummyImf::refresh()
 {
-  return "Dummy";
+  Status* stts = Status::getInstance();
+  stts->set_imf_name("Dummy");
+  stts->set_im_name("none");
 }
 
 string DummyImf::process_input( const string& input)
