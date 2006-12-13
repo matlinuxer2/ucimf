@@ -29,7 +29,7 @@ class IIIMCCF : public Imf {
   public:
     static Imf* getInstance();
     
-    char* name();
+    void refresh();
     string process_input( const string& input );
     void switch_lang();
     void switch_im();
@@ -58,6 +58,7 @@ class IIIMCCF : public Imf {
 
     /* for input methods */
     int cur_ims_id; // current imput method id 
+    char* cur_id_name; // current input method name
     int cur_pos; // current preedit position 
     int cur_idx; // current lookupchoice index 
     int num_of_ims; // number of ims

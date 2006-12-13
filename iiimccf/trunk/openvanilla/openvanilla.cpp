@@ -45,8 +45,7 @@ OVInputMethod* OVImf::im = 0;
 OVImf::OVImf()
 {
   current_module = 0;
-  mod_vector.clear();
-  siz=33;
+  current_im_name = "";
 
   preedit = new OVImfBuffer;
   lookupchoice = new OVImfCandidate;
@@ -95,7 +94,13 @@ OVImf::OVImf()
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
 	     {
-	       mod_vector.push_back(m);
+	       cerr << "mod type: " << m->moduleType() << endl;
+	       string str1= m->moduleType();
+	       string str2= "OVInputMethod";
+	       if( str1 == str2 )
+	       {
+	         mod_vector.push_back(m);
+	       }
 	       cerr << "vec size: " << mod_vector.size() << endl;
 	     }
 	     delete mod;
@@ -106,7 +111,6 @@ OVImf::OVImf()
     closedir(dir);
   }
 
-  cerr << "vec size: " << mod_vector.size() << endl;
    
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
   
@@ -117,7 +121,7 @@ OVImf::OVImf()
   
   if( !mod_vector.empty() )
   {
-    im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
+    im = static_cast<OVInputMethod*>(mod_vector[ current_module ]);
     
     if( im !=0 )
     {
@@ -125,7 +129,8 @@ OVImf::OVImf()
       cxt = im->newContext();
       cxt->start( preedit, lookupchoice, srv );
       
-      stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
+      current_im_name =(char*) im->localizedName( srv->locale() );
+      refresh();
       preedit->clear();
       lookupchoice->clear();
     }
@@ -167,9 +172,10 @@ int stdin_to_openvanila_keycode( int keychar )
   return keycode;
 }
 
-char* OVImf::name()
+void OVImf::refresh()
 {
-  return "OpenVanilla";
+  stts->set_imf_name( "OpenVanilla" );
+  stts->set_im_name( current_im_name );
 }
 
 string OVImf::process_input( const string& buf )
@@ -301,19 +307,24 @@ void OVImf::switch_im()
   if( current_module >= mod_vector.size() ){
     current_module = 0;
   }
-  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>( mod_vector[ current_module ] );
   if( cxt != 0 )
   {
     delete cxt; // clean old data
   }
-  im->initialize( dict, srv, OV_MODULEDIR );
-  cxt = im->newContext();
-  cxt->start( preedit, lookupchoice, srv );
-  
-  stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
-  preedit->clear();
-  lookupchoice->clear();
+
+  if( im !=0 )
+  {
+    im->initialize( dict, srv, OV_MODULEDIR );
+    cxt = im->newContext();
+    cxt->start( preedit, lookupchoice, srv );
+    
+    current_im_name = (char*) im->localizedName( srv->locale() );
+    refresh();
+    preedit->clear();
+    lookupchoice->clear();
+  }
 }
 
 void OVImf::switch_im_per_lang()

@@ -216,6 +216,10 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       if(  buf[0] == 203 )
       {
 	cwm->set_focus( !cwm->get_focus() );
+	if(imf!=0)
+	{
+	   imf->refresh();
+	}
       }
       else if( buf[0] == 204 )
       {
@@ -227,6 +231,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       else if( buf[0] == 205 )
       {
 	scanImf();
+	stts->clear();
       }
       else if( buf[0] == 206 )
       {
@@ -235,9 +240,9 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	stts->clear();
 
 	imf = nextImf();
-	if( imf !=0 )
+	if( imf!=0 )
 	{
-	  stts->set_imf_name( imf->name() );
+	  imf->refresh();
 	}
       }
       else

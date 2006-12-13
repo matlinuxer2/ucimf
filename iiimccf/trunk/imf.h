@@ -26,7 +26,7 @@ using namespace std;
 
 class Imf{
   public:
-    virtual char* name()=0;
+    virtual void refresh()=0;
     virtual string process_input( const string& input )=0;
     virtual void  switch_lang()=0;
     virtual void  switch_im()=0;
