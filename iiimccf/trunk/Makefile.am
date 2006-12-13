@@ -1,4 +1,4 @@
-SUBDIRS = display  openvanilla iiimf
+SUBDIRS = display dummy openvanilla iiimf
 
 #EXTRA_INCS = -I$(prefix)/include/iiim/ -I$(prefix)/include/OpenVanilla/
 #EXTRA_LIBS = -Ldisplay/ -ldisplay -liiimcf -lltdl

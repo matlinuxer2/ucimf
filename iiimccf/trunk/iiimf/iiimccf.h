@@ -21,6 +21,7 @@
 #include <iiimcf.h>
 #include "imf.h"
 #include <string>
+//#include "widget.h"
 using std::string;
 
 
@@ -45,6 +46,8 @@ class IIIMCCF : public Imf {
     IIIMCCF();
     ~IIIMCCF();
     static Imf* _instance;
+    
+ //   static Status *stts;
     
     // IIIMCF Object
     IIIMCF_handle 	handle;
