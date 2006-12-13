@@ -40,11 +40,14 @@ Imf* OVImf::getInstance()
   return _instance;
 }
 
+OVInputMethod* OVImf::im = 0;
 
 OVImf::OVImf()
 {
   current_module = 0;
-  
+  mod_vector.clear();
+  siz=33;
+
   preedit = new OVImfBuffer;
   lookupchoice = new OVImfCandidate;
   srv = new OVImfService;
@@ -54,8 +57,7 @@ OVImf::OVImf()
   // OV_MODULEDIR is defined in Makefile.am !!
   OV_MODULEDIR=getenv("OVMODULE_DIR");
   //lt_dlinit();
-  //lt_dlsetsearchpath( OV_MODULEDIR );
-  lt_dladdsearchdir( OV_MODULEDIR );
+  lt_dlsetsearchpath( OV_MODULEDIR );
 
   DIR *dir = opendir( OV_MODULEDIR );
   if( dir )
@@ -93,17 +95,8 @@ OVImf::OVImf()
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
 	     {
-	         //std::cerr << m->identifier() << std::endl; 
-		 string mtype( m->moduleType() );
-		 string mtype2( "OVOutputFilter");
-		 if( mtype != mtype2 )
-		 {
-		   //std::cerr << m->moduleType() << std::endl;
-		   OVInputMethod* im = static_cast<OVInputMethod*>(m);
-		   im->initialize( dict, srv, OV_MODULEDIR );
-		   m = static_cast<OVModule*>(im);
-		   mod_vector.push_back(m);
-		 }
+	       mod_vector.push_back(m);
+	       cerr << "vec size: " << mod_vector.size() << endl;
 	     }
 	     delete mod;
 	  }
@@ -113,19 +106,35 @@ OVImf::OVImf()
     closedir(dir);
   }
 
+  cerr << "vec size: " << mod_vector.size() << endl;
    
-  OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
-
+  //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
+  
   if( cxt != 0 )
   {
     delete cxt;
   }
-  cxt = im->newContext();
-  cxt->start( preedit, lookupchoice, srv );
   
-  stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
-  preedit->clear();
-  lookupchoice->clear();
+  if( !mod_vector.empty() )
+  {
+    im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
+    
+    if( im !=0 )
+    {
+      im->initialize( dict, srv, OV_MODULEDIR );
+      cxt = im->newContext();
+      cxt->start( preedit, lookupchoice, srv );
+      
+      stts->set_im_name( (char*) im->localizedName( srv->locale() ) );
+      preedit->clear();
+      lookupchoice->clear();
+    }
+  }
+  else
+  {
+    im = 0;
+  }
+
 }
 
 OVImf::~OVImf()
@@ -292,12 +301,13 @@ void OVImf::switch_im()
   if( current_module >= mod_vector.size() ){
     current_module = 0;
   }
-  //OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
-  OVInputMethod* im = dynamic_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  OVInputMethod* im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  //OVInputMethod* im = dynamic_cast<OVInputMethod*>( mod_vector[ current_module ] );
   if( cxt != 0 )
   {
     delete cxt; // clean old data
   }
+  im->initialize( dict, srv, OV_MODULEDIR );
   cxt = im->newContext();
   cxt->start( preedit, lookupchoice, srv );
   

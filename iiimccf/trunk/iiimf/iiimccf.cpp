@@ -341,7 +341,8 @@ Imf* IIIMCCF::getInstance()
 
   return _instance;
 }
-  
+
+//Status* IIIMCCF::stts = Status::getInstance();
 
 IIIMCCF::IIIMCCF()
 {

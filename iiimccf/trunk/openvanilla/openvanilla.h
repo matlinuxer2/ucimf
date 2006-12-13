@@ -130,6 +130,7 @@ class OVImf : public Imf
     ~OVImf();
     static Imf* getInstance();
     static void commitBuffer( string );
+    static OVInputMethod* im;
 
     string process_input( const string& input );
     char* name();
@@ -137,6 +138,7 @@ class OVImf : public Imf
     void switch_lang();
     void switch_im_per_lang();
     
+    int siz;
   protected:
     OVImf();
     static Imf* _instance;

@@ -79,5 +79,6 @@ AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 AC_CONFIG_FILES([Makefile
                  display/Makefile
                  iiimf/Makefile
-                 openvanilla/Makefile])
+                 openvanilla/Makefile
+		 dummy/Makefile])
 AC_OUTPUT

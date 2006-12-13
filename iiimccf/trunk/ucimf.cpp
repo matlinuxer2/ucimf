@@ -230,13 +230,13 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       }
       else if( buf[0] == 206 )
       {
+	prdt->clear();
+	lkc->clear();
+	stts->clear();
+
 	imf = nextImf();
 	if( imf !=0 )
 	{
-	  prdt->clear();
-	  lkc->clear();
-	  stts->clear();
-	  
 	  stts->set_imf_name( imf->name() );
 	}
       }
