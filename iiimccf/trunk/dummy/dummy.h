@@ -32,6 +32,7 @@
  */
 
 #include "imf.h"
+using namespace std;
 
 class DummyImf : public Imf
 {
