@@ -55,7 +55,7 @@ OVImf::OVImf()
 
   // OV_MODULEDIR is defined in Makefile.am !!
   OV_MODULEDIR=getenv("OVMODULE_DIR");
-  //lt_dlinit();
+  lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
 
   DIR *dir = opendir( OV_MODULEDIR );
@@ -70,7 +70,7 @@ OVImf::OVImf()
 	  
 	  mod->handle = lt_dlopen( d_ent->d_name );
 	  if(mod->handle == NULL){
-	    fprintf(stderr, "lt_dlopen %s failed\n", d_ent->d_name );
+	    cerr << "lt_dlopen " << d_ent->d_name << " failed" << endl; 
 	    delete mod;
 	  }
 	  else{ 
@@ -80,12 +80,12 @@ OVImf::OVImf()
 	  }
 
 	  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
-	     fprintf(stderr, "lt_dlsym %s failed\n", d_ent->d_name );
+	     cerr << "lt_dlsym " << d_ent->d_name << " failed" << endl;
 	     delete mod;
 	  }
 	  
 	  if( mod->getLibVersion() < OV_VERSION ){
-	     fprintf(stderr, "%s %d is too old\n", d_ent->d_name, mod->getLibVersion());
+	     cerr <<  d_ent->d_name << " " <<  mod->getLibVersion() <<  " is too old" << endl;
 	     delete mod;
 	  }
 
@@ -94,14 +94,12 @@ OVImf::OVImf()
 	     mod->initLibrary(srv, OV_MODULEDIR);
 	     for(int i=0; m = mod->getModule(i); i++)
 	     {
-	       cerr << "mod type: " << m->moduleType() << endl;
 	       string str1= m->moduleType();
 	       string str2= "OVInputMethod";
 	       if( str1 == str2 )
 	       {
 	         mod_vector.push_back(m);
 	       }
-	       cerr << "vec size: " << mod_vector.size() << endl;
 	     }
 	     delete mod;
 	  }
@@ -368,7 +366,6 @@ OVBuffer* OVImfBuffer::clear() {
 
 OVBuffer* OVImfBuffer::append(const char *s) {
   prdt->append( (char*)s );
-  //prdt->render();
   buf+= s;
   return this;
 }
@@ -432,7 +429,6 @@ OVCandidate* OVImfCandidate::show() {
     if (!onscreen) {
 	onscreen=1;
     }
-    //lkc->render();
     return this;
 }
 
@@ -451,7 +447,7 @@ int OVImfCandidate::onScreen() {
  */
 
 void OVImfService::beep() { }
-void OVImfService::notify(const char *msg) { fprintf(stderr, "%s\n", msg); }
+void OVImfService::notify(const char *msg) { cerr << msg << endl;}
 const char *OVImfService::locale(){
   setlocale( LC_CTYPE, "" );
   string lc_ctype = setlocale( LC_CTYPE, NULL );

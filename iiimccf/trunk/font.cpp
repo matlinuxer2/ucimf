@@ -96,11 +96,6 @@ void Font::render( int code, CharBitMap& charbitmap )
 {
   FT_Error error;
   FT_ULong charcode = static_cast<FT_ULong>(code);
-  /*
-  cout.setf(ios_base::hex, ios_base::basefield );
-  cout << "charcode: [" << charcode << "] in UTF-16" << endl;
-  cout.setf(ios_base::dec, ios_base::basefield );
-  */
   
   int glyph_index = FT_Get_Char_Index( face, charcode );
   FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
@@ -108,14 +103,9 @@ void Font::render( int code, CharBitMap& charbitmap )
   
   FT_Bitmap bmap=face->glyph->bitmap;
 
-
-  cerr << "rows:" << bmap.rows << endl;
-  cerr << "width:" << bmap.width << endl;
-  cerr << "pitch:" << bmap.pitch << endl << endl;
-
   charbitmap.h = bmap.rows;
   charbitmap.w = bmap.width;
-  charbitmap.wBytes = bmap.pitch;
+  charbitmap.wBytes = bmap.pitch; // pitch: how many bytes it has..
   int total_size = bmap.rows * bmap.pitch;
   charbitmap.pBuf = new char[ total_size ];
   memcpy( charbitmap.pBuf, bmap.buffer, total_size );

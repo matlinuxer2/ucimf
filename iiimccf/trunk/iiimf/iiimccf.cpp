@@ -17,26 +17,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "iiimccf.h"
 #include <iostream>
 #include <ctime>
 #include <cstring>
 #include <string>
+#include "iiimccf.h"
 #include "widget.h"
-
 using namespace std;
-#define CONVERT_BUFSIZE 48
 
 
 /*
  * Definition of utilities functions.
  */
-void mesg( char *str ){
-  cout << "msg:" << str << endl;
-}
+#define CONVERT_BUFSIZE 48
 
 void debug( char *str ){
-  cout << "err:" << str << endl;
+  cerr << "err:" << str << endl;
 }
 
 
@@ -346,35 +342,34 @@ Imf* IIIMCCF::getInstance()
 
 IIIMCCF::IIIMCCF()
 {
-	IIIMF_status st;
-    	IIIMCF_attr attr;
-
-    	st = iiimcf_initialize( IIIMCF_ATTR_NULL );
-    	st = iiimcf_create_attr(&attr);
-    	st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
-	                                      "IIIM Console Client Framework");
-	st = iiimcf_create_handle(attr, &handle );
-    	st = iiimcf_destroy_attr(attr);
-
-	cur_ims_id = 0;
-    
-	const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
-	char *hrn, *domain;
-
-	st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
-	iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
-	cur_id_name = iiimcf_string_to_utf8(u16idname);
-
-	st = iiimcf_create_attr( &attr );
-	st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, cur_id_name );
-	
-	st = iiimcf_create_context( handle,attr, &context );
-    
-	IIIMCF_event event;
-	iiimcf_create_trigger_notify_event( 1, &event);
-	iiimcf_forward_event( context, event);
-
+    IIIMF_status st;
+    IIIMCF_attr attr;
+    IIIMCF_event event;
     Status *stts = Status::getInstance();
+    cur_ims_id = 0;
+    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
+    char *hrn, *domain;
+
+    st = iiimcf_initialize( IIIMCF_ATTR_NULL );
+    st = iiimcf_create_attr(&attr);
+    st = iiimcf_attr_put_string_value(attr, IIIMCF_ATTR_CLIENT_TYPE,
+					  "IIIM Console Client Framework");
+    st = iiimcf_create_handle(attr, &handle );
+    st = iiimcf_destroy_attr(attr);
+
+
+    st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
+    iiimcf_get_input_method_desc(pims[cur_ims_id], &u16idname, &u16hrn, &u16domain);
+    cur_id_name = iiimcf_string_to_utf8(u16idname);
+
+    st = iiimcf_create_attr( &attr );
+    st = iiimcf_attr_put_string_value( attr, IIIMCF_ATTR_INPUT_METHOD_NAME, cur_id_name );
+    
+    st = iiimcf_create_context( handle,attr, &context );
+
+    iiimcf_create_trigger_notify_event( 1, &event);
+    iiimcf_forward_event( context, event);
+
     stts->set_im_name(cur_id_name);
 	
 }
@@ -383,12 +378,12 @@ IIIMCCF::IIIMCCF()
 IIIMCCF::~IIIMCCF()
 {
 	
-	IIIMCF_event event;
-	iiimcf_create_trigger_notify_event( 0, &event );
-	iiimcf_forward_event( context, event );
+    IIIMCF_event event;
+    iiimcf_create_trigger_notify_event( 0, &event );
+    iiimcf_forward_event( context, event );
 
-	iiimcf_destroy_handle( handle );
-	iiimcf_finalize();  
+    iiimcf_destroy_handle( handle );
+    iiimcf_finalize();  
 }
 
 
@@ -402,7 +397,7 @@ void IIIMCCF::refresh()
 
 void IIIMCCF::switch_lang()
 {
-
+  switch_im();
 }
 
 void IIIMCCF::switch_im()
@@ -714,17 +709,17 @@ IIIMCCF::iiimccf_preedit(
  
   switch( type ){
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT:
-		  mesg("preedit");
+		  debug("preedit");
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_START:
-		  mesg("preedit start");
+		  debug("preedit start");
 		  prdt->clear();
 
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_CHANGE:
-		  mesg("preedit changed");
+		  debug("preedit changed");
 		  
 		  st = iiimcf_get_preedit_text( context, &buf0 , &cur_pos);
 		  if( st != IIIMF_STATUS_SUCCESS ) check(st);
@@ -735,16 +730,16 @@ IIIMCCF::iiimccf_preedit(
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_DONE:
-		  mesg("preedit done");
+		  debug("preedit done");
 		  prdt->clear();
 		  break;
 		  
 	  case IIIMCF_EVENT_TYPE_UI_PREEDIT_END:
-		  mesg("preedit end");
+		  debug("preedit end");
 		  break;
 		  
 	  default:
-		  mesg("preedit none");
+		  debug("preedit none");
 		  break;
   }
   return IIIMF_STATUS_SUCCESS;
@@ -966,10 +961,9 @@ string IIIMCCF::process_input( const string& input )
 			if (st == IIIMF_STATUS_COMPONENT_FAIL) {
 			    debug("at least one component reported failure");
 			} else if (st == IIIMF_STATUS_COMPONENT_INDIFFERENT) {
-			    //debug("none of the components deal with the event");
 			    IIIMCF_event_type event_type;
 			    iiimcf_get_event_type( event, &event_type );
-			    fprintf( stderr, "none of the components deal with the event: [[ %x ]]\n", event_type );
+			    debug( stderr, "none of the components deal with the event: [[ %x ]]\n", event_type );
 			} else {
 			    debug("fail to dispatch");
 			}
@@ -988,49 +982,3 @@ string IIIMCCF::process_input( const string& input )
 
 	return result;
 }
-/*
-
-
-bool IIIMCCF::ims_show()
-{
-    IIIMF_status st;
-    IIIMCF_input_method *pims;
-    IIIMCF_language *plangs;
-    const IIIMP_card16 *u16idname, *u16hrn, *u16domain;
-    char *idname, *hrn, *domain;
-    const char *langid;
-    int num_of_ims, num_of_langs;
-
-    st = iiimcf_get_supported_input_methods(handle, &num_of_ims, &pims);
-
-    int i;
-    for (i = 0; i < num_of_ims ; i++) {
-       iiimcf_get_input_method_desc(pims[i], &u16idname, &u16hrn, &u16domain);
-       iiimcf_get_input_method_languages(pims[i], &num_of_langs, &plangs);
-
-       idname = iiimcf_string_to_utf8(u16idname);
-       hrn = iiimcf_string_to_utf8(u16hrn);
-       domain = iiimcf_string_to_utf8(u16domain);
-       fprintf(stderr,
-                "Input Method %d ----------------------------------\n"
-                "  idname: %s\n"
-                "  HRN: %s\n"
-                "  domain: %s\n"
-                "  langs: ",
-                i, idname, hrn, domain);
-
-       		int j;
-	        for (j = 0; j < num_of_langs; j++) {
-	              iiimcf_get_language_id(plangs[j], &langid);
-	              fprintf(stderr, "%s, ", langid);
-	        }
-	 fprintf( stderr, "\n" );
-	 free(idname);
-	 free(hrn);
-	 free(domain);
-    }
-    return true;
-}
-
-
-*/
