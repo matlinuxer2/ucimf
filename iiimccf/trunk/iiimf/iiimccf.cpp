@@ -963,7 +963,7 @@ string IIIMCCF::process_input( const string& input )
 			} else if (st == IIIMF_STATUS_COMPONENT_INDIFFERENT) {
 			    IIIMCF_event_type event_type;
 			    iiimcf_get_event_type( event, &event_type );
-			    debug( stderr, "none of the components deal with the event: [[ %x ]]\n", event_type );
+			    debug( "none of the components deal with the event" );
 			} else {
 			    debug("fail to dispatch");
 			}
