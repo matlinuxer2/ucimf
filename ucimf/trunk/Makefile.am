@@ -8,6 +8,8 @@ EXTRA_LIBS = -lltdl -Ldisplay/ -ldisplay
 
 AM_CPPFLAGS = -g -DDEBUG $(EXTRA_INCS) 
 
+bin_SCRIPTS = unicode-console
+
 lib_LTLIBRARIES = libucimf.la
 
 ucimfincludedir = $(includedir)
