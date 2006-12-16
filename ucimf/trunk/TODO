@@ -25,3 +25,9 @@
    * LRMI functions in display module is IA32 only, which prevents UCIMF
      running on other architectures.
    * FreeBSD support
+
+=== The Future ===
+
+To seperate "display module + widgets + window manager" from ucimf,
+make the ucimf a "pure IMFs' loader & switcher".
+That is, to make ucimf independent of GUI layer.
