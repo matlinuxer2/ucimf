@@ -22,7 +22,7 @@
 #include <cstring>
 #include <string>
 #include "iiimccf.h"
-#include "widget.h"
+#include <widget.h>
 using namespace std;
 
 

@@ -19,12 +19,12 @@
 
 
 #include <OpenVanilla.h>
-#include "imf.h"
+#include <imf.h>
 #include <vector>
 #include <map>
 #include <string>
 #include <ltdl.h>
-#include "widget.h"
+#include <widget.h>
 
 typedef OVModule* (*TypeGetModule)(int);
 typedef int (*TypeInitLibrary)(OVService*, const char*);

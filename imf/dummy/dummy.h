@@ -1,5 +1,5 @@
 /*                                                                                                  
- * dummy.cpp : Implementation of dummy input method
+ * dummy.h : Interface of dummy input method
  *
  * Copyright (c) 2006  Chun-Yu Lee (Mat) <Matlinuxer2@gmail.com>
  * All rights reserved.
@@ -31,21 +31,18 @@
  * DAMAGE.
  */
 
-#include "dummy.h"
-#include "widget.h"
-
+#include <imf.h>
 using namespace std;
 
-void DummyImf::refresh()
+class DummyImf : public Imf
 {
-  Status* stts = Status::getInstance();
-  stts->set_imf_name("Dummy");
-  stts->set_im_name("none");
-}
+  public:
+    void refresh();
+    string process_input( const string& input );
+    void  switch_lang(){};
+    void  switch_im(){};
+    void  switch_im_per_lang(){};
+};
 
-string DummyImf::process_input( const string& input)
-{
-  string result = input;
-  return result;
-}
-
+extern "C" Imf* createImf(){ return new DummyImf; }
+extern "C" void destroyImf( Imf* imf ){ delete imf; }

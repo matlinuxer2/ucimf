@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf,1.9.5, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf,1.9.7, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
@@ -18,6 +18,10 @@ AC_PROG_LIBTOOL
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ldisplay':
 AC_CHECK_LIB([display], [main])
+# FIXME: Replace `main' with a function in `-lgraphdev':
+AC_CHECK_LIB([graphdev], [main])
+# FIXME: Replace `main' with a function in `-lltdl':
+AC_CHECK_LIB([ltdl], [main])
 
 dnl Checking FreeType2.......................................................
 AC_CHECK_PROG(FREETYPE_CONFIG, freetype-config, yes, no)
@@ -39,23 +43,15 @@ if test $FREETYPE_CONFIG = yes; then
   LDFLAGS="$LDFLAGS $FT_LDFLAGS"
   LIBS="$LIBS -lfreetype $FT_LIBS"
 else
-    AC_MSG_ERROR([freetype2 is required to build iiimccf])
+    AC_MSG_ERROR([freetype2 is required to build ucimf])
 fi
 # always fail on some recent linux distribution ?
 AC_CHECK_LIB(freetype,
 	FT_Init_FreeType, 
 	[], 
-	[AC_MSG_ERROR([freetype2 is required to build iiimccf])])
+	[AC_MSG_ERROR([freetype2 is required to build ucimf])])
 dnl .........................................................................
 
-# FIXME: Replace `main' with a function in `-lgraphdev':
-AC_CHECK_LIB([graphdev], [main])
-# FIXME: Replace `main' with a function in `-liiimccf':
-AC_CHECK_LIB([iiimccf], [main])
-# FIXME: Replace `main' with a function in `-liiimcf':
-AC_CHECK_LIB([iiimcf], [main])
-# FIXME: Replace `main' with a function in `-lltdl':
-AC_CHECK_LIB([ltdl], [main])
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -77,8 +73,5 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 
 AC_CONFIG_FILES([Makefile
-                 display/Makefile
-                 iiimf/Makefile
-                 openvanilla/Makefile
-		 dummy/Makefile])
+                 display/Makefile])
 AC_OUTPUT
