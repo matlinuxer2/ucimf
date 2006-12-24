@@ -1,9 +1,9 @@
-INCLUDES = -I. -I.. 
+INCLUDES = -I$(includedir)/imf/
 
 pkglib_LTLIBRARIES = dummy.la
+pkglibdir=$(libdir)/ucimf/
 
 dummy_la_SOURCES = dummy.cpp
 dummy_la_LDFLAGS = -module -avoid-version -no-undefined
-dummy_la_LIBADD = -lltdl
 
 

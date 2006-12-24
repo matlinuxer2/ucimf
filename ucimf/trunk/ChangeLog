@@ -1,3 +1,10 @@
+2006-12-24  Mat Lee    <MatLinuxer2@gmail.com>
+	* IMF modules seperation:
+	  IMF modules and UCIMF are now more clearly seperated.
+	  These modules now renames to ucimf-iiimf, ucimf-openvanilla,...etc.
+	  They can be build and install independently.
+	* Reversion to 1.9.7 
+
 2006-12-13  Mat Lee    <MatLinuxer2@gmail.com>
 
         * IMF modulization:
