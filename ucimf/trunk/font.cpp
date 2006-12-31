@@ -19,6 +19,7 @@
 
 #include "graphdev.h"
 #include "font.h"
+#include "options.h"
 #include <cstdlib>
 #include <iostream>
 using namespace std;
@@ -36,7 +37,10 @@ Font* Font::getInstance()
 
 Font::Font()
 {
-  font_path = getenv("UCIMF_FONTPATH");
+  Options* option = Options::getInstance();
+
+  font_path = option->getOption("UCIMF_FONTPATH");
+  cerr << font_path << endl;
 
   FT_Init_FreeType( &library ); 
   FT_New_Face( library, font_path, 0, &face);

@@ -64,6 +64,11 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
+# Check for customized module path
+# if test "x$IMF_MODULE_DIR" = "x"; then
+#   IMF_MODULE_DIR=${prefix}/lib/ucimf
+# fi
+
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_PROG_GCC_TRADITIONAL
