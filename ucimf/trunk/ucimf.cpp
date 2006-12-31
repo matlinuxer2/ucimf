@@ -32,6 +32,7 @@
 #include "imf.h"
 #include "widget.h"
 #include "cwm.h"
+#include "options.h"
 
 using namespace std;
 
@@ -59,7 +60,6 @@ enum
   CTRL_SHIFT = 204,
   CTRL_F5 = 205,
   CTRL_F6 = 206,
-  CTRL_F7 = 207,
 };
 
 typedef struct _new_key
@@ -76,7 +76,6 @@ static new_key nkeys[] = {
   {(1 << KG_CTRL), KEY_LEFTSHIFT, K(KT_LATIN, CTRL_SHIFT)},	/* Ctrl + Shift */
   {(1 << KG_CTRL), KEY_F5, K(KT_LATIN, CTRL_F5)},	/* Ctrl + F5 */
   {(1 << KG_CTRL), KEY_F6, K(KT_LATIN, CTRL_F6)},	/* Ctrl + F6 */
-  {(1 << KG_CTRL), KEY_F7, K(KT_LATIN, CTRL_F7)},	/* Ctrl + F7 */
 };
 
 int setup_keys()
@@ -90,11 +89,50 @@ int setup_keys()
     entry.kb_index = nkeys[i].key;
 
         /* save current value */
-    ioctl (0, KDGKBENT, &entry);
+    int ret;
+    cerr << "Get KeyBoard Event..." << endl;
+    ret = ioctl (0, KDGKBENT, &entry);
+    switch( ret )
+    {
+      case EBADF:
+	cerr << "EBADF" << endl;
+	break;
+      case EFAULT:
+	cerr << "EFAULT" << endl;
+	break;
+      case EINVAL:
+	cerr << "EINVAL" << endl;
+	break;
+      case ENOTTY:
+	cerr << "ENOTTY" << endl;
+	break;
+      default:
+	cerr << "ok" << endl;
+	break;
+    }
     tmp.kb_value = entry.kb_value;
 
     entry.kb_value = nkeys[i].new_key;
-    ioctl (0, KDSKBENT, &entry);
+    cerr << "Set KeyBoard Event..." << endl;
+    ret=ioctl (0, KDSKBENT, &entry);
+    switch( ret )
+    {
+      case EBADF:
+	cerr << "EBADF" << endl;
+	break;
+      case EFAULT:
+	cerr << "EFAULT" << endl;
+	break;
+      case EINVAL:
+	cerr << "EINVAL" << endl;
+	break;
+      case ENOTTY:
+	cerr << "ENOTTY" << endl;
+	break;
+      default:
+	cerr << "ok" << endl;
+	break;
+    }
 
         /* save current value */
     nkeys[i].new_key = tmp.kb_value;
@@ -123,11 +161,19 @@ void scanImf()
   createImf_t* create_imf;
   destroyImf_t* destroy_imf;
 
-  char* IMF_MODULEDIR=getenv("IMF_MODULE_DIR");
-  lt_dlinit();
-  lt_dlsetsearchpath( IMF_MODULEDIR );
+  // char* IMF_MODULEDIR=getenv("IMF_MODULE_DIR");
+  // 
+  // IMF_MODULE_DIR is defined in configure.ac + Makefile.am
+  //
 
-  DIR *dir = opendir( IMF_MODULEDIR );
+  Options* option= Options::getInstance();
+  char* imf_mod_path = option->getOption("IMF_MODULE_DIR");
+  cerr << imf_mod_path << endl;
+ 
+  lt_dlinit();
+  lt_dlsetsearchpath( imf_mod_path );
+
+  DIR *dir = opendir( imf_mod_path );
   if( dir )
   {
     struct dirent *d_ent;
@@ -194,6 +240,7 @@ void ucimf_init()
   cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->attachWindow( prdt->getWindow(), preedit_shift );
   cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
+  cerr << "init entered!!" << endl;
 }
 
 void ucimf_exit()
@@ -215,7 +262,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
   }
   else
   {
-      if(  buf[0] == 203 )
+      if(  buf[0] == CTRL_SPACE )
       {
 	cwm->set_focus( !cwm->get_focus() );
 	if(imf!=0)
@@ -223,19 +270,20 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	   imf->refresh();
 	}
       }
-      else if( buf[0] == 204 )
+      else if( buf[0] == CTRL_SHIFT )
       {
 	if( cwm->get_focus() && imf !=0 )
 	  imf->switch_im();
 	else
 	  cwm->set_focus( true );
       }
-      else if( buf[0] == 205 )
+      //else if( buf[0] == CTRL_F5 )
+      else if( buf[0] == 294 )
       {
 	scanImf();
 	stts->clear();
       }
-      else if( buf[0] == 206 )
+      else if( buf[0] == CTRL_F6 )
       {
 	prdt->clear();
 	lkc->clear();
