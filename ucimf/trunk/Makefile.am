@@ -18,3 +18,8 @@ libucimf_la_SOURCES = options.cpp\
 libucimf_la_LDFLAGS = -lltdl -ldisplay
 libucimf_la_LIBADD = -L$(libdir) -L./display/
 
+bin_PROGRAMS = ucimf_keyboard
+ucimf_keyboard_SOURCES = ucimf_keyboard.cpp
+
+confdir=$(sysconfdir)
+conf_DATA = ucimf.conf ucimf.conf.example
