@@ -1,0 +1,4 @@
+usr/lib/lib*
+usr/include/ucimf.h
+usr/bin/ucimf_keyboard
+etc/*
