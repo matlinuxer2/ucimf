@@ -18,7 +18,7 @@
  */
 
 
-#include <OpenVanilla.h>
+#include "OpenVanilla/OpenVanilla.h"
 #include <imf.h>
 #include <vector>
 #include <map>

@@ -23,6 +23,3 @@ ucimf_keyboard_SOURCES = ucimf_keyboard.cpp
 
 confdir=$(sysconfdir)
 conf_DATA = ucimf.conf ucimf.conf.example
-
-EXTRA_DIST=  cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example
-
