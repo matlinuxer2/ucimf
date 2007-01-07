@@ -1,0 +1,13 @@
+Source: ucimf-iiimf
+Priority: optional
+Maintainer: Mat <MatLinuxer2@gmail>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, libiiimcf-dev
+Standards-Version: 3.6.1
+Section: libs
+
+Package: ucimf-iiimf
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libiiimcf2
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

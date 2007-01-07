@@ -25,7 +25,6 @@
 #include <locale.h>
 
 
-
 /* 
  * implementation of OVImf
  */
@@ -46,6 +45,7 @@ OVImf::OVImf()
 {
   current_module = 0;
   current_im_name = "";
+  cxt = 0;
 
   preedit = new OVImfBuffer;
   lookupchoice = new OVImfCandidate;
@@ -70,7 +70,6 @@ OVImf::OVImf()
 	  
 	  mod->handle = lt_dlopen( d_ent->d_name );
 	  if(mod->handle == NULL){
-	    cerr << "lt_dlopen " << d_ent->d_name << " failed" << endl; 
 	    delete mod;
 	  }
 	  else{ 
@@ -80,14 +79,13 @@ OVImf::OVImf()
 	  }
 
 	  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
-	     cerr << "lt_dlsym " << d_ent->d_name << " failed" << endl;
 	     delete mod;
 	  }
 	  
 	  if( mod->getLibVersion() < OV_VERSION ){
-	     cerr <<  d_ent->d_name << " " <<  mod->getLibVersion() <<  " is too old" << endl;
 	     delete mod;
 	  }
+
 
 	  if(mod){
 	     OVModule* m;
