@@ -277,8 +277,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	else
 	  cwm->set_focus( true );
       }
-      //else if( buf[0] == CTRL_F5 )
-      else if( buf[0] == 294 )
+      else if( buf[0] == CTRL_F5 )
       {
 	scanImf();
 	stts->clear();

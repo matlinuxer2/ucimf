@@ -1,6 +1,6 @@
 INCLUDES = -I$(includedir)/imf/ -I$(prefix)/include/OpenVanilla/
 
-OV_MODULEDIR= $(prefix)/lib/openvanilla/
+#OV_MODULEDIR= $(prefix)/lib/openvanilla/
 
 pkglib_LTLIBRARIES = openvanilla.la
 pkglibdir=$(libdir)/ucimf/
