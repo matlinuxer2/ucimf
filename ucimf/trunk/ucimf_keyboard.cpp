@@ -43,49 +43,11 @@ int setup_keys()
     int ret;
     cerr << "Get KeyBoard Event..." << endl;
     ret = ioctl (0, KDGKBENT, &entry);
-    switch( ret )
-    {
-      case EBADF:
-	cerr << "EBADF" << endl;
-	break;
-      case EFAULT:
-	cerr << "EFAULT" << endl;
-	break;
-      case EINVAL:
-	cerr << "EINVAL" << endl;
-	break;
-      case ENOTTY:
-	cerr << "ENOTTY" << endl;
-	break;
-      default:
-	cerr << "ok: " << entry.kb_value << endl;
-	break;
-    }
     tmp.kb_value = entry.kb_value;
 
     entry.kb_value = nkeys[i].new_key;
     cerr << "Set KeyBoard Event..." << endl;
     ret=ioctl (0, KDSKBENT, &entry);
-    switch( ret )
-    {
-      case EBADF:
-	cerr << "EBADF" << endl;
-	break;
-      case EFAULT:
-	cerr << "EFAULT" << endl;
-	break;
-      case EINVAL:
-	cerr << "EINVAL" << endl;
-	break;
-      case ENOTTY:
-	cerr << "ENOTTY" << endl;
-	break;
-      default:
-	cerr << "ok: " << entry.kb_value << endl;
-	break;
-    }
-
-        /* save current value */
     nkeys[i].new_key = tmp.kb_value;
   }
   return 0;
