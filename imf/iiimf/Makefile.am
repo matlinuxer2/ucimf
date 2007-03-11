@@ -1,3 +1,4 @@
+INCLUDES = -I/$(includedir)
 pkglib_LTLIBRARIES = iiimf.la
 pkglibdir=$(libdir)/ucimf/
 
