@@ -1,4 +1,4 @@
-INCLUDES = -I$(includedir)/imf/ -I$(prefix)/include/OpenVanilla/
+INCLUDES = -I$(includedir)/imf/ -I$(includedir)/ -I$(includedir)/OpenVanilla/
 
 #OV_MODULEDIR= $(prefix)/lib/openvanilla/
 

@@ -1,4 +1,4 @@
-INCLUDES = -I$(includedir)/imf/
+INCLUDES = -I$(includedir)/imf/ -I$(includedir)/
 
 pkglib_LTLIBRARIES = dummy.la
 pkglibdir=$(libdir)/ucimf/
