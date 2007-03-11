@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-iiimf,1.9.1, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf-openvanilla,1.9.1, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([iiimccf.cpp])
+AC_CONFIG_SRCDIR([openvanilla.cpp])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
@@ -13,17 +13,22 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-liiimcf':
-AC_CHECK_LIB([iiimcf], [main])
+# FIXME: Replace `main' with a function in `-lltdl':
+AC_CHECK_LIB([ltdl], [main])
 
 # Checks for header files.
+AC_HEADER_DIRENT
+AC_CHECK_HEADERS([locale.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
+AC_HEADER_STDBOOL
+AC_TYPE_SIZE_T
 
 # Checks for library functions.
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
+AC_FUNC_CLOSEDIR_VOID
+AC_HEADER_STDC
+AC_CHECK_FUNCS([memset setlocale strstr])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-dummy,0.0.1, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf-dummy,1.9.1, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([dummy.h])
 AC_CONFIG_HEADER([config.h])

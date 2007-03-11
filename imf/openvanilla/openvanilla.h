@@ -17,14 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
-#include "OpenVanilla/OpenVanilla.h"
-#include <imf.h>
 #include <vector>
 #include <map>
 #include <string>
 #include <ltdl.h>
-#include <widget.h>
+#include <OpenVanilla/OpenVanilla.h>
+#include <imf/imf.h>
+#include <imf/widget.h>
 
 typedef OVModule* (*TypeGetModule)(int);
 typedef int (*TypeInitLibrary)(OVService*, const char*);
