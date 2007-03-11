@@ -31,7 +31,7 @@
  * DAMAGE.
  */
 
-#include <imf.h>
+#include <imf/imf.h>
 using namespace std;
 
 class DummyImf : public Imf

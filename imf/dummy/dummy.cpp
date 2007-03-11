@@ -32,7 +32,7 @@
  */
 
 #include "dummy.h"
-#include <widget.h>
+#include <imf/widget.h>
 
 using namespace std;
 

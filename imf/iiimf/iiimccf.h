@@ -19,7 +19,7 @@
 
 
 #include <iiimcf.h>
-#include <imf.h>
+#include <imf/imf.h>
 #include <string>
 using std::string;
 

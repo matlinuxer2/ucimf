@@ -1,7 +1,7 @@
 Source: ucimf-openvanilla
 Priority: optional
 Maintainer: Mat <MatLinuxer2@gmail.com>
-Build-Depends: debhelper (>= 4.0.0), autotools-dev
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, ucimf-dev, openvanilla-framework(>=0.7.0)
 Standards-Version: 3.6.1
 Section: libs
 
