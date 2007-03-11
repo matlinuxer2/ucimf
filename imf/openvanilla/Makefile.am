@@ -1,3 +1,4 @@
+INCLUDES = -I/$(includedir)
 pkglib_LTLIBRARIES = openvanilla.la
 pkglibdir=$(libdir)/ucimf/
 
