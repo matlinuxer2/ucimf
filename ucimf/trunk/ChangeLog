@@ -1,4 +1,17 @@
-2006-01-06  Mat <MatLinuxer2@gmail.com>
+2007-03-20  Jim Huang  <jserv.tw@gmail.com>
+
+	* .{cpp,h},
+	AUTHORS,
+	LICENSE: Open RazzmatazZ Laboratory (OrzLab) is now becoming
+	the co-owner for UCIMF, which is still licensed under GNU GPL.
+	However, externals code from other projects are mentioned.
+	NOTE:
+	The file of Input Method Interface definition, include/imf/imf.h,
+	is licensed under BSD License (3 clause), which implies that 
+	developing non-GPL Input Method engine for UCIMF is possible once
+	UCIMF itself is not modified.
+
+2007-01-06  Mat <MatLinuxer2@gmail.com>
 
 	* Announce Revision to 1.9.9 
 	* Debianization:
