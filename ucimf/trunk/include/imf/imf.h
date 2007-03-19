@@ -2,8 +2,9 @@
  * imf.h : Generic interface to Input Methods
  * Part of UCIMF - Unicode Console InputMethod Framework
  *
- * Copyright (c) 2006  Chun-Yu Lee (Mat) <Matlinuxer2@gmail.com>
+ * Copyright (c) 2006-2007 Open RazzmatazZ Laboratory (OrzLab)
  * All rights reserved.
+ * Maintained by Chun-Yu Lee (Mat) <Matlinuxer2@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +32,6 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
  * DAMAGE.
  */
-
 
 #ifndef __UCIMF_Imf
 #define __UCIMF_Imf
