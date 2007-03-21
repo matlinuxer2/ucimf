@@ -30,5 +30,11 @@ AC_FUNC_CLOSEDIR_VOID
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memset setlocale strstr])
 
+if test "x$OV_MODULEDIR" = "x"; then
+   OV_MODULEDIR="/usr/lib/openvanilla/"
+fi
+
+AC_SUBST(OV_MODULEDIR)
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
