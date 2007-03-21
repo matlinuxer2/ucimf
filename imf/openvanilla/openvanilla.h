@@ -143,7 +143,7 @@ class OVImf : public Imf
     static Imf* _instance;
     static string commit_buf;
 
-    char* OV_MODULEDIR;
+    // char* OV_MODULEDIR;
     std::vector<OVModule*> mod_vector; 
     int current_module;
     char* current_im_name;
