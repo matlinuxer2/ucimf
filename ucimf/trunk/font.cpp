@@ -42,14 +42,16 @@ Font::Font()
   Options* option = Options::getInstance();
 
   font_path = option->getOption("UCIMF_FONTPATH");
+  font_width = atoi( option->getOption("FONT_WIDTH") );
+  font_height = atoi( option->getOption("FONT_HEIGHT") );
   cerr << font_path << endl;
 
   FT_Init_FreeType( &library ); 
   FT_New_Face( library, font_path, 0, &face);
 
   /* get font size info */
-  font_width=16;
-  font_height=16;
+  font_width = font_width ? font_width : 16;
+  font_height= font_height ? font_height : 16;
   
   //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   FT_Set_Pixel_Sizes( face, font_width, font_height);
