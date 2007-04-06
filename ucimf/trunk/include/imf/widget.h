@@ -52,13 +52,20 @@ class Status : public Widget{
     void set_imf_name( char* );
     void set_im_name( char* );
     void set_lang_name( char* );
+    void set_bg_color( int );
+    void set_fg_color( int );
+    void set_border_color( int );
 
   protected:
     Status();
 
   private:
     static Status* _instance;
-   
+
+    int fg_color;
+    int bg_color;
+    int border_color;
+
     ustring imf_name;
     ustring im_name;
     ustring lang_name;
@@ -72,12 +79,19 @@ class Preedit : public Widget
     void draw();
     void append( char* s);
     void append( char* s, const char* encoding);
+    void set_bg_color( int );
+    void set_fg_color( int );
+    void set_border_color( int );
     void clear();
     
   protected: 
     Preedit();
 
   private:
+    int fg_color;
+    int bg_color;
+    int border_color;
+
     static Preedit* _instance;
     ustring buf;
 };
@@ -92,29 +106,21 @@ class LookupChoice : public Widget
     void append( char* s, const char* encoding);
     void append_next( char* s);
     void append_next( char* s, const char* encoding);
+    void set_bg_color( int );
+    void set_fg_color( int );
+    void set_border_color( int );
     void clear();
     
   protected: 
     LookupChoice();
 
   private:
+    int fg_color;
+    int bg_color;
+    int border_color;
+
     static LookupChoice* _instance;
     vector<ustring> bufs;
 };
-/*
 
-class Lkc : public Widget
-{
-  public:
-    Lkc();
-    ~Lkc();
-
-    void draw();
-    void append( const char* s );
-    void clear();
-
-  private:
-    vector<char*> title;
-};
-*/
 #endif

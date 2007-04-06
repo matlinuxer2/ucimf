@@ -21,14 +21,13 @@
 
 #include "widget.h"
 #include "shape.h"
+#include "options.h"
 #include <iostream>
 using namespace std;
 
-#define BG_color 8
-#define FG_color 9
 #define BLACK_color 0
-#define BLUE_color 1 
-#define RED_color 5
+
+Options* option = Options::getInstance();
 
 Window* Widget::getWindow()
 {
@@ -85,6 +84,10 @@ Status* Status::_instance = 0;
 
 Status::Status()
 { 
+
+  bg_color = atoi( option->getOption("STATUS_BG_COLOR") ); 
+  fg_color = atoi( option->getOption("STATUS_FG_COLOR") ); 
+  border_color = atoi( option->getOption("STATUS_BORDER_COLOR") ); 
   win = 0;
   gp = 0;
   win = getWindow();
@@ -128,6 +131,21 @@ void Status::set_lang_name( char* new_lang_name )
   render();
 }
 
+void Status::set_fg_color( int fg )
+{
+  fg_color = fg;
+}
+
+void Status::set_bg_color( int bg )
+{
+  bg_color = bg;
+}
+
+void Status::set_border_color( int border )
+{
+  border_color = border;
+}
+
 void Status::draw()
 {
  
@@ -135,13 +153,13 @@ void Status::draw()
 
   Text t;
   t.append( imf_name );
-  t.bgColor( BLACK_color );
-  t.fgColor( BLUE_color );
+  t.bgColor( bg_color );
+  t.fgColor( fg_color );
   
   Text t2;
   t2.append( im_name );
-  t2.bgColor( BLACK_color );
-  t2.fgColor( BLUE_color );
+  t2.bgColor( bg_color );
+  t2.fgColor( fg_color );
 
   Rect r;
   r.w( t.x_max() + t2.x_max() + 2*border );
@@ -152,13 +170,13 @@ void Status::draw()
   Rect r1;
   r1.w( t.x_max() + 1*border );
   r1.h( max( t.y_max(), t2.y_max() ) + 1*border );
-  r1.c( RED_color );
+  r1.c( border_color );
   r1.toFill(false);
   
   Rect r2;
   r2.w( t2.x_max() + 1*border );
   r2.h( max( t.y_max(), t2.y_max() ) + 1*border );
-  r2.c( RED_color );
+  r2.c( border_color );
   r2.toFill(false);
   
   gp->draw( 0, 0, &r);
@@ -177,6 +195,9 @@ Preedit* Preedit::_instance = 0;
 
 Preedit::Preedit()
 { 
+  bg_color = atoi( option->getOption("PREEDIT_BG_COLOR") ); 
+  fg_color = atoi( option->getOption("PREEDIT_FG_COLOR") ); 
+  border_color = atoi( option->getOption("PREEDIT_BORDER_COLOR") ); 
   win = 0;
   gp = 0;
   win = getWindow();
@@ -204,6 +225,21 @@ void Preedit::append( char* s, const char* encoding)
   buf = result;
 }
 
+void Preedit::set_fg_color( int fg )
+{
+  fg_color = fg;
+}
+
+void Preedit::set_bg_color( int bg )
+{
+  bg_color = bg;
+}
+
+void Preedit::set_border_color( int border )
+{
+  border_color = border;
+}
+
 void Preedit::clear()
 {
   buf.clear();
@@ -220,8 +256,8 @@ void Preedit::draw()
   {
     t.append( buf );
   }
-  t.bgColor( BG_color );
-  t.fgColor( FG_color );
+  t.bgColor( bg_color );
+  t.fgColor( fg_color );
 
   Rect r;
   r.w( t.x_max() + 1*border );
@@ -233,7 +269,7 @@ void Preedit::draw()
   r2.w( t.x_max() + 1*border );
   r2.h( t.y_max() + 1*border );
   r2.toFill(false);
-  r2.c(RED_color);
+  r2.c( border_color );
   
   gp->draw( 0, 0, &r);
   gp->draw( 0, 0, &r2);
@@ -246,6 +282,9 @@ LookupChoice* LookupChoice::_instance = 0;
 
 LookupChoice::LookupChoice()
 { 
+  bg_color = atoi( option->getOption("LOOKUPCHOICE_BG_COLOR") ); 
+  fg_color = atoi( option->getOption("LOOKUPCHOICE_FG_COLOR") ); 
+  border_color = atoi( option->getOption("LOOKUPCHOICE_BORDER_COLOR") ); 
   win = 0;
   gp = 0;
   win = getWindow();
@@ -293,6 +332,21 @@ void LookupChoice::append_next( char* s, const char* encoding)
   bufs.push_back( input );
 }
 
+void LookupChoice::set_fg_color( int fg )
+{
+  fg_color = fg;
+}
+
+void LookupChoice::set_bg_color( int bg )
+{
+  bg_color = bg;
+}
+
+void LookupChoice::set_border_color( int border )
+{
+  border_color = border;
+}
+
 void LookupChoice::clear()
 {
   bufs.clear();
@@ -309,8 +363,8 @@ void LookupChoice::draw()
   {
     t.append_next( bufs[i] );
   }
-  t.bgColor( BG_color );
-  t.fgColor( FG_color );
+  t.bgColor( bg_color );
+  t.fgColor( fg_color );
 
   Rect r;
   r.w( t.x_max() + 1*border );
@@ -322,7 +376,7 @@ void LookupChoice::draw()
   r2.w( t.x_max() + 1*border );
   r2.h( t.y_max() + 1*border );
   r2.toFill(false);
-  r2.c(RED_color);
+  r2.c( border_color);
   
   gp->draw( 0, 0, &r);
   gp->draw( 0, 0, &r2);
