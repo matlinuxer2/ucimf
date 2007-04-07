@@ -85,6 +85,7 @@ bool Options::parse_file( ifstream &input)
         if (o == "")
             continue;
         _opts.insert( pair<string, string>(o,v) );
+	cout << o << "=" << v << endl;
     }
 }
 

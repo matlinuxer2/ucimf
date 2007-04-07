@@ -27,7 +27,6 @@ using namespace std;
 
 #define BLACK_color 0
 
-Options* option = Options::getInstance();
 
 Window* Widget::getWindow()
 {
@@ -84,6 +83,7 @@ Status* Status::_instance = 0;
 
 Status::Status()
 { 
+Options* option = Options::getInstance();
 
   bg_color = atoi( option->getOption("STATUS_BG_COLOR") ); 
   fg_color = atoi( option->getOption("STATUS_FG_COLOR") ); 
@@ -195,6 +195,7 @@ Preedit* Preedit::_instance = 0;
 
 Preedit::Preedit()
 { 
+Options* option = Options::getInstance();
   bg_color = atoi( option->getOption("PREEDIT_BG_COLOR") ); 
   fg_color = atoi( option->getOption("PREEDIT_FG_COLOR") ); 
   border_color = atoi( option->getOption("PREEDIT_BORDER_COLOR") ); 
@@ -282,6 +283,7 @@ LookupChoice* LookupChoice::_instance = 0;
 
 LookupChoice::LookupChoice()
 { 
+Options* option = Options::getInstance();
   bg_color = atoi( option->getOption("LOOKUPCHOICE_BG_COLOR") ); 
   fg_color = atoi( option->getOption("LOOKUPCHOICE_FG_COLOR") ); 
   border_color = atoi( option->getOption("LOOKUPCHOICE_BORDER_COLOR") ); 
