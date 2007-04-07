@@ -21,6 +21,7 @@
 
 #include "graphdev.h"
 #include "cwm.h"
+#include "options.h"
 
 Cwm* Cwm::_instance = 0;
 
@@ -105,6 +106,12 @@ void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 }
 
 
+StatusShift::StatusShift()
+{
+  Options* option = Options::getInstance();
+  x_gap = atoi( option->getOption("STATUS_SHIFT_X") ); 
+  y_gap = atoi( option->getOption("STATUS_SHIFT_Y") ); 
+}
 
 void StatusShift::update( Window* win )
 {
@@ -119,8 +126,8 @@ void StatusShift::update( Window* win )
   
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
-  int shift_x =0;
-  int shift_y = 24;
+  int shift_x = x_gap;
+  int shift_y = y_gap;
  
   if( over_x + shift_x > 0  )
   {
@@ -138,6 +145,14 @@ void StatusShift::update( Window* win )
 
 }
 
+PreeditShift::PreeditShift()
+{
+  Options* option = Options::getInstance();
+  x_gap = atoi( option->getOption("PREEDIT_SHIFT_X") ); 
+  y_gap = atoi( option->getOption("PREEDIT_SHIFT_Y") ); 
+}
+
+
 void PreeditShift::update( Window* win )
 {
   cwm = Cwm::getInstance();
@@ -152,8 +167,8 @@ void PreeditShift::update( Window* win )
 
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
-  int shift_x =0;
-  int shift_y = 48;
+  int shift_x = x_gap;
+  int shift_y = y_gap;
  
   if( over_x + shift_x > 0  )
   {
@@ -171,6 +186,13 @@ void PreeditShift::update( Window* win )
   
 }
 
+LookupChoiceShift::LookupChoiceShift()
+{
+  Options* option = Options::getInstance();
+  x_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_X") ); 
+  y_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_Y") ); 
+}
+
 void LookupChoiceShift::update( Window* win )
 {
   cwm = Cwm::getInstance();
@@ -183,8 +205,8 @@ void LookupChoiceShift::update( Window* win )
   
   int over_x = ( x + width ) - Xres;
   int over_y = ( y + height ) - Yres;
-  int shift_x =0;
-  int shift_y = 72;
+  int shift_x = x_gap;
+  int shift_y = y_gap;
  
   if( over_x + shift_x > 0  )
   {
