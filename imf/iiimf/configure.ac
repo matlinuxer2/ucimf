@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-iiimf,1.9.1, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf-iiimf,2.0.0, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([iiimccf.cpp])
 AC_CONFIG_HEADER([config.h])

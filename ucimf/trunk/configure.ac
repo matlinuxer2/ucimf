@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf,1.9.9, BUG-REPORT-ADDRESS)
+AC_INIT(ucimf,2.0.0, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
