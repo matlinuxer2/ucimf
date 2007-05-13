@@ -4,7 +4,7 @@
 	AUTHORS,
 	LICENSE: Open RazzmatazZ Laboratory (OrzLab) is now becoming
 	the co-owner for UCIMF, which is still licensed under GNU GPL.
-	However, externals code from other projects are mentioned.
+	However, external code from other projects are mentioned.
 	NOTE:
 	The file of Input Method Interface definition, include/imf/imf.h,
 	is licensed under BSD License (3 clause), which implies that 
