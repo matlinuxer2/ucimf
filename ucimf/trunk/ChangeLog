@@ -1,3 +1,9 @@
+2008-05-16  Mat <MatLinuxer2@gmail.com>
+
+	* .{cpp,h},
+	AUTHORS,
+	LICENSE: Fixed the co-owner announcement.
+
 2007-03-20  Jim Huang  <jserv.tw@gmail.com>
 
 	* .{cpp,h},

@@ -1,8 +1,7 @@
 /*
  * UCIMF - Unicode Console InputMethod Framework                                                    
  *
- * Copyright (c) 2007 Open RazzmatazZ Laboratory (OrzLab)
- * Maintained by Chun-Yu Lee (Mat) <Matlinuxer2@gmail.com>
+ * Copyright (c) 2007 Chun-Yu Lee (Mat) and Open RazzmatazZ Laboratory (OrzLab)
  *                                                                                                  
  * Parts taken from zhcon project.
  * Copyright (c) 2001 ejoy <ejoy@users.sourceforge.net>
