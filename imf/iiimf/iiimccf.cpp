@@ -23,6 +23,8 @@
 #include <string>
 #include "iiimccf.h"
 #include <imf/widget.h>
+#include <stdlib.h>
+
 using namespace std;
 
 
