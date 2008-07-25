@@ -22,6 +22,7 @@
 #include "shape.h"
 #include "options.h"
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #define BLACK_color 0
