@@ -25,6 +25,7 @@
 #include <linux/input.h>
 #include <stdlib.h>
 #include <string>
+#include <string.h>
 #include <dirent.h>
 #include <ltdl.h>
 #include <vector>

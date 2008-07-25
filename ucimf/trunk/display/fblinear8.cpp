@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include <assert.h>
+#include <string.h>
 #include "fblinear8.h"
 
 //gray scale

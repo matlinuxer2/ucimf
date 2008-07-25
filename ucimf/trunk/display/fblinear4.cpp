@@ -23,6 +23,7 @@
  */
 
 #include <assert.h>
+#include <string.h>
 //#include "global.h"
 #include "fblinear4.h"
 
