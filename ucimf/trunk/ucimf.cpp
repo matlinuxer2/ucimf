@@ -55,70 +55,6 @@ Imf *imf;
 vector<Imf*> imfs;
 int current_imf;
 
-enum
-{
-  CTRL_SPACE = 203,
-  CTRL_SHIFT = 204,
-  CTRL_F5 = 205,
-  CTRL_F6 = 206,
-};
-
-typedef struct _new_key
-{
-  int table;
-  int key;
-  int new_key;
-}
-new_key;
-
-static new_key nkeys[] = {
-  /* [table]        [key]         [new_key] */
-  {(1 << KG_CTRL), KEY_SPACE, K(KT_LATIN, CTRL_SPACE)},	/* Ctrl + Space */
-  {(1 << KG_CTRL), KEY_LEFTSHIFT, K(KT_LATIN, CTRL_SHIFT)},	/* Ctrl + Shift */
-  {(1 << KG_CTRL), KEY_F5, K(KT_LATIN, CTRL_F5)},	/* Ctrl + F5 */
-  {(1 << KG_CTRL), KEY_F6, K(KT_LATIN, CTRL_F6)},	/* Ctrl + F6 */
-};
-
-int setup_keys()
-{
-  int i;
-  for (i = 0; i < sizeof (nkeys) / sizeof (new_key); i++)
-  {
-    struct kbentry entry;
-    struct kbentry tmp;
-    entry.kb_table = nkeys[i].table;
-    entry.kb_index = nkeys[i].key;
-
-        /* save current value */
-    int ret;
-    cerr << "Get KeyBoard Event..." << endl;
-    ret = ioctl (0, KDGKBENT, &entry);
-    tmp.kb_value = entry.kb_value;
-
-    entry.kb_value = nkeys[i].new_key;
-    cerr << "Set KeyBoard Event..." << endl;
-    ret=ioctl (0, KDSKBENT, &entry);
-
-        /* save current value */
-    nkeys[i].new_key = tmp.kb_value;
-  }
-  return 0;
-}
-
-void restore_keys()
-{
-  int i;
-  for (i = 0; i < sizeof (nkeys) / sizeof (new_key); i++)
-  {
-    struct kbentry entry;
-    entry.kb_table = nkeys[i].table;
-    entry.kb_index = nkeys[i].key;
-    entry.kb_value = nkeys[i].new_key;
-    ioctl (0, KDSKBENT, &entry);
-  }
-
-}
-
 void scanImf()
 {
   current_imf =0;
@@ -133,7 +69,7 @@ void scanImf()
 
   Options* option= Options::getInstance();
   char* imf_mod_path = option->getOption("IMF_MODULE_DIR");
-  cerr << imf_mod_path << endl;
+  cerr << "IMF Modules scan path: " << imf_mod_path << endl;
  
   lt_dlinit();
   lt_dlsetsearchpath( imf_mod_path );
@@ -146,7 +82,6 @@ void scanImf()
     {
       if( strstr( d_ent->d_name, ".so") )
       {
-	  
 	  lt_dlhandle handle = lt_dlopen( d_ent->d_name );
 	  if( handle == NULL){
 	    fprintf(stderr, "lt_dlopen %s failed\n", d_ent->d_name );
@@ -165,6 +100,7 @@ void scanImf()
 	  if( i!=0 )
 	  {
 	    imfs.push_back(i);
+	    cerr << "  Load Module[" << imfs.size() << "]: " << d_ent->d_name << endl;
 	  }
 
       }
@@ -199,18 +135,17 @@ Imf* nextImf()
 
 void ucimf_init()
 {
-  setup_keys();
   prev_focus = false;
   imf = 0;
+  scanImf();
   cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->attachWindow( prdt->getWindow(), preedit_shift );
   cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
-  cerr << "init entered!!" << endl;
+  cerr << "UCIMF core intialized." << endl;
 }
 
 void ucimf_exit()
 {
-  restore_keys();
   if( imf !=0 )
   {
     delete imf;
@@ -221,13 +156,17 @@ void ucimf_exit()
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
 { 
 
-  if(  *p_buf_len !=1  )
+  if(  *p_buf_len !=5  )
+  {
+    return ;
+  }
+  else if( buf[0] != 27 || buf[1] !=91 || buf[2] != 50 || buf[4] != 126 )
   {
     return ;
   }
   else
   {
-      if(  buf[0] == CTRL_SPACE )
+      if(  buf[3] == 52 ) // F12
       {
 	cwm->set_focus( !cwm->get_focus() );
 	if(imf!=0)
@@ -235,19 +174,14 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	   imf->refresh();
 	}
       }
-      else if( buf[0] == CTRL_SHIFT )
+      else if( cwm->get_focus() && buf[3] == 51 ) // IM=ON && F11
       {
 	if( cwm->get_focus() && imf !=0 )
 	  imf->switch_im();
 	else
 	  cwm->set_focus( true );
       }
-      else if( buf[0] == CTRL_F5 )
-      {
-	scanImf();
-	stts->clear();
-      }
-      else if( buf[0] == CTRL_F6 )
+      else if( cwm->get_focus() && buf[3] == 49 ) // IM=ON && F10
       {
 	prdt->clear();
 	lkc->clear();
@@ -264,6 +198,7 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	return;
       }
 
+      // Clear input buffer
       *p_buf_len = 0;
       buf[0]='\0';
   }

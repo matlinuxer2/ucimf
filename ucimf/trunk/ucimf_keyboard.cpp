@@ -25,13 +25,13 @@
 #include <iostream>
 using namespace std;
 
-enum
-{
-  CTRL_SPACE = 203,
-  CTRL_SHIFT = 204,
-  CTRL_F5 = 205,
-  CTRL_F6 = 206,
-};
+/*
+* IM  Toggle  -> F12
+* IM  Switch  -> F11 ( When Imf Toggle On )
+* IMF Switch  -> F10 ( When Imf Toggle On )
+* IMF Load    -> F9 ( When Imf Toggle On )
+*/
+
 
 typedef struct _new_key
 {
@@ -43,10 +43,10 @@ new_key;
 
 static new_key nkeys[] = {
   /* [table]        [key]         [new_key] */
-  {(1 << KG_CTRL), KEY_SPACE, K(KT_LATIN, CTRL_SPACE)},	/* Ctrl + Space */
-  {(1 << KG_CTRL), KEY_LEFTSHIFT, K(KT_LATIN, CTRL_SHIFT)},	/* Ctrl + Shift */
-  {(1 << KG_CTRL), KEY_F5, K(KT_LATIN, CTRL_F5)},	/* Ctrl + F5 */
-  {(1 << KG_CTRL), KEY_F6, K(KT_LATIN, CTRL_F6)},	/* Ctrl + F6 */
+  {(1 << KG_CTRL), KEY_SPACE,     	K_F12 },	/* IM Toggle */
+  {(1 << KG_CTRL), KEY_LEFTSHIFT, 	K_F11 },	/* IM Switch */
+  {(1 << KG_CTRL), KEY_RIGHTSHIFT,      K_F10 },	/* IMF Switch */
+  {(1 << KG_CTRL), KEY_F9,        	K_F9 },		/* IMF Load */
 };
 
 int setup_keys()

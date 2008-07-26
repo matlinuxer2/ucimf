@@ -28,6 +28,7 @@ GraphPort::GraphPort()
   x_tmp = y_tmp = 0;
   pseudo = true ;
   win = 0;
+  buf_fg = buf_bg = 0;
 
   GraphDev::Open();
   gdev = GraphDev::mpGraphDev;
