@@ -40,12 +40,12 @@ class OVImfKeyCode : public OVKeyCode  {
 public:
     OVImfKeyCode (int p);
     virtual int code();          
-    virtual int isShift();       
-    virtual int isCapslock();    
-    virtual int isCtrl();        
-    virtual int isAlt();         
-    virtual int isOpt();         
-    virtual int isNum();         
+    virtual bool isShift();       
+    virtual bool isCapslock();    
+    virtual bool isCtrl();        
+    virtual bool isAlt();         
+    virtual bool isOpt();         
+    virtual bool isNum();         
     
     virtual void setCode(int x);    
     virtual void setShift(int x);   
@@ -66,7 +66,7 @@ public:
     virtual OVBuffer* send();
     virtual OVBuffer* update();
     virtual OVBuffer* update(int cursorPos, int markFrom=-1, int markTo=-1);
-    virtual int isEmpty();
+    virtual bool isEmpty();
 
 protected:
     Preedit *prdt;
@@ -81,7 +81,7 @@ public:
     virtual OVCandidate* hide();
     virtual OVCandidate* show();
     virtual OVCandidate* update();
-    virtual int onScreen();
+    virtual bool onScreen();
 
 protected:
     char buf[512];
@@ -112,7 +112,7 @@ private:
 // string is done transparently, like what is done in e.g. sqlite3.
 class OVImfDictionary : public OVDictionary {
   public:
-    virtual int keyExist(const char *key);
+    virtual bool keyExist(const char *key);
     virtual int getInteger(const char *key);
     virtual int setInteger(const char *key, int value);
     virtual const char* getString(const char *key);
