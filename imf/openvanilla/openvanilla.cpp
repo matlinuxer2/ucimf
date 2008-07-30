@@ -335,12 +335,12 @@ void OVImf::switch_im_per_lang()
 
 OVImfKeyCode::OVImfKeyCode (int p=0)  { chr=p; shift=capslock=ctrl=alt=0; }
 int OVImfKeyCode::code()              { return chr; }
-int OVImfKeyCode::isShift()           { return shift; }
-int OVImfKeyCode::isCapslock()        { return capslock; }
-int OVImfKeyCode::isCtrl()            { return ctrl; }
-int OVImfKeyCode::isAlt()             { return alt; }
-int OVImfKeyCode::isOpt()             { return alt; }
-int OVImfKeyCode::isNum()             { return 0; }
+bool OVImfKeyCode::isShift()           { return shift!=0; }
+bool OVImfKeyCode::isCapslock()        { return capslock!=0; }
+bool OVImfKeyCode::isCtrl()            { return ctrl!=0; }
+bool OVImfKeyCode::isAlt()             { return alt!=0; }
+bool OVImfKeyCode::isOpt()             { return alt!=0; }
+bool OVImfKeyCode::isNum()             { return false; }
 
 void OVImfKeyCode::setCode(int x)     { chr=x; }
 void OVImfKeyCode::setShift(int x)    { shift=x; }
@@ -384,7 +384,7 @@ OVBuffer* OVImfBuffer::update(int cursorPos, int markFrom, int markTo) {
     return update();
 }
 
-int OVImfBuffer::isEmpty() {
+bool OVImfBuffer::isEmpty() {
   if ( buf.empty() )
   {
     return true;
@@ -436,7 +436,7 @@ OVCandidate* OVImfCandidate::update() {
     return this;
 }
 
-int OVImfCandidate::onScreen() {
+bool OVImfCandidate::onScreen() {
     return onscreen;
 }
 
@@ -567,7 +567,7 @@ int OVImfService::UTF8ToUTF16(const char *src, unsigned short **rcvr) {
  * Implementation of OVImfDictionary
  */
 
-int OVImfDictionary::keyExist(const char *key) {
+bool OVImfDictionary::keyExist(const char *key) {
    return _dict.find(key) != _dict.end();
 }
 
