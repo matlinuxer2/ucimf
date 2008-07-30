@@ -105,9 +105,21 @@ Status* Status::getInstance()
 
 void Status::clear()
 {
-  set_imf_name("");
-  set_im_name("");
-  set_lang_name("");
+  //set_imf_name("");
+  //set_im_name("");
+  //set_lang_name("");
+  set_imf_status("","","");
+}
+
+void Status::set_imf_status( char* new_imf_name, char* new_im_name, char* new_lang_name )
+{
+  ustring input( "UTF-8", new_imf_name );
+  ustring input2( "UTF-8", new_imf_name );
+  ustring input3( "UTF-8", new_imf_name );
+  imf_name = input;
+  im_name = input2;
+  lang_name = input3;
+  render();
 }
 
 void Status::set_imf_name( char* new_imf_name )

@@ -51,6 +51,7 @@ class Status : public Widget{
     void set_imf_name( char* );
     void set_im_name( char* );
     void set_lang_name( char* );
+    void set_imf_status( char*, char*, char* );
     void set_bg_color( int );
     void set_fg_color( int );
     void set_border_color( int );
