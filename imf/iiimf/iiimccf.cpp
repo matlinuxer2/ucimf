@@ -392,8 +392,9 @@ IIIMCCF::~IIIMCCF()
 void IIIMCCF::refresh()
 {
   Status *stts = Status::getInstance();
-  stts->set_imf_name("IIIMF");
-  stts->set_im_name( cur_id_name );
+  //stts->set_imf_name("IIIMF");
+  //stts->set_im_name( cur_id_name );
+  stts->set_imf_status("IIIMF",cur_id_name,"");
 }
 
 

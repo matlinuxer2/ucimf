@@ -114,8 +114,8 @@ void Status::clear()
 void Status::set_imf_status( char* new_imf_name, char* new_im_name, char* new_lang_name )
 {
   ustring input( "UTF-8", new_imf_name );
-  ustring input2( "UTF-8", new_imf_name );
-  ustring input3( "UTF-8", new_imf_name );
+  ustring input2( "UTF-8", new_im_name );
+  ustring input3( "UTF-8", new_lang_name);
   imf_name = input;
   im_name = input2;
   lang_name = input3;
@@ -126,21 +126,21 @@ void Status::set_imf_name( char* new_imf_name )
 {
   ustring input( "UTF-8", new_imf_name );
   imf_name = input;
-  render();
+  return;
 }
 
 void Status::set_im_name( char* new_im_name )
 {
   ustring input( "UTF-8", new_im_name );
   im_name = input;
-  render();
+  return;
 }
 
 void Status::set_lang_name( char* new_lang_name )
 {
   ustring input( "UTF-8", new_lang_name );
   lang_name = input;
-  render();
+  return;
 }
 
 void Status::set_fg_color( int fg )
