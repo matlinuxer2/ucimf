@@ -137,10 +137,12 @@ void ucimf_init()
 {
   prev_focus = false;
   imf = 0;
-  scanImf();
   cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->attachWindow( prdt->getWindow(), preedit_shift );
   cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
+  cwm->set_focus( false );
+  scanImf();
+  imf = imfs[current_imf];
   cerr << "UCIMF core intialized." << endl;
 }
 
@@ -156,13 +158,9 @@ void ucimf_exit()
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
 { 
 
-  if(  *p_buf_len !=5  )
+  if( *p_buf_len !=5 || buf[0] != 27 || buf[1] !=91 || buf[2] != 50 || buf[4] != 126 )
   {
-    return ;
-  }
-  else if( buf[0] != 27 || buf[1] !=91 || buf[2] != 50 || buf[4] != 126 )
-  {
-    return ;
+    return;
   }
   else
   {

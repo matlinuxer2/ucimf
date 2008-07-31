@@ -39,8 +39,9 @@ using namespace std;
 void DummyImf::refresh()
 {
   Status* stts = Status::getInstance();
-  stts->set_imf_name("Dummy");
-  stts->set_im_name("none");
+  //stts->set_imf_name("Dummy");
+  //stts->set_im_name("none");
+  stts->set_imf_status("Dummy","none","");
 }
 
 string DummyImf::process_input( const string& input)
@@ -49,3 +50,7 @@ string DummyImf::process_input( const string& input)
   return result;
 }
 
+void DummyImf::switch_im()
+{
+  return;
+}

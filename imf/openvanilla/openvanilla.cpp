@@ -171,8 +171,9 @@ int stdin_to_openvanila_keycode( int keychar )
 
 void OVImf::refresh()
 {
-  stts->set_imf_name( "OpenVanilla" );
-  stts->set_im_name( current_im_name );
+  //stts->set_imf_name( "OpenVanilla" );
+  //stts->set_im_name( current_im_name );
+  stts->set_imf_status("OpenVanilla",current_im_name,"");
 }
 
 string OVImf::process_input( const string& buf )
