@@ -1,4 +1,5 @@
 IMF_MODULE_DIR = /usr/lib/ucimf/
+#UCIMF_FONTPATH = /usr/share/fonts/ucimf/unifont.pcf
 UCIMF_FONTPATH = /usr/share/fonts/truetype/arphic/ukai.ttf
 
 FONT_WIDTH = 24
