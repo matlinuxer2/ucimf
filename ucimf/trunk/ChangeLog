@@ -1,3 +1,22 @@
+2008-07-26  Mat <matlinuxer2@gmail.com>
+	* Tag Revision to 2.0.1 
+
+2008-07-26  Mat <matlinuxer2@gmail.com>
+
+	* Change key mapping to overcome key registration error.
+	  Hotkey now defined to:
+	     IM Toggle -> F12 <- Ctrl_Space
+	     IM Switch -> F11 <- Ctrl_ShiftLeft
+	     IMF Switch-> F10 <- Ctrl_ShiftRight
+
+	* fixed GraphPort initialization segment fault error.
+	  GraphPort buf_{fg,bg} not initialized cleanly.
+
+2008-07-25  Mat <matlinuxer2@gmail.com>
+
+	* Fix compile error.
+	  Thanks for wuhugh's advice.
+
 2008-05-16  Mat <MatLinuxer2@gmail.com>
 
 	* .{cpp,h},

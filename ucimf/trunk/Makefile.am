@@ -27,3 +27,6 @@ conf_DATA = ucimf.conf ucimf.conf.example
 
 EXTRA_DIST=  cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example
 
+install-data-local:
+	$(INSTALL_DATA) -d $(DESTDIR)$(datadir)/fonts/ucimf
+	$(INSTALL_DATA) $(srcdir)/fonts/* $(DESTDIR)$(datadir)/fonts/ucimf
