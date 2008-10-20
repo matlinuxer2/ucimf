@@ -86,6 +86,8 @@ bool Options::parse_file( ifstream &input)
         _opts.insert( pair<string, string>(o,v) );
 	cout << o << "=" << v << endl;
     }
+    // FIXME: error handling
+    return true;
 }
 
 char* Options::getOption( const char* opt_str )
@@ -95,7 +97,7 @@ char* Options::getOption( const char* opt_str )
     char* result;
     if ( iter == _opts.end())
     {   
-	result="nothing";
+	result= (char*) "nothing";
     }
     else
     {

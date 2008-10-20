@@ -52,8 +52,6 @@ void Cwm::set_position( int new_x, int new_y )
 {
   if( new_x != _cursor_x || new_y != _cursor_y )
   {
-    bool p_focus = _focus;
-    
     _cursor_x = new_x;
     _cursor_y = new_y;
 

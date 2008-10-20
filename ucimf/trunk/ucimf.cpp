@@ -53,14 +53,14 @@ Cwm *cwm = Cwm::getInstance();
 
 Imf *imf;
 vector<Imf*> imfs;
-int current_imf;
+size_t current_imf;
 
 void scanImf()
 {
   current_imf =0;
   imfs.clear();
-  createImf_t* create_imf;
-  destroyImf_t* destroy_imf;
+  createImf_t* create_imf = NULL;
+  destroyImf_t* destroy_imf = NULL;
 
   // char* IMF_MODULEDIR=getenv("IMF_MODULE_DIR");
   // 

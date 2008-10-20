@@ -51,8 +51,7 @@ static new_key nkeys[] = {
 
 int setup_keys()
 {
-  int i;
-  for (i = 0; i < sizeof (nkeys) / sizeof (new_key); i++)
+  for (size_t i = 0; i < sizeof (nkeys) / sizeof (new_key); i++)
   {
     struct kbentry entry;
     struct kbentry tmp;

@@ -108,7 +108,7 @@ void Status::clear()
   //set_imf_name("");
   //set_im_name("");
   //set_lang_name("");
-  set_imf_status("","","");
+  set_imf_status((char*)"", (char*)"", (char*)"");
 }
 
 void Status::set_imf_status( char* new_imf_name, char* new_im_name, char* new_lang_name )
@@ -373,7 +373,7 @@ void LookupChoice::draw()
   int border = 3;
 
   Text t;
-  for( int i=0 ; i<bufs.size(); i++ )
+  for( size_t i=0 ; i<bufs.size(); i++ )
   {
     t.append_next( bufs[i] );
   }

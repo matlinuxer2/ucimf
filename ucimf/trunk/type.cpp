@@ -38,7 +38,7 @@ ustring::ustring(const char* encoding, const char* data)
   size_t outbytesleft=sizeof(tmp);
 
   iconv_t conv_codec = iconv_open( "UTF-32", encoding );
-  size_t nconv = iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+  iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
   iconv_close( conv_codec );
   
   udata.clear();
@@ -74,7 +74,7 @@ string ustring::out(const char* encoding) const
   size_t outbytesleft = 256;
   
   iconv_t conv_codec = iconv_open( encoding, "UTF-32" );
-  size_t nconv = iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+  iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
   iconv_close( conv_codec );
 
   string result( outbuf );
@@ -101,7 +101,7 @@ ustring ustring::operator+(const ustring& ustr) const
 {
   ustring result;
   result.udata = udata;
-  for( int i=0; i< ustr.udata.size(); i++ )
+  for( size_t i=0; i< ustr.udata.size(); i++ )
   {
     result.udata.push_back( ustr.udata[i] );
   }
@@ -127,7 +127,7 @@ int ustring::length() const
   Font* font= Font::getInstance();
   int result = 0;
 
-  for( int i=0; i< udata.size(); i++ )
+  for( size_t i=0; i< udata.size(); i++ )
   {
     result += font->length( udata[i] );
   }
