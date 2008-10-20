@@ -101,7 +101,8 @@ int Font::Width()
 
 void Font::render( int code, CharBitMap& charbitmap )
 {
-  FT_Error error;
+  // FIXME: handle failure
+  // FT_Error error;
   FT_ULong charcode = static_cast<FT_ULong>(code);
   
   int glyph_index = FT_Get_Char_Index( face, charcode );

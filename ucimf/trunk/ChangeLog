@@ -1,3 +1,16 @@
+2008-10-20  Jim Huang  <jserv.tw@gmail.com>
+
+	* shape.cpp (Text::draw),
+	ucimf.cpp (current_imf) (scanImf),
+	ucimf_keyboard.cpp (setup_keys),
+	cwm.cpp (Cwm::set_position),
+	options.cpp (Options::parse_file) (Options::getOption),
+	font.cpp (Font::render),
+	type.cpp (ustring::ustring) (ustring::out) (ustring::operator+)
+	(ustring::length),
+	widget.cpp (Status::clear) (LookupChoice::draw): Eliminate compilation
+	warnings.
+	
 2008-07-26  Mat <matlinuxer2@gmail.com>
 	* Tag Revision to 2.0.1 
 
