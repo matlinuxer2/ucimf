@@ -1,3 +1,9 @@
+ucimf-openvanilla (2.8.5) unstable; urgency=low
+
+  * Update to ucimf 2.0.5 and openvanilla 0.8.0
+
+ -- Mat <MatLinuxer2@gmail.com>  Sun, 26 Oct 2008 17:43:08 +0800
+
 ucimf-openvanilla (0.0.1-1) unstable; urgency=low
 
   * Initial Release.

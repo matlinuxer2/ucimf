@@ -1,4 +1,4 @@
-INCLUDES = -I/$(includedir) -I. -I../../ucimf/trunk/include -DOV_MODULEDIR=\"@OV_MODULEDIR@\"
+INCLUDES = -I/$(includedir) -I. -I../libucimf/include -DOV_MODULEDIR=\"@OV_MODULEDIR@\"
 pkglib_LTLIBRARIES = openvanilla.la
 pkglibdir=$(libdir)/ucimf/
 
