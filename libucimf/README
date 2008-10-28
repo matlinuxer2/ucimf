@@ -1,28 +1,59 @@
+UCIMF
 
-==========[Main Program Structure]==========
+UCIMF( Unicode Console InputMethod Framework ) 是一個在 Framebuffer Console 環境下, 提供外掛輸入法支援的函式庫架構.
 
----Application Programmable Interface---
+:UCIMF:TodoList
 
- * ucimf.h ucimf.cpp
+特色
+ • 支援 UTF-8 
+ • 支援 OpenVanilla 輸入法模組
+ • 支援 PCF, TrueType 字型顯示
+ • 提供 OverSpot 浮動組字視窗.
+ • 提供 C/C++ API
 
----Input Method Framework Object---
 
- * openvanilla.h openvanilla.cpp
- * iiimccf.h iiimccf.cpp
+顯示環境
+啟動 FrameBuffer 必須在開機時設定核心參數
+可以直接加入 LILO, GRUB, ...等 bootloaders 的設定, 
+以方便每次開機都進入相容的顯示環境.
 
----GUI Layout System---
- * graphport.h graphport.cpp
- * shape.h shape.cpp
- * window.h window.cpp
- * widget.h widget.cpp
- * cwm.h cwm.cpp
+vga=785  (640x480, 16 )
+vga=788  (800x600, 16 )
+vga=791  (1024x768, 16 )
+vga=794  (1280x1024, 16 )
 
----Graphical Implementation---
- * font.h font.cpp
- * graphdev.h graphdev.cpp
- * display/*.cpp
+環境參數
+你需要某些環境設定以符合程式可能用到的參數.
 
----Basic data type ---
- * type.h type.cpp
+LC_CTYPE
+使用UTF-8以正確辨識Unicode字元 
 
+OVMODULE_DIR
+OpenVanilla的輸入法模組所在的目錄 
+
+設定檔
+/etc/ucimf.conf 或是 ~/.ucimf.conf
+將下列的參數直接寫到裡面即可.
+
+IMF_MODULE_DIR
+輸入法架構模組所在的目錄 
+IMF_MODULE_DIR=/usr/lib/ucimf/
+
+UCIMF_FONTPATH
+Unicode字型檔案的路徑 
+UCIMF_FONTPATH=/usr/share/fonts/truetype/arphic/ukai.ttf 
+
+功能鍵
+
+F12 或 Ctrl-Space  切換輸入狀態
+F11 或 Ctrl-ShiftL 切換輸入法
+F10 或 Ctrl-ShiftR 動態切換輸入法架構模組
+
+
+資源
+專案主站, 檔案下載, 程式碼管理
+http://sourceforge.net/projects/ucimf
+
+討論區, 郵件論譠, 問題回報
+http://groups.google.com/group/ucimf 
 
