@@ -1,0 +1,14 @@
+0. 第一次下載請執行
+
+     `./init.sh`
+
+   以取得 OpenVanilla 的程式碼
+
+1. 編譯 OpenVanilla 輸入法模組，請執行
+   
+     `cd Modules`
+     `make`
+
+2. 安裝 ( coming soon... )
+      
+
