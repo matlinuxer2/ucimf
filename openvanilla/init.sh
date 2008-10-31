@@ -17,7 +17,7 @@ ov_common_unpack() {
 	cd ${ROOT}
 	svn checkout ${OV_SVN_URL}/Framework
 
-	test -f ${ROOT}/Framework/Headers || ln -s ${ROOT}/Framework/Headers ${ROOT}/Modules/SharedHeaders/OpenVanilla
+	test -d ${ROOT}/Modules/SharedHeaders/OpenVanilla  || ln -s ${ROOT}/Framework/Headers ${ROOT}/Modules/SharedHeaders/OpenVanilla
 }
 
 ov_array_unpack() {
@@ -79,6 +79,7 @@ ov_poj_unpack() {
 }
 
 ov_patches(){
+	cd ${ROOT}
 	patch -p0 < patches/module_makefile.patch
 }
 
