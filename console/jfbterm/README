@@ -1,0 +1,18 @@
+0. 第一次下載請執行
+
+     `./init.sh`
+
+   以取得 jfbterm 的程式碼
+
+1. 編譯 jfbterm，請執行
+   
+     `cd jfbterm-0.4.7/`
+     `./configure --prefix=/usr/` 
+     `make`
+
+   P.S. /usr/ 可以改成你希望的路徑
+
+2. 安裝, 請執行
+      
+     `make install`
+
