@@ -12,18 +12,18 @@
 
 <table border="0" cellspacing="0" width = 100%>
 <tr>
-  <td>引入IIIMF, OpenVanilla輸入法架構的終端機輸入環境
+  <td>在 Unicode Console 環境下, 提供外掛輸入法支援的函式庫架構.
 	  <p>Copyright &copy; 2006-2007 <a href="mailto:matlinuxer2@gmail.com">Chun-Yu Lee (Mat)</a> and <a href="http://orzlab.blogspot.com/">Open RazzmatazZ Laboratory (OrzLab)</a><br />
        Copyright &copy; 2006  Chun-Yu Lee (Mat)</p>
     <p>授權方式： <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a> (GPL)</p>
-    <p>開發者:</p>
+    <p>作者:</p>
     <ul>
       <li>Mat   MatLinuxer2@gmail.com</li>
     </ul>
   </td>
   <td bgcolor="#DDDDDD">
     <ul>
-	    <li><a href="#wiki">Wiki</a></li>
+	    <li><a href="http://groups.google.com/group/ucimf"><em>討論區(Open)</em></a></li>
 	    <li><a href="#news">最新消息</a></li>
 	    <li><a href="#download">下載</a></li>
     </ul>
@@ -31,74 +31,114 @@
 </tr>
 </table>
 
-<a name="wiki"><h2 class="title">Wiki</h2></a>
+
+
+</p>
+<a name="feature"><h2 class="title">特色</h2></a>
+<ul>
+<ul>
+<li>支援 UTF-8 </li>
+<li>支援 OpenVanilla 輸入法模組</li>
+<li>支援 PCF, TrueType 字型顯示</li>
+<li>提供 OverSpot 浮動組字視窗.</li>
+<li>提供 C/C++ API</li>
+</ul>
+</ul>
+<p>
+
+</p>
+<a name="display"><h2 class="title">顯示環境</h2></a>
+<p>
+啟動 FrameBuffer 必須在開機時設定核心參數<br />
+可以直接加入 LILO, GRUB, ...等 bootloaders 的設定, <br />
+以方便每次開機都進入相容的顯示環境.<br />
+
+</p>
+<pre>
+vga=785  (640x480, 16 )
+vga=788  (800x600, 16 )
+vga=791  (1024x768, 16 )
+vga=794  (1280x1024, 16 )
+</pre>
+<a name="enviroment"><h2 class="title">環境參數</h2></a>
+<p>
+你需要某些環境設定以符合程式可能用到的參數.<br />
+
+</p>
+<h5>LC_CTYPE</h5>
+<pre>
+使用UTF-8以正確辨識Unicode字元 
+</pre>
+<h5>OVMODULE_DIR</h5>
+<pre>
+OpenVanilla的輸入法模組所在的目錄 
+</pre>
+<a name="setting"><h2 class="title">設定檔</h2></a>
+<p>
+/etc/ucimf.conf 或是 ~/.ucimf.conf<br />
+將下列的參數直接寫到裡面即可.<br />
+
+</p>
+<h5>IMF_MODULE_DIR</h5>
+<pre>
+輸入法架構模組所在的目錄 
+IMF_MODULE_DIR=/usr/lib/ucimf/
+</pre>
+<h5>UCIMF_FONTPATH</h5>
+<pre>
+Unicode字型檔案的路徑 
+UCIMF_FONTPATH=/usr/share/fonts/truetype/arphic/ukai.ttf 
+</pre>
+<a name="fnkey"><h2 class="title">功能鍵</h2></a>
+<pre>
+F12 或 Ctrl-Space  切換輸入狀態
+F11 或 Ctrl-ShiftL 切換輸入法
+F10 或 Ctrl-ShiftR 動態切換輸入法架構模組
+</pre>
+<a name="resource"><h2 class="title">資源</h2></a>
+<p>
+專案主站, 檔案下載, 程式碼管理<br />
+<a href='http://sourceforge.net/projects/ucimf'>http://sourceforge.net/projects/ucimf</a><br />
+
+</p>
+<p>
+討論區, 郵件論譠, 問題回報<br />
+<a href='http://groups.google.com/group/ucimf'>http://groups.google.com/group/ucimf</a> <br />
+
+
+<a name="download"><h2 class="title">下載</h2></a>
+  <h3>Subversion</h3>
   <p>
-    感謝TOSSUG社群的提供, 這個專案有wiki頁面提供互動性更高的專案版面.
-    你可以在:
-    <ul><a href="http://wiki.tossug.org/UCIMF">Wiki in TOSSUG</a></ul>
-    找到安裝及測試方式,還有相關的內文和連結.
+  <pre>
+  svn co https://ucimf.svn.sourceforge.net/svnroot/ucimf ucimf
+  </pre>
   </p>
 
-<a name="news"><h2 class="title">最新消息</h2></a>
-  <h3 class="title">2007.04.15 2.0.0版開放下載測試</h3>
-    <p>
-      <ul><a href="./file/ucimf-2.0.0.tar.gz">ucimf-2.0.0.tar.gz</a></ul>
-      <ul><a href="./file/jfbterm_0.4.7-patch.orig.tar.gz">jfbterm_0.4.7-patch.orig.tar.gz</a></ul>
-      <ul><a href="./file/ucimf-dummy-2.0.0.tar.gz">dummy模組</a></ul>
-      <ul><a href="./file/ucimf-iiimf-2.0.0.tar.gz">iiimf模組</a></ul>
-      <ul><a href="./file/ucimf-openvanilla-2.0.0.tar.gz">openvanilla模組</a></ul>
-    </p>
-  
-  <h3 class="title">2007.01.06 Beta版開放下載測試</h3>
-    <p>
-      <ul><a href="./file/ucimf-1.9.9.tar.gz">ucimf-1.9.9.tar.gz</a></ul>
-      <ul><a href="./file/jfbterm_0.4.7-patch.orig.tar.gz">jfbterm_0.4.7-patch.orig.tar.gz</a></ul>
-      <ul><a href="./file/ucimf-dummy_0.0.1.orig.tar.gz">dummy模組</a></ul>
-      <ul><a href="./file/ucimf-iiimf_0.0.1.orig.tar.gz">iiimf模組</a></ul>
-      <ul><a href="./file/ucimf-openvanilla_0.0.1.orig.tar.gz">openvanilla模組</a></ul>
-    </p>
+  <h3>Files</h3>
+  <p>
+  <pre>
+  https://sourceforge.net/project/showfiles.php?group_id=208016
+  </pre>
+  </p>
 
-  <h3 class="title">2006.11.07 正式支援OpenVanilla輸入法架構</h3>
-    <p>
-      <ul><a href="./file/ucimf-1.9.0.tar.gz">ucimf-1.9.0.tar.gz</a></ul>
-      <ul><a href="./file/jfbterm-0.4.7-patch.tar.gz">jfbterm-0.4.7-patch.tar.gz</a></ul>
-    </p>
+
+<a name="news"><h2 class="title">最新消息</h2></a>
+  <h3 class="title">2007.04.15 2.0.0版發佈</h3>
+  
+  <h3 class="title">2007.01.06 Beta版發佈</h3>
+
+  <h3 class="title">2006.11.07 1.9.0 測試版發佈，正式支援OpenVanilla輸入法架構</h3>
     <p>
       <br><img src="./screenshot/ucimf_006.png"><br>
       <br><img src="./screenshot/ucimf_007.png"><br>
       <br><img src="./screenshot/ucimf_011.png"><br>
     </p>
     
-  <h3 class="title">2006.03.26 iiimccf 0.9.3 測試版出爐</h3>
-    <p>
-      <ul><a href="./file/iiimccf-0.9.3.tar.gz">iiimccf-0.9.3.tar.gz</a></ul>
-      <ul><a href="./file/jfbterm-0.4.7.tar.gz">jfbterm-0.4.7.tar.gz</a></ul>
-    </p>
+  <h3 class="title">2006.03.26 iiimccf 0.9.3 測試版發佈</h3>
     <p>
       <br><img src="./screenshot/002.png"><br>
       <br><img src="./screenshot/003.png"><br>
     </p>
-
-<a name="download"><h2 class="title">下載</h2></a>
-  <h3>SVN</h3>
-  <p>
-    Lastest Source:
-    <ul><a>svn checkout https://svn.csie.net/iiimtcf/  YOUR_CUSTOM_DIR/</a></ul>
-    如果你是svn.csie.net上的member:
-    <ul><a>svn checkout --username=MEMBER_NAME https://svn.csie.net/iiimtcf/  YOUR_CUSTOM_DIR/</a></ul>
-  </p>
-  
-  <h3 class="title">2006.11.07 1.9.0測試版</h3>
-  <p>
-    <ul><a href="./file/ucimf-1.9.0.tar.gz">ucimf-1.9.0.tar.gz</a></ul>
-    <ul><a href="./file/jfbterm-0.4.7-patch.tar.gz">jfbterm-0.4.7-patch.tar.gz</a></ul>
-  </p>
-  
-  <h3 class="title">2006.03.26  0.9.3測試版</h3>
-  <p>
-    <ul><a href="./file/iiimccf-0.9.3.tar.gz">iiimccf-0.9.3.tar.gz</a></ul>
-    <ul><a href="./file/jfbterm-0.4.7.tar.gz">jfbterm-0.4.7.tar.gz</a></ul>
-  </p>
 
 </body>
 </html>
