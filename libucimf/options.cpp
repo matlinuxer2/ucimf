@@ -27,6 +27,14 @@
 #include "options.h"
 using namespace std;
 
+
+#ifdef SYSCONFDIR
+#define FILE_UCIMF_CONF       SYSCONFDIR"/ucimf.conf"                                        
+#else
+#define FILE_UCIMF_CONF       "/etc/ucimf.conf"
+#endif
+
+
 Options* Options::_instance = 0;
 
 Options* Options::getInstance()
@@ -46,7 +54,7 @@ Options::Options()
 
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
-    conf = "/etc/ucimf.conf";
+    conf = FILE_UCIMF_CONF;
   }
   
   ifstream input_file( conf.c_str() );
