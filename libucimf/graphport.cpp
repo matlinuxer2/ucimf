@@ -37,7 +37,10 @@ GraphPort::GraphPort()
 int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 {
     int x_next = x+ x_tmp;
-    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
+    if( gdev )
+    {
+	    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
+    }
     return x_next-x_tmp;
 }
 
@@ -45,21 +48,29 @@ int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 
 void GraphPort::PutPixel( int x, int y, int color)
 {
+
+    if( !gdev ) return;
     gdev->PutPixel( x+x_tmp, y+y_tmp, color );
 }
 
 void GraphPort::FillRect( int x, int y, int width, int height, int color) 
 {
+
+    if( !gdev ) return;
     gdev->FillRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
 }
 
 void GraphPort::DrawRect( int x, int y, int width, int height, int color) 
 {
+
+    if( !gdev ) return;
     gdev->DrawRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
 }
 
 void GraphPort::RevRect( int x, int y, int width, int height)
 {
+
+    if( !gdev ) return;
     gdev->RevRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height );
 }
 
@@ -97,6 +108,7 @@ void GraphPort::push_bg_buf()
     buf_bg = 0;
   }
 
+  if( !gdev ) return;
   gdev->SaveRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_bg );
 }
 
@@ -106,6 +118,8 @@ void GraphPort::push_fg_buf()
   {
     buf_fg = 0;
   }
+
+  if( !gdev ) return;
   gdev->SaveRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_fg );
 }
 
@@ -113,6 +127,7 @@ void GraphPort::pop_bg_buf()
 {
   if( buf_bg != 0 )
   {
+    if( !gdev ) return;
     gdev->RstrRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_bg );
   }
 }
@@ -121,6 +136,8 @@ void GraphPort::pop_fg_buf()
 {
   if( buf_fg != 0 )
   {
+
+    if( !gdev ) return;
     gdev->RstrRect( win->x(), win->y(), win->x()+win->w(), win->y()+win->h(), &buf_fg );
   }
 }
