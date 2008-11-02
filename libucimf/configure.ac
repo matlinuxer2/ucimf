@@ -68,6 +68,15 @@ AC_TYPE_SIZE_T
 #   IMF_MODULE_DIR=${prefix}/lib/ucimf
 # fi
 
+#Check for customized conf file path
+if test "x$UCIMF_CONF_PATH" = "x"; then
+  UCIMF_CONF_PATH="/etc/"
+fi
+
+AC_SUBST(UCIMF_CONF_PATH)
+
+
+
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_PROG_GCC_TRADITIONAL

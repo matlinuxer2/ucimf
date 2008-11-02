@@ -1,7 +1,7 @@
 SUBDIRS = ./display 
 
 AM_CPPFLAGS = -g -DDEBUG 
-INCLUDES = -I./include -I./include/imf
+INCLUDES = -I./include -I./include/imf -DUCIMF_CONF_DIR=\"@UCIMF_CONF_PATH@\"
 
 ucimfinclude_HEADERS = include/*.h 
 ucimfincludedir = $(includedir)
@@ -23,10 +23,9 @@ bin_PROGRAMS = ucimf_keyboard
 ucimf_keyboard_SOURCES = ucimf_keyboard.cpp
 
 confdir=$(sysconfdir)
-conf_DATA = ucimf.conf ucimf.conf.example
+conf_DATA = ucimf.conf 
 
-EXTRA_DIST=  cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example
+miscdir=$(datadir)/ucimf/
+misc_DATA = fonts/unifont.pcf ucimf.conf.example
 
-install-data-local:
-	$(INSTALL_DATA) -d $(DESTDIR)$(datadir)/fonts/ucimf
-	$(INSTALL_DATA) $(srcdir)/fonts/* $(DESTDIR)$(datadir)/fonts/ucimf
+EXTRA_DIST=  cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf

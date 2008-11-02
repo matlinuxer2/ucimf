@@ -62,11 +62,6 @@ void scanImf()
   createImf_t* create_imf = NULL;
   destroyImf_t* destroy_imf = NULL;
 
-  // char* IMF_MODULEDIR=getenv("IMF_MODULE_DIR");
-  // 
-  // IMF_MODULE_DIR is defined in configure.ac + Makefile.am
-  //
-
   Options* option= Options::getInstance();
   char* imf_mod_path = option->getOption("IMF_MODULE_DIR");
   cerr << "IMF Modules scan path: " << imf_mod_path << endl;
