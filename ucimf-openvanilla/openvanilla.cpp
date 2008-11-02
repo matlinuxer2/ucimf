@@ -54,8 +54,7 @@ OVImf::OVImf()
   dict = new OVImfDictionary;
   stts = Status::getInstance();
 
-  // OV_MODULEDIR is defined in Makefile.am !!
-  // OV_MODULEDIR=getenv("OVMODULE_DIR");
+  // OV_MODULEDIR is defined in Makefile.am 
   lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
 
