@@ -9,7 +9,7 @@ ov_common_unpack() {
 	test -d ${ROOT}/Modules || mkdir ${ROOT}/Modules
 	cd ${ROOT}/Modules
 	echo "Checkout common source"
-	wget --continue ${OV_SVN_URL}/Modules/Makefile                                                         
+	wget -O Makefile ${OV_SVN_URL}/Modules/Makefile                                                         
 	svn checkout ${OV_SVN_URL}/Modules/Mk                                                          
 	svn checkout ${OV_SVN_URL}/Modules/SharedHeaders 
 	svn checkout ${OV_SVN_URL}/Modules/SharedSource 
@@ -85,7 +85,10 @@ ov_patches(){
 
 
 ov_common_unpack
-ov_array_unpack
+
+# fail to load
+#ov_array_unpack
+
 ov_generic_unpack
 ov_phonetic_unpack
 ov_poj_unpack
