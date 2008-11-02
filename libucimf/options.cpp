@@ -27,11 +27,14 @@
 #include "options.h"
 using namespace std;
 
-
+#ifndef UCIMF_CONF_DIR
 #ifdef SYSCONFDIR
 #define FILE_UCIMF_CONF       SYSCONFDIR"/ucimf.conf"                                        
 #else
 #define FILE_UCIMF_CONF       "/etc/ucimf.conf"
+#endif
+#else
+#define FILE_UCIMF_CONF	      UCIMF_CONF_DIR"/ucimf.conf"
 #endif
 
 

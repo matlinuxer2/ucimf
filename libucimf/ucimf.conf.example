@@ -1,22 +1,28 @@
+# The paths of IMF modules ( like openvanilla.so, iiimf.so )
 IMF_MODULE_DIR = /usr/lib/ucimf/
-#UCIMF_FONTPATH = /usr/share/fonts/ucimf/unifont.pcf
-UCIMF_FONTPATH = /usr/share/fonts/truetype/arphic/ukai.ttf
 
+# Font settings 
+#UCIMF_FONTPATH = /usr/share/fonts/truetype/arphic/ukai.ttf
+#UCIMF_FONTPATH = /usr/share/fonts/efont-unicode/b16.pcf.gz
+UCIMF_FONTPATH = /usr/share/ucimf/unifont.pcf
 FONT_WIDTH = 24
 FONT_HEIGHT = 24
 
+# Status bar settings.
 STATUS_FG_COLOR = 9
 STATUS_BG_COLOR = 8
 STATUS_BORDER_COLOR = 5
 STATUS_SHIFT_X = 0 
 STATUS_SHIFT_Y = 30 
 
+# Preedit bar settings.
 PREEDIT_FG_COLOR = 9
 PREEDIT_BG_COLOR = 8
 PREEDIT_BORDER_COLOR = 5
 PREEDIT_SHIFT_X = 0 
 PREEDIT_SHIFT_Y = 60 
 
+# LookupChooice bar settings.
 LOOKUPCHOICE_FG_COLOR = 9
 LOOKUPCHOICE_BG_COLOR = 8
 LOOKUPCHOICE_BORDER_COLOR = 5
