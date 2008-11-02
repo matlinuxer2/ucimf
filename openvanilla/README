@@ -9,6 +9,8 @@
      `cd Modules`
      `make`
 
-2. 安裝 ( coming soon... )
+2. 安裝 
       
+     `INSTALL_PREFIX=/usr/local/ make install` 
 
+   其中 INSTALL_PREFIX 可以改成目的路徑

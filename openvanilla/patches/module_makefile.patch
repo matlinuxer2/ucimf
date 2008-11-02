@@ -6,7 +6,7 @@
  
 -MODULES=OVIMArray OVIMGeneric OVIMPOJ-Holo OVIMPhonetic OVIMSpaceChewing \
 -    OVKPPhraseTools OVOFFullWidthCharacter OVOFHanConvert OVOFReverseLookup
-+MODULES=OVIMArray OVIMGeneric OVIMPOJ-Holo OVIMPhonetic
++MODULES=OVIMGeneric OVIMPOJ-Holo OVIMPhonetic
  
  all:
  	for i in $(MODULES) ; do make -C $$i all ;done
