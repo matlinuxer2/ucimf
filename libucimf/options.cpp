@@ -114,6 +114,12 @@ char* Options::getOption( const char* opt_str )
     {
 	result=(char*) (*iter).second.c_str();
     }
+
+    // to avoid to return NULL;
+    if( !result ){
+	result="";
+    }
+
     return result;
 }
 
