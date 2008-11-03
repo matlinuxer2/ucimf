@@ -8,8 +8,10 @@ AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CXX
+AC_PROG_LIBTOOL
 
 # Checks for libraries.
+AC_CHECK_LIB([ltdl], [main])
 
 # Checks for header files.
 
