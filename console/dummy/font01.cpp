@@ -23,6 +23,22 @@
 #include <iostream>
 using namespace std;
 
+
+const char* get_ft_error(FT_Error error)
+{
+	#undef __FTERRORS_H__
+	#define FT_ERRORDEF(e,v,s) case e: return s;
+	#define FT_ERROR_START_LIST
+	#define FT_ERROR_END_LIST
+	switch (error) {
+		#include FT_ERRORS_H
+		default:
+		return "unknown";
+	}
+}
+
+
+
 Font* Font::_instance = NULL;
 
 Font* Font::getInstance()
@@ -36,6 +52,7 @@ Font* Font::getInstance()
 
 Font::Font()
 {
+	FT_Error ft_err = 0;
 	cerr << "Font instance init" << endl;
   char* font_path = getenv ("FONT_PATH");
   char*  width  = "";//getenv ("FONT_WIDTH") ;
@@ -43,29 +60,44 @@ Font::Font()
 	cerr << "pass0" << endl;
   font_width = atoi( width );
   font_height = atoi( height );
+  if( font_path == NULL )
+  {
+	  font_path = "";
+  }
+
+  cerr << "fp: " << font_path << endl;
 
 
 	cerr << "pass1" << endl;
-  FT_Init_FreeType( &library ); 
-  FT_New_Face( library, font_path, 0, &face);
+  ft_err = FT_Init_FreeType( &library ); 
+  if( ft_err ) cerr << "FreeType hurt: "<< get_ft_error( ft_err ) << endl;
+  ft_err = FT_New_Face( library, font_path, 0, &face);
+  if( ft_err ) cerr << "FreeType hurt: "<< get_ft_error( ft_err ) << endl;
 
 	cerr << "pass2" << endl;
+	cerr << font_width << endl;
+	cerr << font_height << endl;
   /* get font size info */
   font_width = font_width ? font_width : 16;
-  font_height= font_height ? font_height : 16;
+  font_height = font_height ? font_height : 16;
 
+	cerr << "pass3" << endl;
+
+  cerr << "fw: "<< font_width << endl;
   cerr << font_path << endl;
-  cerr << font_width << endl;
-  cerr << font_height << endl;
+  cerr << "fh: "<< font_height << endl;
   
   //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   FT_Set_Pixel_Sizes( face, font_width, font_height);
   //FT_Select_Charmap( face, FT_ENCODING_UNICODE );
+	cerr << "pass4" << endl;
 
   if( face->available_sizes !=0 ) // stand for the pcf font.
   {
+	cerr << "pass5" << endl;
     FT_Set_Charmap( face, face->charmaps[0] );
 
+	cerr << "pass6" << endl;
     int fh = face->available_sizes->height;
     int fw = face->available_sizes->width;
     if( fh == 0 )
