@@ -14,4 +14,3 @@ lib_LTLIBRARIES = libfont01.la
 libfont01_la_SOURCES = font01.cpp
 libfont01_la_LDFLAGS =  `pkg-config --libs freetype2` -lltdl
 libfont01_la_CPPFLAGS = `pkg-config --cflags freetype2` -g -DDEBUG
-
