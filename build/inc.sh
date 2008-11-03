@@ -5,6 +5,7 @@ LIBUCIMF=${ROOT}/libucimf/
 UCIMFOV=${ROOT}/ucimf-openvanilla/
 OV=${ROOT}/openvanilla/
 CONSOLE=${ROOT}/console/fbterm/
+DUMMY=${ROOT}/console/dummy/
 BUILD=${ROOT}/build/
 
 export LIBRARY_PATH=${BUILD}/lib/
@@ -20,6 +21,8 @@ build_libucimf(){
 	UCIMF_CONF_PATH=${BUILD}/etc/ ./configure --prefix=${BUILD}
 	make
 	make install
+
+	cd ${BUILD}
 }
 
 check_libucimf(){
@@ -37,6 +40,7 @@ check_libucimf(){
 	&& cat ${FILE} |grep UCIMF_FONTPATH \
 	&& cat ${FILE} |grep IMF_MODULE_DIR
 	
+	cd ${BUILD}
 }
 
 setup_libucimf(){
@@ -57,6 +61,8 @@ setup_libucimf(){
 	echo "檢查字型檔:"
 	FONTFILE=$(cat ${FILE} |grep UCIMF_FONTPATH| sed 's/^.*=//g')
 	ls -l ${FONTFILE}
+
+	cd ${BUILD}
 }
 
 build_ucimf-openvanilla(){
@@ -67,6 +73,8 @@ build_ucimf-openvanilla(){
 	OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
 	make
 	make install
+
+	cd ${BUILD}
 }
 
 build_openvanilla(){
@@ -76,6 +84,8 @@ build_openvanilla(){
 	cd Modules/
 	make
 	make install INSTALL_PREFIX=${BUILD}
+
+	cd ${BUILD}
 }
 
 build_console_fbterm(){
@@ -86,6 +96,20 @@ build_console_fbterm(){
 	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	make
 	make install
+
+	cd ${BUILD}
+}
+
+build_console_testing(){
+	echo "Start to build testing"
+	cd ${DUMMY}
+	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
+	autoreconf -i --force
+	LIBS="-L${BUILD}/lib/" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
+	make
+	make install
+
+	cd ${BUILD}
 }
 
 
