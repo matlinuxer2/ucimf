@@ -51,7 +51,7 @@ Font* Font::getInstance()
 
 Font::Font()
 {
-  FT_Error ft_err = NULL;
+  FT_Error ft_err;
 
   Options* option = Options::getInstance();
 
@@ -63,12 +63,10 @@ Font::Font()
   ft_err = FT_Init_FreeType( &library ); 
   if( ft_err ){
 	  cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
-	  return NULL;
   }
   ft_err = FT_New_Face( library, font_path, 0, &face);
   if( ft_err ){
 	  cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
-	  return NULL;
   }
 
   /* get font size info */
@@ -110,6 +108,8 @@ Font::Font()
 
 Font::~Font()
 {
+  FT_Error ft_err;
+
   ft_err = FT_Done_Face(face);
   if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
   ft_err = FT_Done_FreeType(library);
@@ -128,6 +128,8 @@ int Font::Width()
 
 void Font::render( int code, CharBitMap& charbitmap )
 {
+  FT_Error ft_err;
+
   // FIXME: handle failure
   // FT_Error error;
   FT_ULong charcode = static_cast<FT_ULong>(code);
@@ -152,6 +154,8 @@ void Font::render( int code, CharBitMap& charbitmap )
 
 int Font::length( int code )
 {
+  FT_Error ft_err;
+
   FT_ULong charcode = static_cast<FT_ULong>(code);
 
   int glyph_index = FT_Get_Char_Index( face, charcode );
