@@ -159,8 +159,6 @@ void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
-    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 3;
-    __u8* buf= (__u8*)(*buffer);
 
     int height = y2 - y1 + 1;
     int width = x2 - x1 + 1;
@@ -175,16 +173,15 @@ void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
 
     *buffer = (char*) new char[buffer_bytes];
     
-    __u8* dest8;
-    __u8*  buf8;
+    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 3;
+    __u8* buf= (__u8*)(*buffer);
     int cnt;
     for(; height--; dest += mNextLine) {
-        dest8 = (__u8*)dest;
-        buf8 = (__u8*)buf;
-        for (cnt = width * 3; cnt--;) {
-            *buf8 = fb_readb(dest8);
-            dest8++;
-            buf8++;
+        __u8* dest8 = (__u8*)dest;
+        for ( int cnt = width; cnt--;) {
+            fb_writeb( fb_readb(dest8++) , buf++ );
+            fb_writeb( fb_readb(dest8++) , buf++ );
+            fb_writeb( fb_readb(dest8++) , buf++ );
         }
         buf += mNextLine;
     }
@@ -194,25 +191,22 @@ void FBLinear24::RstrRect(int x1,int y1,int x2,int y2, char* *buffer) {
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
-    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 3;
-    __u8* buf= (__u8*)(*buffer);
 
     assert( *buffer != NULL ); 
     
-    __u8* dest8;
-    __u8*  buf8;
-    int cnt;
+    __u8* buf= (__u8*)(*buffer);
+    __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 3;
+
+
     int height = y2 - y1 + 1;
     int width = x2 - x1 + 1;
     for(; height--; dest += mNextLine) {
-        dest8 = (__u8*)dest;
-        buf8 = (__u8*)buf;
-        for (cnt = width * 3; cnt--;) {
-            fb_writeb( *buf8, dest8 );
-            dest8++;
-            buf8++;
+        __u8* dest8 = (__u8*)dest;
+        for ( int cnt = width ; cnt--;) {
+            fb_writew( fb_readw(buf++), dest8++ );
+            fb_writew( fb_readw(buf++), dest8++ );
+            fb_writew( fb_readw(buf++), dest8++ );
         }
-        buf += mNextLine;
     }
     
     // release memory 
