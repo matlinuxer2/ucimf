@@ -55,16 +55,28 @@ Options::Options()
   string conf = getenv("HOME");
   conf += "/.ucimf.conf";
 
+  cerr << "Checking config file: " << conf << endl;
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
+    cerr << "Could not open config file: " << conf << endl;
     conf = FILE_UCIMF_CONF;
   }
+
+  cerr << "Checking config file: " << conf << endl;
+  if ( access(conf.c_str(), R_OK ) != 0 )
+  {
+    cerr << "Could not open config file: " << conf << endl;
+    throw runtime_error("Could not open config file!");
+  }
+
+  cerr << "Reading config file: " << conf << endl;
   
   ifstream input_file( conf.c_str() );
   
   if (!input_file)
   {
-      throw runtime_error("Could not open config file!");
+      cerr << "Could not reading config file: " << conf << endl;
+      throw runtime_error("Could not reading config file!");
   }
 
   parse_file( input_file );
@@ -95,7 +107,7 @@ bool Options::parse_file( ifstream &input)
         if (o == "")
             continue;
         _opts.insert( pair<string, string>(o,v) );
-	cout << o << "=" << v << endl;
+	cerr << o << "=" << v << endl;
     }
     // FIXME: error handling
     return true;
