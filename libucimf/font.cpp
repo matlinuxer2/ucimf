@@ -58,7 +58,8 @@ Font::Font()
   font_path = option->getOption("UCIMF_FONTPATH");
   font_width = atoi( option->getOption("FONT_WIDTH") );
   font_height = atoi( option->getOption("FONT_HEIGHT") );
-  cerr << font_path << endl;
+
+  cerr << "UCIMF_FONTPATH: " << font_path << endl;
 
   ft_err = FT_Init_FreeType( &library ); 
   if( ft_err ){
