@@ -16,6 +16,7 @@ src_unpack(){
 
 	echo "Adopt patches"
 	patch -d jfbterm-0.4.7 < patches/jfbterm-0.4.7-ucimf.patch
+	patch -d jfbterm-0.4.7 -p3 < patches/Makefile.am.patch
 }
 
 src_fetch
