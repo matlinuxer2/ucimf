@@ -31,7 +31,7 @@ Cwm* Cwm::getInstance()
 {
   if( _instance == 0 )
   {
-	  cout << " Cwm new() " << endl;
+	  cerr << " Cwm new() " << endl;
     _instance = new Cwm;
   }
 
@@ -96,19 +96,19 @@ void Cwm::set_focus( bool new_focus )
 
 void Cwm::update( Window* cw )
 {
-cout << "void Cwm::update( Window* cw )" << endl;
+cerr << "void Cwm::update( Window* cw )" << endl;
   Shift *s = cwmmap[cw];
-cout << s << ',' << cw << " Pre" << endl;
+cerr << s << ',' << cw << " Pre" << endl;
 if( s->cwm != 0 )
 {
   s->update( cw );
 }
-cout << "void Cwm::update( Window* cw ) END" << endl;
+cerr << "void Cwm::update( Window* cw ) END" << endl;
 }
 
 void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 {
-cout << new_shift << " Attached" << endl;
+cerr << new_shift << " Attached" << endl;
   cwmmap[new_win]=new_shift;
   new_win->wm = this;
 }
@@ -124,7 +124,7 @@ StatusShift::StatusShift()
 
 void StatusShift::update( Window* win )
 {
-cout <<"void StatusShift::update( Window* win )" << endl;
+cerr <<"void StatusShift::update( Window* win )" << endl;
   cwm = Cwm::getInstance();
 
   int Xres= cwm->xres() - 16;
@@ -152,7 +152,7 @@ cout <<"void StatusShift::update( Window* win )" << endl;
 
   win->x( x + shift_x );
   win->y( y + shift_y );
-cout <<"void StatusShift::update( Window* win ) END" << endl;
+cerr <<"void StatusShift::update( Window* win ) END" << endl;
 
 }
 
@@ -167,7 +167,7 @@ PreeditShift::PreeditShift()
 
 void PreeditShift::update( Window* win )
 {
-cout <<"void PreeditShift::update( Window* win )" << endl;
+cerr <<"void PreeditShift::update( Window* win )" << endl;
   cwm = Cwm::getInstance();
   int Xres= cwm->xres() -16;
   int Yres= cwm->yres() -16;
@@ -197,7 +197,7 @@ cout <<"void PreeditShift::update( Window* win )" << endl;
   win->x( x + shift_x );
   win->y( y + shift_y );
   
-cout <<"void PreeditShift::update( Window* win ) END" << endl;
+cerr <<"void PreeditShift::update( Window* win ) END" << endl;
 }
 
 LookupChoiceShift::LookupChoiceShift()
@@ -210,7 +210,7 @@ LookupChoiceShift::LookupChoiceShift()
 
 void LookupChoiceShift::update( Window* win )
 {
-cout << "void LookupChoiceShift::update( Window* win )"<< endl;
+cerr << "void LookupChoiceShift::update( Window* win )"<< endl;
   cwm = Cwm::getInstance();
   int Xres= cwm->xres()-16;
   int Yres= cwm->yres()-16;
@@ -237,6 +237,6 @@ cout << "void LookupChoiceShift::update( Window* win )"<< endl;
 
   win->x( x + shift_x );
   win->y( y + shift_y );
-cout << "void LookupChoiceShift::update( Window* win ) END"<< endl;
+cerr << "void LookupChoiceShift::update( Window* win ) END"<< endl;
 
 }

@@ -158,7 +158,7 @@ void FBLinear24::RevRect(int x1,int y1,int x2,int y2) {
 
 
 void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
-cout << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
+cerr << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -188,11 +188,11 @@ cout << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
         }
         buf += mNextLine;
     }
-cout << "FBLinear24::SaveRect() End"<<endl;
+cerr << "FBLinear24::SaveRect() End"<<endl;
 }
 
 void FBLinear24::RstrRect(int x1,int y1,int x2,int y2, char* *buffer) {
-cout << "FBLinear24::RstrRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
+cerr << "FBLinear24::RstrRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -218,7 +218,7 @@ cout << "FBLinear24::RstrRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
     delete [] (*buffer);
     *buffer = NULL;
 
-cout << "FBLinear24::RstrRect() End"<<endl;
+cerr << "FBLinear24::RstrRect() End"<<endl;
 }
 
 inline void FBLinear24::PutPixel(int x,int y,int color) {
