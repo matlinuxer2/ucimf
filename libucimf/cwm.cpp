@@ -22,6 +22,8 @@
 #include "graphdev.h"
 #include "cwm.h"
 #include "options.h"
+#include <iostream>
+using namespace std;
 
 Cwm* Cwm::_instance = 0;
 
@@ -29,6 +31,7 @@ Cwm* Cwm::getInstance()
 {
   if( _instance == 0 )
   {
+	  cout << " Cwm new() " << endl;
     _instance = new Cwm;
   }
 
@@ -93,12 +96,19 @@ void Cwm::set_focus( bool new_focus )
 
 void Cwm::update( Window* cw )
 {
+cout << "void Cwm::update( Window* cw )" << endl;
   Shift *s = cwmmap[cw];
+cout << s << ',' << cw << " Pre" << endl;
+if( s->cwm != 0 )
+{
   s->update( cw );
+}
+cout << "void Cwm::update( Window* cw ) END" << endl;
 }
 
 void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 {
+cout << new_shift << " Attached" << endl;
   cwmmap[new_win]=new_shift;
   new_win->wm = this;
 }
@@ -106,6 +116,7 @@ void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 
 StatusShift::StatusShift()
 {
+  cwm = 0;
   Options* option = Options::getInstance();
   x_gap = atoi( option->getOption("STATUS_SHIFT_X") ); 
   y_gap = atoi( option->getOption("STATUS_SHIFT_Y") ); 
@@ -113,6 +124,7 @@ StatusShift::StatusShift()
 
 void StatusShift::update( Window* win )
 {
+cout <<"void StatusShift::update( Window* win )" << endl;
   cwm = Cwm::getInstance();
 
   int Xres= cwm->xres() - 16;
@@ -140,11 +152,13 @@ void StatusShift::update( Window* win )
 
   win->x( x + shift_x );
   win->y( y + shift_y );
+cout <<"void StatusShift::update( Window* win ) END" << endl;
 
 }
 
 PreeditShift::PreeditShift()
 {
+  cwm = 0;
   Options* option = Options::getInstance();
   x_gap = atoi( option->getOption("PREEDIT_SHIFT_X") ); 
   y_gap = atoi( option->getOption("PREEDIT_SHIFT_Y") ); 
@@ -153,6 +167,7 @@ PreeditShift::PreeditShift()
 
 void PreeditShift::update( Window* win )
 {
+cout <<"void PreeditShift::update( Window* win )" << endl;
   cwm = Cwm::getInstance();
   int Xres= cwm->xres() -16;
   int Yres= cwm->yres() -16;
@@ -182,10 +197,12 @@ void PreeditShift::update( Window* win )
   win->x( x + shift_x );
   win->y( y + shift_y );
   
+cout <<"void PreeditShift::update( Window* win ) END" << endl;
 }
 
 LookupChoiceShift::LookupChoiceShift()
 {
+  cwm = 0;
   Options* option = Options::getInstance();
   x_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_X") ); 
   y_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_Y") ); 
@@ -193,6 +210,7 @@ LookupChoiceShift::LookupChoiceShift()
 
 void LookupChoiceShift::update( Window* win )
 {
+cout << "void LookupChoiceShift::update( Window* win )"<< endl;
   cwm = Cwm::getInstance();
   int Xres= cwm->xres()-16;
   int Yres= cwm->yres()-16;
@@ -219,5 +237,6 @@ void LookupChoiceShift::update( Window* win )
 
   win->x( x + shift_x );
   win->y( y + shift_y );
+cout << "void LookupChoiceShift::update( Window* win ) END"<< endl;
 
 }
