@@ -5,6 +5,7 @@ LIBUCIMF=${ROOT}/libucimf/
 UCIMFOV=${ROOT}/ucimf-openvanilla/
 OV=${ROOT}/openvanilla/
 CONSOLE=${ROOT}/console/fbterm/
+CONSOLEJ=${ROOT}/console/jfbterm/
 DUMMY=${ROOT}/console/dummy/
 BUILD=${ROOT}/build/
 
@@ -93,6 +94,18 @@ build_console_fbterm(){
 	cd ${CONSOLE}
 	./init.sh
 	cd fbterm-1.2/
+	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	make
+	make install
+
+	cd ${BUILD}
+}
+
+build_console_jfbterm(){
+	echo "Start to build jfbterm"
+	cd ${CONSOLEJ}
+	./init.sh
+	cd jfbterm-0.4.7/
 	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	make
 	make install
