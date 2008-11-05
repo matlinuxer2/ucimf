@@ -22,6 +22,8 @@
 #include "window.h"
 #include "shape.h"
 #include "graphdev.h"
+#include <iostream>
+using namespace std;
 
 GraphPort::GraphPort()
 {
@@ -36,42 +38,51 @@ GraphPort::GraphPort()
 
 int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 {
+    cout << "GraphPort::OutChar( "<<x<<", "<<y<<",  "<<fg<<",  "<<bg<<",  "<<charcode<<" )" << endl;
     int x_next = x+ x_tmp;
     if( gdev )
     {
 	    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
     }
     return x_next-x_tmp;
+    cout << "GraphPort::OutChar() End" << endl;
 }
 
 
 
 void GraphPort::PutPixel( int x, int y, int color)
 {
+    cout << "GraphPort::PutPixel( "<<x<<", "<<y<<", "<<color<<" )" << endl;
 
     if( !gdev ) return;
     gdev->PutPixel( x+x_tmp, y+y_tmp, color );
+    cout << "GraphPort::PutPixel() End" << endl;
 }
 
 void GraphPort::FillRect( int x, int y, int width, int height, int color) 
 {
-
+cout <<	"GraphPort::FillRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<",  "<<color<<")"<< endl; 
     if( !gdev ) return;
     gdev->FillRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
+cout <<	"GraphPort::FillRect() End()" << endl;
 }
 
 void GraphPort::DrawRect( int x, int y, int width, int height, int color) 
 {
+cout <<	"GraphPort::DrawRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<",  "<<color<<")"<< endl; 
 
     if( !gdev ) return;
     gdev->DrawRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
+cout <<	"GraphPort::DrawRect() End()" << endl;
 }
 
 void GraphPort::RevRect( int x, int y, int width, int height)
 {
 
+cout <<	"GraphPort::RevRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<")"<< endl; 
     if( !gdev ) return;
     gdev->RevRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height );
+cout <<	"GraphPort::RevRect() End()" << endl;
 }
 
 void GraphPort::setPseudo( bool flag)

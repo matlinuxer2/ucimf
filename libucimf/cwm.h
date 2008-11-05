@@ -60,7 +60,6 @@ class Shift
   public:
     virtual void update( Window* )=0;
 
-  protected:
     Cwm* cwm;
 };
 
