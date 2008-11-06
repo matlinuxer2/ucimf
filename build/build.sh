@@ -18,8 +18,8 @@ build_openvanilla
 if [[ $myconsole == "j" ]]
 then
   echo "Build jfbterm as console program"
-  build_console_fbterm
+  build_console_jfbterm
 else
   echo "Build FbTerm as console program"
-  build_console_jfbterm
+  build_console_fbterm
 fi
