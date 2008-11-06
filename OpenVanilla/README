@@ -1,0 +1,10 @@
+請直接執行
+
+     `./init.sh`
+
+程式將會自動以取得 OpenVanilla 的程式碼
+編譯，並製作成
+      
+      openvanilla-modules-VERSION.tar.gz  ( Source )
+      openvanilla-modules-VERSION.tar.bz2 ( Binary )
+
