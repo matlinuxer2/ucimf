@@ -1,3 +1,9 @@
+libucimf (2.1.0) unstable; urgency=low
+
+  * Update to latest ucimf 2.1.0
+
+ -- Mat <MatLinuxer2@gmail.com>  Sun, 12 Nov 2008 00:52:00 +0800
+
 libucimf (2.0.5) unstable; urgency=low
 
   * Update to latest ucimf 2.0.5

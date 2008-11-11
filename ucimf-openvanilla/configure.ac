@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-openvanilla,2.8.5, ucimf@googlegroups.com)
+AC_INIT(ucimf-openvanilla,2.9.0, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([openvanilla.cpp])
 AC_CONFIG_HEADER([config.h])
