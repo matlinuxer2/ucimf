@@ -178,7 +178,7 @@ cerr << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
     
     __u8* dest = (__u8*)mpBuf + mNextLine * y1 + x1 * 3;
     __u8* buf= (__u8*)(*buffer);
-    int cnt;
+
     for(; height--; dest += mNextLine) {
         __u8* dest8 = (__u8*)dest;
         for ( int cnt = width; cnt--;) {
@@ -186,7 +186,6 @@ cerr << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
             fb_writeb( fb_readb(dest8++) , buf++ );
             fb_writeb( fb_readb(dest8++) , buf++ );
         }
-        buf += mNextLine;
     }
 cerr << "FBLinear24::SaveRect() End"<<endl;
 }
