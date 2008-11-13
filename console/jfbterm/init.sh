@@ -22,6 +22,7 @@ src_unpack(){
 	test -f ${SRC_TARBALL} && tar -zxvf ${SRC_TARBALL} 
 
 	patch -d ${SRC_DIR} -p3 < patches/fbdpsp.c.diff
+	patch -d ${SRC_DIR} < patches/jfbterm-0.4.7-page.patch
 }
 
 src_update(){
@@ -53,7 +54,6 @@ src_patch(){
 	echo "Adopt patches"
 	patch -d ${SRC_DIR} < patches/jfbterm-0.4.7-ucimf.patch
 	patch -d ${SRC_DIR} -p3 < patches/Makefile.am.patch
-	patch -d ${SRC_DIR} < patches/jfbterm-0.4.7-page.patch
 
 }
 
