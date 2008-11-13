@@ -1,18 +1,19 @@
-0. 第一次下載請執行
+0. Please execute
 
      `./init.sh`
 
-   以取得 jfbterm 的程式碼
+   to get jfbterm's source code.
 
-1. 編譯 jfbterm，請執行
+1. To compile jfbterm，please execute
    
      `cd jfbterm-0.4.7/`
-     `./configure --prefix=/usr/` 
+     `LDFLAGS="-L/usr/lib/" ./configure --prefix=/usr/` 
      `make`
 
-   P.S. /usr/ 可以改成你希望的路徑
+   P.S. /usr/ can be set to your prefered path.
+   P.S. LIB is needed to locate where libucimf.so is.
 
-2. 安裝, 請執行
+2. To install, please execute
       
      `make install`
 
