@@ -40,6 +40,8 @@ AC_CHECK_FUNCS([bzero floor memset munmap select setenv strcasecmp strchr strcsp
 AC_CONFIG_FILES([Makefile
                  OVIMGeneric/Makefile
                  OVIMPhonetic/Makefile
+                 SharedData/Makefile
+                 SharedHeaders/Makefile
                  SharedSource/Makefile])
 
 AC_OUTPUT

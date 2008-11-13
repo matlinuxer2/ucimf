@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS=foreign
 
-SUBDIRS = SharedSource OVIMGeneric OVIMPhonetic
+SUBDIRS = SharedData SharedHeaders SharedSource OVIMGeneric OVIMPhonetic
 
-AM_CPPFLAGS=""
+
