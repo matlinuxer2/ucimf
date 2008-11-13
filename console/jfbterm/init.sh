@@ -10,21 +10,40 @@ src_fetch(){
 }
 
 src_unpack(){
-	echo "Unpack original code"
+	echo "Clean old source"
 	test -d jfbterm-0.4.7 && rm -rvf jfbterm-0.4.7
+
+	echo "Unpack original code"
 	test -f ${SRC_TARBALL} && tar -zxvf ${SRC_TARBALL} 
 
+	patch -d jfbterm-0.4.7 -p3 < patches/fbdpsp.c.diff
+}
+
+src_unpack_debian(){
+	echo "Clean old source"
+	test -d jfbterm-0.4.7 && rm -rvf jfbterm-0.4.7
+
+	echo "Unpack debian source package"
+	apt-get source jfbterm
+}
+
+src_patch(){
 	echo "Adopt patches"
 	patch -d jfbterm-0.4.7 < patches/jfbterm-0.4.7-ucimf.patch
 	patch -d jfbterm-0.4.7 -p3 < patches/Makefile.am.patch
 
-	which dpkg 2>/dev/null
-	if (( !$? )) 
-	then
-		echo "Patching debian specified patch"
-		patch -d jfbterm-0.4.7 -p3 < patches/fbdpsp.c.diff
-	fi
 }
 
-src_fetch
-src_unpack
+
+which dpkg 2>/dev/null
+if (( !$? )) 
+then
+	# unpack source for debian based distributions
+	src_unpack_debian
+else
+	# unpack source for general distributions
+	src_fetch
+	src_unpack
+fi
+
+src_patch
