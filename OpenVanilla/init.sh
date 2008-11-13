@@ -15,7 +15,8 @@ ov_common_unpack() {
 	cd ${ROOT}
 	svn checkout ${OV_SVN_URL}/Framework
 
-	test -d ${ROOT}/Modules/SharedHeaders/OpenVanilla  || ln -s ${ROOT}/Framework/Headers ${ROOT}/Modules/SharedHeaders/OpenVanilla
+	test -d ${ROOT}/Modules/SharedHeaders/OpenVanilla || mkdir ${ROOT}/Modules/SharedHeaders/OpenVanilla 
+	cp -a ${ROOT}/Framework/Headers/*.h ${ROOT}/Modules/SharedHeaders/OpenVanilla/
 }
 
 ov_array_unpack() {
@@ -47,9 +48,6 @@ ov_generic_unpack() {
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/pinyin.cin
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/simplex.cin
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/wubizixing.cin
-
-	cd ${ROOT}
-	cp -v patches/OVIMS/Makefile.am.Generic Modules/OVIMGeneric/Makefile.am
 }
 
 
@@ -65,9 +63,6 @@ ov_phonetic_unpack() {
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/bpmf.cin 
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/bpmf-ext.cin 
 	wget -nc ${OV_SVN_URL}/Modules/SharedData/punctuations.cin
-
-	cd ${ROOT}
-	cp -v patches/OVIMS/Makefile.am.Phonetic Modules/OVIMPhonetic/Makefile.am
 }
 
 ov_poj_unpack() {
@@ -84,9 +79,21 @@ ov_poj_unpack() {
 
 ov_patches(){
 	cd ${ROOT}
-	cp -v patches/Makefile.am Modules/
 	cp -v patches/configure.ac Modules/
-	cp -v patches/OVIMS/Makefile.am.SharedSource Modules/SharedSource/Makefile.am
+	SRC="patches/"
+	DST="Modules/"
+	sync_makefile_am
+}
+
+sync_makefile_am(){
+	cd $ROOT
+	test -d $DST || mkdir -p $DST
+	for make_am in `find $SRC -name 'Makefile.am'`
+	do
+		dir=`dirname ${make_am#${SRC}}`
+		test -d ${DST}/${dir} || mkdir -p ${DST}/${dir}
+		cp -v $make_am ${DST}/${dir}
+	done
 }
 
 ov_autotoolize()
@@ -99,7 +106,7 @@ ov_mods_build()
 {
 	cd ${ROOT}/Modules
 	./configure --prefix=${ROOT}/openvanilla && make && make install 
-	make dist-gzip && mv -v *.tar.gz  ${ROOT}
+	make distcheck && mv -v *.tar.gz  ${ROOT}
 	
 	cd ${ROOT}
 	tar -cjf openvanilla-modules-0.8.0.tar.bz2 openvanilla/
