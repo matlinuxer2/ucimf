@@ -23,28 +23,6 @@ AC_CHECK_LIB([graphdev], [main])
 AC_CHECK_LIB([ltdl], [main])
 
 dnl Checking FreeType2.......................................................
-AC_CHECK_PROG(FREETYPE_CONFIG, freetype-config, yes, no)
-if test $FREETYPE_CONFIG = yes; then
-  # These are in fact CPPFLAGS
-  CPPFLAGS="$CPPFLAGS `freetype-config --cflags`"
-  # This is a mix of LDFLAGS and LIBS...
-  FT_BORDEL=`freetype-config --libs`
-  FT_LIBS=""
-  FT_LDFLAGS=""
-  for word in $FT_BORDEL ; do
-    beginning=`echo $word | cut -c -2`
-    if test ".$beginning" = ".-L"; then
-      FT_LDFLAGS="$FT_LDFLAGS $word"
-    else
-      FT_LIBS="$FT_LIBS $word"
-    fi
-  done
-  LDFLAGS="$LDFLAGS $FT_LDFLAGS"
-  LIBS="$LIBS -lfreetype $FT_LIBS"
-else
-    AC_MSG_ERROR([freetype2 is required to build ucimf])
-fi
-# always fail on some recent linux distribution ?
 AC_CHECK_LIB(freetype,
 	FT_Init_FreeType, 
 	[], 
