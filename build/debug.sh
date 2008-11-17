@@ -66,3 +66,16 @@ then
 	FONT_PATH=${BUILD}/share/ucimf/unifont.pcf gdb -batch -x ${BUILD}/debug/trace.gdb ${BUILD}/bin/console03 2>>error.log >> error.log
 fi
 
+
+# Create convient bug report pack
+test -d ${BUILD}/BugReport && rm -rf ${BUILD}/BugReport 
+
+mkdir -p ${BUILD}/BugReport
+cp ${BUILD}/../libucimf/config.log  ${BUILD}/BugReport/libucimf.config.log
+cp ${BUILD}/../ucimf-openvanilla/config.log  ${BUILD}/BugReport/ucimf_openvanilla.config.log
+cp ${BUILD}/../console/jfbterm/jfbterm-0.4.7/config.log ${BUILD}/BugReport/jfbterm.config.log
+cp ${BUILD}/../console/fbterm/fbterm-1.2/config.log ${BUILD}/BugReport/fbterm.config.log
+cp ${BUILD}/../console/dummy/config.log ${BUILD}/BugReport/dummy.config.log
+cp ${BUILD}/../OpenVanilla/Modules/config.log ${BUILD}/BugReport/OpenVanillaModules.config.log
+cd ${BUILD}
+tar -czf BugReport.tar.gz BugReport/
