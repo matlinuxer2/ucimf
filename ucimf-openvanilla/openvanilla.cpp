@@ -278,9 +278,16 @@ string OVImf::process_input( const string& buf )
       break;
   }
   
+  string result;
+
+  if( preedit->isEmpty() && keyevent->code() == ovkBackspace )
+  {
+	  result = "\x7f";
+	  return result;
+  }
+	
   cxt->keyEvent( keyevent, preedit, lookupchoice, srv);
 
-  string result;
 
   if( commit_buf.size() > 0 )
   {
