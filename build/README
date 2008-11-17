@@ -1,14 +1,20 @@
-0. 第一次編譯請直接執行
-    `./build.sh`
-   即可將各個元件一次編譯完成並安裝至暫時的目錄
+0. Please execute following script to auto build
 
-1. 執行程式
+    `./build.sh`
+
+   This script will do all the work (fetch/patch/compile), 
+     and install the program to a temporary directory.
+     ( Without install into real system )
+
+1. To run program, please execute
+
     `./run.sh`
 
-2. 除錯
-    `./debug.sh`
-   需要先裝 gdb
-   遇到錯誤時可以用 backtrace 的指令將除錯訊息列出:
-     $gdb> bt
+2. To debug program, please execute
 
+    `./debug.sh`
+
+   *NOTE* gdb is required.
+   *NOTE* Welcome to reported 'error.log' on UCIMF's forum
+          ( http://groups.google.com/group/ucimf/ )
 

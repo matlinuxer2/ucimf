@@ -1,9 +1,9 @@
-請直接執行
+Please execute for first compilation
 
      `./init.sh`
 
-程式將會自動以取得 OpenVanilla 的程式碼
-編譯，並製作成
+The script will fetch source codes and build automaticallly,
+and produce packages as 
       
       openvanilla-modules-VERSION.tar.gz  ( Source )
       openvanilla-modules-VERSION.tar.bz2 ( Binary )

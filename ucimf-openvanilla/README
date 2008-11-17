@@ -1,16 +1,17 @@
-0. 第一次編譯請執行
+0. Please execute following command to initialize autotools 
+    for the first compilation
 
      `autoreconf -i --force`
 
-   以重新展開 configure 和 Makefile
+   It will generate 'configure' and 'Makefile'
 
-1. 編譯 
+1. Compile
      `OV_MODULEDIR=/lib/openvanilla ./configure ` 
      `make`
 
-     其中 OV_MODULEDIR 可以換成 openvanilla 其他放模組的路徑
+   "OV_MODULEDIR" can be customized to your modules' path.
 
-2. 安裝 
+2. Install
       
      `make install` 
 
