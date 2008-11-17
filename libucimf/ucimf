@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Load keymaps
+loadkeys --verbose <<End-of-keymaps
+control keycode  42 = F11             
+control keycode  54 = F10             
+control keycode  57 = F12             
+End-of-keymaps
+
+# Check locale settings
+lcs=$(locale -a|grep -i utf*8)
+for lc in $lcs
+do
+  lcs_menu="$lcs_menu $lc $lc"
+done
+
+dialog --stdout --title "Select Locale" --menu "Locale menu" 20 60 14 $lcs_menu >/tmp/ucimf_mylcs
+my_lcs=$(cat /tmp/ucimf_mylcs)
+echo $LC_CTYPE > /tmp/ucimf_mylcs.orig
+export LC_CTYPE=$my_lcs
+
+# Check framebuffer device
+
+
+# Execute console program
+cons_menu="jfbterm jfbterm fbterm FbTerm"
+dialog --stdout --title "Select Console" --menu "Console menu" 20 60 14 $cons_menu >/tmp/ucimf_mycon
+my_con=$(cat /tmp/ucimf_mycon)
+${my_con}
+
+# Restore settings when exit
+loadkeys -d
+
+my_lcs=$(cat /tmp/ucimf_mylcs.orig)
+export LC_CTYPE=$my_lcs
