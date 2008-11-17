@@ -26,7 +26,7 @@ export LC_CTYPE=$my_lcs
 cons_menu="jfbterm jfbterm fbterm FbTerm"
 dialog --stdout --title "Select Console" --menu "Console menu" 20 60 14 $cons_menu >/tmp/ucimf_mycon
 my_con=$(cat /tmp/ucimf_mycon)
-${my_con}
+${my_con} 2>/dev/null
 
 # Restore settings when exit
 loadkeys -d
