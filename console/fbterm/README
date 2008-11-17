@@ -1,38 +1,41 @@
-0. 第一次下載請執行
+0. Please execute
 
      `./init.sh`
 
-   以取得 fbterm 的程式碼
-   此外，編譯的相依性有:
-     * libucimf ( 請多多支持 <(_._)> )
+   to get FbTerm's source code.
+   
+   *DEPENDENCY*
+     * libucimf 
      * pkg-config
      * fontconfig
      * gpm ( optional )
-   請記得在編譯前先安裝
+   
 
-1. 編譯 fbterm，請執行
+1. To compile fbterm，please execute
    
      `cd fbterm-1.2/`
-     `LIBS=-lucimf ./configure --prefix=/usr/` 
+     `LDFLAGS="-L/usr/lib/" LIBS=-lucimf ./configure --prefix=/usr/` 
      `make`
 
-   P.S. /usr/ 可以改成你希望的路徑
+   P.S. /usr/ can be set to your prefered path.
+   P.S. LDFLAGS is needed to locate where libucimf.so is.
+   P.S. LIBS is needed to tell fbterm to use libucimf.
 
-2. 安裝, 請執行
+2. To install, please execute
       
      `make install`
 
-   或是直接測試
+   or execute directly
 
      `cd fbterm-1.2/src`
      `LC_CTYPE=zh_TW.UTF-8 ./fbterm`
 
 Notice:
 
-1. 請注意 /dev/fb0 的權限是否足夠存取
-   若是 Debian 的用戶，請確認使用者是否在 video 這個 group 裡
+1. Please check the permission of /dev/fb0 granted to user.
+   For example, in Debian system, the user should be in the 'video' group.
 
-2. Debian 的用戶，相依性的套件名為
+2. For Debian users, the dependency packages are:
      * pkg-config
      * fontconfig, libfontconfig-dev
      * libgpm-dev

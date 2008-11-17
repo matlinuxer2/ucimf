@@ -1,16 +1,14 @@
-0. 第一次下載請執行
+0. Please execute following script to fetch OpenVanilla's source code.
 
      `./init.sh`
 
-   以取得 OpenVanilla 的程式碼
-
-1. 編譯 OpenVanilla 輸入法模組，請執行
+1. To compile OpenVanilla modules，please execute
    
      `cd Modules`
      `make`
 
-2. 安裝 
+2. To install, please execute script with INSTALL_PREFIX parameter.
+   "INSTALL_PREFIX/lib/openvanilla/" refer to the location for your modules.
       
      `INSTALL_PREFIX=/usr/local/ make install` 
 
-   其中 INSTALL_PREFIX 可以改成目的路徑

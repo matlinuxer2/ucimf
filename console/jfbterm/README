@@ -11,7 +11,7 @@
      `make`
 
    P.S. /usr/ can be set to your prefered path.
-   P.S. LIB is needed to locate where libucimf.so is.
+   P.S. LDFLAGS is needed to locate where libucimf.so is.
 
 2. To install, please execute
       
