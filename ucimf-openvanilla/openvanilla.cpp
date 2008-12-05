@@ -52,8 +52,8 @@ OVImf::OVImf()
   lookupchoice = new OVImfCandidate;
   srv = new OVImfService;
   dict = new OVImfDictionary;
-  dict.setString( 'matchOneChar',"?" );
-  dict.setString( 'matchZeroOrMoreChar',"*" );
+  dict->setString( "matchOneChar","?" );
+  dict->setString( "matchZeroOrMoreChar","*" );
 
 
   stts = Status::getInstance();
