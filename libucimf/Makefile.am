@@ -16,7 +16,9 @@ imfinclude_HEADERS = \
 imfincludedir = $(includedir)/imf/
 
 lib_LTLIBRARIES = libucimf.la
-libucimf_la_SOURCES = display/libdisplay.a options.cpp \
+libucimf_la_SOURCES = display/fbdev.cpp display/fblinear15.cpp display/fblinear16.cpp display/fblinear24.cpp display/fblinear32.cpp display/fblinear4.cpp display/fblinear8.cpp display/fbvgaplanes.cpp display/libggi.cpp display/vgadev.cpp display/lrmi.c \
+			display/fbdev.h display/fblinear15.h display/fblinear16.h display/fblinear24.h display/fblinear32.h display/fblinear4.h display/fblinear8.h display/fbvgaplanes.h display/libggi.h display/lrmi.h display/vgadev.h \
+			options.cpp \
                         graphdev.cpp font.cpp \
 			type.cpp graphport.cpp \
 			window.cpp widget.cpp shape.cpp cwm.cpp \
