@@ -16,15 +16,14 @@ imfinclude_HEADERS = \
 imfincludedir = $(includedir)/imf/
 
 lib_LTLIBRARIES = libucimf.la
-libucimf_la_SOURCES = options.cpp \
+libucimf_la_SOURCES = display/libdisplay.a options.cpp \
                         graphdev.cpp font.cpp \
 			type.cpp graphport.cpp \
 			window.cpp widget.cpp shape.cpp cwm.cpp \
 			ucimf.cpp
 
 libucimf_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_srcdir)/include/imf -DUCIMF_CONF_DIR=\"@UCIMF_CONF_PATH@\" `pkg-config --cflags freetype2`
-libucimf_la_LDFLAGS = -lltdl -ldisplay `pkg-config --libs freetype2`
-libucimf_la_LIBADD = -L$(libdir) -L./display/ 
+libucimf_la_LDFLAGS = -lltdl `pkg-config --libs freetype2`
 
 bin_PROGRAMS = ucimf_keyboard
 ucimf_keyboard_SOURCES = ucimf_keyboard.cpp

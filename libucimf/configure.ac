@@ -13,6 +13,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
+AM_PROG_CC_C_O
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ldisplay':
