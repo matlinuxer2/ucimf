@@ -23,13 +23,32 @@ export LC_CTYPE=$my_lcs
 
 
 # Execute console program
-cons_menu="jfbterm jfbterm fbterm FbTerm"
+bin_jfbterm=$(which jfbterm)
+bin_fbterm=$(which fbterm)
+cons_menu=""
+
+if [ "x$bin_jfbterm" != "x" ]
+then
+  cons_menu="$cons_menu jfbterm jfbterm"
+fi
+
+if [ "x$bin_fbterm" != "x" ]
+then
+  cons_menu="$cons_menu fbterm FbTerm"
+fi
+
+if [ "x$cons_menu" == "x" ]
+then 
+  echo "No unicode console applications, please install jfbterm or fbterm with ucimf support"
+  exit 1
+fi
+
 dialog --stdout --title "Select Console" --menu "Console menu" 20 60 14 $cons_menu >/tmp/ucimf_mycon
 my_con=$(cat /tmp/ucimf_mycon)
 ${my_con} 2>/dev/null
 
 # Restore settings when exit
-loadkeys -d
+loadkeys -d || /etc/init.d/keymaps restart
 
 my_lcs=$(cat /tmp/ucimf_mylcs.orig)
 export LC_CTYPE=$my_lcs
