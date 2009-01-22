@@ -28,9 +28,11 @@ void ucimf_exit();
 
 /* on/off switch */
 void ucimf_switch( unsigned char* buf, int* ptr_buf_len );
+void ucimf_switch_raw( char* buf, int* ptr_buf_len );
   
 /* stdin(keyboard) input */
 char* ucimf_process_stdin( char* buf, int* ptr_buf_len );
+char* ucimf_process_raw( char* buf, int* ptr_buf_len );
 
 /* cursor position */
 void ucimf_cursor_position( int x, int y);
