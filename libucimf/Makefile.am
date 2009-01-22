@@ -30,7 +30,7 @@ libucimf_la_LDFLAGS = -lltdl `pkg-config --libs freetype2`
 bin_PROGRAMS = ucimf_keyboard
 ucimf_keyboard_SOURCES = ucimf_keyboard.cpp
 
-bin_SCRIPTS = ucimf
+bin_SCRIPTS = ucimf_start
 
 confdir=$(sysconfdir)
 conf_DATA = ucimf.conf 
@@ -39,8 +39,8 @@ miscdir=$(datadir)/ucimf/
 misc_DATA = fonts/unifont.pcf ucimf.conf.example
 
 install-exec-hook:
-	chown root:utmp $(DESTDIR)$(bindir)/ucimf || echo "Change ownership failed..."
-	chmod ug+s $(DESTDIR)$(bindir)/ucimf
+	chown root:utmp $(DESTDIR)$(bindir)/ucimf_start || echo "Change ownership failed..."
+	chmod ug+s $(DESTDIR)$(bindir)/ucimf_start
 
-EXTRA_DIST=  ucimf cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf
+EXTRA_DIST=  ucimf_start cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf
 

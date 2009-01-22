@@ -1,3 +1,8 @@
+2009-01-23  Mat <matlinuxer2@gmail.com>
+
+	* Add keycode support
+	* rename startup script from 'ucimf' to 'ucimf_start'
+
 2008-10-20  Jim Huang  <jserv.tw@gmail.com>
 
 	* shape.cpp (Text::draw),
@@ -12,6 +17,7 @@
 	warnings.
 	
 2008-07-26  Mat <matlinuxer2@gmail.com>
+
 	* Tag Revision to 2.0.1 
 
 2008-07-26  Mat <matlinuxer2@gmail.com>
