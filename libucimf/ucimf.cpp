@@ -344,6 +344,7 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 
 	if( !down )
 	{
+		bzero( buf, *p_ret);
 		return buf;
 	}
 
@@ -353,6 +354,10 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 
   string input( str );
   string output;
+  
+  // clean input buffer
+  (*p_ret)=0; 
+  strcpy(buf,"");
 
   if( cwm->get_focus() == false || input.size() == 0 || imf == 0  ) 
   {
@@ -360,10 +365,6 @@ char* ucimf_process_raw( char *buf, int *p_ret )
   }
   else
   {
-    // clean input buffer
-    (*p_ret)=0; 
-    strcpy(buf,"");
-
     output = imf->process_input( input );
     (*p_ret) = output.copy( buf, string::npos ); // need to be checked!
   }
@@ -396,14 +397,8 @@ void init_keycode_state()
 	bzero(key_down, sizeof(char) * NR_KEYS);
 	bzero(shift_down, sizeof(char) * NR_SHIFT);
 	ioctl(STDIN_FILENO, KDGKBLED, &lock_state);
-}
 
-
-void update_term_mode(char crlf, char appkey, char curo)
-{
-    cr_with_lf = crlf;
-    applic_keypad = appkey;
-    cursor_esco = curo;
+	cr_with_lf = true;
 }
 
 
@@ -574,8 +569,9 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 
 	case KT_SPEC:
 		if (keysym == K_ENTER) {
-			buf[index++] = '\r';
-			if (cr_with_lf) buf[index++] = '\n';
+			//buf[index++] = '\r';
+			buf[index++] = 13;
+			//if (cr_with_lf) buf[index++] = '\n';
 		} else if (keysym == K_NUM && applic_keypad) {
 			buf[index++] = '\e';
 			buf[index++] = 'O';
