@@ -35,6 +35,7 @@
 #include "cwm.h"
 #include "options.h"
 
+#include <iostream>
 using namespace std;
 
 bool prev_focus;
@@ -315,9 +316,6 @@ char* ucimf_process_stdin( char *buf, int *p_ret )
 char* ucimf_process_raw( char *buf, int *p_ret )
 {
 
-	//char *buf;
-	//size_t n = read(fd, buf, sizeof(buf));
-
 	size_t n = (*p_ret);
 	int kc;
 	char down;
@@ -342,34 +340,72 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		}
 	}
 
+	unsigned short sym = keycode_to_keysym( kc, down );
+	char *str = keysym_to_term_string(sym, down);
+
 	if( !down )
 	{
 		bzero( buf, *p_ret);
 		return buf;
 	}
 
-	unsigned short sym = keycode_to_keysym( kc, down );
-	char *str = keysym_to_term_string(sym, down);
+	if( kc== KEY_SPACE && shift_down[KG_CTRL] >0 )
+	{
+		bzero( buf, *p_ret);
+		return buf;
+	}
+	else if( kc==KEY_LEFTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F11
+	{
+		if( cwm->get_focus() && imf !=0 )
+		imf->switch_im();
+		else
+		cwm->set_focus( true );
+
+		bzero( buf, *p_ret);
+		return buf;
+	}
+	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F10
+	{
+		prdt->clear();
+		lkc->clear();
+		stts->clear();
+
+		imf = nextImf();
+		if( imf!=0 )
+		{
+			imf->refresh();
+		}
+
+		bzero( buf, *p_ret);
+		return buf;
+	}
+
+	if( kc==KEY_LEFTCTRL || kc==KEY_RIGHTCTRL )
+	{
+		bzero( buf, *p_ret);
+		return buf;
+	}
 
 
-  string input( str );
-  string output;
-  
-  // clean input buffer
-  (*p_ret)=0; 
-  strcpy(buf,"");
 
-  if( cwm->get_focus() == false || input.size() == 0 || imf == 0  ) 
-  {
-    ; // do nothing...
-  }
-  else
-  {
-    output = imf->process_input( input );
-    (*p_ret) = output.copy( buf, string::npos ); // need to be checked!
-  }
+	string input( str );
+	string output;
 
-  return buf;
+	// clean input buffer
+	(*p_ret)=0; 
+	strcpy(buf,"");
+
+	if( cwm->get_focus() == false || input.size() == 0 || imf == 0  ) 
+	{
+		; // do nothing...
+	}
+	else
+	{
+		output = imf->process_input( input );
+		(*p_ret) = output.copy( buf, string::npos ); // need to be checked!
+	}
+
+	return buf;
 }
 
 
