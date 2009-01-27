@@ -1,0 +1,186 @@
+FbTerm implements a lightweight client-server input method architecture. Instead of processing user input and 
+drawing input method UI itself, FbTerm acts as a client and requests the input method server to do all these works.
+
+
+1. Input Method Messages
+
+On startup, FbTerm forks a child process and executes the input method server program in it. FbTerm and the input 
+method server will communicate each other with a unix socket pair created by FbTerm. When IM server startup, it sends 
+a Connect message to FbTerm, indicates that the server has got ready. FbTerm response a FbTermInfo message, tell 
+IM server things like current font name, font size, rotation etc, help IM server keep same UI with FbTerm. Of course, 
+IM server may ignore these hints.
+
+When FbTerm exit, it sends a Disconnect to IM server, indicates it to exit.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |<init>      <exit>|                   |
+    |     Connect       |                  |    Disconnect     |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |    FbtermInfo     |                  |                   |<exit>
+    |------------------>|                  |                   |
+    |                   |                  |                   |
+    |                   |                  |                   |
+
+
+If user presses the input method state switch shortcut (e.g. Ctrl + Space), FbTerm sends a Active message to 
+IM server, and a CursorPosition message with current cursor position. After receiveing the Active message, 
+IM server may want to draw it's UI (e.g. a IM status bar) on framebuffer screen. In order to avoid FbTerm corrupting 
+it's UI, IM server first sends a SetWins message, tell FbTerm the screen areas occupied by IM's UI, and waits FbTerm 
+to response a AckWins message. Now IM server can begin to draw it's UI.
+
+While user pressing Ctrl + Space again, FbTerm sends a Deactive message to IM server. IM server should responses a 
+SetWins message with a empty screen areas list to hide it's UI and ask FbTerm to redraw IM's UI areas contained in 
+the last previous SetWins message.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |      Active       |                  |     Deactive      |
+    |------------------>|                  |------------------>|
+    |                   |                  |                   |
+    |  CursorPosition   |                  |      SetWins      |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |      SetWins      |                  |      AckWins      |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |      AckWins      |                  |                   |
+    |------------------>|                  |                   |
+    |                   |<draw UI>         |                   |
+    |                   |                  |                   |
+
+
+When IM state is on, FbTerm dosn't process any keyboard input, it redirects them to IM server with SendKey messages. 
+After receiving SendKey message, IM server may draw it's preedit and candidate UI, as described above, it should 
+first send a SetWins message to FbTerm and wait for a responsed AckWins message before drawing UI.
+
+IM server sends the converted texts in a PutText message back to FbTerm, and FbTerm will write them to the running 
+program. In the common case, the running program will change cursor position, FbTerm notifies it to IM server with a 
+CursorPosition message. If IM server provides a XIM "over the spot" style UI, it may response a SetWins message to move 
+and redraw it's UI.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |      SendKey      |                  |      PutText      |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |      SetWins      |                  |  CursorPosition   |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |      AckWins      |                  |      SetWins      |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |                   |<draw UI>         |      AckWins      |
+    |                   |                  |------------------>|
+    |                   |                  |                   |
+    |                   |                  |                   |<draw UI>
+
+
+
+2. Upper API
+
+FbTerm provides a set of wrapped API to simply the IM server development. The API encuplates input method message sending, 
+receiving and processing.
+
+	void connect_fbterm(char mode);
+IM server call this function to send a Connect message to FbTerm.
+see section 3 for details of parameter mode.
+
+
+	void put_im_text(char *text, unsigned short len);
+IM server call this function to send a PutText message to FbTerm.
+
+
+	typedef struct {
+		unsigned x, y, w, h;
+	} ImWin;
+
+	void set_im_windows(ImWin *wins, unsigned short num);
+IM server call this function to send a SetWins message to FbTerm.
+
+
+	int check_im_message();
+IM server call this function to receive and process messages from FbTerm.
+retrun zero if a Disconnect message has received, otherwise return non-zero.
+
+
+	int get_im_socket();
+IM server call this function to get the file descriptor of the unix socket used to transfer IM messages.
+Because check_im_message() blocks until a message arrives, IM server can use select/poll to monitor other file 
+descriptors among with the one from get_im_socket().
+
+
+	typedef void (*ActiveFun)();
+	typedef void (*DeactiveFun)();
+	typedef void (*SendKeyFun)(char *keys, unsigned short len);
+	typedef void (*CursorPositionFun)(unsigned x, unsigned y);
+	typedef void (*FbTermInfoFun)(Info *info);
+
+	typedef struct {
+		ActiveFun active;
+		DeactiveFun deactive;
+		SendKeyFun send_key;
+		CursorPositionFun cursor_position;
+		FbTermInfoFun fbterm_info;
+	} ImCallbacks;
+
+	void register_im_callbacks(ImCallbacks cbs);
+IM server call this function to register callbacks.
+
+When receiving a Active message, function provided by IM server in active member of ImCallbacks will be called;
+When receiving a Deactive message, function provided by IM server in deactive member will be called;
+When receiving a SendKey message, function provided by IM server in send_key member will be called;
+When receiving a CursorPosition message, function provided by IM server in cursor_position member will be called;
+When receiving a FbTermInfo message, function provided by IM server in fbterm_info member will be called.
+
+
+3. Keyboard Input Mode
+
+FbTerm provides two kinds of keyboard input modes, IM server can choose a favorite one with parameter mode of 
+connect_fbterm().
+
+If mode equals zero, IM server will receive characters translated by kernel with current keymap in SendKey messages.
+There are some disadvantages in this mode, for example, shortcuts composed with only modifiers are impossible.
+( shortcuts composed with modifiers and normal keys can create a map if they are not mapped in current kernel keymap, 
+maybe we need add new messages like RequestKeyMap and AckKeyMap used by IM server to ask FbTerm to do this work. )
+
+If mode is non-zero, FbTerm sets keyboard mode to K_MEDIUMRAW after Active Message, IM server will receive raw keycode
+from kernel and have full control for keyboard, except Ctrl + Space, which used by FbTerm to deactive IM server.
+Under this mode, IM server should translate keycodes to keysyms according current kernel keymap, change keyboard led 
+state and translate keysyms to characters if it want to send user input back to FbTerm. Because some translation of 
+keysyms to characters are not fixed (e.g. cursor movement keysym K_LEFT can be 'ESC [ D' or 'ESC O D'), a new message 
+named TermMode sent by FbTerm is added to help IM server do this translation.
+
+
+4. Screen Rotation
+
+FbTerm can change the orientation of screen display, it sends current rotation configuration to IM server with 
+FbTermInfo message. IM server just need quit if it dosn't support screen rotation.
+
+The coordinate of the rectangles in message SetWins should be the original coordinate before rotation, NOT the one 
+after rotation. Let's see a example, if screen size is [1024, 768], IM server wants to draw UI in rectangle [0, 0, 20, 10] 
+(20 for width and 10 for height), after rotating clockwise 90 degrees, this rectangle will be [1014, 0, 10, 20]. 
+The SetWins message sent by IM server should contain the original rectangle [0, 0, 20, 10], not the rotated one.
+
+The point in CursorPoition message sent by FbTerm is also the original point before rotation, NOT the rotated point.
+
+
+5. IM example program
+
+FbTerm also contains a demo of IM server, which help developers understand the IM framework and provide some base sources 
+to make development more easier.
+
+example.cpp           main source file
+immessage.h           define the messages in section 1
+imapi.h imapi.c       define and implement the API in section 2
+keycode.h keycode.c   provide functions to do keycode translation descripted in section 3
+other files           implement screen render functions with rotation support
