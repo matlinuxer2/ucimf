@@ -1,3 +1,7 @@
+2009-01-28  Mat <matlinuxer2@gmail.com>
+
+	* Add <Control>+<{LEFT,RIGHT}Shift> support
+
 2009-01-23  Mat <matlinuxer2@gmail.com>
 
 	* Add keycode support

@@ -1,5 +1,3 @@
-AUTOMAKE_OPTIONS=foreign
-
 bin_PROGRAMS = fbterm_ucimf 
 
 fbterm_ucimf_SOURCES = immessage.h imapi.h imapi.c keycode.h keycode.c fbterm_ucimf.cpp \
