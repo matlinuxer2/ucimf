@@ -1,18 +1,11 @@
-SUBDIRS = ./display 
+SUBDIRS = display 
 
 AM_CPPFLAGS = -g -DDEBUG 
 
-ucimfinclude_HEADERS = \
-			include/imf \
-			include/ucimf.h
+ucimfinclude_HEADERS = include/ucimf.h
 ucimfincludedir = $(includedir)
 
-imfinclude_HEADERS = \
-			include/imf/graphport.h \
-			include/imf/imf.h \
-			include/imf/type.h \
-			include/imf/widget.h \
-			include/imf/window.h
+imfinclude_HEADERS = include/imf/graphport.h include/imf/imf.h include/imf/type.h include/imf/widget.h include/imf/window.h
 imfincludedir = $(includedir)/imf/
 
 lib_LTLIBRARIES = libucimf.la
