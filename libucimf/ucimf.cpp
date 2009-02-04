@@ -34,6 +34,7 @@
 #include "widget.h"
 #include "cwm.h"
 #include "options.h"
+#include "debug.h"
 
 #include <iostream>
 using namespace std;
@@ -81,7 +82,7 @@ void scanImf()
 
   Options* option= Options::getInstance();
   char* imf_mod_path = option->getOption("IMF_MODULE_DIR");
-  cerr << "IMF Modules scan path: " << imf_mod_path << endl;
+  UrDEBUG("IMF Modules scan path: %s \n", imf_mod_path );
  
   lt_dlinit();
   lt_dlsetsearchpath( imf_mod_path );
@@ -96,7 +97,7 @@ void scanImf()
       {
 	  lt_dlhandle handle = lt_dlopen( d_ent->d_name );
 	  if( handle == NULL){
-	    fprintf(stderr, "lt_dlopen %s failed\n", d_ent->d_name );
+	    UrDEBUG( "lt_dlopen %s failed\n", d_ent->d_name );
 	  }
 	  else{ 
 	    create_imf = (createImf_t*) lt_dlsym( handle, "createImf" );
@@ -104,7 +105,7 @@ void scanImf()
 	  }
 
 	  if( !create_imf || !destroy_imf ){
-	     fprintf(stderr, "lt_dlsym %s failed\n", d_ent->d_name );
+	     UrDEBUG( "lt_dlsym %s failed\n", d_ent->d_name );
 	  }
 	  
 	  Imf* i;
@@ -112,7 +113,7 @@ void scanImf()
 	  if( i!=0 )
 	  {
 	    imfs.push_back(i);
-	    cerr << "  Load Module[" << imfs.size() << "]: " << d_ent->d_name << endl;
+	    UrDEBUG( "  Load Module[ %d ]: %s \n", imfs.size(), d_ent->d_name );
 	  }
 
       }
@@ -155,7 +156,7 @@ void ucimf_init()
   cwm->set_focus( false );
   scanImf();
   imf = imfs[current_imf];
-  cerr << "UCIMF core intialized." << endl;
+  UrDEBUG("UCIMF core intialized.");
 }
 
 void ucimf_exit()
@@ -240,7 +241,7 @@ void ucimf_switch_raw( char *buf, int *p_buf_len )
 			kc = (buf[i] & 0x7f);
 			i++;
 		}
-		printf( "keycode %3d %s\n", kc, s);
+		UrDEBUG( "keycode %3d %s\n", kc, s);
 	}
 
 
@@ -513,7 +514,7 @@ unsigned short keycode_to_keysym(unsigned short keycode, char down)
 	case KT_LOCK:
 	case KT_SLOCK:
 	case KT_BRL:
-		printf("not support!\n");
+		UrDEBUG( "not support!\n");
 		break;
 
 	default:

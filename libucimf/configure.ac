@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libucimf, 2.2.0, ucimf@googlegroups.com)
+AC_INIT(libucimf, 2.2.1, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
@@ -54,6 +54,16 @@ fi
 
 AC_SUBST(UCIMF_CONF_PATH)
 
+AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
+AC_ARG_ENABLE([debug],
+        AS_HELP_STRING([--enable-debug],
+                [enable Debug (default: no)]),
+        debug=$enableval, debug="no")
+
+if test "$debug" = yes; then                                                                     
+	AC_DEFINE([USE_DEBUG], [], [])
+fi
+AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
 
 
 # Checks for library functions.

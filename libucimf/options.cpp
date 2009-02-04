@@ -25,6 +25,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include "options.h"
+#include "debug.h" 
+
 using namespace std;
 
 #ifndef UCIMF_CONF_DIR
@@ -55,27 +57,27 @@ Options::Options()
   string conf = getenv("HOME");
   conf += "/.ucimf.conf";
 
-  cerr << "Checking config file: " << conf << endl;
+  UrDEBUG("Checking config file: %s \n", conf );
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
-    cerr << "Could not open config file: " << conf << endl;
+    UrDEBUG("Could not open config file: %s \n",conf );
     conf = FILE_UCIMF_CONF;
   }
 
-  cerr << "Checking config file: " << conf << endl;
+  UrDEBUG("Checking config file: %s \n", conf );
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
-    cerr << "Could not open config file: " << conf << endl;
+    UrDEBUG("Could not open config file: %s \n", conf );
     throw runtime_error("Could not open config file!");
   }
 
-  cerr << "Reading config file: " << conf << endl;
+  UrDEBUG("Reading config file: %s \n", conf );
   
   ifstream input_file( conf.c_str() );
   
   if (!input_file)
   {
-      cerr << "Could not reading config file: " << conf << endl;
+      UrDEBUG("Could not reading config file: %s \n", conf );
       throw runtime_error("Could not reading config file!");
   }
 
@@ -107,7 +109,7 @@ bool Options::parse_file( ifstream &input)
         if (o == "")
             continue;
         _opts.insert( pair<string, string>(o,v) );
-	cerr << o << "=" << v << endl;
+	UrDEBUG( "Option: %s = %s \n ", o ,v );
     }
     // FIXME: error handling
     return true;
