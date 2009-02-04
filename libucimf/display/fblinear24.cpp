@@ -25,6 +25,8 @@
 #include <assert.h>
 #include "fblinear24.h"
 #include <iostream>
+#include "debug.h"
+
 using namespace std;
 
 FBLinear24::FBLinear24() {
@@ -158,7 +160,7 @@ void FBLinear24::RevRect(int x1,int y1,int x2,int y2) {
 
 
 void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
-cerr << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
+ UrDEBUG("FBLinear24::SaveRect( %d, %d, %d, %d) \n", x1,y1,x2,y2 );
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -187,11 +189,11 @@ cerr << "FBLinear24::SaveRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
             fb_writeb( fb_readb(dest8++) , buf++ );
         }
     }
-cerr << "FBLinear24::SaveRect() End"<<endl;
+ UrDEBUG("FBLinear24::SaveRect() End\n");
 }
 
 void FBLinear24::RstrRect(int x1,int y1,int x2,int y2, char* *buffer) {
-cerr << "FBLinear24::RstrRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
+ UrDEBUG("FBLinear24::RstrRect( %d, %d, %d, %d )\n", x1, y1, x2, y2 );
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -217,7 +219,7 @@ cerr << "FBLinear24::RstrRect( "<<x1<<", "<<y1<<", "<<x2<<", "<<y2<<") "<<endl;
     delete [] (*buffer);
     *buffer = NULL;
 
-cerr << "FBLinear24::RstrRect() End"<<endl;
+ UrDEBUG("FBLinear24::RstrRect() End\n");
 }
 
 inline void FBLinear24::PutPixel(int x,int y,int color) {

@@ -23,6 +23,7 @@
 #include "cwm.h"
 #include "options.h"
 #include <iostream>
+#include "debug.h"
 using namespace std;
 
 Cwm* Cwm::_instance = 0;
@@ -31,7 +32,7 @@ Cwm* Cwm::getInstance()
 {
   if( _instance == 0 )
   {
-	  cerr << " Cwm new() " << endl;
+	 UrDEBUG( "Cwm new() \n");
     _instance = new Cwm;
   }
 
@@ -96,19 +97,17 @@ void Cwm::set_focus( bool new_focus )
 
 void Cwm::update( Window* cw )
 {
-cerr << "void Cwm::update( Window* cw )" << endl;
+ UrDEBUG("void Cwm::update( Window* cw )\n");
   Shift *s = cwmmap[cw];
-cerr << s << ',' << cw << " Pre" << endl;
 if( s->cwm != 0 )
 {
   s->update( cw );
 }
-cerr << "void Cwm::update( Window* cw ) END" << endl;
+ UrDEBUG("void Cwm::update( Window* cw ) END\n");
 }
 
 void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 {
-cerr << new_shift << " Attached" << endl;
   cwmmap[new_win]=new_shift;
   new_win->wm = this;
 }
@@ -124,7 +123,7 @@ StatusShift::StatusShift()
 
 void StatusShift::update( Window* win )
 {
-cerr <<"void StatusShift::update( Window* win )" << endl;
+ UrDEBUG("void StatusShift::update( Window* win )\n"); 
   cwm = Cwm::getInstance();
 
   int Xres= cwm->xres() - 16;
@@ -152,7 +151,7 @@ cerr <<"void StatusShift::update( Window* win )" << endl;
 
   win->x( x + shift_x );
   win->y( y + shift_y );
-cerr <<"void StatusShift::update( Window* win ) END" << endl;
+ UrDEBUG("void StatusShift::update( Window* win ) END\n");
 
 }
 
@@ -167,7 +166,7 @@ PreeditShift::PreeditShift()
 
 void PreeditShift::update( Window* win )
 {
-cerr <<"void PreeditShift::update( Window* win )" << endl;
+ UrDEBUG("void PreeditShift::update( Window* win )\n");
   cwm = Cwm::getInstance();
   int Xres= cwm->xres() -16;
   int Yres= cwm->yres() -16;
@@ -197,7 +196,7 @@ cerr <<"void PreeditShift::update( Window* win )" << endl;
   win->x( x + shift_x );
   win->y( y + shift_y );
   
-cerr <<"void PreeditShift::update( Window* win ) END" << endl;
+ UrDEBUG("void PreeditShift::update( Window* win ) END\n");
 }
 
 LookupChoiceShift::LookupChoiceShift()
@@ -210,7 +209,7 @@ LookupChoiceShift::LookupChoiceShift()
 
 void LookupChoiceShift::update( Window* win )
 {
-cerr << "void LookupChoiceShift::update( Window* win )"<< endl;
+ UrDEBUG("void LookupChoiceShift::update( Window* win )\n");
   cwm = Cwm::getInstance();
   int Xres= cwm->xres()-16;
   int Yres= cwm->yres()-16;
@@ -237,6 +236,6 @@ cerr << "void LookupChoiceShift::update( Window* win )"<< endl;
 
   win->x( x + shift_x );
   win->y( y + shift_y );
-cerr << "void LookupChoiceShift::update( Window* win ) END"<< endl;
+ UrDEBUG("void LookupChoiceShift::update( Window* win ) END\n");
 
 }

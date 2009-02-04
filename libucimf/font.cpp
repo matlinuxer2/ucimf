@@ -23,6 +23,8 @@
 #include "options.h"
 #include <cstdlib>
 #include <iostream>
+#include "debug.h"
+
 using namespace std;
 
 const char* get_ft_error(FT_Error error)
@@ -59,16 +61,13 @@ Font::Font()
   font_width = atoi( option->getOption("FONT_WIDTH") );
   font_height = atoi( option->getOption("FONT_HEIGHT") );
 
-  cerr << "UCIMF_FONTPATH: " << font_path << endl;
+  UrDEBUG("UCIMF_FONTPATH: %s \n", font_path );
 
   ft_err = FT_Init_FreeType( &library ); 
-  if( ft_err ){
-	  cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
-  }
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
+
   ft_err = FT_New_Face( library, font_path, 0, &face);
-  if( ft_err ){
-	  cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
-  }
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
 
   /* get font size info */
   font_width = font_width ? font_width : 16;
@@ -76,13 +75,13 @@ Font::Font()
   
   //FT_Set_Char_Size( face, font_width*64 , font_height*64, 0, 0 );
   ft_err = FT_Set_Pixel_Sizes( face, font_width, font_height);
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
   //FT_Select_Charmap( face, FT_ENCODING_UNICODE );
 
   if( face->available_sizes !=0 ) // stand for the pcf font.
   {
     ft_err= FT_Set_Charmap( face, face->charmaps[0] );
-    if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
 
     int fh = face->available_sizes->height;
     int fw = face->available_sizes->width;
@@ -112,9 +111,10 @@ Font::~Font()
   FT_Error ft_err;
 
   ft_err = FT_Done_Face(face);
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
+
   ft_err = FT_Done_FreeType(library);
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
 }
 
 int Font::Height()
@@ -137,9 +137,9 @@ void Font::render( int code, CharBitMap& charbitmap )
   
   int glyph_index = FT_Get_Char_Index( face, charcode );
   ft_err = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
   ft_err = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
   
   FT_Bitmap bmap=face->glyph->bitmap;
 
@@ -161,9 +161,10 @@ int Font::length( int code )
 
   int glyph_index = FT_Get_Char_Index( face, charcode );
   ft_err = FT_Load_Glyph( face, glyph_index, FT_LOAD_DEFAULT );
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
+
   ft_err = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
-  if( ft_err ) cerr << "[FreeType Err]::" << get_ft_error( ft_err ) << endl;
+  if( ft_err ){ UrDEBUG( "[FreeType Err]::%s \n", get_ft_error( ft_err ) ); }
   
   int result = face->glyph->bitmap.width;
   

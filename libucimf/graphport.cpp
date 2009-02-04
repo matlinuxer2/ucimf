@@ -23,6 +23,7 @@
 #include "shape.h"
 #include "graphdev.h"
 #include <iostream>
+#include "debug.h"
 using namespace std;
 
 GraphPort::GraphPort()
@@ -38,51 +39,52 @@ GraphPort::GraphPort()
 
 int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 {
-    cerr << "GraphPort::OutChar( "<<x<<", "<<y<<",  "<<fg<<",  "<<bg<<",  "<<charcode<<" )" << endl;
+    UrDEBUG("GraphPort::OutChar( %d, %d, %d, %d, %d )\n", x, y, fg, bg, charcode );
     int x_next = x+ x_tmp;
     if( gdev )
     {
 	    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
     }
     return x_next-x_tmp;
-    cerr << "GraphPort::OutChar() End" << endl;
+    UrDEBUG("GraphPort::OutChar() End\n")
 }
 
 
 
 void GraphPort::PutPixel( int x, int y, int color)
 {
-    cerr << "GraphPort::PutPixel( "<<x<<", "<<y<<", "<<color<<" )" << endl;
+    UrDEBUG("GraphPort::PutPixel( %d, %d, %d )\n", x, y, color );
 
     if( !gdev ) return;
     gdev->PutPixel( x+x_tmp, y+y_tmp, color );
-    cerr << "GraphPort::PutPixel() End" << endl;
+    UrDEBUG("GraphPort::PutPixel() End\n");
 }
 
 void GraphPort::FillRect( int x, int y, int width, int height, int color) 
 {
-cerr <<	"GraphPort::FillRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<",  "<<color<<")"<< endl; 
+ UrDEBUG("GraphPort::FillRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
     if( !gdev ) return;
     gdev->FillRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
-cerr <<	"GraphPort::FillRect() End()" << endl;
+ UrDEBUG("GraphPort::FillRect() End()\n");
 }
 
 void GraphPort::DrawRect( int x, int y, int width, int height, int color) 
 {
-cerr <<	"GraphPort::DrawRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<",  "<<color<<")"<< endl; 
+ UrDEBUG("GraphPort::DrawRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
 
     if( !gdev ) return;
     gdev->DrawRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
-cerr <<	"GraphPort::DrawRect() End()" << endl;
+
+ UrDEBUG("GraphPort::DrawRect() End()\n");
 }
 
 void GraphPort::RevRect( int x, int y, int width, int height)
 {
 
-cerr <<	"GraphPort::RevRect( "<<x<<",  "<<y<<",  "<<width<<",  "<<height<<")"<< endl; 
+ UrDEBUG("GraphPort::RevRect( %d, %d, %d, %d )\n", x, y, width, height );
     if( !gdev ) return;
     gdev->RevRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height );
-cerr <<	"GraphPort::RevRect() End()" << endl;
+ UrDEBUG("GraphPort::RevRect() End()\n");
 }
 
 void GraphPort::setPseudo( bool flag)

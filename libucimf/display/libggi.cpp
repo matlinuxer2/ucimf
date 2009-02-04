@@ -68,13 +68,13 @@ bool LIBGGI::TryOpen(char *ggiDriveName) {
     const ggi_pixelformat* pf;
 
     if (ggiInit() != 0) {
-        printf("unable to initialize LibGGI, exiting.\n");
+       UrDEBUG("unable to initialize LibGGI, exiting.\n");
         return false;
     }
 
     visual = ggiOpen (ggiDriveName);
     if (visual == NULL) {
-        printf("unable to open default visual, exiting.\n");
+       UrDEBUG("unable to open default visual, exiting.\n");
         ggiExit();
         return false;
     }
@@ -82,7 +82,7 @@ bool LIBGGI::TryOpen(char *ggiDriveName) {
     // ggiSetFlags (visual, GGIFLAG_ASYNC);
     ggiCheckMode (visual, &mode);
     if (ggiSetMode (visual, &mode))    { 
-        printf("Can't set mode\n");
+       UrDEBUG("Can't set mode\n");
         ggiClose (visual);
         ggiExit ();
         return false;

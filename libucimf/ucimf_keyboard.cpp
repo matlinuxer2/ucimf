@@ -23,6 +23,7 @@
 #include <linux/keyboard.h>
 #include <linux/input.h>
 #include <iostream>
+#include "debug.h"
 using namespace std;
 
 /*
@@ -60,13 +61,21 @@ int setup_keys()
 
         /* save current value */
     int ret;
-    cerr << "Get KeyBoard Event..." << endl;
+    UrINFO( "Getting KeyBoard Event...\n" );
     ret = ioctl (0, KDGKBENT, &entry);
+    if( ret == -1 )
+    {
+       UrINFO( "Get KeyBoard Event Failed\n" );
+    }
     tmp.kb_value = entry.kb_value;
 
     entry.kb_value = nkeys[i].new_key;
-    cerr << "Set KeyBoard Event..." << endl;
+    UrINFO("Setting KeyBoard Event...\n" );
     ret=ioctl (0, KDSKBENT, &entry);
+    if( ret == -1 )
+    {
+       UrINFO( "Set KeyBoard Event Failed\n" );
+    }
     nkeys[i].new_key = tmp.kb_value;
   }
   return 0;
