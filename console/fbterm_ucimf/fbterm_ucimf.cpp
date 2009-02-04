@@ -7,6 +7,7 @@
 #include "screen.h"
 #include "ucimf.h"
 #include "imf/widget.h"
+#include "debug.h"
 
 static char raw_mode = 1;
 static char first_show = 1;
@@ -16,7 +17,7 @@ static void im_active()
 	if (raw_mode) {
 		init_keycode_state();
 	}
-	printf("im active\n");
+	UrINFO("im active\n");
 
 	/* patch */
 	int buf_len = 5;
@@ -49,7 +50,7 @@ static void im_deactive()
 	ucimf_switch(  buf, &buf_len );                                       
 	/* patch */
 
-	printf("im deactive\n");
+	UrINFO("im deactive\n");
 	set_im_windows(0, 0);
 	first_show = 1;
 }
@@ -72,13 +73,13 @@ static void process_raw_key(char *buf, int len)
 	    unsigned short keysym = keycode_to_keysym(code, down);
 	    char *str = keysym_to_term_string(keysym, down);
 
-	    printf( "getkey, down:%d, keysym:0x%x, term string:%s\n", down, keysym, str);
+	    UrDEBUG( "getkey, down:%d, keysym:0x%x, term string:%s\n", down, keysym, str);
 	    //put_im_text(str, strlen(str));
     }
 
     char* result = ucimf_process_raw( buf, &len ); 
     unsigned short result_len = len;
-    printf("ucimf: return text, %s\n", result );
+    UrDEBUG("ucimf: return text, %s\n", result );
     put_im_text( result, result_len );
 
 }
@@ -88,7 +89,7 @@ static void process_key(char *keys, unsigned short len)
 	if (raw_mode) {
 		process_raw_key(keys, len);
 	} else {
-		printf("getkey, (%c, 0x%x)\n", *keys, *keys);
+		UrDEBUG("getkey, (%c, 0x%x)\n", *keys, *keys);
 
 		/* patch */
 		int buf_len=len;
@@ -109,7 +110,7 @@ static void process_key(char *keys, unsigned short len)
 
 static void cursor_pos_changed(unsigned x, unsigned y)
 {
-	printf("cursor, %d, %d\n", x, y);
+	UrDEBUG("cursor, %d, %d\n", x, y);
 
 	ucimf_cursor_position( x, y);
 
@@ -119,18 +120,18 @@ static void cursor_pos_changed(unsigned x, unsigned y)
 
 	int x1 = stts->getWindow()->x();
 	int y1 = stts->getWindow()->y();
-	int w1 = stts->getWindow()->w();
-	int h1 = stts->getWindow()->h();
+	int w1 = stts->getWindow()->w() +1;
+	int h1 = stts->getWindow()->h() +1;
 
 	int x2 = prdt->getWindow()->x();
 	int y2 = prdt->getWindow()->y();
-	int w2 = prdt->getWindow()->w();
-	int h2 = prdt->getWindow()->h();
+	int w2 = prdt->getWindow()->w() +1;
+	int h2 = prdt->getWindow()->h() +1;
 
 	int x3 = lkc->getWindow()->x();
 	int y3 = lkc->getWindow()->y();
-	int w3 = lkc->getWindow()->w();
-	int h3 = lkc->getWindow()->h();
+	int w3 = lkc->getWindow()->w() +1;
+	int h3 = lkc->getWindow()->h() +1;
 
 	ImWin wins[] = {
 		{ x1 , y1 , w1, h1 },
@@ -202,6 +203,6 @@ int main()
 	while (check_im_message()) ;
 
 	Screen::uninstance();
-	printf("im exit normally\n");
+	UrINFO("im exit normally\n");
 	return 0;
 }
