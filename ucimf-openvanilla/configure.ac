@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-openvanilla,2.10.0, ucimf@googlegroups.com)
+AC_INIT(ucimf-openvanilla,2.10.1, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([openvanilla.cpp])
 AC_CONFIG_HEADER([config.h])
@@ -35,6 +35,18 @@ if test "x$OV_MODULEDIR" = "x"; then
 fi
 
 AC_SUBST(OV_MODULEDIR)
+
+AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
+AC_ARG_ENABLE([debug],
+        AS_HELP_STRING([--enable-debug],
+                [enable Debug (default: no)]),
+        debug=$enableval, debug="no")
+
+if test "$debug" = yes; then                                                                     
+	AC_DEFINE([USE_DEBUG], [], [])
+fi
+AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
+
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

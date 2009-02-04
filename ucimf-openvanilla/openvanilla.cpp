@@ -25,6 +25,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
+#include "debug.h"
 
 /* 
  * implementation of OVImf
@@ -74,7 +75,9 @@ OVImf::OVImf()
 	  
 	  mod->handle = lt_dlopen( d_ent->d_name );
 	  if(mod->handle == NULL){
+            UrDEBUG( "lt_dlopen loading error: %s \n", lt_dlerror() );
 	    delete mod;
+	    continue;
 	  }
 	  else{ 
 	    mod->getModule = (TypeGetModule)lt_dlsym( mod->handle, "OVGetModuleFromLibrary" );
@@ -83,11 +86,15 @@ OVImf::OVImf()
 	  }
 
 	  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
+             UrDEBUG( " the loading module is not compatible with current spec \n" );
 	     delete mod;
+	     continue;
 	  }
 	  
 	  if( mod->getLibVersion() < OV_VERSION ){
+             UrDEBUG( "Library Version is not match: %d \n", OV_VERSION );
 	     delete mod;
+	     continue;
 	  }
 
 
