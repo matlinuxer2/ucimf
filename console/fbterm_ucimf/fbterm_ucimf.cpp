@@ -17,7 +17,7 @@ static void im_active()
 	if (raw_mode) {
 		init_keycode_state();
 	}
-	UrINFO("im active\n");
+	UrDEBUG("im active\n");
 
 	/* patch */
 	int buf_len = 5;
@@ -50,7 +50,7 @@ static void im_deactive()
 	ucimf_switch(  buf, &buf_len );                                       
 	/* patch */
 
-	UrINFO("im deactive\n");
+	UrDEBUG("im deactive\n");
 	set_im_windows(0, 0);
 	first_show = 1;
 }
@@ -203,6 +203,6 @@ int main()
 	while (check_im_message()) ;
 
 	Screen::uninstance();
-	UrINFO("im exit normally\n");
+	UrDEBUG("im exit normally\n");
 	return 0;
 }
