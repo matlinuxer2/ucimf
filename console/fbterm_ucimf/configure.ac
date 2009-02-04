@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([fbterm_ucimf], [0.2.0], [ucimf@googlegroups.com])
+AC_INIT([fbterm_ucimf], [0.2.1], [ucimf@googlegroups.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([fbterm_ucimf.cpp])
 AC_CONFIG_HEADER([config.h])
@@ -23,6 +23,18 @@ AC_CHECK_HEADERS([stdlib.h string.h sys/socket.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
+
+AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
+AC_ARG_ENABLE([debug],
+        AS_HELP_STRING([--enable-debug],
+                [enable Debug (default: no)]),
+        debug=$enableval, debug="no")
+
+if test "$debug" = yes; then                                                                     
+	AC_DEFINE([USE_DEBUG], [], [])
+fi
+AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
+
 
 # Checks for library functions.
 AC_FUNC_FORK
