@@ -55,6 +55,7 @@ OVImf::OVImf()
   dict = new OVImfDictionary;
   dict->setString( "matchOneChar","?" );
   dict->setString( "matchZeroOrMoreChar","*" );
+  dict->setInteger( "maxKeySequenceLength", 32 );
 
 
   stts = Status::getInstance();
