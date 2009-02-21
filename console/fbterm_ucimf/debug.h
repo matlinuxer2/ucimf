@@ -2,10 +2,10 @@
 #include <config.h>
 #endif
 
-#ifdef USE_DEBUG
-#define UrDEBUG(format...) fprintf( stderr, format)
-#else
-#define UrDEBUG(format...)
-#endif
+#define UCIMF_ERR(format...)    	{extern int LogFd; if( LogFd >=0 ){ dprintf( LogFd, "[Err]:"format  );} }
+#define UCIMF_WARNING(format...)        {extern int LogFd; if( LogFd >=0 ){ dprintf( LogFd, "[WARN]:"format );} } 
+#define UCIMF_INFO(format...)           {extern int LogFd; if( LogFd >=0 ){ dprintf( LogFd, "[INFO]:"format );} } 
+#define UCIMF_DEBUG(format...)          {extern int LogFd; if( LogFd >=0 ){ dprintf( LogFd, "[DEBUG]:"format);} } 
 
-#define UrINFO(format...) fprintf( stdout, format)
+#define UrINFO(format...) UCIMF_INFO(format)
+#define UrDEBUG(format...) UCIMF_DEBUG(format)

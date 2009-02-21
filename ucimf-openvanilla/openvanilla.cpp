@@ -25,7 +25,10 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 #include "debug.h"
+
+int LogFd=-1;
 
 /* 
  * implementation of OVImf
@@ -45,6 +48,16 @@ OVInputMethod* OVImf::im = 0;
 
 OVImf::OVImf()
 {
+	
+	char name[64];
+	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".ucimf-log");
+
+        extern int LogFd;
+	LogFd = open(name, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	if ( LogFd == -1){
+		printf("open log file error");
+	}  
+
   current_module = 0;
   current_im_name = "";
   cxt = 0;
@@ -152,7 +165,11 @@ OVImf::OVImf()
 
 OVImf::~OVImf()
 {
-
+	extern int LogFd;
+	if( LogFd >=0 )
+	{
+		close(LogFd);
+	}
 }
 
 string OVImf::commit_buf="";

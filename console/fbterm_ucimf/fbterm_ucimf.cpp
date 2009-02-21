@@ -11,6 +11,7 @@
 
 static char raw_mode = 1;
 static char first_show = 1;
+int LogFd=-1;
 
 static void im_active()
 {

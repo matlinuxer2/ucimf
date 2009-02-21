@@ -57,27 +57,27 @@ Options::Options()
   string conf = getenv("HOME");
   conf += "/.ucimf.conf";
 
-  UrDEBUG("Checking config file: %s \n", conf );
+  UrDEBUG("Checking config file: %s \n", conf.c_str() );
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
-    UrDEBUG("Could not open config file: %s \n",conf );
+    UrDEBUG("Could not open config file: %s \n",conf.c_str() );
     conf = FILE_UCIMF_CONF;
   }
 
-  UrDEBUG("Checking config file: %s \n", conf );
+  UrDEBUG("Checking config file: %s \n", conf.c_str() );
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
-    UrDEBUG("Could not open config file: %s \n", conf );
+    UrDEBUG("Could not open config file: %s \n", conf.c_str() );
     throw runtime_error("Could not open config file!");
   }
 
-  UrDEBUG("Reading config file: %s \n", conf );
+  UrDEBUG("Reading config file: %s \n", conf.c_str() );
   
   ifstream input_file( conf.c_str() );
   
   if (!input_file)
   {
-      UrDEBUG("Could not reading config file: %s \n", conf );
+      UrDEBUG("Could not reading config file: %s \n", conf.c_str() );
       throw runtime_error("Could not reading config file!");
   }
 
@@ -109,7 +109,7 @@ bool Options::parse_file( ifstream &input)
         if (o == "")
             continue;
         _opts.insert( pair<string, string>(o,v) );
-	UrDEBUG( "Option: %s = %s \n ", o ,v );
+	UrDEBUG( "Option: %s = %s \n ", o.c_str() ,v.c_str() );
     }
     // FIXME: error handling
     return true;

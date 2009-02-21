@@ -29,6 +29,7 @@
 #include <dirent.h>
 #include <ltdl.h>
 #include <vector>
+#include <fcntl.h>
 
 #include "imf.h"
 #include "widget.h"
@@ -38,6 +39,8 @@
 
 #include <iostream>
 using namespace std;
+
+int LogFd=-1;
 
 bool prev_focus;
 //ConsoleFocus *focus = ConsoleFocus::getInstance();
@@ -148,6 +151,16 @@ Imf* nextImf()
 
 void ucimf_init()
 {
+
+	char name[64];
+	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".ucimf-log");
+
+        extern int LogFd;
+	LogFd = open(name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+	if ( LogFd == -1){
+		printf("open log file error");
+	}  
+
   prev_focus = false;
   imf = 0;
   cwm->attachWindow( stts->getWindow(), status_shift );
@@ -161,11 +174,17 @@ void ucimf_init()
 
 void ucimf_exit()
 {
-  if( imf !=0 )
-  {
-    delete imf;
-    imf=0;
-  }
+	if( imf !=0 )
+	{
+		delete imf;
+		imf=0;
+	}
+
+	extern int LogFd;
+	if( LogFd >=0 )
+	{
+		close(LogFd);
+	}
 }
 
 void ucimf_switch( unsigned char *buf, int *p_buf_len )
