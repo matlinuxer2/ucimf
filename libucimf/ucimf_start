@@ -1,54 +1,236 @@
 #!/bin/bash
 
-# Load keymaps
-loadkeys --verbose <<End-of-keymaps
-control keycode  42 = F11             
-control keycode  54 = F10             
-control keycode  57 = F12             
-End-of-keymaps
+UCIMF_DIR="${HOME}/.ucimf/"
 
-# Check locale settings
-lcs=$(locale -a|grep -i utf*8)
-for lc in $lcs
+UCIMF_CMD="${HOME}/.ucimf/cmd"
+UCIMF_LOCALE="${HOME}/.ucimf/locale"
+UCIMF_TERM="${HOME}/.ucimf/term"
+UCIMF_IME="${HOME}/.ucimf/ime"
+UCIMF_FONT="${HOME}/.ucimf/font"
+UCIMF_FONTSIZE="${HOME}/.ucimf/fontsize"
+
+UCIMF_RC="${HOME}/.ucimfrc"
+
+test -d ${UCIMF_DIR} || mkdir -p ${UCIMF_DIR}
+
+test -f ${UCIMF_CMD} || touch ${UCIMF_CMD}
+test -f ${UCIMF_LOCALE} || touch ${UCIMF_LOCALE}
+test -f ${UCIMF_TERM} || touch ${UCIMF_TERM}
+test -f ${UCIMF_IME} || touch ${UCIMF_IME}
+test -f ${UCIMF_FONT} || touch ${UCIMF_FONT}
+test -f ${UCIMF_FONTSIZE} || touch ${UCIMF_FONTSIZE}
+
+test -f ${UCIMF_RC} || touch ${UCIMF_RC}
+
+echo "main" > $UCIMF_CMD
+
+function environ_setup(){
+	# check ttyname in /dev/tty* or /dev/vc*
+
+	# check /dev/fb/* existence and permission
+
+	# check framebuffer parameters WxHxColour
+
+	# check .ucimfrc existed 
+
+	# check .openvanilla existed
+
+	# check openvanilla's modules existed
+
+	echo "main" > $UCIMF_CMD
+}
+
+function main_setup(){
+	dialog --stdout \
+	--title "UCIMF -- Unicode Console InputMethod Framework" \
+	--menu "Enter the setup menu" 20 60 14 \
+	"environ" "Run-time detected environment parameters" \
+	"locale"  "Locale settings" \
+	"term" "Detected console terminal applications" \
+	"ime" "Input Method Engines (IME) setup" \
+	"font" "Fonts Settings" \
+	"save" "Save Settings" \
+	"restore" "Restore settings" \
+	"run" "Start to run program" \
+	> $UCIMF_CMD
+}
+
+function save_setup(){
+	echo "" > ${UCIMF_RC}
+        echo "locale=$( cat ${UCIMF_LOCALE})" >> ${UCIMF_RC}
+        echo "term=$( cat ${UCIMF_TERM})" >> ${UCIMF_RC}
+        echo "font-name=$( cat ${UCIMF_FONT})" >> ${UCIMF_RC}
+        echo "font-size=$( cat ${UCIMF_FONTSIZE})" >> ${UCIMF_RC}
+
+	echo "main" > $UCIMF_CMD
+}
+
+function restore_setup(){
+	THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
+	THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
+	THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
+	THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
+
+	echo $THE_LOCALE    >     $UCIMF_LOCALE
+	echo $THE_TERM      >     $UCIMF_TERM
+	echo $THE_FONT      >     $UCIMF_FONT
+	echo $THE_FONTSIZE  >     $UCIMF_FONTSIZE
+
+	echo "main" > $UCIMF_CMD
+}
+
+
+function locale_setup(){
+       my_locale=$(cat ${UCIMF_LOCALE})
+
+       # Check locale settings
+       lcs=$(locale -a|grep -i utf*8)
+
+       lcs__menu=""
+
+       if [ "x$my_locale" != "x" ]
+       then 
+	   lcs_menu="$my_locale Current_locale_setting"
+       fi
+
+       for lc in $lcs
+       do
+       lcs_menu="$lcs_menu $lc $lc"
+       done
+
+       dialog --stdout --title "Locale settings" --menu "Select the locale:" 20 60 14 $lcs_menu > $UCIMF_LOCALE
+
+	echo "main" > $UCIMF_CMD
+}
+
+function term_setup(){
+	my_term=$(cat ${UCIMF_TERM} )
+
+	terms_menu=""
+	if [ "x$my_term" != "x" ]
+	then 
+	    terms_menu="$my_term Current_terminal_setting"
+        fi
+
+
+	bin_jfbterm=$(which jfbterm 2>/dev/null )
+	if [ $? == 0 ]
+	then 
+	    ucimf_ldd =$( ldd ${bin_jfbterm} )
+	    if [ "x$ucimf_ldd" != "x" ]
+	    then
+	    terms_menu="${terms_menu} jfbterm jfbterm J Framebuffer terminal"
+	    fi
+        fi
+
+	bin_fbterm=$(which fbterm 2>/dev/null )
+	if [ $? == 0 ]
+	then 
+	    ucimf_ldd=$( ldd ${bin_fbterm} )
+	    ucimf_rev=$( fbterm -V| grep '1.3' )
+	    if [ "x$ucimf_ldd" != "x" ]
+	    then
+	    terms_menu="${terms_menu} fbterm FbTerm" 
+	    fi
+        fi
+	        
+	echo $terms_menu
+
+	dialog --stdout --title "Detected console terminal applications" --menu "Select the application:" 20 60 14 $terms_menu > $UCIMF_TERM
+
+	echo "main" > $UCIMF_CMD
+}
+
+ime_setup(){
+	my_imes=$(cat ${UCIMF_TERM} )
+
+	imes_menu=""
+
+	imes=$(cd /usr/lib/openvanilla/OVIMGeneric/;ls *.cin)
+
+        for ime in $imes
+        do
+            imes_menu="$imes_menu $ime $ime off"
+        done
+
+	echo $imes_menu
+
+	dialog --stdout --title "Input Method Engines(IME) Setup" --checklist "Select toggle referred IME:" 20 60 14 $imes_menu > $UCIMF_IME
+
+	echo "main" > $UCIMF_CMD
+}
+
+font_setup(){
+	fonts_menu=""
+
+	fonts=$(fc-list | sed s/\ /_/g| cut -d: -f1| cut -d, -f1)
+
+        for font in $fonts
+        do
+            fonts_menu="$fonts_menu $font $font off"
+        done
+
+	echo $fonts_menu
+
+	dialog --stdout --title "Fonts Setup" --radiolist "Select the font:" 20 60 14 $fonts_menu | sed s/_/\ /g > $UCIMF_FONT
+
+	echo "main" > $UCIMF_CMD
+}
+
+while true
 do
-  lcs_menu="$lcs_menu $lc $lc"
+  CMD=$(cat ${UCIMF_CMD})
+  
+  case $CMD in
+  environ)
+    echo "" > $UCIMF_CMD
+    environ_setup
+    ;;
+  save)
+    echo "" > $UCIMF_CMD
+    save_setup
+    ;;
+  restore)
+    echo "" > $UCIMF_CMD
+    restore_setup
+    ;;
+  run)
+    echo "" > $UCIMF_CMD
+    THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
+    THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
+    THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
+    THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
+
+    LC_CTYPE="$THE_LOCALE" $THE_TERM 
+
+    ;;
+  locale)
+    echo "" > $UCIMF_CMD
+    locale_setup
+    ;;
+  term)
+    echo "" > $UCIMF_CMD
+    term_setup
+    ;;
+  ime)
+    echo "" > $UCIMF_CMD
+    ime_setup
+    ;;
+  font)
+    echo "" > $UCIMF_CMD
+    font_setup
+    ;;
+  fontsize)
+    echo "" > $UCIMF_CMD
+    fontsize_setup
+    ;;
+  main)
+    echo "" > $UCIMF_CMD
+    main_setup
+    ;;
+  *)
+    exit 0
+    ;;
+  esac
 done
 
-dialog --stdout --title "Select Locale" --menu "Locale menu" 20 60 14 $lcs_menu >/tmp/ucimf_mylcs
-my_lcs=$(cat /tmp/ucimf_mylcs)
-echo $LC_CTYPE > /tmp/ucimf_mylcs.orig
-export LC_CTYPE=$my_lcs
-
-# Check framebuffer device
-
-
-# Execute console program
-bin_jfbterm=$(which jfbterm)
-bin_fbterm=$(which fbterm)
-cons_menu=""
-
-if [ "x$bin_jfbterm" != "x" ]
-then
-  cons_menu="$cons_menu jfbterm jfbterm"
-fi
-
-if [ "x$bin_fbterm" != "x" ]
-then
-  cons_menu="$cons_menu fbterm FbTerm"
-fi
-
-if [ "x$cons_menu" == "x" ]
-then 
-  echo "No unicode console applications, please install jfbterm or fbterm with ucimf support"
-  exit 1
-fi
-
-dialog --stdout --title "Select Console" --menu "Console menu" 20 60 14 $cons_menu >/tmp/ucimf_mycon
-my_con=$(cat /tmp/ucimf_mycon)
-${my_con} 2>/dev/null
-
-# Restore settings when exit
-loadkeys -d || /etc/init.d/keymaps restart
-
-my_lcs=$(cat /tmp/ucimf_mylcs.orig)
-export LC_CTYPE=$my_lcs
