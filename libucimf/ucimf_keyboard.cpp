@@ -23,8 +23,11 @@
 #include <linux/keyboard.h>
 #include <linux/input.h>
 #include <iostream>
+#include <fcntl.h>
 #include "debug.h"
 using namespace std;
+
+int LogFd = -1;
 
 /*
 * IM  Toggle  -> F12
@@ -83,6 +86,21 @@ int setup_keys()
 
 int main()
 {
-  setup_keys();
-  return 0;
+	char name[64];
+	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".ucimf-log");
+
+	extern int LogFd;
+	LogFd = open(name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+	if ( LogFd == -1){
+		printf("open log file error");
+	}  
+
+	setup_keys();
+
+	extern int LogFd;
+	if( LogFd >=0 )
+	{
+		close(LogFd);
+	}
+	return 0;
 }
