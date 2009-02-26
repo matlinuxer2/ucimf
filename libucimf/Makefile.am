@@ -15,7 +15,7 @@ libucimf_la_SOURCES = options.cpp \
 			window.cpp widget.cpp shape.cpp cwm.cpp \
 			ucimf.cpp
 
-libucimf_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_srcdir)/include/imf -DUCIMF_CONF_DIR=\"@UCIMF_CONF_PATH@\" `pkg-config --cflags freetype2`
+libucimf_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_srcdir)/include/imf `pkg-config --cflags freetype2`
 libucimf_la_LDFLAGS = -lltdl `pkg-config --libs freetype2`
 libucimf_la_LIBADD = $(top_builddir)/display/libdisplay.a
 
