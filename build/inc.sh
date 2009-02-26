@@ -10,6 +10,7 @@ CONSOLEJ=${ROOT}/console/jfbterm/
 DUMMY=${ROOT}/console/dummy/
 BUILD=${ROOT}/build/
 TARBALL=${ROOT}/tarball/
+PKGBUILD=${ROOT}/pkgbuild/
 
 export LIBRARY_PATH=${BUILD}/lib/
 export LD_LIBRARY_PATH=${BUILD}/lib/
@@ -161,10 +162,31 @@ make_tarball_of_fbterm-ucimf(){
 	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 }
 
-make_tarball_of_fbterm-ucimf(){
-	echo "Start to make tarball of fbterm-ucimf..."
-	cd ${FBTERMUCIMF}
-	./autogen.sh
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
-	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+make_pkgbuild_of_libucimf-svn(){
+	echo "Start to make pkgbuild of libucimf..."
+	cd ${PKGBUILD}
+	wget -O PKGBUILD_libucimf http://aur.archlinux.org/packages/libucimf-svn/libucimf-svn/PKGBUILD
+	makepkg -p PKGBUILD_libucimf
 }
+
+make_pkgbuild_of_ucimf-openvanilla-svn(){
+	echo "Start to make pkgbuild of ucimf-openvanilla..."
+	cd ${PKGBUILD}
+	wget -O PKGBUILD_ucimf-openvanilla http://aur.archlinux.org/packages/ucimf-openvanilla-svn/ucimf-openvanilla-svn/PKGBUILD
+	makepkg -p PKGBUILD_ucimf-openvanilla
+}
+
+make_pkgbuild_of_openvanilla-svn(){
+	echo "Start to make pkgbuild of openvanilla..."
+	cd ${PKGBUILD}
+	wget -O PKGBUILD_openvanilla http://aur.archlinux.org/packages/openvanilla-svn/openvanilla-svn/PKGBUILD
+	makepkg -p PKGBUILD_openvanilla
+}
+
+make_pkgbuild_of_fbterm-ucimf-svn(){
+	echo "Start to make pkgbuild of fbterm-ucimf..."
+	cd ${PKGBUILD}
+	wget -O PKGBUILD_fbterm-ucimf http://aur.archlinux.org/packages/fbterm-ucimf-svn/fbterm-ucimf-svn/PKGBUILD
+	makepkg -p PKGBUILD_fbterm-ucimf
+}
+
