@@ -22,6 +22,7 @@
 #include <linux/kd.h>
 #include <linux/keyboard.h>
 #include <linux/input.h>
+#include <stdlib.h>
 #include <iostream>
 #include <fcntl.h>
 #include "debug.h"
