@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libucimf, 2.2.1, ucimf@googlegroups.com)
+AC_INIT(libucimf, 2.2.3, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 # Checks for programs.
@@ -42,17 +42,10 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
-# Check for customized module path
-# if test "x$IMF_MODULE_DIR" = "x"; then
-#   IMF_MODULE_DIR=${prefix}/lib/ucimf
-# fi
-
-#Check for customized conf file path
-if test "x$UCIMF_CONF_PATH" = "x"; then
-  UCIMF_CONF_PATH="/etc/"
-fi
-
-AC_SUBST(UCIMF_CONF_PATH)
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
+SYSCONFDIR="`eval echo $sysconfdir`"
+AC_DEFINE_UNQUOTED([SYSCONFDIR], [${SYSCONFDIR}], [Description])
 
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AC_ARG_ENABLE([debug],

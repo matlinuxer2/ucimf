@@ -5,14 +5,17 @@ LIBUCIMF=${ROOT}/libucimf/
 UCIMFOV=${ROOT}/ucimf-openvanilla/
 OV=${ROOT}/openvanilla/
 CONSOLE=${ROOT}/console/fbterm/
+FBTERMUCIMF=${ROOT}/console/fbterm_ucimf/
 CONSOLEJ=${ROOT}/console/jfbterm/
 DUMMY=${ROOT}/console/dummy/
 BUILD=${ROOT}/build/
+TARBALL=${ROOT}/tarball/
 
 export LIBRARY_PATH=${BUILD}/lib/
 export LD_LIBRARY_PATH=${BUILD}/lib/
 export LD_RUN_PATH=${BUILD}/lib/
 export PATH=${PATH}:${BUILD}/bin/
+
 
 build_libucimf(){
 	echo "Start to build libucimf"
@@ -125,4 +128,43 @@ build_console_testing(){
 	cd ${BUILD}
 }
 
+make_tarball_of_libucimf(){
+	echo "Start to make tarball of libucimf..."
+	cd ${LIBUCIMF}
+	./autogen.sh
+	test -f configure || LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	make distcheck && ls -t libucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+}
 
+make_tarball_of_ucimf-openvanilla(){
+	echo "Start to make tarball of ucimf-openvanilla..."
+	cd ${UCIMFOV}
+	./autogen.sh
+	test -f configure || OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
+	make distcheck && ls -t ucimf-openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+}
+
+make_tarball_of_jfbterm(){
+	echo "Start to make tarball of jfbterm..."
+	cd ${CONSOLEJ}
+	./init.sh
+	cd jfbterm-0.4.7/
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	fakeroot make distcheck && ls -t jfbterm*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+}
+
+make_tarball_of_fbterm-ucimf(){
+	echo "Start to make tarball of fbterm-ucimf..."
+	cd ${FBTERMUCIMF}
+	./autogen.sh
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+}
+
+make_tarball_of_fbterm-ucimf(){
+	echo "Start to make tarball of fbterm-ucimf..."
+	cd ${FBTERMUCIMF}
+	./autogen.sh
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+}

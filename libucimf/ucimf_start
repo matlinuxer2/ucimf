@@ -11,31 +11,43 @@ UCIMF_FONTSIZE="${HOME}/.ucimf/fontsize"
 
 UCIMF_RC="${HOME}/.ucimfrc"
 
-test -d ${UCIMF_DIR} || mkdir -p ${UCIMF_DIR}
-
-test -f ${UCIMF_CMD} || touch ${UCIMF_CMD}
-test -f ${UCIMF_LOCALE} || touch ${UCIMF_LOCALE}
-test -f ${UCIMF_TERM} || touch ${UCIMF_TERM}
-test -f ${UCIMF_IME} || touch ${UCIMF_IME}
-test -f ${UCIMF_FONT} || touch ${UCIMF_FONT}
-test -f ${UCIMF_FONTSIZE} || touch ${UCIMF_FONTSIZE}
-
-test -f ${UCIMF_RC} || touch ${UCIMF_RC}
-
-echo "main" > $UCIMF_CMD
-
-function environ_setup(){
+#
+#  This function is to check environment setting before excution
+# 
+function env_check(){
 	# check ttyname in /dev/tty* or /dev/vc*
+	my_tty="$(ls -l /dev/fd/* )"
 
 	# check /dev/fb/* existence and permission
+	my_fb_perm=$( ls -l /dev/fb* )
 
 	# check framebuffer parameters WxHxColour
+	my_fb_param=$(fbset)
 
 	# check .ucimfrc existed 
+	my_ucimfrc=$(cat ${HOME}/.ucimfrc)
 
 	# check .openvanilla existed
+	my_openvanilla=$( ls -l ${HOME}/.openvanilla )
 
 	# check openvanilla's modules existed
+	my_openvanilla_modules=$( ls -l ${HOME}/.openvanilla/modules )
+
+	dialog  --title "tty listing" \
+		--msgbox "${my_tty}" \
+		20 76	
+
+	dialog  --title "framebuffer status" \
+		--msgbox "${my_fb_perm}""${my_fb_param}" \
+		20 76	
+
+	dialog  --title " ~/.ucimfrc setting" \
+		--msgbox "${my_ucimfrc}" \
+		20 76	
+
+	dialog  --title " ~/.openvanilla/ setting" \
+		--msgbox "${my_openvanilla}""${my_openvanilla_modules}" \
+		20 76	
 
 	echo "main" > $UCIMF_CMD
 }
@@ -44,14 +56,12 @@ function main_setup(){
 	dialog --stdout \
 	--title "UCIMF -- Unicode Console InputMethod Framework" \
 	--menu "Enter the setup menu" 20 60 14 \
-	"environ" "Run-time detected environment parameters" \
+	"env" "Run-time detected environment parameters" \
 	"locale"  "Locale settings" \
 	"term" "Detected console terminal applications" \
 	"ime" "Input Method Engines (IME) setup" \
 	"font" "Fonts Settings" \
-	"save" "Save Settings" \
-	"restore" "Restore settings" \
-	"run" "Start to run program" \
+	"run" "Save and start to run program" \
 	> $UCIMF_CMD
 }
 
@@ -61,8 +71,6 @@ function save_setup(){
         echo "term=$( cat ${UCIMF_TERM})" >> ${UCIMF_RC}
         echo "font-name=$( cat ${UCIMF_FONT})" >> ${UCIMF_RC}
         echo "font-size=$( cat ${UCIMF_FONTSIZE})" >> ${UCIMF_RC}
-
-	echo "main" > $UCIMF_CMD
 }
 
 function restore_setup(){
@@ -75,8 +83,6 @@ function restore_setup(){
 	echo $THE_TERM      >     $UCIMF_TERM
 	echo $THE_FONT      >     $UCIMF_FONT
 	echo $THE_FONTSIZE  >     $UCIMF_FONTSIZE
-
-	echo "main" > $UCIMF_CMD
 }
 
 
@@ -86,7 +92,7 @@ function locale_setup(){
        # Check locale settings
        lcs=$(locale -a|grep -i utf*8)
 
-       lcs__menu=""
+       lcs_menu=""
 
        if [ "x$my_locale" != "x" ]
        then 
@@ -99,8 +105,6 @@ function locale_setup(){
        done
 
        dialog --stdout --title "Locale settings" --menu "Select the locale:" 20 60 14 $lcs_menu > $UCIMF_LOCALE
-
-	echo "main" > $UCIMF_CMD
 }
 
 function term_setup(){
@@ -137,8 +141,6 @@ function term_setup(){
 	echo $terms_menu
 
 	dialog --stdout --title "Detected console terminal applications" --menu "Select the application:" 20 60 14 $terms_menu > $UCIMF_TERM
-
-	echo "main" > $UCIMF_CMD
 }
 
 ime_setup(){
@@ -156,8 +158,6 @@ ime_setup(){
 	echo $imes_menu
 
 	dialog --stdout --title "Input Method Engines(IME) Setup" --checklist "Select toggle referred IME:" 20 60 14 $imes_menu > $UCIMF_IME
-
-	echo "main" > $UCIMF_CMD
 }
 
 font_setup(){
@@ -173,64 +173,77 @@ font_setup(){
 	echo $fonts_menu
 
 	dialog --stdout --title "Fonts Setup" --radiolist "Select the font:" 20 60 14 $fonts_menu | sed s/_/\ /g > $UCIMF_FONT
-
-	echo "main" > $UCIMF_CMD
 }
 
+
+# 先檢查檔案跟目錄是否存在
+test -d ${UCIMF_DIR} || mkdir -p ${UCIMF_DIR}
+test -f ${UCIMF_CMD} || touch ${UCIMF_CMD}
+test -f ${UCIMF_LOCALE} || touch ${UCIMF_LOCALE}
+test -f ${UCIMF_TERM} || touch ${UCIMF_TERM}
+test -f ${UCIMF_IME} || touch ${UCIMF_IME}
+test -f ${UCIMF_FONT} || touch ${UCIMF_FONT}
+test -f ${UCIMF_FONTSIZE} || touch ${UCIMF_FONTSIZE}
+test -f ${UCIMF_RC} || touch ${UCIMF_RC}
+
+# 讀取目前的設定
+restore_setup
+
+# 進入主選單
+echo "main" > $UCIMF_CMD
+
+# 對話式選單的主程式
 while true
 do
   CMD=$(cat ${UCIMF_CMD})
   
   case $CMD in
-  environ)
-    echo "" > $UCIMF_CMD
-    environ_setup
-    ;;
-  save)
-    echo "" > $UCIMF_CMD
-    save_setup
-    ;;
-  restore)
-    echo "" > $UCIMF_CMD
-    restore_setup
-    ;;
-  run)
-    echo "" > $UCIMF_CMD
-    THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
-    THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
-    THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
-    THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
+    main)
+      echo "main" > $UCIMF_CMD # 回主選單
+      main_setup
+      ;;
+    env)
+      echo "main" > $UCIMF_CMD # 回主選單
+      env_check
+      ;;
+    locale)
+      echo "main" > $UCIMF_CMD # 回主選單
+      locale_setup
+      ;;
+    term)
+      echo "main" > $UCIMF_CMD # 回主選單
+      term_setup
+      ;;
+    ime)
+      echo "main" > $UCIMF_CMD # 回主選單
+      ime_setup
+      ;;
+    font)
+      echo "main" > $UCIMF_CMD # 回主選單
+      font_setup
+      ;;
+    fontsize)
+      echo "main" > $UCIMF_CMD # 回主選單
+      fontsize_setup
+      ;;
+    run)
+      save_setup
+      THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
 
-    LC_CTYPE="$THE_LOCALE" $THE_TERM 
-
-    ;;
-  locale)
-    echo "" > $UCIMF_CMD
-    locale_setup
-    ;;
-  term)
-    echo "" > $UCIMF_CMD
-    term_setup
-    ;;
-  ime)
-    echo "" > $UCIMF_CMD
-    ime_setup
-    ;;
-  font)
-    echo "" > $UCIMF_CMD
-    font_setup
-    ;;
-  fontsize)
-    echo "" > $UCIMF_CMD
-    fontsize_setup
-    ;;
-  main)
-    echo "" > $UCIMF_CMD
-    main_setup
-    ;;
-  *)
-    exit 0
-    ;;
+      if [ $THE_TERM == "fbterm" ]
+      then
+	      LC_CTYPE="$THE_LOCALE" $THE_TERM -i fbterm_ucimf 2>/dev/null
+      else
+	      LC_CTYPE="$THE_LOCALE" $THE_TERM 2>/dev/null
+      fi
+      
+      exit 0
+      ;;
+    *)
+      exit 0
+      ;;
   esac
 done
-

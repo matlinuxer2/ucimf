@@ -29,16 +29,7 @@
 
 using namespace std;
 
-#ifndef UCIMF_CONF_DIR
-#ifdef SYSCONFDIR
-#define FILE_UCIMF_CONF       SYSCONFDIR"/ucimf.conf"                                        
-#else
-#define FILE_UCIMF_CONF       "/etc/ucimf.conf"
-#endif
-#else
-#define FILE_UCIMF_CONF	      UCIMF_CONF_DIR"/ucimf.conf"
-#endif
-
+#define UCIMFRC_SYS SYSCONFDIR"ucimf.conf"
 
 Options* Options::_instance = 0;
 
@@ -61,7 +52,7 @@ Options::Options()
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
     UrDEBUG("Could not open config file: %s \n",conf.c_str() );
-    conf = FILE_UCIMF_CONF;
+    conf = "FILE_UCIMF_CONF";
   }
 
   UrDEBUG("Checking config file: %s \n", conf.c_str() );

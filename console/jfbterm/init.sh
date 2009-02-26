@@ -10,7 +10,7 @@ src_fetch(){
 	cd ${ROOT}
 
 	echo "Fetch original source code"
-	wget --continue ${SRC_URL}
+	test -f ${SRC_TARBALL} || wget --continue ${SRC_URL}
 }
 
 src_unpack(){
@@ -53,7 +53,7 @@ src_patch(){
 	cd ${ROOT}
 	echo "Adopt patches"
 	patch -d ${SRC_DIR} < patches/jfbterm-0.4.7-ucimf.patch
-	patch -d ${SRC_DIR} -p3 < patches/Makefile.am.patch
+	patch -d ${SRC_DIR} < patches/Makefile.am.patch
 
 }
 
