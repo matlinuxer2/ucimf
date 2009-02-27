@@ -56,12 +56,12 @@ function main_setup(){
 	dialog --stdout \
 	--title "UCIMF -- Unicode Console InputMethod Framework" \
 	--menu "Enter the setup menu" 20 60 14 \
+	"run" "Save and start to run program" \
 	"env" "Run-time detected environment parameters" \
 	"locale"  "Locale settings" \
 	"term" "Detected console terminal applications" \
 	"ime" "Input Method Engines (IME) setup" \
 	"font" "Fonts Settings" \
-	"run" "Save and start to run program" \
 	> $UCIMF_CMD
 }
 
@@ -202,6 +202,22 @@ do
       echo "main" > $UCIMF_CMD # 回主選單
       main_setup
       ;;
+    run)
+      save_setup
+      THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
+      THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
+
+      if [ $THE_TERM == "fbterm" ]
+      then
+	      LC_CTYPE="$THE_LOCALE" $THE_TERM -i fbterm_ucimf 2>/dev/null
+      else
+	      LC_CTYPE="$THE_LOCALE" $THE_TERM 2>/dev/null
+      fi
+      
+      exit 0
+      ;;
     env)
       echo "main" > $UCIMF_CMD # 回主選單
       env_check
@@ -225,22 +241,6 @@ do
     fontsize)
       echo "main" > $UCIMF_CMD # 回主選單
       fontsize_setup
-      ;;
-    run)
-      save_setup
-      THE_LOCALE=$( grep "^locale=" ${UCIMF_RC}| cut -d\= -f2 )
-      THE_TERM=$( grep "^term=" ${UCIMF_RC}| cut -d\= -f2 )
-      THE_FONT=$( grep "^font-name=" ${UCIMF_RC}| cut -d\= -f2 )
-      THE_FONTSIZE=$( grep "^font-size=" ${UCIMF_RC}| cut -d\= -f2 )
-
-      if [ $THE_TERM == "fbterm" ]
-      then
-	      LC_CTYPE="$THE_LOCALE" $THE_TERM -i fbterm_ucimf 2>/dev/null
-      else
-	      LC_CTYPE="$THE_LOCALE" $THE_TERM 2>/dev/null
-      fi
-      
-      exit 0
       ;;
     *)
       exit 0
