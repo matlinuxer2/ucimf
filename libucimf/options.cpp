@@ -52,7 +52,7 @@ Options::Options()
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
     UrDEBUG("Could not open config file: %s \n",conf.c_str() );
-    conf = "FILE_UCIMF_CONF";
+    conf = UCIMFRC_SYS;
   }
 
   UrDEBUG("Checking config file: %s \n", conf.c_str() );
