@@ -497,7 +497,11 @@ const char *OVImfService::locale(){
   }
   return current_locale.c_str(); 
 }
-const char *OVImfService::userSpacePath(const char *modid){ return "/tmp"; }
+const char *OVImfService::userSpacePath(const char *modid){
+	char name[64];
+	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".openvanilla");
+	return name;
+}
 const char *OVImfService::pathSeparator() { return "/"; }
 
 const char *OVImfService::toUTF8(const char *encoding, const char *src) { 
