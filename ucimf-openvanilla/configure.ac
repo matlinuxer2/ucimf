@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-openvanilla,2.10.3, ucimf@googlegroups.com)
+AC_INIT(ucimf-openvanilla,2.10.4, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([openvanilla.cpp])
 AC_CONFIG_HEADER([config.h])
@@ -30,11 +30,10 @@ AC_FUNC_CLOSEDIR_VOID
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memset setlocale strstr])
 
-if test "x$OV_MODULEDIR" = "x"; then
-   OV_MODULEDIR="/usr/lib/openvanilla/"
-fi
-
-AC_SUBST(OV_MODULEDIR)
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
+LIBDIR="`eval echo $libdir`"
+AC_DEFINE_UNQUOTED([LIBDIR], ["${LIBDIR}"], [Description])
 
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AC_ARG_ENABLE([debug],
