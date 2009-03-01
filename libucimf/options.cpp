@@ -29,7 +29,7 @@
 
 using namespace std;
 
-#define UCIMFRC_SYS SYSCONFDIR"ucimf.conf"
+#define UCIMFRC_SYS SYSCONFDIR"/ucimf.conf"
 
 Options* Options::_instance = 0;
 

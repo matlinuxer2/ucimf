@@ -40,6 +40,8 @@
 #include <iostream>
 using namespace std;
 
+#define IMF_MODULE_DIR LIBDIR"/ucimf/"
+
 int LogFd=-1;
 
 bool prev_focus;
@@ -83,14 +85,12 @@ void scanImf()
   createImf_t* create_imf = NULL;
   destroyImf_t* destroy_imf = NULL;
 
-  Options* option= Options::getInstance();
-  char* imf_mod_path = option->getOption("IMF_MODULE_DIR");
-  UrDEBUG("IMF Modules scan path: %s \n", imf_mod_path );
+  UrDEBUG("IMF Modules scan path: %s \n", IMF_MODULE_DIR );
  
   lt_dlinit();
-  lt_dlsetsearchpath( imf_mod_path );
+  lt_dlsetsearchpath( IMF_MODULE_DIR );
 
-  DIR *dir = opendir( imf_mod_path );
+  DIR *dir = opendir( IMF_MODULE_DIR );
   if( dir )
   {
     struct dirent *d_ent;
