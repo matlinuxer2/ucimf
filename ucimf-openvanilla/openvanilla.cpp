@@ -30,6 +30,8 @@
 
 int LogFd=-1;
 
+#define OV_MODULEDIR LIBDIR"/openvanilla/"
+
 /* 
  * implementation of OVImf
  */
@@ -73,7 +75,9 @@ OVImf::OVImf()
 
   stts = Status::getInstance();
 
-  // OV_MODULEDIR is defined in Makefile.am 
+  UrDEBUG( "OVIMF starting \n" );
+  UrDEBUG( "OVIMF Module Dir: %s \n", OV_MODULEDIR );
+
   lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
 
@@ -87,6 +91,8 @@ OVImf::OVImf()
       {
 	  OVLibrary* mod = new OVLibrary();
 	  
+	  UrDEBUG( "loading .so: %s \n", d_ent->d_name );
+
 	  mod->handle = lt_dlopen( d_ent->d_name );
 	  if(mod->handle == NULL){
             UrDEBUG( "lt_dlopen loading error: %s \n", lt_dlerror() );
@@ -314,6 +320,16 @@ string OVImf::process_input( const string& buf )
 	  result = "\x7f";
 	  return result;
   }
+  else if( preedit->isEmpty() && keyevent->code() == ovkRight )
+  {
+	  result = "\x1b\x5b\x43";
+	  return result;
+  }
+  else if( preedit->isEmpty() && keyevent->code() == ovkLeft )
+  {
+	  result = "\x1b\x5b\x44";
+	  return result;
+  }
 	
   cxt->keyEvent( keyevent, preedit, lookupchoice, srv);
 
@@ -498,9 +514,8 @@ const char *OVImfService::locale(){
   return current_locale.c_str(); 
 }
 const char *OVImfService::userSpacePath(const char *modid){
-	char name[64];
-	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".openvanilla");
-	return name;
+	const string path = string( getenv("HOME") ) + string( "/.openvanilla/" )+string( modid );
+	return path.c_str();
 }
 const char *OVImfService::pathSeparator() { return "/"; }
 
