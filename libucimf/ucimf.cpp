@@ -45,18 +45,15 @@ using namespace std;
 int LogFd=-1;
 
 bool prev_focus;
-//ConsoleFocus *focus = ConsoleFocus::getInstance();
-//CursorPosition *pos = CursorPosition::getInstance();
-//CurrentImfStatus *sts = CurrentImfStatus::getInstance();
-Status *stts = Status::getInstance();
-Preedit *prdt = Preedit::getInstance();
-LookupChoice *lkc = LookupChoice::getInstance();
+Status *stts;
+Preedit *prdt;
+LookupChoice *lkc;
 
-Shift *status_shift = new StatusShift;
-Shift *preedit_shift = new PreeditShift;
-Shift *lookupchoice_shift = new LookupChoiceShift;
+Shift *status_shift;
+Shift *preedit_shift;
+Shift *lookupchoice_shift;
 
-Cwm *cwm = Cwm::getInstance();
+Cwm *cwm;
 
 Imf *imf;
 vector<Imf*> imfs;
@@ -151,6 +148,15 @@ Imf* nextImf()
 
 void ucimf_init()
 {
+	stts = Status::getInstance();
+	prdt = Preedit::getInstance();
+	lkc = LookupChoice::getInstance();
+
+	status_shift = new StatusShift;
+	preedit_shift = new PreeditShift;
+	lookupchoice_shift = new LookupChoiceShift;
+
+	cwm = Cwm::getInstance();
 
 	char name[64];
 	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".ucimf-log");
