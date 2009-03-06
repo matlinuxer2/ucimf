@@ -7,8 +7,8 @@ mkdir -p ${TARBALL}
 make_tarball_of_libucimf
 make_tarball_of_ucimf-openvanilla
 # second
-make_tarball_of_jfbterm
+#make_tarball_of_jfbterm
 make_tarball_of_fbterm-ucimf
 ## third
-#make_tarball_of_openvanilla
+make_tarball_of_openvanilla
 

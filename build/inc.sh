@@ -18,14 +18,23 @@ export LD_RUN_PATH=${BUILD}/lib/
 export PATH=${PATH}:${BUILD}/bin/
 
 
+build_clean(){
+	cd ${BUILD}
+	test -d bin && rm -rvf bin
+	test -d etc && rm -rvf etc
+	test -d include && rm -rvf include
+	test -d lib && rm -rvf lib
+	test -d share && rm -rvf share 
+	cd ${BUILD}
+}
+
 build_libucimf(){
 	echo "Start to build libucimf"
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
 	cd ${LIBUCIMF}
-	autoreconf -i --force
-	UCIMF_CONF_PATH=${BUILD}/etc/ ./configure --prefix=${BUILD}
-	make
-	make install
+	./autogen.sh
+	test -f Makefile && make distclean
+	./configure --prefix=${BUILD} && make && make install
 
 	cd ${BUILD}
 }
@@ -74,10 +83,9 @@ build_ucimf-openvanilla(){
 	echo "Start to build ucimf-openvanilla"
 	cd ${UCIMFOV}
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
-	autoreconf -i --force
-	OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
-	make
-	make install
+	./autogen.sh
+	test -f Makefile && make distclean
+	./configure --prefix=${BUILD} && make &&  make install
 
 	cd ${BUILD}
 }
@@ -85,10 +93,10 @@ build_ucimf-openvanilla(){
 build_openvanilla(){
 	echo "Start to build openvanilla"
 	cd ${OV}
-	./init.sh
-	cd Modules/
-	make
-	make install INSTALL_PREFIX=${BUILD}
+	test -L openvanilla-modules || ./init.sh
+	cd openvanilla-modules
+	test -f Makefile && make distclean
+	./configure --prefix=${BUILD} && make && make install
 
 	cd ${BUILD}
 }
@@ -105,11 +113,22 @@ build_console_fbterm(){
 	cd ${BUILD}
 }
 
+build_fbterm-ucimf(){
+	echo "Start to make tarball of fbterm-ucimf..."
+	cd ${FBTERMUCIMF}
+	./autogen.sh
+	test -f Makefile && make distclean
+	./configure --prefix=${BUILD} && make && make install
+
+	cd ${BUILD}
+}
+
 build_console_jfbterm(){
 	echo "Start to build jfbterm"
 	cd ${CONSOLEJ}
 	./init.sh
 	cd jfbterm-0.4.7/
+	test -f Makefile && make distclean
 	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	make
 	make install
@@ -122,6 +141,7 @@ build_console_testing(){
 	cd ${DUMMY}
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
 	autoreconf -i --force
+	test -f Makefile && make distclean
 	LIBS="-L${BUILD}/lib/" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make
 	make install
@@ -143,6 +163,19 @@ make_tarball_of_ucimf-openvanilla(){
 	./autogen.sh
 	test -f configure && OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
 	make distcheck && ls -t ucimf-openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+
+	cd ${BUILD}
+}
+
+make_tarball_of_openvanilla(){
+	echo "Start to make tarball of openvanilla..."
+	cd ${OV}
+	test -L openvanilla-modules || ./init.sh
+	cd openvanilla-modules
+	test -f configure && ./configure --prefix=${BUILD}
+	make distcheck && ls -t openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+
+	cd ${BUILD}
 }
 
 make_tarball_of_jfbterm(){
@@ -152,6 +185,8 @@ make_tarball_of_jfbterm(){
 	cd jfbterm-0.4.7/
 	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	fakeroot make distcheck && ls -t jfbterm*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+
+	cd ${BUILD}
 }
 
 make_tarball_of_fbterm-ucimf(){
@@ -160,6 +195,8 @@ make_tarball_of_fbterm-ucimf(){
 	./autogen.sh
 	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
+
+	cd ${BUILD}
 }
 
 make_pkgbuild_of_libucimf-svn(){
@@ -167,6 +204,8 @@ make_pkgbuild_of_libucimf-svn(){
 	cd ${PKGBUILD}
 	wget -O PKGBUILD_libucimf http://aur.archlinux.org/packages/libucimf-svn/libucimf-svn/PKGBUILD
 	makepkg -p PKGBUILD_libucimf
+
+	cd ${BUILD}
 }
 
 make_pkgbuild_of_ucimf-openvanilla-svn(){
@@ -174,6 +213,8 @@ make_pkgbuild_of_ucimf-openvanilla-svn(){
 	cd ${PKGBUILD}
 	wget -O PKGBUILD_ucimf-openvanilla http://aur.archlinux.org/packages/ucimf-openvanilla-svn/ucimf-openvanilla-svn/PKGBUILD
 	makepkg -p PKGBUILD_ucimf-openvanilla
+
+	cd ${BUILD}
 }
 
 make_pkgbuild_of_openvanilla-svn(){
@@ -181,6 +222,8 @@ make_pkgbuild_of_openvanilla-svn(){
 	cd ${PKGBUILD}
 	wget -O PKGBUILD_openvanilla http://aur.archlinux.org/packages/openvanilla-svn/openvanilla-svn/PKGBUILD
 	makepkg -p PKGBUILD_openvanilla
+
+	cd ${BUILD}
 }
 
 make_pkgbuild_of_fbterm-ucimf-svn(){
@@ -188,5 +231,7 @@ make_pkgbuild_of_fbterm-ucimf-svn(){
 	cd ${PKGBUILD}
 	wget -O PKGBUILD_fbterm-ucimf http://aur.archlinux.org/packages/fbterm-ucimf-svn/fbterm-ucimf-svn/PKGBUILD
 	makepkg -p PKGBUILD_fbterm-ucimf
+
+	cd ${BUILD}
 }
 
