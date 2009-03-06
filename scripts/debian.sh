@@ -3,6 +3,7 @@
 ROOT="$(dirname $(pwd))"
 SCRIPTS="${ROOT}/scripts"
 LIBUCIMF="${ROOT}/libucimf"
+UCIMFOV="${ROOT}/ucimf-openvanilla"
 TARBALL_DIR="${ROOT}/tarball"
 TARBALL_TEMP="${ROOT}/temp"
 
@@ -18,4 +19,15 @@ build_libucimf_deb(){
 	cd ${SCRIPTS}
 }
 
+build_ucimf-openvanilla_deb(){
+	test -L ${UCIMFOV}/debian && rm ${UCIMFOV}/debian
+	ln -s  ${SCRIPTS}/debian/ucimf-openvanilla ${UCIMFOV}/debian
+	cd ${UCIMFOV}
+	dpkg-buildpackage -rfakeroot && cp -av *.deb ${ROOT} 
+	rm ${UCIMFOV}/debian
+
+	cd ${SCRIPTS}
+}
+
 build_libucimf_deb
+build_ucimf-openvanilla_deb
