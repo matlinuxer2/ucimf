@@ -28,9 +28,9 @@ endif
 #version=2.0.5
 #major=2
 # option 2, assuming the library is created as src/.libs/libfoo.so.2.0.5 or so
-version=`ls src/.libs/lib*.so.* | \
+version=`ls .libs/lib*.so.* | \
  awk '{if (match($$0,/[0-9]+\.[0-9]+\.[0-9]+$$/)) print substr($$0,RSTART)}'`
-major=`ls src/.libs/lib*.so.* | \
+major=`ls .libs/lib*.so.* | \
  awk '{if (match($$0,/\.so\.[0-9]+$$/)) print substr($$0,RSTART+4)}'`
 
 config.status: configure
@@ -54,14 +54,7 @@ clean:
 	rm -f build-stamp 
 
 	# Add here commands to clean up after the build process.
-	#-$(MAKE) distclean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-
+	-$(MAKE) distclean
 
 	dh_clean 
 
@@ -75,11 +68,9 @@ install: build
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
 
-# Build architecture-independent files here.
 binary-indep: build install
-# We have nothing to do by default.
+	# We have nothing to do by default.
 
-# Build architecture-dependent files here.
 binary-arch: build install
 	dh_testdir
 	dh_testroot
@@ -87,22 +78,10 @@ binary-arch: build install
 	dh_installdocs
 	dh_installexamples
 	dh_install --sourcedir=debian/tmp
-#	dh_installmenu
-#	dh_installdebconf	
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-#	dh_installman
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-#	dh_perl
-#	dh_python
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
@@ -111,4 +90,5 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
+
 .PHONY: build clean binary-indep binary-arch binary install 
