@@ -1,0 +1,64 @@
+#summary 如何在 *[http://www.gentoo.org Gentoo Linux]* 中安裝和使用 *UCIMF*
+#labels Featured,Gentoo
+
+= 准備工作 =
+
+== 請先將之前舊的檔案清除 ==
+
+此步驟可選( optional )，若以前手動編譯安裝軟體，請事先清除, 避免連結到舊的檔案。
+造成不必要的BUG
+
+== 將 *gentoo-taiwn* 加入你的軟體列表 ==
+
+{{{
+layman -a gentoo-taiwan
+}}}
+
+*注*: *UCIMF*目前未被收錄至官方軟件倉庫（portage樹）中, fbterm 可從gentoo-china overlay中獲取。
+
+== 添加KEYWORDS == 
+在 /etc/portage/package.keywords 添加以下內容，讓 UCIMF 相關的軟體可以接受安裝
+
+{{{
+app-i18n/jfbterm ~*
+app-i18n/fbterm ~*
+app-i18n/fbterm-ucimf ~*
+app-i18n/libucimf **
+app-i18n/ucimf-openvanilla **
+app-i18n/openvanilla-modules **
+}}}
+
+= 安裝/使用 *UCIMF* 相關套件 =
+
+== 以 *[http://fbterm.googlecode.com fbterm]* 當 terminal ==
+
+=== 安裝 ===
+{{{
+emerge fbterm fbterm-ucimf ucimf-openvanilla
+}}}
+
+=== 注意事項 ===
+# 確保用戶隸屬于 *video* 用戶組
+# 啟機核心參數 vga=788 (或是789,791,792...)
+# 執行 LC_CTYPE=zh_CN.UTF-8 fbterm -i fbterm_ucimf
+
+=== 熱鍵設置 ====
+|| Ctrl-Space  || 切換輸入狀態 ||
+|| Ctrl-ShiftL || 切換輸入法 ||
+|| Ctrl-ShiftR || 動態切換輸入法架構模組 ||
+
+
+==  以 *jfbterm*  當 terminal ==
+{{{
+emerge jfbterm ucimf-openvanilla
+}}}
+
+=== 注意事項 ===
+# 啟機核心參數 vga=788 (或是789,791,792...)
+# 用 root 在 tty 下執行 ucimf_keyboard
+# 執行 LC_CTYPE=zh_CN.UTF-8 jfbterm
+
+=== 熱鍵設置 ====
+|| F12 或 Ctrl-Space || 切換輸入狀態 ||
+|| F11 或 Ctrl-ShiftL || 切換輸入法 ||
+|| F10 或 Ctrl-ShiftR || 動態切換輸入法架構模組 ||
