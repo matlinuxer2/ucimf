@@ -1,0 +1,30 @@
+#labels Phase-Deploy,Debain,WIP
+= Debian Packages 方法 =
+
+
+*注*：請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
+
+=== 添加軟件倉庫源 === 
+將下列連結加入你的 /etc/apt/sources.list
+{{{
+deb http://people.python.org.tw/~mat/debian binary/
+deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
+}}}
+
+=== 安裝相關套件 ===
+ 請用 aptitude 安裝
+   jfbterm 0.4.7-8
+   libucimf
+   ucimf-openvanilla
+   openvanilla-module-imgeneric
+
+
+=== 使用 ===
+依序執行下列步驟即可
+  # 啟機核心參數 vga=788 (或是789,791,792...)
+  # 用 root 在 tty 下執行 ucimf_keyboard
+  # 執行 LC_CTYPE=zh_CN.UTF-8 jfbterm
+
+|| F12 或 Ctrl-Space ||  切換輸入狀態 ||
+|| F11 或 Ctrl-ShiftL || 切換輸入法 ||
+|| F10 或 Ctrl-ShiftR || 動態切換輸入法架構模組 ||
