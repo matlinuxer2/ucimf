@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libucimf
+Description: UCIMF (http://ucimf.sourceforge.net ) is a toolkit framework for input method under unicode console environment.
+Version: @PACKAGE_VERSION@
+Requires: freetype 
+Libs: -L@abs_top_srcdir@/src/.libs -lucimf
+Cflags: -I@abs_top_srcdir@/include
