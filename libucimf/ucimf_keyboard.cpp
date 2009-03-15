@@ -51,7 +51,6 @@ static new_key nkeys[] = {
   {(1 << KG_CTRL), KEY_SPACE,     	K_F12 },	/* IM Toggle */
   {(1 << KG_CTRL), KEY_LEFTSHIFT, 	K_F11 },	/* IM Switch */
   {(1 << KG_CTRL), KEY_RIGHTSHIFT,      K_F10 },	/* IMF Switch */
-  {(1 << KG_CTRL), KEY_F9,        	K_F9 },		/* IMF Load */
 };
 
 int setup_keys()
