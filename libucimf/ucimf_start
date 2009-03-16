@@ -148,16 +148,66 @@ ime_setup(){
 
 	imes_menu=""
 
-	imes=$(cd /usr/lib/openvanilla/OVIMGeneric/;ls *.cin)
+	sys_imes_dir="/usr/lib/openvanilla/OVIMGeneric/"
+	imes=$( test -d $sys_imes_dir && cd $sys_imes_dir && ls *.cin)
 
-        for ime in $imes
+	my_imes_dir="${HOME}/.openvanilla/OVIMGeneric/"
+	test -d ${HOME} || mkdir -p "${HOME}/.openvanilla"
+	test -d ${my_imes_dir} || mkdir -p "$my_imes_dir"
+	imes2=$( test -d $my_imes_dir && cd $my_imes_dir && ls *.cin)
+	imes3=$( test -d $my_imes_dir && cd $my_imes_dir && ls *.cin.off )
+
+        for ime in $imes2 
         do
-            imes_menu="$imes_menu $ime $ime off"
+            imes_menu="$imes_menu $ime $ime on"
+        done
+
+        for ime in $imes3 
+        do
+            imes_menu="$imes_menu ${ime%.off} ${ime%.off} off"
+        done
+
+        for ime in $imes 
+        do
+	    if ! [ -f $my_imes_dir/$ime ]
+	    then
+		    imes_menu="$imes_menu $ime $ime off"
+	    fi
         done
 
 	echo $imes_menu
 
 	dialog --stdout --title "Input Method Engines(IME) Setup" --checklist "Select toggle referred IME:" 20 60 14 $imes_menu > $UCIMF_IME
+
+	for ime_str in $( cat $UCIMF_IME )
+	do  
+	    ime_str2="${ime_str/\"/}"
+	    ime="${ime_str2/\"/}"
+	    if ! [ "${imes2/$ime/}" = "${imes2}" ]
+	    then
+	       echo "$ime was on"
+	    elif ! [ "${imes3/$ime.off/}" = "${imes3}" ]
+	    then 
+	       echo "$ime turns on"
+	       mv -v $my_imes_dir/${ime}.off $my_imes_dir/${ime}
+	    elif ! [ "${imes/$ime/}" = "${imes}" ]
+	    then
+	       echo "$ime copy and turns on"
+	       cp -v $sys_imes_dir/$ime $my_imes_dir/$ime
+            fi
+	done
+	
+	imes4=$(cat $UCIMF_IME )
+	for ime in $imes2
+	do
+	    if [ "${imes4/$ime/}" = "${imes4}" ]
+	    then
+	        echo "$ime turns off"
+	        mv -v $my_imes_dir/${ime} $my_imes_dir/${ime}.off
+	    fi
+	done
+
+	sleep 3
 }
 
 font_setup(){
