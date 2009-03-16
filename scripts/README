@@ -1,0 +1,20 @@
+0. Please execute following script to auto build
+
+    `./build.sh`
+
+   This script will do all the work (fetch/patch/compile), 
+     and install the program to a temporary directory.
+     ( Without install into real system )
+
+1. To run program, please execute
+
+    `./run.sh`
+
+2. To debug program, please execute
+
+    `./debug.sh`
+
+   *NOTE* gdb is required.
+   *NOTE* Welcome to reported 'error.log' on UCIMF's forum
+          ( http://groups.google.com/group/ucimf/ )
+

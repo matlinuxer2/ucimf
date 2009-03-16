@@ -1,13 +1,5 @@
 #!/bin/bash
-
-ROOT="$(dirname $(pwd))"
-SCRIPTS="${ROOT}/scripts"
-LIBUCIMF="${ROOT}/libucimf"
-UCIMFOV="${ROOT}/ucimf-openvanilla"
-TARBALL_DIR="${ROOT}/tarball"
-TARBALL_TEMP="${ROOT}/temp"
-
-echo ${ROOT}
+source inc.sh
 
 build_libucimf_deb(){
 	test -L ${LIBUCIMF}/debian && rm ${LIBUCIMF}/debian
