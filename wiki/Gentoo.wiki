@@ -8,7 +8,7 @@
 此步驟可選( optional )，若以前手動編譯安裝軟體，請事先清除, 避免連結到舊的檔案。
 造成不必要的BUG
 
-=== 將 *gentoo-taiwn* 加入你的軟體列表 ===
+=== 將 *gentoo-taiwan* 加入你的軟體列表 ===
 
 {{{
 layman -a gentoo-taiwan
