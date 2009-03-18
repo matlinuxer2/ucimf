@@ -1,0 +1,13 @@
+Source: fbterm-ucimf
+Priority: optional
+Maintainer: Mat <MatLinuxer2@gmail.com>
+Build-Depends: debhelper, autotools-dev 
+Standards-Version: 3.6.1
+Section: libs
+
+Package: fbterm-ucimf
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
