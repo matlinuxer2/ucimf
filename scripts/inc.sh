@@ -195,6 +195,15 @@ make_tarball_of_jfbterm(){
 	back_to_scripts
 }
 
+make_tarball_of_fbterm(){
+	cd ${TARBALL}
+	
+	FBTERM_FILE=$( ls -t fbterm*.tar.gz|grep -v 'ucimf'| head --lines=1 )
+	test -f "$FBTERM_FILE" || wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
+
+	back_to_scripts
+}
+
 make_tarball_of_fbterm-ucimf(){
 	echo "Start to make tarball of fbterm-ucimf..."
 	cd ${FBTERMUCIMF}
