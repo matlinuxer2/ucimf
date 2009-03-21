@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC_URL="http://ucimf.googlecode.com/files/openvanilla-modules-0.8.0_6.tar.gz"
+SRC_URL="http://ucimf.googlecode.com/files/openvanilla-modules-0.8.0_7.tar.gz"
 SRC_TARBALL="$(basename $SRC_URL)"
 SRC_ALIAS="openvanilla-modules"
 
