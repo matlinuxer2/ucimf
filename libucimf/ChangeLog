@@ -1,3 +1,7 @@
+2009-03-24  Mat <matlinuxer2@gmail.com>
+
+	* Fix ucimf_process_raw_misbehavier
+
 2009-02-04  Mat <matlinuxer2@gmail.com>
 
 	* Add compile time configurable debug output switch

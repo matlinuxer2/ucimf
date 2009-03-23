@@ -367,17 +367,20 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 
 	unsigned short sym = keycode_to_keysym( kc, down );
-	char *str = keysym_to_term_string(sym, down);
+	char *str = (char*)malloc( sizeof(char)*128 );
+	str = keysym_to_term_string(sym, down);
 
 	if( !down )
 	{
 		bzero( buf, *p_ret);
+		(*p_ret)=0; 
 		return buf;
 	}
 
 	if( kc== KEY_SPACE && shift_down[KG_CTRL] >0 )
 	{
 		bzero( buf, *p_ret);
+		(*p_ret)=0; 
 		return buf;
 	}
 	else if( kc==KEY_LEFTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F11
@@ -388,6 +391,7 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		cwm->set_focus( true );
 
 		bzero( buf, *p_ret);
+		(*p_ret)=0; 
 		return buf;
 	}
 	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F10
@@ -403,12 +407,14 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		}
 
 		bzero( buf, *p_ret);
+		(*p_ret)=0; 
 		return buf;
 	}
 
 	if( kc==KEY_LEFTCTRL || kc==KEY_RIGHTCTRL )
 	{
 		bzero( buf, *p_ret);
+		(*p_ret)=0; 
 		return buf;
 	}
 

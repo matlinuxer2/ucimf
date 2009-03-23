@@ -14,9 +14,10 @@ build_clean
 
 build_libucimf
 build_ucimf-openvanilla
-build_fbterm-ucimf
 build_openvanilla
 
+build_fbterm-ucimf
+build_console_fbterm
 
 #if [[ $myconsole == "j" ]]
 #then
