@@ -58,6 +58,8 @@ static void im_deactive()
 
 static void process_raw_key(char *buf, int len) 
 {
+
+
     unsigned short i;
     for (i = 0; i < len; i++) {
 	    char down = !(buf[i] & 0x80);
@@ -78,10 +80,19 @@ static void process_raw_key(char *buf, int len)
 	    //put_im_text(str, strlen(str));
     }
 
+    if( len <= 0 ) { return; }
+
     char* result = ucimf_process_raw( buf, &len ); 
-    unsigned short result_len = len;
-    UrDEBUG("ucimf: return text, %s\n", result );
-    put_im_text( result, result_len );
+
+    if( len <= 0 ) { 
+	    return; 
+    }
+    else
+    {
+	    unsigned short result_len = len;
+	    UrDEBUG("ucimf: return text, '%s', length:%d \n", result, len );
+	    put_im_text( result, result_len );
+    }
 
 }
 

@@ -109,8 +109,8 @@ build_openvanilla(){
 build_console_fbterm(){
 	echo "Start to build fbterm"
 	cd ${CONSOLE}
-	./init.sh
-	cd fbterm-1.2/
+	test -d fbterm-1.4 || ./init.sh
+	cd fbterm-1.4/
 	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
 	make
 	make install
