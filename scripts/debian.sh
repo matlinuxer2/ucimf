@@ -1,7 +1,7 @@
 #!/bin/bash
 source inc.sh
 
-if [ "x$(which dh)" = "x" ]
+if [ "x$(which dh_install)" = "x" ]
 then
     echo "Please install debhelper first. ( aptitude install debhelper )"
     exit 3
@@ -9,9 +9,15 @@ fi
 
 
 OVMOD="${OV}/openvanilla-modules"
+BINARY="${SCRIPTS}/debian/binary"
+test -d ${BINARY} || mkdir -p ${BINARY}
+
+make_apt(){
+	dpkg-scanpackages ${BINARY} /dev/null | gzip -9c > ${BINARY}/Packages.gz
+}
 
 clean_deb(){
-	rm -v ${SCRIPTS}/debian/*.deb
+	rm -v ${BINARY}/*.deb
 }
 
 build_libucimf_deb(){
@@ -19,10 +25,10 @@ build_libucimf_deb(){
 	ln -s  ${SCRIPTS}/debian/libucimf ${LIBUCIMF}/debian
 	cd ${LIBUCIMF}
 	dpkg-buildpackage -rfakeroot -b -d
-	cd .. && rm *.dsc *.changes *.tar.gz && cd -
 	rm ${LIBUCIMF}/debian
+	cd .. ; rm *.dsc *.changes *.tar.gz
 
-	mv *.deb ${SCRIPTS}/debian
+	mv *.deb ${BINARY}
 
 	cd ${SCRIPTS}
 }
@@ -32,10 +38,10 @@ build_ucimf-openvanilla_deb(){
 	ln -s  ${SCRIPTS}/debian/ucimf-openvanilla ${UCIMFOV}/debian
 	cd ${UCIMFOV}
 	dpkg-buildpackage -rfakeroot -b -d
-	cd .. && rm *.dsc *.changes *.tar.gz && cd -
 	rm ${UCIMFOV}/debian
+	cd .. ; rm *.dsc *.changes *.tar.gz 
 	
-	mv *.deb ${SCRIPTS}/debian
+	mv *.deb ${BINARY}
 
 	cd ${SCRIPTS}
 }
@@ -45,10 +51,10 @@ build_openvanilla-modules_deb(){
 	ln -s  ${SCRIPTS}/debian/openvanilla-modules ${OVMOD}/debian
 	cd ${OVMOD}
 	dpkg-buildpackage -rfakeroot -b -d
-	cd .. && rm *.dsc *.changes *.tar.gz && cd -
 	rm ${OVMOD}/debian
+	cd .. ; rm *.dsc *.changes *.tar.gz 
 
-	mv *.deb ${SCRIPTS}/debian
+	mv *.deb ${BINARY}
 
 	cd ${SCRIPTS}
 }
@@ -58,10 +64,22 @@ build_fbterm-ucimf_deb(){
 	ln -s  ${SCRIPTS}/debian/fbterm_ucimf ${FBTERMUCIMF}/debian
 	cd ${FBTERMUCIMF}
 	dpkg-buildpackage -rfakeroot -b -d
-	cd .. && rm *.dsc *.changes *.tar.gz && cd -
 	rm ${FBTERMUCIMF}/debian
+	cd .. ; rm *.dsc *.changes *.tar.gz 
 
-	mv *.deb ${SCRIPTS}/debian
+	mv *.deb ${BINARY}
+
+	cd ${SCRIPTS}
+}
+
+build_jfbterm_deb(){
+	cd ${CONSOLEJ}
+	test -d jfbterm-0.4.7 || ./init.sh
+	cd jfbterm-0.4.7
+	dpkg-buildpackage -rfakeroot -b -d
+	cd .. ; rm *.dsc *.changes *.tar.gz 
+
+	mv *.deb ${BINARY}
 
 	cd ${SCRIPTS}
 }
@@ -71,3 +89,5 @@ build_libucimf_deb
 build_ucimf-openvanilla_deb
 build_openvanilla-modules_deb
 build_fbterm-ucimf_deb
+build_jfbterm_deb
+make_apt

@@ -1,3 +1,9 @@
+libucimf (2.2.7) unstable; urgency=low
+
+  * Version pump
+
+ -- Mat <MatLinuxer2@gmail.com>  Tue, 24 Mar 2009 02:04:00 +0800
+
 libucimf (2.2.6) unstable; urgency=low
 
   * Update to latest ucimf 2.2.6
