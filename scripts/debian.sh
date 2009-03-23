@@ -3,6 +3,10 @@ source inc.sh
 
 OVMOD="${OV}/openvanilla-modules"
 
+clean_deb(){
+	rm -v ${SCRIPTS}/debian/*.deb
+}
+
 build_libucimf_deb(){
 	test -L ${LIBUCIMF}/debian && rm ${LIBUCIMF}/debian
 	ln -s  ${SCRIPTS}/debian/libucimf ${LIBUCIMF}/debian
@@ -55,6 +59,7 @@ build_fbterm-ucimf_deb(){
 	cd ${SCRIPTS}
 }
 
+clean_deb
 build_libucimf_deb
 build_ucimf-openvanilla_deb
 build_openvanilla-modules_deb
