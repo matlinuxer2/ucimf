@@ -19,6 +19,7 @@ DUMMY=${ROOT}/console/dummy/
 export LIBRARY_PATH=${BUILD}/lib/
 export LD_LIBRARY_PATH=${BUILD}/lib/
 export LD_RUN_PATH=${BUILD}/lib/
+export CPATH=${CPATH}:${BUILD}/include/
 export PATH=${PATH}:${BUILD}/bin/
 
 back_to_scripts(){
