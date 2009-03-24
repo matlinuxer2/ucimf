@@ -1,0 +1,13 @@
+diff -Naur jfbterm-0.4.7.orig/debian/changelog jfbterm-0.4.7/debian/changelog
+--- jfbterm-0.4.7.orig/debian/changelog	2009-03-24 02:29:42.000000000 +0800
++++ jfbterm-0.4.7/debian/changelog	2009-03-24 23:15:39.000000000 +0800
+@@ -1,3 +1,9 @@
++jfbterm (0.4.7-8) unstable; urgency=low
++
++  * Add UCIMF ( Unicode Console Input Method Framework )
++
++ -- Mat <ucimf@googlegroups.com>  Tue, 24 Mar 2009 23:15:00 +0800
++
+ jfbterm (0.4.7-7) unstable; urgency=low
+ 
+   * debian/rules: enable vga16fb for DEB_HOST_GNU_TYPE=i486-linux-gnu 
