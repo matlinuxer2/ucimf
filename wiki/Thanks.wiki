@@ -1,0 +1,46 @@
+Thanks all the people who ever help and contribe to UCIMF project. ( Descending with date )
+
+• oahong
+	• gentoo porting and package maintainance
+
+• Qi Wenmin
+	• fbterm testing
+	• arch tarball package maintainance
+
+• Drag Chan
+	• fbterm IM API design and implementation with excellent program structure
+	• excellent issue support
+
+• fourdollars
+	• autotool package refinement
+
+• andy
+	• arch porting
+
+• darksair
+	• arch porting
+
+• nico65
+	• jfbterm patch suggestion
+	• debian usage suggestion
+
+• Lukhnos D. Liu
+	• OpenVanilla IMF support
+	• IMF introduction
+
+• jserv
+	• suggest to use SVN and hosting svn.csie.net
+	• donate for UCIMF maintainance
+	• handle license issue for framework interface.
+
+• thhsieh
+	• suggest to use iconv for string encoding handling
+
+• Hideki Hiura
+	• suggest about libiiimcf
+
+• Jiro Sekiba
+	• fbiterm's source code discussions
+
+
+Please remind us, if anything is missing,  thank you sincerely.
