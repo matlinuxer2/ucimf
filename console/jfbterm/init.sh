@@ -47,6 +47,7 @@ src_unpack_debian(){
 
 	echo "Unpack debian source package"
 	apt-get source jfbterm
+	patch -d ${SRC_DIR} -p1 < patches/debian_changelog.patch
 }
 
 src_patch(){

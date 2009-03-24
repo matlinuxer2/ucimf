@@ -13,7 +13,9 @@ BINARY="${SCRIPTS}/debian/binary"
 test -d ${BINARY} || mkdir -p ${BINARY}
 
 make_apt(){
-	dpkg-scanpackages ${BINARY} /dev/null | gzip -9c > ${BINARY}/Packages.gz
+	cd ${BINARY}	
+	cd ..
+	dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz
 }
 
 clean_deb(){
