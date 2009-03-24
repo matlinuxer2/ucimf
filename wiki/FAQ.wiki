@@ -40,7 +40,7 @@ jfbterm 需要 patch 過，也可以換成其他 patch 過的 term
 請安裝 openvanilla-modules 的模組
 
 === 如何添加输入法模块 ===
-下载相应的 .cin  檔放到 $HOME/.openvanilla/ 的目錄即可
+下载相应的 .cin  檔放到 $HOME/.openvanilla/OVIMGeneric 的目錄即可，若沒有這個目錄，可以先以手動建立。
 
 === jfbterm 為什麼要打上 patch？如果不打會怎麼樣 ===
 原始的 jfbterm 並不認得 ucimf, 所以需要作一些 patch 讓 jfbterm 把輸入傳給 ucimf 處理
