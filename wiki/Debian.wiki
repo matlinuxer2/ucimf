@@ -16,7 +16,7 @@ deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
    jfbterm 0.4.7-8
    libucimf
    ucimf-openvanilla
-   openvanilla-module-imgeneric
+   openvanilla-modules
 
 
 === 使用 ===
