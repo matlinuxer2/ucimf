@@ -27,11 +27,12 @@
 #include "type.h"
 #include <iconv.h>
 #include "font.h"
+#include <stdint.h>
 
 ustring::ustring(const char* encoding, const char* data)
 {
 
-  unsigned long tmp[64];
+  uint32_t tmp[64];
   char* outbuf = (char*)tmp;
   char* inbuf = (char*)data; 
   size_t inbytesleft = sizeof(char) * strlen(data);
@@ -42,7 +43,7 @@ ustring::ustring(const char* encoding, const char* data)
   iconv_close( conv_codec );
   
   udata.clear();
-  int count = ( sizeof(tmp) - outbytesleft )/sizeof(unsigned long);
+  int count = ( sizeof(tmp) - outbytesleft )/sizeof(uint32_t);
   
   // The first byte of UTF-32 word( == tmp[0]) is byte-order header, so to ignore it!
   for( int i=1; i< count; i++)
@@ -60,7 +61,7 @@ ustring::ustring(const string& encoding, const string& data)
 
 string ustring::out(const char* encoding) const
 {
-  unsigned long tmp[64];
+  uint32_t tmp[64];
   for( int i=0; i< 64; i++ )
   {
     tmp[i]=udata[i];
