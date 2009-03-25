@@ -35,6 +35,9 @@ unsigned short keypad_keysym_redirect(unsigned short keysym);
 
 char *keysym_to_term_string(unsigned short keysym, char down);
 
+unsigned short is_chvt_keys( unsigned short keycode, char down);
+
+
 #ifdef __cplusplus
 }
 #endif
