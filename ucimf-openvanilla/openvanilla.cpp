@@ -530,7 +530,11 @@ bool OVImfCandidate::onScreen() {
  */
 
 void OVImfService::beep() { }
-void OVImfService::notify(const char *msg) { cerr << msg << endl;}
+
+void OVImfService::notify(const char *msg) {
+	UrDEBUG( "%s\n", msg );
+}
+
 const char *OVImfService::locale(){
   setlocale( LC_CTYPE, "" );
   string lc_ctype = setlocale( LC_CTYPE, NULL );
