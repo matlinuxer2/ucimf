@@ -381,6 +381,33 @@ void OVImf::switch_im()
   }
 }
 
+void OVImf::switch_im_reverse()
+{
+
+  current_module -= 1;
+  if( current_module < 0 ){
+    current_module = mod_vector.size()-1;
+  }
+  im = static_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  //OVInputMethod* im = dynamic_cast<OVInputMethod*>( mod_vector[ current_module ] );
+  if( cxt != 0 )
+  {
+    delete cxt; // clean old data
+  }
+
+  if( im !=0 )
+  {
+    im->initialize( dict, srv, OV_MODULEDIR );
+    cxt = im->newContext();
+    cxt->start( preedit, lookupchoice, srv );
+    
+    current_im_name = (char*) im->localizedName( srv->locale() );
+    refresh();
+    preedit->clear();
+    lookupchoice->clear();
+  }
+}
+
 void OVImf::switch_im_per_lang()
 {
   switch_im();
