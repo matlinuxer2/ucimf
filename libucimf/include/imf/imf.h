@@ -43,6 +43,7 @@ class Imf {
     virtual std::string process_input( const std::string& input ) = 0;
     virtual void switch_lang() = 0;
     virtual void switch_im() = 0;
+    virtual void switch_im_reverse() = 0;
     virtual void switch_im_per_lang() = 0;
 };
 

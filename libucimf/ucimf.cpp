@@ -219,15 +219,10 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       }
       else if( cwm->get_focus() && buf[3] == 49 ) // IM=ON && F10
       {
-	prdt->clear();
-	lkc->clear();
-	stts->clear();
-
-	imf = nextImf();
-	if( imf!=0 )
-	{
-	  imf->refresh();
-	}
+	if( cwm->get_focus() && imf !=0 )
+	  imf->switch_im_reverse();
+	else
+	  cwm->set_focus( true );
       }
       else
       {
@@ -396,15 +391,10 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F10
 	{
-		prdt->clear();
-		lkc->clear();
-		stts->clear();
-
-		imf = nextImf();
-		if( imf!=0 )
-		{
-			imf->refresh();
-		}
+		if( cwm->get_focus() && imf !=0 )
+		imf->switch_im_reverse();
+		else
+		cwm->set_focus( true );
 
 		bzero( buf, *p_ret);
 		(*p_ret)=0; 
