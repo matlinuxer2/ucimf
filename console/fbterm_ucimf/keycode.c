@@ -289,3 +289,16 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 	buf[index] = 0;
 	return buf;
 }
+
+unsigned short is_chvt_keys(unsigned short keycode, char down)
+{
+	if( shift_down[KG_ALT] >0 )
+	{
+		if( KEY_F1 <= keycode && keycode <= KEY_F10 )
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}

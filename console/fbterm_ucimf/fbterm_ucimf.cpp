@@ -77,6 +77,12 @@ static void process_raw_key(char *buf, int len)
 	    char *str = keysym_to_term_string(keysym, down);
 
 	    UrDEBUG( "getkey, down:%d, keysym:0x%x, term string:%s\n", down, keysym, str);
+
+	    if( is_chvt_keys( code,down ) && down )
+	    {
+		    UrDEBUG( " Change Virtual Terminal...!! \n");
+		    return;
+	    }
 	    //put_im_text(str, strlen(str));
     }
 
