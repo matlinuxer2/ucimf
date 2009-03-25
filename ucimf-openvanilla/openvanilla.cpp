@@ -320,6 +320,11 @@ string OVImf::process_input( const string& buf )
 	  result = "\x7f";
 	  return result;
   }
+  else if( preedit->isEmpty() && keyevent->code() == ovkReturn )
+  {
+	  result = "\x0d";
+	  return result;
+  }
   else if( preedit->isEmpty() && keyevent->code() == ovkRight )
   {
 	  result = "\x1b\x5b\x43";
