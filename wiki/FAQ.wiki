@@ -1,4 +1,7 @@
-﻿=== ucimf_keyboard 这个小程序是干什么的? ===
+﻿=== 我只用倉頡,簡易和行列輸入法. 怎樣disable其他輸入法? ===
+可以嘗試刪除  /usr/lib/openvanilla/OVIMGeneric/ 及 ~/.openvanilla/OVIMGeneric 目錄下的不用的 *.cin 輸入法表格。
+
+=== ucimf_keyboard 这个小程序是干什么的? ===
 
 ucimf_keyboard 是一個註冊鍵盤對映的程式，他的作用是建立:
 {{{
