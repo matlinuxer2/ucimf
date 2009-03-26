@@ -1,4 +1,7 @@
-﻿=== 我只用倉頡,簡易和行列輸入法. 怎樣disable其他輸入法? ===
+﻿=== jfbterm 和 FbTerm 有什麼不同? ===
+這兩個程式都是 Unicode Console Terminal，基本的功能大同小異。相對於 jfbterm 而言，FbTerm 的幾個好用的功能大概是，字型的彈性( 使用 fontconfig, 可以輕易設定使用 TTF 等字型 )，還有速度快。此外，FbTerm 的問題的修復和處理速度相當快(Thanks for drag )。兩者都相當穩定，可以作為日常的應用程式來使用。
+
+=== 我只用倉頡,簡易和行列輸入法. 怎樣disable其他輸入法? ===
 可以嘗試刪除  /usr/lib/openvanilla/OVIMGeneric/ 及 ~/.openvanilla/OVIMGeneric 目錄下的不用的 *.cin 輸入法表格。
 
 === ucimf_keyboard 这个小程序是干什么的? ===
