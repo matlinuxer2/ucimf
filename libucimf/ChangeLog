@@ -1,3 +1,11 @@
+2009-03-26  Mat <matlinuxer2@gmail.com>
+
+	* Adjust <F10> and <Ctrl+ShiftRight> to "switch im in reverse order"
+
+2009-03-25  Mat <matlinuxer2@gmail.com>
+
+	* Adopt patch for amd64
+
 2009-03-24  Mat <matlinuxer2@gmail.com>
 
 	* Fix ucimf_process_raw_misbehavier
