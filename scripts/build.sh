@@ -19,6 +19,9 @@ build_openvanilla
 build_fbterm-ucimf
 build_console_fbterm
 
+sudo chown root ${BUILD}/bin/fbterm
+sudo chmod u+s ${BUILD}/bin/fbterm
+
 #if [[ $myconsole == "j" ]]
 #then
 #  echo "Build jfbterm as console program"
