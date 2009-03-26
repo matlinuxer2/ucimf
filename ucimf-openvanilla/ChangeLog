@@ -1,5 +1,10 @@
 2009-02-26  Mat <MatLinuxer2@gmail.com>
 
+	* Revision to 2.10.5 
+	* Enable autocomposing 
+
+2009-02-26  Mat <MatLinuxer2@gmail.com>
+
 	* Revision to 2.10.3 ( 2.2.3 + 0.8.0 )
 	* Log message to file .ucimf-log
 
