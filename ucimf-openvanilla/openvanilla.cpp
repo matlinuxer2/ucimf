@@ -71,6 +71,8 @@ OVImf::OVImf()
   dict->setString( "matchOneChar","?" );
   dict->setString( "matchZeroOrMoreChar","*" );
   dict->setInteger( "maxKeySequenceLength", 32 );
+  dict->setInteger( "autoCompose", 1 );
+  
 
 
   stts = Status::getInstance();
