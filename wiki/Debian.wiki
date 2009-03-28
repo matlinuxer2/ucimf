@@ -13,7 +13,7 @@ deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
 
 === 安裝相關套件 ===
  請用 aptitude 安裝
-   jfbterm 0.4.7-8
+   jfbterm 
    libucimf
    ucimf-openvanilla
    openvanilla-modules
