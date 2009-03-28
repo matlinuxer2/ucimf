@@ -1,3 +1,7 @@
+2009-03-29  Mat <matlinuxer2@gmail.com>
+
+	* Remove deprecated IMF_MODULE_DIR option
+
 2009-03-26  Mat <matlinuxer2@gmail.com>
 
 	* Adjust <F10> and <Ctrl+ShiftRight> to "switch im in reverse order"
