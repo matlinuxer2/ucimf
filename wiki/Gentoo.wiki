@@ -1,4 +1,4 @@
-#labels Featured,Gentoo
+﻿#labels Featured,Gentoo
 = 如何在 *[http://www.gentoo.org Gentoo Linux]* 中安裝和使用 *UCIMF* =
 
 == 准備工作 ==
@@ -14,9 +14,7 @@
 layman -a gentoo-taiwan
 }}}
 
-*注*: UCIMF 目前未被收錄至官方軟件倉庫（portage樹）中, fbterm 可從gentoo-china overlay中獲取。
-
-=== 添加KEYWORDS === 
+=== 添加KEYWORDS ===
 在 /etc/portage/package.keywords 添加以下內容，讓 UCIMF 相關的軟體可以接受安裝
 
 {{{
@@ -29,6 +27,16 @@ app-i18n/openvanilla-modules **
 }}}
 
 == 安裝/使用 *UCIMF* 相關套件 ==
+
+=== 使用package set進行安裝 ===
+portage 2.2分支的用戶，可以直接使用Gentoo Taiwan Overlay中的set定義來安裝，執行如下
+命令，即可安裝包括fbterm和jbterm在內的所有ucimf運行所需套件：
+{{{
+	# 若此命令有輸出，可直接使用第二條命令進行安裝
+	emerge --list-sets | grep ucimf
+	# 安裝所有套件
+	emerge @ucimf
+}}}
 
 === 以 *[http://fbterm.googlecode.com fbterm]* 當 terminal ===
 
