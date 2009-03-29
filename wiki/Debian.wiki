@@ -12,12 +12,16 @@ deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
 }}}
 
 === 安裝相關套件 ===
- 請用 aptitude 安裝
+ 請用 aptitude 安裝 (jfbterm+ucimf)
    jfbterm 
    libucimf
    ucimf-openvanilla
    openvanilla-modules
-
+ 或 ( FbTerm+ucimf)
+  fbterm 
+  fbterm-ucimf
+  ucimf-openvanilla
+  openvanilla-modules
 
 === 使用 ===
 依序執行下列步驟即可
