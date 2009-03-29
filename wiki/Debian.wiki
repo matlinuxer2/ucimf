@@ -24,11 +24,19 @@ deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
   openvanilla-modules
 
 === 使用 ===
-依序執行下列步驟即可
+依序執行下列步驟即可 ( 使用 jfbterm )
   # 啟機核心參數 vga=788 (或是789,791,792...)
   # 用 root 在 tty 下執行 ucimf_keyboard
   # 執行 LC_CTYPE=zh_CN.UTF-8 jfbterm
 
 || F12 或 Ctrl-Space ||  切換輸入狀態 ||
 || F11 或 Ctrl-ShiftL || 切換輸入法 ||
-|| F10 或 Ctrl-ShiftR || 動態切換輸入法架構模組 ||
+|| F10 或 Ctrl-ShiftR || 切換回前一個輸入法 ||
+
+依序執行下列步驟即可 ( 使用 FbTerm )
+  # 啟機核心參數 vga=788 (或是789,791,792...)
+  # 執行 LC_CTYPE=zh_CN.UTF-8 fbterm -i fbterm_ucimf
+
+||  Ctrl-Space ||  切換輸入狀態 ||
+||  Ctrl-ShiftL || 切換輸入法 ||
+||  Ctrl-ShiftR || 切換前一個輸入法 ||
