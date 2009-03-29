@@ -1,4 +1,7 @@
-﻿=== jfbterm 和 FbTerm 有什麼不同? ===
+﻿=== 输入法出来的字是正确的，但是显示在命令行上面确是别的字， 好似乱码。在 X 下的 rxvt 下 打开他， 这些字都明没有错， 但是 在 console 下面确显示乱码===
+和字的顯示相關的可能，主要有 locale 的設定跟字型的對映。除了檢查 locale 跟 /etc/jfbterm.conf 是否正確設定為 UTF-8 外，還需再確認一下 /etc/jfbterm.conf 的 UTF-8 (iso10646) 的字型是否正確安裝。在 debian 上，預設的字型是 xfonts-unicode 。
+
+=== jfbterm 和 FbTerm 有什麼不同? ===
 這兩個程式都是 Unicode Console Terminal，基本的功能大同小異。相對於 jfbterm 而言，FbTerm 的幾個好用的功能大概是，字型的彈性( 使用 fontconfig, 可以輕易設定使用 TTF 等字型 )，還有速度快。此外，FbTerm 的問題的修復和處理速度相當快(Thanks for drag )。兩者都相當穩定，可以作為日常的應用程式來使用。
 
 === 我只用倉頡,簡易和行列輸入法. 怎樣disable其他輸入法? ===
