@@ -1,48 +1,60 @@
 #sidebar TOCArticles
 
-Thanks all the people who ever help and contribe to UCIMF project. ( Descending with date )
+Thanks all the people who ever help and contribe to UCIMF project. Without them, UCIMF cannot reach to  the achievements today as you see.
 
-• oahong
-	• gentoo porting and package maintainance
+_ ( Descending with date )_
 
-• Qi Wenmin
-	• fbterm testing
-	• arch tarball package maintainance
+* oahong *
+    * Several document refinement.
+    * gentoo porting and package maintainance
 
-• Drag Chan
-	• fbterm IM API design and implementation with excellent program structure
-	• excellent issue support
+* Qi Wenmin *
+	* fbterm testing
+	* arch tarball package maintainance
 
-• fourdollars
-	• autotool package refinement
+* Drag Chan *
+        * The great work of FbTerm ( http://code.google.com/p/fbterm/ )
+	* fbterm IM API design and implementation with excellent program structure
+	* excellent issue support
 
-• andy
-	• arch porting
+* fourdollars *
+	* autotool package refinement
 
-• darksair
-	• arch porting
+* andy *
+  * arch porting
+  * arch svn packages maintainance.
 
-• nico65
-	• jfbterm patch suggestion
-	• debian usage suggestion
+* darksair *
+	* arch porting
 
-• Lukhnos D. Liu
-	• OpenVanilla IMF support
-	• IMF introduction
+* nico65 *
+	* jfbterm patch suggestion
+	* debian usage suggestion
 
-• jserv
-	• suggest to use SVN and hosting svn.csie.net
-	• donate for UCIMF maintainance
-	• handle license issue for framework interface.
+* Lukhnos D. Liu *
+  * The great work of OpenVanilla project. ( http://openvanilla.org )
+  * OpenVanilla IMF support
+  * IMF introduction
 
-• thhsieh
-	• suggest to use iconv for string encoding handling
+* jserv *
+	* suggest to use SVN and hosting svn.csie.net
+	* donate to UCIMF maintainance
+	* handle license issue for framework interface.
 
-• Hideki Hiura
-	• suggest about libiiimcf
+* YoungChol *
+  * The great work of TII ( http://wiki.kldp.org/wiki.php/tii )
+  * Excellent reference for early iiimf part of UCIMF
 
-• Jiro Sekiba
-	• fbiterm's source code discussions
+* thhsieh *
+	* suggest to use iconv for string encoding handling
+
+* Hideki Hiura *
+    * The great work of IIIMF
+    * suggest about libiiimcf
+
+* Jiro Sekiba *
+    * The great work of fbiterm
+    * fbiterm's source code discussions
 
 
-Please remind us, if anything is missing,  thank you sincerely.
+_Please remind us, if anything is missing,  thank you sincerely._
