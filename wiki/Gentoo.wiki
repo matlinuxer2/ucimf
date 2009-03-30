@@ -1,4 +1,6 @@
 ﻿#labels Featured,Gentoo
+#sidebar TOCArticles
+
 = 如何在 *[http://www.gentoo.org Gentoo Linux]* 中安裝和使用 *UCIMF* =
 
 == 准備工作 ==
