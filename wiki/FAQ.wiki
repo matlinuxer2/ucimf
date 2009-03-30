@@ -1,4 +1,13 @@
-﻿=== 输入法出来的字是正确的，但是显示在命令行上面确是别的字， 好似乱码。在 X 下的 rxvt 下 打开他， 这些字都明没有错， 但是 在 console 下面确显示乱码===
+﻿===普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来===
+对了，我这里普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来。。。后来我
+{{{ 
+chmod u+s /usr/bin/fbterm 
+}}}
+后就可以了。。。 
+
+( Thanks to Y.L Zhou's answer !)
+
+=== 输入法出来的字是正确的，但是显示在命令行上面确是别的字， 好似乱码。在 X 下的 rxvt 下 打开他， 这些字都明没有错， 但是 在 console 下面确显示乱码===
 和字的顯示相關的可能，主要有 locale 的設定跟字型的對映。除了檢查 locale 跟 /etc/jfbterm.conf 是否正確設定為 UTF-8 外，還需再確認一下 /etc/jfbterm.conf 的 UTF-8 (iso10646) 的字型是否正確安裝。在 debian 上，預設的字型是 xfonts-unicode 。
 
 === jfbterm 和 FbTerm 有什麼不同? ===
