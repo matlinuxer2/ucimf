@@ -1,4 +1,6 @@
-﻿===普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来===
+﻿#sidebar TOCArticles
+
+===普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来===
 对了，我这里普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来。。。后来我
 {{{ 
 chmod u+s /usr/bin/fbterm 
