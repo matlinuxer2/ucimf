@@ -1,9 +1,7 @@
-  * [Welcome ↑ Home]
   * [Thanks]
+  * [UserManual]
+  * [DeveloperManual]
   * [Distribution Installations]
     * [Arch]
     * [Debian]
     * [Gentoo]
-  * [UserManual]
-  * [DeveloperManual]
-
