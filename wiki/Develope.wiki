@@ -1,3 +1,5 @@
+#sidebar TOCArticles
+
 0.  取得 UCIMF 原始碼
 
  
@@ -6,5 +8,3 @@
 
 
   進到 UCIMF/build/ 下依 README 的步驟進行。
-
-
