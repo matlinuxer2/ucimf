@@ -1,3 +1,5 @@
+#sidebar TOCArticles
+
 = 在 Arch 下安裝 UCIMF 套件 =
 
 0. 請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
