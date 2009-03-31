@@ -1,5 +1,4 @@
-﻿#labels Featured,Gentoo
-#sidebar TOCArticles
+﻿#sidebar TOCArticles
 
 = 如何在 *[http://www.gentoo.org Gentoo Linux]* 中安裝和使用 *UCIMF* =
 
@@ -53,12 +52,6 @@ emerge fbterm fbterm-ucimf ucimf-openvanilla
  * 啟機核心參數 vga=788 (或是789,791,792...)
  * 執行 LC_CTYPE=zh_CN.UTF-8 fbterm -i fbterm_ucimf
 
-==== 熱鍵設置 =====
-|| Ctrl-Space  || 切換輸入狀態 ||
-|| Ctrl-ShiftL || 切換輸入法 ||
-|| Ctrl-ShiftR || 切換回前一個輸入法 ||
-
-
 ===  以 *jfbterm*  當 terminal ===
 {{{
 emerge jfbterm ucimf-openvanilla
@@ -67,8 +60,3 @@ emerge jfbterm ucimf-openvanilla
 ==== 注意事項 ====
  * 啟機核心參數 vga=788 (或是789,791,792...)
  * 執行 LC_CTYPE=zh_CN.UTF-8 jfbterm
-
-==== 熱鍵設置 =====
-|| F12 或 Ctrl-Space || 切換輸入狀態 ||
-|| F11 或 Ctrl-ShiftL || 切換輸入法 ||
-|| F10 或 Ctrl-ShiftR || 切換回前一個輸入法 ||
