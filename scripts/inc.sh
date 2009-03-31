@@ -108,7 +108,7 @@ build_openvanilla(){
 build_console_fbterm(){
 	echo "Start to build fbterm"
 	cd ${CONSOLE}
-	FBTERM_FILE=$( ls -t fbterm*.tar.gz|grep -v 'ucimf'| head --lines=1 )
+	FBTERM_FILE="fbterm-1.4.tar.gz"
 	test -f "$FBTERM_FILE" || wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
 	test -d fbterm-1.4 || ./init.sh
 	cd fbterm-1.4/
