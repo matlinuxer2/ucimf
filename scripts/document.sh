@@ -19,6 +19,10 @@ mkdir -p ${DOCUMENT}
 
 WIKIDIR=${ROOT}/wiki
 
+WIKIHTMLDIR=${DOCUMENT}/html
+test -d ${WIKIHTMLDIR} && rm -rvf ${WIKIHTMLDIR}
+mkdir -p ${WIKIHTMLDIR}
+
 # An auto script for document gathering and build.
 
 
@@ -72,11 +76,24 @@ gather_ChangeLog(){
 #
 #}
 
+gather_GoogleCodeHomepage(){
+
+
+	cd ${WIKIHTMLDIR}
+
+	PAGE_URL="http://code.google.com/p/ucimf/"
+
+	wget -O this.html $PAGE_URL
+
+	tidy -q -asxhtml -numeric -utf8 < this.html > this.xml
+	${SCRIPTS}/gchome.py this.xml > ${WIKIHTMLDIR}/main.html
+	rm this.html this.xml
+
+	cd -
+}
+
 gather_GoogleCodeWikiHtml(){
 
-	WIKIHTMLDIR=${DOCUMENT}/wiki.html
-	test -d ${WIKIHTMLDIR} && rm -rvf ${WIKIHTMLDIR}
-	mkdir -p ${WIKIHTMLDIR}
 
 	cd ${WIKIHTMLDIR}
 	for PAGE in "TOCArticles"
@@ -94,28 +111,28 @@ gather_GoogleCodeWikiHtml(){
 }
 
 gather_GoogleCodeWikiTxt(){
-	WIKITXTDIR=${DOCUMENT}/wiki.txt
+	WIKITXTDIR=${DOCUMENT}/txt
 	test -d ${WIKITXTDIR} && rm -rvf ${WIKITXTDIR}
 	mkdir -p ${WIKITXTDIR}
 
 	cd ${WIKITXTDIR}
-	#for PAGE in "Gentoo" "Debian" "Arch" "FAQ"
-	for PAGE in `ls ${WIKIDIR}/*.wiki`
+	for PAGE in `ls ${WIKIDIR} |grep -e '.*\.wiki'`
 	do
 		echo $PAGE
-		cp ${WIKIDIR}/$PAGE.wiki -v ${DOCUMENT}/$PAGE.txt
+		cp ${WIKIDIR}/$PAGE -v ${WIKITXTDIR}/${PAGE%.wiki}.txt
 	done 
 }
 
 gather_Index(){
 	cd ${SCRIPTS}
-	cp -av document/{index.html,list.html,main.html} ${DOC}
+	cp -av document/{index.html,list.html} ${DOC}
 	cd -
 }
 
 gather_README
 gather_INSTALL
 gather_ChangeLog
+gather_GoogleCodeHomepage
 gather_GoogleCodeWikiHtml
 gather_GoogleCodeWikiTxt
 gather_Index
