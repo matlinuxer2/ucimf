@@ -1,0 +1,60 @@
+#sidebar TOCArticles
+
+Thanks all the people who ever help and contribe to UCIMF project. Without them, UCIMF cannot reach to  the achievements today as you see.
+
+_ ( Descending with date )_
+
+* oahong *
+    * Several document refinement.
+    * gentoo porting and package maintainance
+
+* Qi Wenmin *
+	* fbterm testing
+	* arch tarball package maintainance
+
+* Drag Chan *
+        * The great work of FbTerm ( http://code.google.com/p/fbterm/ )
+	* fbterm IM API design and implementation with excellent program structure
+	* excellent issue support
+
+* fourdollars *
+	* autotool package refinement
+
+* andy *
+  * arch porting
+  * arch svn packages maintainance.
+
+* darksair *
+	* arch porting
+
+* nico65 *
+	* jfbterm patch suggestion
+	* debian usage suggestion
+
+* Lukhnos D. Liu *
+  * The great work of OpenVanilla project. ( http://openvanilla.org )
+  * OpenVanilla IMF support
+  * IMF introduction
+
+* jserv *
+	* suggest to use SVN and hosting svn.csie.net
+	* donate to UCIMF maintainance
+	* handle license issue for framework interface.
+
+* YoungChol *
+  * The great work of TII ( http://wiki.kldp.org/wiki.php/tii )
+  * Excellent reference for early iiimf part of UCIMF
+
+* thhsieh *
+	* suggest to use iconv for string encoding handling
+
+* Hideki Hiura *
+    * The great work of IIIMF
+    * suggest about libiiimcf
+
+* Jiro Sekiba *
+    * The great work of fbiterm
+    * fbiterm's source code discussions
+
+
+_Please remind us, if anything is missing,  thank you sincerely._

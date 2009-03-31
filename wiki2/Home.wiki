@@ -1,0 +1,21 @@
+﻿= Home =
+Created Thursday 19 March 2009
+
+= 簡介 =
+ 首先，感謝你使用 UCIMF 這個程式。這個程式的功用，是在 Linux unicode console terminal 下提供輸入法的支援。目前支援的 console terminal 有 [http://code.google.com/p/fbterm/ FbTerm]{{{[1]}}} 及 [http://jfbterm.sourceforge.jp/ jfbterm]{{{[2]}}} ，而輸入法服務則主要來自於 [http://www.openvanilla.org/ OpenVanilla]{{{[3]}}} 專案。提供 over the spot 的輸入視窗，支援來自 [http://www.freetype.org/ FreeType]{{{[4]}}} 的 TrueType, PCF 字型顯示，還有來自於 OXIM 的簡繁日韓越泰的輸入法[http://opensource.nchc.org.tw/odp/OXIM/cin_tables/cin.list 表格資料]{{{[5]}}}。
+
+= 回報與建議 =
+ UCIMF 如你所見，並不是一個完美的程式，還有許多地方需要改進。目前 UCIMF 設有[http://groups.google.com/group/ucimf 討論區]{{{[8]}}}跟問題的[http://code.google.com/p/ucimf/issues/list 回報列表]{{{[9]}}}，若你在 UCIMF 有相關的問題，隨時歡迎你來提問與建議。能力所及，我們會盡力改善 UCIMF ，以期在不久的將來，能提供一個完整好用的使用環境。
+
+= 參考連結 =
+{{{
+ [1]. http://code.google.com/p/fbterm/
+ [2]. http://jfbterm.sourceforge.jp/
+ [3]. http://www.openvanilla.org/
+ [4]. http://www.freetype.org/
+ [5]. http://opensource.nchc.org.tw/odp/OXIM/cin_tables/cin.list
+ [6]. http://code.google.com/p/ucimf/downloads/list?q=label:Featured
+ [7]. http://code.google.com/p/fbterm/downloads/list?q=label:Featured
+ [8]. http://groups.google.com/group/ucimf
+ [9]. http://code.google.com/p/ucimf/issues/list
+}}}

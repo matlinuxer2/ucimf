@@ -1,0 +1,37 @@
+﻿#sidebar TOCArticles
+=安裝=
+==安裝 UCIMF 軟體套件==
+ 請至 UCIMF 的[http://code.google.com/p/ucimf/downloads/list?q=label:Featured 軟體下載區]{{{[6]}}}，取得最新的軟體套件。
+  * libucimf
+  * ucimf-openvanilla
+  * openvanilla-modules
+
+ 這三個檔案都是依標準的 Tarball 方式來包裝，下載後請依序解壓縮並安裝之。
+
+{{{
+tar -zxvf  foo.tar.gz
+cd foo
+./configure
+make
+make install
+}}}
+
+== 安裝 console terminal 的軟體套件 ==
+ Console terminal 可以選擇裝 FbTerm 或是 jfbterm 其中之一。
+
+=== 安裝 FbTerm ===
+ 請至 FbTerm 的[http://code.google.com/p/fbterm/downloads/list?q=label:Featured 軟體下載區]{{{[7]}}}，下載最新版的程式並安裝之。
+ 請至 UCIMF 的[http://code.google.com/p/ucimf/downloads/list?q=label:Featured 軟體下載區]{{{[6]}}}，下載最新版的 fbterm_ucimf 軟體套件。
+ fbterm_ucimf 為一個架接 fbterm 及 ucimf 的程式。依 Tarball 的方式來包裝，下載後請解壓縮並安裝之。
+
+{{{
+tar -zxvf  bar.tar.gz
+cd bar
+./configure
+make
+make install
+}}}
+
+===安裝 jfbterm===
+ jfbterm 需要安裝有經過 ucimf patch 的版本，請至 UCIMF 的[http://code.google.com/p/ucimf/downloads/list?q=label:Featured 軟體下載區]{{{[6]}}}，下載最新版的 jfbterm 軟體套件。
+(TODO: 補上一篇標準的 unix tarball 的安裝簡介 )
