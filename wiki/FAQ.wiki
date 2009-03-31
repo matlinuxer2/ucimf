@@ -7,7 +7,22 @@ chmod u+s /usr/bin/fbterm
 }}}
 后就可以了。。。 
 
-( Thanks to Y.L Zhou's answer !)
+*( Thanks to Y.L Zhou's answer !)*
+
+
+>> 用 普通用户 test 安装 fbterm 时，其自动设置有 suid，有：
+{{{
+ $ ll ${HOME}/local/bin/fbterm
+ -rwsr-xr-x 1 test test 76248 03-30 23:57 /home/test/local/bin/fbterm
+}}}
+
+>> 修改 fbterm 为 root 所有 并且 设置 suid，之后 root 和 普通用户 test 可以激活输入法。
+{{{ 
+  chown 0.0 ${HOME}/local/bin/fbterm
+   chmod u+s ${HOME}/local/bin/fbterm
+}}}
+*( Thanks to Eric Zhao's answer! )*
+
 
 === 输入法出来的字是正确的，但是显示在命令行上面确是别的字， 好似乱码。在 X 下的 rxvt 下 打开他， 这些字都明没有错， 但是 在 console 下面确显示乱码===
 和字的顯示相關的可能，主要有 locale 的設定跟字型的對映。除了檢查 locale 跟 /etc/jfbterm.conf 是否正確設定為 UTF-8 外，還需再確認一下 /etc/jfbterm.conf 的 UTF-8 (iso10646) 的字型是否正確安裝。在 debian 上，預設的字型是 xfonts-unicode 。
