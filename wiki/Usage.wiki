@@ -1,0 +1,48 @@
+=使用方式=
+==啟動方式==
+ 以命令列來啟動
+ 若使用 jfbterm 的話，請以
+
+{{{
+LC_ALL=zh_TW.UTF-8 jfbterm
+}}}                       
+
+ 來啟動 console terminal 即可。
+
+ 若使用 FbTerm 的話，請以
+
+{{{
+LC_ALL=zh_TW.UTF-8 fbterm -i fbterm_ucimf
+}}}
+
+ 來啟動 console terminal 即可。
+
+ 以 ucimf_start 來啟動
+ ucimf_start 為一個用 dialog 所作的 UI 輔助程式。用來協助你設定 UCIMF 相關的設定並啟動 console terminal 程式。
+(TODO: 放上 screenshot )
+
+http://ucimf.googlecode.com/svn/pics/ucimf_start.png
+
+== 功能鍵 ==
+ 若使用 FbTerm 的話，輸入法相關的功能鍵是
+
+{{{
+Ctrl+Space, 開啟/關閉輸入法
+Ctrl+ShiftLeft, 切換到下一個輸入法
+}}}
+
+ 若使用 jfbterm 的話，輸入法相關的功能鍵是
+
+{{{
+F12, 開啟/關閉輸入法
+F11, 切換到下一個輸入法模組
+}}}
+
+ 若你希望可以在 jfbterm 下用 Ctrl+Space, Ctrl+ShiftLeft 作為熱鍵的話，請在 jfbterm 執行之前，用 root 的權限來執行 ucimf_keyboard 這個程式。ucimf_keyboard 是 libucimf 所附的一個小工具，可以建立鍵盤的對映如下:
+
+{{{
+Ctrl+Space -->  F12
+Ctrl+ShiftLeft --> F11
+}}}
+
+(TODO: 改用 loadkey 的工具來設定 )
