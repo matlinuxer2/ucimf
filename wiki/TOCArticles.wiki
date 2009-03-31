@@ -1,7 +1,0 @@
-  * [Thanks]
-  * [UserManual]
-  * [DeveloperManual]
-  * [Distribution Installations]
-    * [Arch]
-    * [Debian]
-    * [Gentoo]
