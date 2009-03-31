@@ -1,0 +1,107 @@
+﻿#sidebar TOCArticles
+
+===普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来===
+对了，我这里普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来。。。后来我
+{{{ 
+chmod u+s /usr/bin/fbterm 
+}}}
+后就可以了。。。 
+
+*( Thanks to Y.L Zhou's answer !)*
+
+
+>> 用 普通用户 test 安装 fbterm 时，其自动设置有 suid，有：
+{{{
+ $ ll ${HOME}/local/bin/fbterm
+ -rwsr-xr-x 1 test test 76248 03-30 23:57 /home/test/local/bin/fbterm
+}}}
+
+>> 修改 fbterm 为 root 所有 并且 设置 suid，之后 root 和 普通用户 test 可以激活输入法。
+{{{ 
+  chown 0.0 ${HOME}/local/bin/fbterm
+   chmod u+s ${HOME}/local/bin/fbterm
+}}}
+*( Thanks to Eric Zhao's answer! )*
+
+
+=== 输入法出来的字是正确的，但是显示在命令行上面确是别的字， 好似乱码。在 X 下的 rxvt 下 打开他， 这些字都明没有错， 但是 在 console 下面确显示乱码===
+和字的顯示相關的可能，主要有 locale 的設定跟字型的對映。除了檢查 locale 跟 /etc/jfbterm.conf 是否正確設定為 UTF-8 外，還需再確認一下 /etc/jfbterm.conf 的 UTF-8 (iso10646) 的字型是否正確安裝。在 debian 上，預設的字型是 xfonts-unicode 。
+
+=== jfbterm 和 FbTerm 有什麼不同? ===
+這兩個程式都是 Unicode Console Terminal，基本的功能大同小異。相對於 jfbterm 而言，FbTerm 的幾個好用的功能大概是，字型的彈性( 使用 fontconfig, 可以輕易設定使用 TTF 等字型 )，還有速度快。此外，FbTerm 的問題的修復和處理速度相當快(Thanks for drag )。兩者都相當穩定，可以作為日常的應用程式來使用。
+
+=== 我只用倉頡,簡易和行列輸入法. 怎樣disable其他輸入法? ===
+可以嘗試刪除  /usr/lib/openvanilla/OVIMGeneric/ 及 ~/.openvanilla/OVIMGeneric 目錄下的不用的 *.cin 輸入法表格。
+
+=== ucimf_keyboard 这个小程序是干什么的? ===
+
+ucimf_keyboard 是一個註冊鍵盤對映的程式，他的作用是建立:
+{{{
+  Ctrl-Space --> F12
+  Ctrl-LeftShift   --> F11
+  Ctrl-RightShift   --> F10
+}}}
+的鍵盤對映。
+目前僅 jfbterm 和 fbterm1.2 with ucimf patches 支援 F10,F11,F12 的熱鍵。FbTerm
+1.3 版之後，已經採 keycode 的方式來讀取特殊鍵。而 libucimf 在  2.2.1 之後的版本，也加入了 keycode
+的支援。希望將來可以完整取代 ucimf_keyboard 的功能。
+
+=== 找不到 /dev/fb0 ===
+需要啟動 framebuffer 模式, 請在 boot 時設定 kernel 參數
+
+=== cannot access /dev/fb0 ===
+請確認一下 /dev/fb0 的讀寫權限喔,通常需要将用户添加至 *video* 组
+
+=== 只裝輸入法，不裝 jfbterm 的話，應該裝那幾個？ ===
+{{{
+• ucimf
+• ucimf-openvanilla
+• openvanilla-modules
+}}}
+=== openvanilla 是一個外掛的輸入法框架吧？ ===
+yes
+
+=== ucimf-dummy 幹什麼用的？ ===
+ucimf-dummy 是外掛輸入法框架的 example plugin, 用來確定程式運作
+也可以當成 imf plugin 的 example code
+
+程式運作的原理大約是
+{{{
+jfbterm <-> ucimf <-> ucimf-openvanilla <-> openvanilla-modules
+}}}
+jfbterm 需要 patch 過，也可以換成其他 patch 過的 term
+
+=== 是否有五筆輸入法，如果没有，我怎麼才能加上？ ===
+請安裝 openvanilla-modules 的模組
+
+=== 如何添加输入法模块 ===
+下载相应的 .cin  檔放到 $HOME/.openvanilla/OVIMGeneric 的目錄即可，若沒有這個目錄，可以先以手動建立。
+
+=== jfbterm 為什麼要打上 patch？如果不打會怎麼樣 ===
+原始的 jfbterm 並不認得 ucimf, 所以需要作一些 patch 讓 jfbterm 把輸入傳給 ucimf 處理
+如果不打的話，就跟原來的 jfbterm 的功能一樣，但沒辦法輸入。
+
+=== 讓 ucimf 在其它 fbterm 下運行試試看可不可以? ===
+可以的，只要將你想要用的 framebuffer term 作適當的 patch 即可
+( 目前已經實作了 fbterm-ucimf 的程式，在 fbterm 1.3 版之後，正式支援 fbterm 的輸入功能 )
+
+=== 我是 debian stable 能不能用呢？ ===
+debian stable 已經納入考量，也已經可以用嘍!
+
+=== 我刚才又试了一下。现在的错误为terminate called after throwing an instance of 'std::runtime_error' what():  Could not open config file! ===
+檢查一下看有沒有連結到舊的函式庫
+
+===fonts/unifont.pcf taken from GNU Unifont?===
+yes, unifont is token from GNU Unifont
+
+
+=== ucimf 可以 disable FreeType 嗎? ===
+不行，目前是 depend on freetype 來作 font render
+印象中 FT rendering 有 error 要 catch
+
+=== openvanilla.h:24:37: error: OpenVanilla/OpenVanilla.h: No such file or directory ===
+openvanilla-framework 這個
+
+=== UCIMF才是正式名稱? 與jfbterm怎作區別? ===
+jfbterm 負責顯示 unicode 的 console,
+而 UCIMF 則是以外掛函式庫的角色幫 jfbterm 增加輸入法的支援。

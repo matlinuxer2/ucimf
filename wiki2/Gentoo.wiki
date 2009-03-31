@@ -1,0 +1,74 @@
+﻿#labels Featured,Gentoo
+#sidebar TOCArticles
+
+= 如何在 *[http://www.gentoo.org Gentoo Linux]* 中安裝和使用 *UCIMF* =
+
+== 准備工作 ==
+
+=== 請先將之前舊的檔案清除 ===
+
+此步驟可選( optional )，若以前手動編譯安裝軟體，請事先清除, 避免連結到舊的檔案。
+造成不必要的BUG
+
+=== 將 *gentoo-taiwan* 加入你的軟體列表 ===
+
+{{{
+layman -a gentoo-taiwan
+}}}
+
+=== 添加KEYWORDS ===
+在 /etc/portage/package.keywords 添加以下內容，讓 UCIMF 相關的軟體可以接受安裝
+
+{{{
+app-i18n/jfbterm ~*
+app-i18n/fbterm ~*
+app-i18n/fbterm-ucimf ~*
+app-i18n/libucimf **
+app-i18n/ucimf-openvanilla **
+app-i18n/openvanilla-modules **
+}}}
+
+== 安裝/使用 *UCIMF* 相關套件 ==
+
+=== 使用package set進行安裝 ===
+portage 2.2分支的用戶，可以直接使用Gentoo Taiwan Overlay中的set定義來安裝，執行如下
+命令，即可安裝包括fbterm和jbterm在內的所有ucimf運行所需套件：
+{{{
+	# 若此命令有輸出，可直接使用第二條命令進行安裝
+	emerge --list-sets | grep ucimf
+	# 安裝所有套件
+	emerge @ucimf
+}}}
+
+=== 以 *[http://fbterm.googlecode.com fbterm]* 當 terminal ===
+
+==== 安裝 ====
+{{{
+emerge fbterm fbterm-ucimf ucimf-openvanilla
+}}}
+
+==== 注意事項 ====
+
+ * 確保用戶隸屬于 *video* 用戶組
+ * 啟機核心參數 vga=788 (或是789,791,792...)
+ * 執行 LC_CTYPE=zh_CN.UTF-8 fbterm -i fbterm_ucimf
+
+==== 熱鍵設置 =====
+|| Ctrl-Space  || 切換輸入狀態 ||
+|| Ctrl-ShiftL || 切換輸入法 ||
+|| Ctrl-ShiftR || 切換回前一個輸入法 ||
+
+
+===  以 *jfbterm*  當 terminal ===
+{{{
+emerge jfbterm ucimf-openvanilla
+}}}
+
+==== 注意事項 ====
+ * 啟機核心參數 vga=788 (或是789,791,792...)
+ * 執行 LC_CTYPE=zh_CN.UTF-8 jfbterm
+
+==== 熱鍵設置 =====
+|| F12 或 Ctrl-Space || 切換輸入狀態 ||
+|| F11 或 Ctrl-ShiftL || 切換輸入法 ||
+|| F10 或 Ctrl-ShiftR || 切換回前一個輸入法 ||
