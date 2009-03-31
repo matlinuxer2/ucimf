@@ -26,23 +26,22 @@ http://ucimf.googlecode.com/svn/pics/ucimf_start.png
 == 功能鍵 ==
  若使用 FbTerm 的話，輸入法相關的功能鍵是
 
-{{{
-Ctrl+Space, 開啟/關閉輸入法
-Ctrl+ShiftLeft, 切換到下一個輸入法
-}}}
+|| Ctrl-Space  || 開啟/關閉輸入法 ||
+|| Ctrl-ShiftL || 切換到下一個輸入法 ||
+|| Ctrl-ShiftR || 切換回前一個輸入法 ||
+
 
  若使用 jfbterm 的話，輸入法相關的功能鍵是
 
-{{{
-F12, 開啟/關閉輸入法
-F11, 切換到下一個輸入法模組
-}}}
+|| F12 或 Ctrl-Space || 開啟/關閉輸入法 ||
+|| F11 或 Ctrl-ShiftL || 切換到下一個輸入法模組 ||
+|| F10 或 Ctrl-ShiftR || 切換回前一個輸入法 ||
+
 
  若你希望可以在 jfbterm 下用 Ctrl+Space, Ctrl+ShiftLeft 作為熱鍵的話，請在 jfbterm 執行之前，用 root 的權限來執行 ucimf_keyboard 這個程式。ucimf_keyboard 是 libucimf 所附的一個小工具，可以建立鍵盤的對映如下:
 
-{{{
-Ctrl+Space -->  F12
-Ctrl+ShiftLeft --> F11
-}}}
+|| Ctrl+Space || --> || F12 ||
+|| Ctrl+ShiftLeft || --> || F11 ||
+
 
 (TODO: 改用 loadkey 的工具來設定 )
