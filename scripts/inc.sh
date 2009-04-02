@@ -57,13 +57,13 @@ check_libucimf(){
 	&& ls -l ${FILE} \
 	&& cat ${FILE} |grep UCIMF_FONTPATH \
 	&& cat ${FILE} |grep IMF_MODULE_DIR
-	
+
 	back_to_scripts
 }
 
 setup_libucimf(){
 	FILE=${BUILD}/etc/ucimf.conf
-	#cat ${FILE} | sed 's/.*UCIMF_FONTPATH.*=.*//g' | sed 's/.*IMF_MODULE_DIR.*=.*//g' 
+	#cat ${FILE} | sed 's/.*UCIMF_FONTPATH.*=.*//g' | sed 's/.*IMF_MODULE_DIR.*=.*//g'
 	sed -i 's/^.*UCIMF_FONTPATH.*$//g' ${FILE}
 	sed -i 's/^.*IMF_MODULE_DIR.*$//g' ${FILE}
 	sed -i "1a UCIMF_FONTPATH = ${BUILD}/share/ucimf/unifont.pcf" ${FILE}
@@ -109,12 +109,15 @@ build_console_fbterm(){
 	echo "Start to build fbterm"
 	cd ${CONSOLE}
 	FBTERM_FILE="fbterm-1.4.tar.gz"
-	test -f "$FBTERM_FILE" || wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
-	test -d fbterm-1.4 || ./init.sh
+	if [ ! -f "$FBTERM_FILE" ]; then
+		wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
+	fi
+	tar xzf ${FBTERM_FILE}
 	cd fbterm-1.4/
-	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	#    LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
+	./configure --prefix=${BUILD}
 	make
-	make install
+	fakeroot make install
 
 	back_to_scripts
 }
@@ -135,7 +138,7 @@ build_console_jfbterm(){
 	./init.sh
 	cd jfbterm-0.4.7/
 	test -f Makefile && make distclean
-	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make
 	make install
 
@@ -159,7 +162,7 @@ make_tarball_of_libucimf(){
 	echo "Start to make tarball of libucimf..."
 	cd ${LIBUCIMF}
 	./autogen.sh
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make distcheck && ls -t libucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
 	back_to_scripts
@@ -191,7 +194,7 @@ make_tarball_of_jfbterm(){
 	cd ${CONSOLEJ}
 	./init.sh
 	cd jfbterm-0.4.7/
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	fakeroot make distcheck && ls -t jfbterm*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
 	back_to_scripts
@@ -199,7 +202,7 @@ make_tarball_of_jfbterm(){
 
 make_tarball_of_fbterm(){
 	cd ${TARBALL}
-	
+
 	FBTERM_FILE=$( ls -t fbterm*.tar.gz|grep -v 'ucimf'| head --lines=1 )
 	test -f "$FBTERM_FILE" || wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
 
@@ -210,7 +213,7 @@ make_tarball_of_fbterm-ucimf(){
 	echo "Start to make tarball of fbterm-ucimf..."
 	cd ${FBTERMUCIMF}
 	./autogen.sh
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} 
+	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
 	back_to_scripts
