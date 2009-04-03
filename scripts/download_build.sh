@@ -1,91 +1,107 @@
-#!/bin/bash
-# 
-# Thanks to the Eric Zhao's script
-#
-#-----------------install--------------------
-export LD_LIBRARY_PATH=${HOME}/local/lib
-export PKG_CONFIG_PATH=${LD_LIBRARY_PATH}/pkgconfig
+#!/bin/sh
 
-cd
+FBTERM_HOME="http://fbterm.googlecode.com/"
+FBTERM="fbterm-1.4"
 
-wget -c http://ucimf.googlecode.com/files/UserManual.pdf
-wget -c http://ucimf.googlecode.com/files/UserManual.txt
+UCIMF_HOME="http://ucimf.googlecode.com/"
+LIBUCIMF="libucimf-2.2.8"
+UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.5"
+OPENVANILLA_MODULES="openvanilla-modules-0.8.0_9"
+FBTERM_UCIMF="fbterm_ucimf-0.2.4"
+USERMANUAL="UserManual.pdf"
 
-wget -c http://ucimf.googlecode.com/files/libucimf-2.2.8.tar.gz
-tar -xvf libucimf-2.2.8.tar.gz
-cd libucimf-2.2.8/
-./configure --prefix=${HOME}/local
-make
-make install
-cd
-rm -rf libucimf-2.2.8/
+#DIALOG_HOME="http://www.hightek.org/dialog/"
+#DIALOG="dialog-0.7"
+DIALOG_HOME="ftp://ftp.invisible-island.net/dialog/"
+DIALOG="dialog-1.1-20080819"
 
-sed -i "s@/usr@${HOME}/local@g" ${HOME}/local/etc/ucimf.conf
+SOURCE_DIR=${HOME}/source
+BUILD_DIR=${HOME}/build
+PREFIX_DIR=/opt/fbterminal
 
+mkdir -pv ${SOURCE_DIR} ${BUILD_DIR}
 
-wget -c http://ucimf.googlecode.com/files/ucimf-openvanilla-2.10.5.tar.gz
-tar -xvf ucimf-openvanilla-2.10.5.tar.gz
-cd ucimf-openvanilla-2.10.5/
-./configure --prefix=${HOME}/local
-make
-make install
-cd
-rm -rf ucimf-openvanilla-2.10.5/
+if [ "${PREFIX_DIR}" != "/usr" ]; then
+	export LD_LIBRARY_PATH=${PREFIX_DIR}/lib
+	export PKG_CONFIG_PATH=${LD_LIBRARY_PATH}/pkgconfig
+fi
 
 
-wget -c http://ucimf.googlecode.com/files/openvanilla-modules-0.8.0_9.tar.gz
-tar -xvf openvanilla-modules-0.8.0_9.tar.gz
-cd openvanilla-modules-0.8.0_9/
-./configure --prefix=${HOME}/local --with-zh_CN
-make
-make install
-cd
-rm -rf openvanilla-modules-0.8.0_9/
+get_source ()
+{
+	cd ${SOURCE_DIR} &&
+
+	wget -c ${FBTERM_HOME}/files/${FBTERM}.tar.gz &&
+
+	wget -c ${UCIMF_HOME}files/${LIBUCIMF}.tar.gz &&
+	wget -c ${UCIMF_HOME}files/${UCIMF_OPENVANILLA}.tar.gz &&
+	wget -c ${UCIMF_HOME}files/${OPENVANILLA_MODULES}.tar.gz &&
+	wget -c ${UCIMF_HOME}files/${FBTERM_UCIMF}.tar.gz &&
+	wget -c ${UCIMF_HOME}files/${USERMANUAL} &&
+
+	wget -c ${DIALOG_HOME}${DIALOG}.tgz
+
+	if [ $? != 0 ]; then
+		echo "GET SOURCE:$0 ERROR!"
+		exit 1
+	fi
+}
 
 
-wget -c http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
-tar -xvf fbterm-1.4.tar.gz
-cd fbterm-1.4/
-./configure --prefix=${HOME}/local
-make
-make install
-cd
-rm -rf fbterm-1.4/
+# autobuild $1 $2 $3 ...
+# autobuild "libucimf-2.2.8"
+# autobuild "libucimf-2.2.8" "--sysconfdir=/etc"
+autobuild ()
+{
+	tar -xvf ${SOURCE_DIR}/$1.* -C ${BUILD_DIR} &&
+	cd ${BUILD_DIR}/$1 &&
+
+	./configure --prefix=${PREFIX_DIR} $2 &&
+	make &&
+	make install
+
+	if [ $? != 0 ]; then
+		echo "PACKAGE AUTOBUILD:$0 ERROR!"
+		exit 1
+	fi
+}
 
 
-wget -c http://ucimf.googlecode.com/files/fbterm_ucimf-0.2.4.tar.gz
-tar -xvf fbterm_ucimf-0.2.4.tar.gz
-cd fbterm_ucimf-0.2.4/
-./configure --prefix=${HOME}/local
-make
-make install
-cd
-rm -rf fbterm_ucimf-0.2.4/
+get_source
 
+if [ "${PREFIX_DIR}" != "/usr" ]; then
+	autobuild "${LIBUCIMF}"
+	[ "${PREFIX_DIR}" != "/usr" ] && sed -i "s@/usr@${PREFIX_DIR}@g" ${PREFIX_DIR}/etc/ucimf.conf
+else
+	autobuild "${LIBUCIMF}" "--sysconfdir=/etc"
+fi
+autobuild ${UCIMF_OPENVANILLA}
 
-wget -c http://ftp.debian.org/debian/pool/main/d/dialog/dialog_1.1-20080819.orig.tar.gz
-tar -xvf dialog_1.1-20080819.orig.tar.gz
-cd dialog-1.1-20080819/
-./configure --prefix=${HOME}/local
-make
-make install
-cd
-rm -rf dialog-1.1-20080819/
+#autobuild ${OPENVANILLA_MODULES} "--with-zh_CN"
+autobuild ${OPENVANILLA_MODULES}
+
+autobuild ${FBTERM}
+
+autobuild ${FBTERM_UCIMF}
+
+autobuild ${DIALOG}
+
 
 echo ""
 echo "===NOTE==="
 echo "FbTerm binary's permission setting is:"
 echo ""
-ls -l ${HOME}/local/bin/fbterm
+ls -l ${PREFIX_DIR}/bin/fbterm
 echo ""
 
 
 echo ""
 echo "===NOTE==="
-echo "If fbterm could not get CTRL-SPACE triggerred correctly, try to "
+echo "If fbterm could not get CTRL-SPACE triggerred correctly,"
+echo "please login in as root user and try to"
 echo ""
-echo "  chown 0.0 ${HOME}/local/bin/fbterm"
-echo "  chmod u+s ${HOME}/local/bin/fbterm"
+echo " chown 0.0 ${PREFIX_DIR}/bin/fbterm"
+echo " chmod u+s ${PREFIX_DIR}/bin/fbterm"
 echo ""
 echo "to make fbterm grab key succesfully."
 
@@ -96,6 +112,6 @@ echo "To start excution, just set enviroment and enter command below:"
 echo ""
 echo "  export LANG=zh_CN.UTF-8"
 echo "  export LC_ALL=zh_CN.UTF-8"
-echo "  export PATH=${HOME}/local/bin:\$PATH"
+echo "  export PATH=${PREFIX_DIR}/bin:\$PATH"
 echo "  fbterm -i fbterm_ucimf"
 echo ""
