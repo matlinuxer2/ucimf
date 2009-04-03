@@ -4,6 +4,10 @@ Thanks all the people who ever help and contribe to UCIMF project. Without them,
 
 _ ( Descending with date )_
 
+
+* Eric Zhao *
+    * Provide an execellent automatical download and build script.
+
 * oahong *
     * Several document refinement.
     * gentoo porting and package maintainance
