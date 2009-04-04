@@ -35,6 +35,11 @@ _ ( Descending with date )_
 	* jfbterm patch suggestion
 	* debian usage suggestion
 
+* Hu Yong and Zhang Le *
+  * The greate works for zhcon.
+  * PCF support reference hints.
+  * Discussion about unicode console terminals. 
+
 * Lukhnos D. Liu *
   * The great work of OpenVanilla project. ( http://openvanilla.org )
   * OpenVanilla IMF support
