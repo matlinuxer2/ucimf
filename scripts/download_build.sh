@@ -2,6 +2,8 @@
 
 FBTERM_HOME="http://fbterm.googlecode.com/"
 FBTERM="fbterm-1.4"
+FBTERM_PATCH="http://fbterm.googlecode.com/issues/attachment?aid=1767471292131701725&name=fbterm-1.4_run_command.patch"
+FBTERM_PATCH_FILE="fbterm-1.4_run_command.patch"
 
 UCIMF_HOME="http://ucimf.googlecode.com/"
 LIBUCIMF="libucimf-2.2.8"
@@ -17,7 +19,7 @@ DIALOG="dialog-1.1-20080819"
 
 SOURCE_DIR=${HOME}/source
 BUILD_DIR=${HOME}/build
-PREFIX_DIR=/opt/fbterminal
+PREFIX_DIR=${HOME}/fbterminal
 
 mkdir -pv ${SOURCE_DIR} ${BUILD_DIR}
 
@@ -31,15 +33,16 @@ get_source ()
 {
 	cd ${SOURCE_DIR} &&
 
-	wget -c ${FBTERM_HOME}/files/${FBTERM}.tar.gz &&
+	wget -nc -c ${FBTERM_HOME}/files/${FBTERM}.tar.gz &&
+	wget -c ${FBTERM_PATCH} -O ${FBTERM_PATCH_FILE} &&
 
-	wget -c ${UCIMF_HOME}files/${LIBUCIMF}.tar.gz &&
-	wget -c ${UCIMF_HOME}files/${UCIMF_OPENVANILLA}.tar.gz &&
-	wget -c ${UCIMF_HOME}files/${OPENVANILLA_MODULES}.tar.gz &&
-	wget -c ${UCIMF_HOME}files/${FBTERM_UCIMF}.tar.gz &&
-	wget -c ${UCIMF_HOME}files/${USERMANUAL} &&
+	wget -nc -c ${UCIMF_HOME}files/${LIBUCIMF}.tar.gz &&
+	wget -nc -c ${UCIMF_HOME}files/${UCIMF_OPENVANILLA}.tar.gz &&
+	wget -nc -c ${UCIMF_HOME}files/${OPENVANILLA_MODULES}.tar.gz &&
+	wget -nc -c ${UCIMF_HOME}files/${FBTERM_UCIMF}.tar.gz &&
+	wget -nc -c ${UCIMF_HOME}files/${USERMANUAL} &&
 
-	wget -c ${DIALOG_HOME}${DIALOG}.tgz
+	wget -nc -c ${DIALOG_HOME}${DIALOG}.tgz
 
 	if [ $? != 0 ]; then
 		echo "GET SOURCE:$0 ERROR!"
@@ -80,6 +83,8 @@ autobuild ${UCIMF_OPENVANILLA}
 #autobuild ${OPENVANILLA_MODULES} "--with-zh_CN"
 autobuild ${OPENVANILLA_MODULES}
 
+autobuild ${FBTERM}
+patch -p1 -d ${BUILD_DIR}/fbterm-1.4 < ${SOURCE_DIR}/${FBTERM_PATCH_FILE}
 autobuild ${FBTERM}
 
 autobuild ${FBTERM_UCIMF}
