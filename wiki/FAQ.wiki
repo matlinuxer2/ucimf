@@ -1,5 +1,10 @@
 ﻿#sidebar TOCArticles
 
+===运行fbterm后，光标变成不闪烁的下划线，有什么办法让fbterm的光标变成闪烁的方块? ===
+可以試試看 fbterm --cursor-shape=1。 預設值是 0，你也可以將這個設定寫進 ~/.fbtermrc 裡。
+
+( Thanks to the question from lurz! )
+
 ===普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来===
 对了，我这里普通用户启用 fbterm -i fbterm_ucimf 后， 输入法一闪就消失了，按不出来。。。后来我
 {{{ 
