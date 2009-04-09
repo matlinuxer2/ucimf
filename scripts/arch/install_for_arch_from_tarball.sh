@@ -9,8 +9,8 @@ yaourt -S --noconfirm fbterm
 yaourt -S --noconfirm fbterm-ucimf 
 
 # list installed packages
-pacman -Q |grep libucimf
-pacman -Q |grep ucimf-openvanilla
-pacman -Q |grep openvanilla
-pacman -Q |grep fbterm-ucimf
-pacman -Q |grep fbterm
+pacman -Q |grep ^libucimf
+pacman -Q |grep ^ucimf-openvanilla
+pacman -Q |grep ^openvanilla
+pacman -Q |grep ^fbterm-ucimf
+pacman -Q |grep ^fbterm |grep -v ucimf
