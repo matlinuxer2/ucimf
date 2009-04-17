@@ -1,0 +1,9 @@
+Origin: UCIMF
+Label: UCIMF
+Suite: stable
+Codename: lenny
+Version: 5.0
+Architectures: i386 
+Components: main 
+Description: Repository of UCIMF
+SignWith: default
