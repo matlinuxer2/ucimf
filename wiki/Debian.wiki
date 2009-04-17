@@ -7,8 +7,8 @@
 === 添加軟件倉庫源 === 
 將下列連結加入你的 /etc/apt/sources.list
 {{{
-deb http://people.python.org.tw/~mat/debian binary/
-deb http://people.python.org.tw/~mat/debian64 binary/  ( amd64 )
+deb http://people.debian.org.tw/~mat/ lenny main
+(建構中) deb http://people.debian.org.tw/~mat/ lenny main  ( amd64 )
 }}}
 
 === 安裝相關套件 ===
