@@ -14,8 +14,15 @@ test -d ${BINARY} || mkdir -p ${BINARY}
 
 make_apt(){
 	cd ${BINARY}	
-	cd ..
-	dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz
+	test -L ${BINARY}/conf || ln -s  ${SCRIPTS}/debian/conf ${BINARY}/conf
+	ls
+	rm -rvf db dists pool
+	#cd ..
+	#dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz
+	for deb_file in `ls *.deb`
+	do
+		reprepro --ask-passphrase -Vb . includedeb lenny $deb_file
+	done
 }
 
 clean_deb(){
@@ -26,11 +33,11 @@ build_libucimf_deb(){
 	test -L ${LIBUCIMF}/debian && rm ${LIBUCIMF}/debian
 	ln -s  ${SCRIPTS}/debian/libucimf ${LIBUCIMF}/debian
 	cd ${LIBUCIMF}
-	dpkg-buildpackage -rfakeroot -b -d
+	dpkg-buildpackage -rfakeroot -b -d -nc
 	rm ${LIBUCIMF}/debian
-	cd .. ; rm *.dsc *.changes *.tar.gz
+	cd .. ; #rm *.dsc *.changes *.tar.gz
 
-	mv *.deb ${BINARY}
+	mv *.deb *.dsc *.changes *.tar.gz ${BINARY}
 
 	cd ${SCRIPTS}
 }
