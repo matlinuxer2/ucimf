@@ -65,8 +65,8 @@ static char key_down[NR_KEYS];
 static unsigned char shift_down[NR_SHIFT];
 static short shift_state;
 static char lock_state;
-static int npadch;
 static char cr_with_lf, applic_keypad, cursor_esco;
+static int npadch;
 
 unsigned short keycode_to_keysym(unsigned short keycode, char down);                              
 char *keysym_to_term_string(unsigned short keysym, char down);
@@ -452,17 +452,18 @@ void init_keycode_state()
 {
 	npadch = -1;
 	shift_state = 0;
-	bzero(key_down, sizeof(char) * NR_KEYS);
-	bzero(shift_down, sizeof(char) * NR_SHIFT);
+	memset(key_down, 0, sizeof(char) * NR_KEYS);
+	memset(shift_down, 0, sizeof(char) * NR_SHIFT);
 	ioctl(STDIN_FILENO, KDGKBLED, &lock_state);
-
-	cr_with_lf = true;
 }
 
+void update_term_mode(char crlf, char appkey, char curo)
+{
+    cr_with_lf = crlf;
+    applic_keypad = appkey;
+    cursor_esco = curo;
+}
 
-/*
- * down 的型別是 char, 但內容只是 1 (Press) 或是 0 (Release)
- */
 unsigned short keycode_to_keysym(unsigned short keycode, char down)
 {
 	if (keycode >= NR_KEYS) return K_HOLE;
@@ -486,10 +487,6 @@ unsigned short keycode_to_keysym(unsigned short keycode, char down)
 	unsigned value = KVAL(ke.kb_value);
 
 	switch (KTYP(ke.kb_value)) {
-	case KT_LETTER:
-		ke.kb_value = K(KT_LATIN, value);
-		break;
-
 	case KT_SPEC:
 		switch (ke.kb_value) {
 		case K_NUM:
@@ -522,7 +519,7 @@ unsigned short keycode_to_keysym(unsigned short keycode, char down)
 				ioctl(STDIN_FILENO, KDSKBLED, lock_state);
 			}
 		}
-		
+
 		if (down) shift_down[value]++;
 		else if (shift_down[value]) shift_down[value]--;
 
@@ -531,24 +528,28 @@ unsigned short keycode_to_keysym(unsigned short keycode, char down)
 
 		break;
 
-	case KT_DEAD:
-	case KT_LOCK:
-	case KT_SLOCK:
-	case KT_BRL:
-		UrDEBUG( "not support!\n");
+	case KT_LATIN:
+	case KT_LETTER:
+	case KT_FN:
+	case KT_PAD:
+	case KT_CONS:
+	case KT_CUR:
+	case KT_META:
+	case KT_ASCII:
 		break;
 
 	default:
+		printf("not support!\n");
 		break;
 	}
 
 	return ke.kb_value;
 }
 
-unsigned short keypad_keysym_redirect(unsigned keysym)
+unsigned short keypad_keysym_redirect(unsigned short keysym)
 {
 	if (applic_keypad || KTYP(keysym) != KT_PAD || KVAL(keysym) >= NR_PAD) return keysym;
-	
+
 	#define KL(val) K(KT_LATIN, val)
 	static const unsigned short num_map[] = {
 		KL('0'), KL('1'), KL('2'), KL('3'), KL('4'),
@@ -565,7 +566,7 @@ unsigned short keypad_keysym_redirect(unsigned keysym)
 		K_REMOVE, K_REMOVE, KL('?'), KL('('), KL(')'),
 		KL('#')
 	};
-	
+
 	if (lock_state & K_NUMLOCK) return num_map[keysym - K_P0];
 	return fn_map[keysym - K_P0];
 }
@@ -616,7 +617,8 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 
 	switch (KTYP(keysym)) {
 	case KT_LATIN:
-		index = to_utf8(value, buf);
+	case KT_LETTER:
+		if (value < KVAL(AC_START) || value > KVAL(AC_END)) index = to_utf8(value, buf);
 		break;
 
 	case KT_FN:
@@ -627,9 +629,8 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 
 	case KT_SPEC:
 		if (keysym == K_ENTER) {
-			//buf[index++] = '\r';
-			buf[index++] = 13;
-			//if (cr_with_lf) buf[index++] = '\n';
+			buf[index++] = '\r';
+			if (cr_with_lf) buf[index++] = '\n';
 		} else if (keysym == K_NUM && applic_keypad) {
 			buf[index++] = '\e';
 			buf[index++] = 'O';
@@ -682,7 +683,7 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 			npadch = -1;
 		}
 		break;
-	
+
 	case KT_ASCII:
 		if (value < NR_ASCII) {
 			int base = 10;
@@ -691,7 +692,7 @@ char *keysym_to_term_string(unsigned short keysym, char down)
 				base = 16;
 				value -= KVAL(K_HEX0);
 			}
-			
+
 			if (npadch == -1) npadch = value;
 			else npadch = npadch * base + value;
 		}
