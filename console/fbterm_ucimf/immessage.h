@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2008 dragchan <zgchan317@gmail.com>
+ *   Copyright Â© 2008-2009 dragchan <zgchan317@gmail.com>
  *   This file is part of FbTerm.
  *
  *   This program is free software; you can redistribute it and/or
@@ -49,12 +49,13 @@ typedef enum {
 	Active, Deactive,
 	SendKey, PutText,
 	SetWins, AckWins,
-	CursorPosition, FbTermInfo, TermMode
+	CursorPosition, FbTermInfo, TermMode,
+	ShowUI, HideUI, AckHideUI
 } MessageType;
 
 typedef struct {
 	unsigned char rotate;
-	unsigned short fontSize;
+	unsigned short fontSize, fontHeight, fontWidth;
 	char fontName[0];
 } Info;
 
@@ -70,13 +71,13 @@ typedef struct {
 	unsigned short len;  // message's length, including head and body
 
 	union {
+		char keys[0]; // for SendKey
+		char texts[0]; // for PutText
+		ImWin wins[0]; // for SetWins
+		Info info; // for FbTermInfo
 		char raw; // for Connect, 1: when IM actived, FbTerm sets keyboard mode to K_MEDIUMRAW
 				  //              0: keep K_UNICODE mode
 
-		unsigned shell;  // for Active, FbTerm's active window while sending this message
-
-		Info info; // for FbTermInfo
-		
 		struct {
 			char crWithLf;
 			char applicKeypad;
@@ -86,13 +87,6 @@ typedef struct {
 		struct {
 			unsigned x, y;
 		} cursor; // for CursorPosition
-
-		struct {
-			unsigned shell; // ignored in SenKey; for PutText, set this member to the value received from Active message
-			char text[0];
-		} texts; // for SendKey, PutText
-
-		ImWin wins[0]; // for SetWins
 	};
 } Message;
 

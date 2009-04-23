@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2008 dragchan <zgchan317@gmail.com>
+ *   Copyright Â© 2008-2009 dragchan <zgchan317@gmail.com>
  *   This file is part of FbTerm.
  *
  *   This program is free software; you can redistribute it and/or
@@ -33,7 +33,6 @@ static ImCallbacks cbs;
 static char pending_msg_buf[10240];
 static unsigned pending_msg_buf_len = 0;
 static int im_active = 0;
-static unsigned fbterm_active_shell = 0;
 
 void register_im_callbacks(ImCallbacks callbacks)
 {
@@ -71,14 +70,13 @@ void connect_fbterm(char raw)
 
 void put_im_text(char *text, unsigned short len)
 {
-	if (imfd == -1 || !im_active || !text || !len || (OFFSET(Message, texts.text) + len > UINT16_MAX)) return;
+	if (imfd == -1 || !im_active || !text || !len || (OFFSET(Message, texts) + len > UINT16_MAX)) return;
 
-	char buf[OFFSET(Message, texts.text) + len];	
+	char buf[OFFSET(Message, texts) + len];
 
 	MSG(buf)->type = PutText;
 	MSG(buf)->len = sizeof(buf);
-	MSG(buf)->texts.shell = fbterm_active_shell;
-	memcpy(MSG(buf)->texts.text, text, len);
+	memcpy(MSG(buf)->texts, text, len);
 
 	int ret = write(imfd, buf, MSG(buf)->len);
 }
@@ -107,9 +105,9 @@ void set_im_windows(ImWin *rects, unsigned short num)
 			imfd = -1;
 			return;
 		} else if (len <= 0) continue;
-		
+
 		pending_msg_buf_len += len;
-		
+
 		char *end = cur + len;
 		for (; cur < end && MSG(cur)->len <= (end - cur); cur += MSG(cur)->len) {
 			if (MSG(cur)->type == AckWins) {
@@ -126,7 +124,7 @@ void set_im_windows(ImWin *rects, unsigned short num)
 static int process_message(Message *msg)
 {
 	int exit = 0;
-	
+
 	switch (msg->type) {
 	case Disconnect:
 		close(imfd);
@@ -142,7 +140,6 @@ static int process_message(Message *msg)
 
 	case Active:
 		im_active = 1;
-		fbterm_active_shell = msg->shell;
 		if (cbs.active) {
 			cbs.active();
 		}
@@ -155,9 +152,27 @@ static int process_message(Message *msg)
 		im_active = 0;
 		break;
 
+	case ShowUI:
+		if (cbs.show_ui) {
+			cbs.show_ui();
+		}
+		break;
+
+	case HideUI: {
+		if (cbs.hide_ui) {
+			cbs.hide_ui();
+		}
+
+		Message msg;
+		msg.type = AckHideUI;
+		msg.len = sizeof(msg);
+		int ret = write(imfd, (char *)&msg, sizeof(msg));
+		break;
+		}
+
 	case SendKey:
 		if (im_active && cbs.send_key) {
-				cbs.send_key(msg->texts.text, msg->len - OFFSET(Message, texts.text));
+				cbs.send_key(msg->keys, msg->len - OFFSET(Message, keys));
 		}
 		break;
 
@@ -176,7 +191,7 @@ static int process_message(Message *msg)
 	default:
 		break;
 	}
-	
+
 	return exit;
 }
 
@@ -192,7 +207,7 @@ int check_im_message()
 		memcpy(buf, pending_msg_buf, len);
 	} else {
 		if (imfd == -1) return 0;
-		
+
 		len = read(imfd, buf, sizeof(buf));
 
 		if (len == -1 && errno == ECONNRESET) {
@@ -201,13 +216,13 @@ int check_im_message()
 			return 0;
 		} else if (len <= 0) return 1;
 	}
-	
+
 	char *cur = buf, *end = cur + len;
 	int exit = 0;
 
 	for (; cur < end && MSG(cur)->len <= (end - cur); cur += MSG(cur)->len) {
 		exit |= process_message(MSG(cur));
 	}
-	
+
 	return !exit;
 }
