@@ -31,23 +31,17 @@ function env_check(){
 	my_openvanilla=$( ls -l ${HOME}/.openvanilla )
 
 	# check openvanilla's modules existed
-	my_openvanilla_modules=$( ls -l ${HOME}/.openvanilla/modules )
+	my_openvanilla_modules=$( ls -l ${HOME}/.openvanilla/OVIMGeneric )
 
-	dialog  --title "tty listing" \
-		--msgbox "${my_tty}" \
-		20 76	
+	echo "===tty listing===" 
+	echo "${my_tty}" 
+	echo "===framebuffer status===" 
+	echo "${my_fb_perm}""${my_fb_param}" 
+	echo "=== ~/.ucimfrc setting ===" 
+	echo "${my_ucimfrc}" 
+	echo "=== ~/.openvanilla/ setting ===" 
+	echo "${my_openvanilla}""${my_openvanilla_modules}" 
 
-	dialog  --title "framebuffer status" \
-		--msgbox "${my_fb_perm}""${my_fb_param}" \
-		20 76	
-
-	dialog  --title " ~/.ucimfrc setting" \
-		--msgbox "${my_ucimfrc}" \
-		20 76	
-
-	dialog  --title " ~/.openvanilla/ setting" \
-		--msgbox "${my_openvanilla}""${my_openvanilla_modules}" \
-		20 76	
 
 	echo "main" > $UCIMF_CMD
 }
@@ -56,12 +50,12 @@ function main_setup(){
 	dialog --stdout \
 	--title "UCIMF -- Unicode Console InputMethod Framework" \
 	--menu "Enter the setup menu" 20 60 14 \
-	"run" "Save and start to run program" \
-	"env" "Run-time detected environment parameters" \
 	"locale"  "Locale settings" \
 	"term" "Detected console terminal applications" \
 	"ime" "Input Method Engines (IME) setup" \
 	"font" "Fonts Settings" \
+	"env" "Run-time detected environment parameters" \
+	"run" "Save and start to run program" \
 	> $UCIMF_CMD
 }
 
@@ -265,6 +259,9 @@ do
       else
 	      LC_CTYPE="$THE_LOCALE" $THE_TERM 2>/dev/null
       fi
+
+      # 理想的啟動設定
+      # LC_CTYPE="$THE_LOCALE" fbterm --input-method=fbterm_ucimf --font-names="$THE_FONT" --font-size=$THE_FONTSIZE 2>/dev/null
       
       exit 0
       ;;
