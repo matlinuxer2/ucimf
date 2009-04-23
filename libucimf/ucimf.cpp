@@ -61,6 +61,34 @@ size_t current_imf;
 
 
 /* 紀錄整個鍵盤，看有那些鍵被按下 */
+enum Keys {
+        AC_START = K(KT_LATIN, 0x80),
+        SHIFT_PAGEUP = AC_START,
+        SHIFT_PAGEDOWN,
+        SHIFT_LEFT,
+        SHIFT_RIGHT,
+        CTRL_SPACE,
+        CTRL_ALT_1,
+        CTRL_ALT_2,
+        CTRL_ALT_3,
+        CTRL_ALT_4,
+        CTRL_ALT_5,
+        CTRL_ALT_6,
+        CTRL_ALT_7,
+        CTRL_ALT_8,
+        CTRL_ALT_9,
+        CTRL_ALT_0,
+        CTRL_ALT_C,
+        CTRL_ALT_D,
+        CTRL_ALT_E,
+        CTRL_ALT_F1,
+        CTRL_ALT_F2,
+        CTRL_ALT_F3,
+        CTRL_ALT_F4,
+        CTRL_ALT_F5,
+        CTRL_ALT_F6,
+        AC_END = CTRL_ALT_F6
+};
 static char key_down[NR_KEYS];
 static unsigned char shift_down[NR_SHIFT];
 static short shift_state;
