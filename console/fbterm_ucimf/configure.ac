@@ -20,7 +20,6 @@ AC_CHECK_LIB([ucimf], [ucimf_init])
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h sys/socket.h unistd.h])
-AC_CHECK_HEADER([fontconfig/fontconfig.h],[],[echo "fontconfig not found, please check 'fontconfig' related packages..."; exit; ],[])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

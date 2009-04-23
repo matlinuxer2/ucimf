@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2008 dragchan <zgchan317@gmail.com>
+ *   Copyright Â© 2008-2009 dragchan <zgchan317@gmail.com>
  *   This file is part of FbTerm.
  *
  *   This program is free software; you can redistribute it and/or
@@ -29,6 +29,8 @@ extern "C" {
 
 typedef void (*ActiveFun)();
 typedef void (*DeactiveFun)();
+typedef void (*ShowUIFun)();
+typedef void (*HideUIFun)();
 typedef void (*SendKeyFun)(char *keys, unsigned short len);
 typedef void (*CursorPositionFun)(unsigned x, unsigned y);
 typedef void (*FbTermInfoFun)(Info *info);
@@ -37,6 +39,8 @@ typedef void (*TermModeFun)(char crlf, char appkey, char curo);
 typedef struct {
 	ActiveFun active; // called when receive message Active
 	DeactiveFun deactive; // for message Deactive
+	ShowUIFun show_ui; // for message ShowUI
+	HideUIFun hide_ui; // for message HideUI
 	SendKeyFun send_key;  // for message SendKey
 	CursorPositionFun cursor_position; // for message CursorPoition
 	FbTermInfoFun fbterm_info; // for message FbTermInfo
