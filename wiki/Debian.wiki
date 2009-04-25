@@ -9,6 +9,9 @@
 {{{
 deb http://people.debian.org.tw/~mat/ lenny main
 (建構中) deb http://people.debian.org.tw/~mat/ lenny main  ( amd64 )
+
+如果使用是 debian stable 分支，安裝 fbterm 需添加 testing 或 sid 源
+deb http://ftp.debian.org/debian testing main
 }}}
 
 === 安裝相關套件 ===
