@@ -258,8 +258,8 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
       }
 
       // Clear input buffer
-      *p_buf_len = 0;
-      buf[0]='\0';
+      bzero( buf, *p_buf_len);
+      (*p_buf_len)=0; 
   }
 
 
@@ -332,8 +332,8 @@ void ucimf_switch_raw( char *buf, int *p_buf_len )
       }
 
       // Clear input buffer
-      *p_buf_len = 0;
-      buf[0]='\0';
+      bzero( buf, *p_buf_len);
+      (*p_buf_len)=0; 
   }
 
 
@@ -485,12 +485,6 @@ void init_keycode_state()
 	ioctl(STDIN_FILENO, KDGKBLED, &lock_state);
 }
 
-void update_term_mode(char crlf, char appkey, char curo)
-{
-    cr_with_lf = crlf;
-    applic_keypad = appkey;
-    cursor_esco = curo;
-}
 
 unsigned short keycode_to_keysym(unsigned short keycode, char down)
 {

@@ -39,6 +39,7 @@ build_libucimf(){
 	./autogen.sh
 	test -f Makefile && make distclean
 	./configure --prefix=${BUILD} && make && make install
+	sed -i "s@/usr@${BUILD}@g" ${BUILD}/etc/ucimf.conf
 
 	back_to_scripts
 }
