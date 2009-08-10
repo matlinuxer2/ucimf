@@ -1,5 +1,13 @@
 #!/bin/bash
-source ./inc.sh
+
+ROOT="$( dirname $(echo $0))/.."
+if [ "`echo "$ROOT" | cut -c1`" != "/" ];
+then
+        ROOT="$(pwd)/$ROOT"
+fi
+
+source $ROOT/scripts/env.sh
+
 
 tarball_build_libucimf(){
 	LIBUCIMF_PATH=$( ls ${TARBALL} |grep 'libucimf.*.tar.gz'| head --lines=1 )
@@ -19,6 +27,8 @@ tarball_build_libucimf(){
 }
 
 tarball_build_ucimf-openvanilla(){
+	pushd .
+
 
 	UCIMFOV_PATH=$( ls ${TARBALL} |grep 'ucimf-openvanilla.*.tar.gz'| head --lines=1 )
 	UCIMFOV_FILE=${UCIMFOV_PATH%.tar.gz}
@@ -33,11 +43,13 @@ tarball_build_ucimf-openvanilla(){
 	cd ${TARBALL}
 	rm -rvf ${UCIMFOV_FILE}
 
-	back_to_scripts
+	popd
 
 }
 
 tarball_build_openvanilla-modules(){
+	pushd .
+
 
 	OVMOD_PATH=$( ls ${TARBALL} |grep 'openvanilla-modules.*.tar.gz'| head --lines=1 )
 	OVMOD_FILE=${OVMOD_PATH%.tar.gz}
@@ -52,10 +64,12 @@ tarball_build_openvanilla-modules(){
 	cd ${TARBALL}
 	rm -rvf ${OVMOD_FILE}
 
-	back_to_scripts
+	popd
 }
 
 tarball_build_fbterm_ucimf(){
+	pushd .
+
 
 	FBTERMUCIMF_PATH=$( ls ${TARBALL} |grep 'fbterm_ucimf.*.tar.gz'| head --lines=1 )
 	FBTERMUCIMF_FILE=${FBTERMUCIMF_PATH%.tar.gz}
@@ -70,11 +84,13 @@ tarball_build_fbterm_ucimf(){
 	cd ${TARBALL}
 	rm -rvf ${FBTERMUCIMF_FILE}
 
-	back_to_scripts
+	popd
 
 }
 
 tarball_build_fbterm(){
+	pushd .
+
 
 	FBTERM_PATH=$( ls ${TARBALL} |grep 'fbterm.*.tar.gz'| head --lines=1 )
 	FBTERM_FILE=${FBTERM_PATH%.tar.gz}
@@ -89,10 +105,12 @@ tarball_build_fbterm(){
 	cd ${TARBALL}
 	rm -rvf ${FBTERM_FILE}
 
-	back_to_scripts
+	popd
 }
 
 tarball_build_jfbterm(){
+	pushd .
+
 
 	JFBTERM_PATH=$( ls ${TARBALL} |grep 'jfbterm.*.tar.gz'| head --lines=1 )
 	JFBTERM_FILE=${JFBTERM_PATH%.tar.gz}
@@ -107,7 +125,7 @@ tarball_build_jfbterm(){
 	cd ${TARBALL}
 	rm -rvf ${JFBTERM_FILE}
 
-	back_to_scripts
+	popd
 }
 
 build_clean
