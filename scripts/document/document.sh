@@ -7,19 +7,28 @@
 # 各項文件
 # 
 
-source ./inc.sh
+ROOT="$( dirname $(echo $0))/../.."
+if [ "`echo "$ROOT" | cut -c1`" != "/" ];
+then
+        ROOT="$(pwd)/$ROOT"
+fi
+
+source $ROOT/scripts/env.sh
+
+
+DOCUMENT_SCRIPTS=${SCRIPTS}/document
+DOC=${BUILD}/doc
+DOCUMENT=${DOC}/data
+WIKIDIR=${ROOT}/wiki
+WIKIHTMLDIR=${DOCUMENT}/html
+
 
 test -d ${BUILD} || mkdir -p ${BUILD}
 
-DOC=${BUILD}/doc
-DOCUMENT=${DOC}/data
 test -d ${DOC} && rm -rvf ${DOC}
 mkdir -p ${DOC}
 mkdir -p ${DOCUMENT}
 
-WIKIDIR=${ROOT}/wiki
-
-WIKIHTMLDIR=${DOCUMENT}/html
 test -d ${WIKIHTMLDIR} && rm -rvf ${WIKIHTMLDIR}
 mkdir -p ${WIKIHTMLDIR}
 
@@ -77,7 +86,7 @@ gather_ChangeLog(){
 #}
 
 gather_GoogleCodeHomepage(){
-
+	pushd .
 
 	cd ${WIKIHTMLDIR}
 
@@ -86,14 +95,14 @@ gather_GoogleCodeHomepage(){
 	wget -O this.html $PAGE_URL
 
 	tidy -q -asxhtml -numeric -utf8 < this.html > this.xml
-	${SCRIPTS}/gchome.py this.xml > ${WIKIHTMLDIR}/main.html
+	${DOCUMENT_SCRIPTS}/gchome.py this.xml > ${WIKIHTMLDIR}/main.html
 	rm this.html this.xml
 
-	cd -
+	popd
 }
 
 gather_GoogleCodeWikiHtml(){
-
+	pushd .
 
 	cd ${WIKIHTMLDIR}
 	for PAGE in "TOCArticles"
@@ -104,10 +113,11 @@ gather_GoogleCodeWikiHtml(){
 		wget -nc -np -r -k -c -nd $PAGE_URL
 
 		#tidy -q -asxhtml -numeric -utf8 < $PAGE.html > $PAGE.xml
-		#${SCRIPTS}/gcw.py $PAGE.xml > "$DOCUMENT/$PAGE.txt"
+		#${DOCUMENT_SCRIPTS}/gcw.py $PAGE.xml > "$DOCUMENT/$PAGE.txt"
 		#rm $PAGE.html $PAGE.xml
 	done 
-	cd -
+
+	popd 
 }
 
 gather_GoogleCodeWikiTxt(){
@@ -124,9 +134,13 @@ gather_GoogleCodeWikiTxt(){
 }
 
 gather_Index(){
-	cd ${SCRIPTS}
-	cp -av document/{index.html,list.html} ${DOC}
-	cd -
+	pushd .
+
+	cd ${DOCUMENT_SCRIPTS}
+	cp -av {index.html,list.html} ${DOC}
+
+	popd 
+
 }
 
 gather_README
