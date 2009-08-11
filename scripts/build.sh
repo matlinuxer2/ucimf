@@ -127,7 +127,7 @@ build_fbterm-ucimf(){
 
 	echo "Start to make tarball of fbterm-ucimf..."
 	cd ${FBTERMUCIMF}
-	./autogen.sh
+	autoreconf -sif
 	test -f Makefile && make distclean
 	./configure --prefix=${BUILD} && make && make install
 
