@@ -18,8 +18,8 @@ cd $REPOS
 cat > $LFTP_SCRIPT << EOF
 open sftp://mat@people.debian.org.tw
 cd public_html/debian
-mirror -R dists 
-mirror -R pool
+mirror -R --delete-first dists 
+mirror -R --delete-first pool
 EOF
 
 lftp -f $LFTP_SCRIPT
