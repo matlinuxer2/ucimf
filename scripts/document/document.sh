@@ -96,6 +96,8 @@ gather_GoogleCodeHomepage(){
 
 	tidy -q -asxhtml -numeric -utf8 < this.html > this.xml
 	${DOCUMENT_SCRIPTS}/gchome.py this.xml > ${WIKIHTMLDIR}/main.html
+	echo '<script type="text/javascript" src="http://www.ohloh.net/p/315926/widgets/project_basic_stats.js"></script>' >> ${WIKIHTMLDIR}/main.html
+
 	rm this.html this.xml
 
 	popd
