@@ -182,6 +182,7 @@ build_openvanilla
 
 build_fbterm-ucimf
 build_console_fbterm
+build_console_testing
 
 sudo chown root ${BUILD}/bin/fbterm
 sudo chmod u+s ${BUILD}/bin/fbterm
