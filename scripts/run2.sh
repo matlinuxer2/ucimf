@@ -8,5 +8,6 @@ fi
 
 source $ROOT/scripts/env.sh
 
-
-LC_CTYPE=zh_TW.UTF-8 ${BUILD}/bin/fbterm -i ${BUILD}/bin/fbterm_ucimf 2>/dev/null
+stty -icanon
+LC_CTYPE=zh_TW.UTF-8 ${BUILD}/bin/console04 2>/dev/null
+stty +icanon
