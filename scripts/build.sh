@@ -8,6 +8,7 @@ fi
 
 source $ROOT/scripts/env.sh
 
+
 build_clean(){
 	pushd .
 
@@ -23,59 +24,13 @@ build_libucimf(){
 	echo "Start to build libucimf"
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
 	cd ${LIBUCIMF}
-	./autogen.sh
-	test -f Makefile && make distclean
-	./configure --prefix=${BUILD} && make && make install
+	test -f ./configure || autoreconf -sif || return 1
+	test -f Makefile && make distclean 
+	( ./configure --prefix=${BUILD} && make && make install ) || return 1
 	sed -i "s@/usr@${BUILD}@g" ${BUILD}/etc/ucimf.conf
 
 	popd
 }
-
-check_libucimf(){
-	pushd .
-
-	# 檢查設定檔
-	echo "系統設定檔:"
-	FILE=/etc/ucimf.conf
-	test -f ${FILE} \
-	&& ls -l ${FILE} \
-	&& cat ${FILE} |grep UCIMF_FONTPATH \
-	&& cat ${FILE} |grep IMF_MODULE_DIR
-	echo "個人設定檔:"
-	FILE=${HOME}/.ucimf.conf
-	test -f ${FILE} \
-	&& ls -l ${FILE} \
-	&& cat ${FILE} |grep UCIMF_FONTPATH \
-	&& cat ${FILE} |grep IMF_MODULE_DIR
-
-	popd
-}
-
-setup_libucimf(){
-	pushd .
-
-	FILE=${BUILD}/etc/ucimf.conf
-	#cat ${FILE} | sed 's/.*UCIMF_FONTPATH.*=.*//g' | sed 's/.*IMF_MODULE_DIR.*=.*//g'
-	sed -i 's/^.*UCIMF_FONTPATH.*$//g' ${FILE}
-	sed -i 's/^.*IMF_MODULE_DIR.*$//g' ${FILE}
-	sed -i "1a UCIMF_FONTPATH = ${BUILD}/share/ucimf/unifont.pcf" ${FILE}
-	sed -i "1a IMF_MODULE_DIR = ${BUILD}/lib/ucimf/" ${FILE}
-
-	echo "測試設定檔:"
-	FILE=${BUILD}/etc/ucimf.conf
-	test -f ${FILE} \
-	&& ls -l ${FILE} \
-	&& cat ${FILE} |grep UCIMF_FONTPATH| sed 's/^.*=//g' \
-	&& cat ${FILE} |grep IMF_MODULE_DIR| sed 's/^.*=//g'
-
-	echo "檢查字型檔:"
-	FONTFILE=$(cat ${FILE} |grep UCIMF_FONTPATH| sed 's/^.*=//g')
-	ls -l ${FONTFILE}
-
-	popd
-}
-
-
 
 build_ucimf-openvanilla(){
 	pushd .
@@ -83,9 +38,9 @@ build_ucimf-openvanilla(){
 	echo "Start to build ucimf-openvanilla"
 	cd ${UCIMFOV}
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
-	./autogen.sh
+	test -f ./configure || autoreconf -sif || return 1
 	test -f Makefile && make distclean
-	./configure --prefix=${BUILD} && make &&  make install
+	( ./configure --prefix=${BUILD} && make && make install ) || return 1
 
 	popd
 }
@@ -98,7 +53,7 @@ build_openvanilla(){
 	test -L openvanilla-modules || ./init.sh
 	cd openvanilla-modules
 	test -f Makefile && make distclean
-	./configure --prefix=${BUILD} && make && make install
+	( ./configure --prefix=${BUILD} && make && make install ) || return 1
 
 	popd
 }
@@ -108,16 +63,16 @@ build_console_fbterm(){
 
 	echo "Start to build fbterm"
 	cd ${CONSOLE}
-	FBTERM_FILE="fbterm-1.4.tar.gz"
+	FBTERM_FILE="fbterm-1.5.tar.gz"
 	if [ ! -f "$FBTERM_FILE" ]; then
-		wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
+		wget --continue http://fbterm.googlecode.com/files/fbterm-1.5.tar.gz
 	fi
 	tar xzf ${FBTERM_FILE}
-	cd fbterm-1.4/
+	cd fbterm-1.5/
 	#    LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
-	./configure --prefix=${BUILD}
-	make
-	fakeroot make install
+	./configure --prefix=${BUILD} || return 1
+	make || return 1
+	fakeroot make install || return 1
 
 	popd
 }
@@ -127,7 +82,7 @@ build_fbterm-ucimf(){
 
 	echo "Start to make tarball of fbterm-ucimf..."
 	cd ${FBTERMUCIMF}
-	autoreconf -sif
+	test -f ./configure || autoreconf -sif || return 1
 	test -f Makefile && make distclean
 	./configure --prefix=${BUILD} && make && make install
 
@@ -155,11 +110,11 @@ build_console_testing(){
 	echo "Start to build testing"
 	cd ${DUMMY}
 	echo "Autotoolizing is somewhat slow, please wait a moment...:-)"
-	autoreconf -i --force
+	test -f ./configure || autoreconf -sif || return 1
 	test -f Makefile && make distclean
-	LIBS="-L${BUILD}/lib/" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
-	make
-	make install
+	LIBS="-L${BUILD}/lib/" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD} || return 1
+	make || return 1
+	make install || return 1
 
 	popd
 }
@@ -176,22 +131,15 @@ build_console_testing(){
 
 build_clean
 
-build_libucimf
-build_ucimf-openvanilla
-build_openvanilla
+build_libucimf || exit 
+build_ucimf-openvanilla || exit 
+build_openvanilla || exit 
 
-build_fbterm-ucimf
-build_console_fbterm
-build_console_testing
+build_fbterm-ucimf || exit
+build_console_fbterm || exit
 
 sudo chown root ${BUILD}/bin/fbterm
 sudo chmod u+s ${BUILD}/bin/fbterm
 
-#if [[ $myconsole == "j" ]]
-#then
-#  echo "Build jfbterm as console program"
-#  build_console_jfbterm
-#else
-#  echo "Build FbTerm as console program"
-#  build_console_fbterm
-#fi
+build_console_testing
+
