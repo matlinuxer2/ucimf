@@ -62,7 +62,7 @@ OVImf::OVImf()
 	}  
 
   current_module = 0;
-  current_im_name = "";
+  current_im_name = const_cast<char*>("");
   cxt = 0;
 
   preedit = new OVImfBuffer;
@@ -210,7 +210,7 @@ void OVImf::refresh()
 {
   //stts->set_imf_name( "OpenVanilla" );
   //stts->set_im_name( current_im_name );
-  stts->set_imf_status("OpenVanilla",current_im_name,"");
+  stts->set_imf_status( const_cast<char*>("OpenVanilla"),current_im_name, const_cast<char*>(""));
 }
 
 string OVImf::process_input( const string& buf )
