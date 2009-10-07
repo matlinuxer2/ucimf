@@ -16,18 +16,16 @@ AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-ldisplay':
-AC_CHECK_LIB([display], [main])
-# FIXME: Replace `main' with a function in `-lgraphdev':
-AC_CHECK_LIB([graphdev], [main])
-# FIXME: Replace `main' with a function in `-lltdl':
-AC_CHECK_LIB([ltdl], [main])
+AC_CHECK_LIB([ltdl], 
+	[lt_dlopen],
+	[], 
+	[AC_MSG_ERROR([ltdl is required to build libucimf])])
 
 dnl Checking FreeType2.......................................................
 AC_CHECK_LIB(freetype,
 	FT_Init_FreeType, 
 	[], 
-	[AC_MSG_ERROR([freetype2 is required to build ucimf])])
+	[AC_MSG_ERROR([freetype2 is required to build libucimf])])
 dnl .........................................................................
 
 
