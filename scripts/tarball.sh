@@ -17,7 +17,7 @@ make_tarball_of_libucimf(){
 
 	echo "Start to make tarball of libucimf..."
 	cd ${LIBUCIMF}
-	./autogen.sh
+	autoreconf -sif
 	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make distcheck && ls -t libucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
@@ -29,7 +29,7 @@ make_tarball_of_ucimf-openvanilla(){
 
 	echo "Start to make tarball of ucimf-openvanilla..."
 	cd ${UCIMFOV}
-	./autogen.sh
+	autoreconf -sif
 	test -f configure && OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
 	make distcheck && ls -t ucimf-openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
@@ -78,7 +78,7 @@ make_tarball_of_fbterm-ucimf(){
 
 	echo "Start to make tarball of fbterm-ucimf..."
 	cd ${FBTERMUCIMF}
-	./autogen.sh
+	autoreconf -sif
 	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
 	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
 
