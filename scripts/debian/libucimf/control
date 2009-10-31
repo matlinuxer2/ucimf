@@ -1,22 +1,22 @@
 Source: libucimf
-Priority: optional
-Maintainer: Mat <MatLinuxer2@gmail.com>
-Build-Depends: libltdl3, libfreetype6-dev
-Standards-Version: 3.6.1
 Section: libs
-
-Package: libucimf-dev
-Section: libdev
-Architecture: any
-Depends: libucimf (= ${Source-Version})
-Description: Unicode Console InputMethod Framework library, development files
- UCIMF provide an C/C++ compatible API for console applications to adopt 
- external input method frameworks, such as IIIMF, OpenVanilla.
+Priority: extra
+Maintainer: Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+Build-Depends: cdbs, debhelper (>= 7), autotools-dev, libltdl-dev, libfreetype6-dev
+Standards-Version: 3.8.3
+Homepage: http://ucimf.sourceforge.net
 
 Package: libucimf
-Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl3, libfreetype6
+Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl, libfreetype6
 Description: Unicode Console InputMethod Framework library
  UCIMF provide an C/C++ compatible API for console applications to adopt
+ external input method frameworks, such as IIIMF, OpenVanilla.
+
+Package: libucimf-dev
+Section: libdevel
+Architecture: any
+Depends: libucimf
+Description: Unicode Console InputMethod Framework library, development files
+ UCIMF provide an C/C++ compatible API for console applications to adopt 
  external input method frameworks, such as IIIMF, OpenVanilla.

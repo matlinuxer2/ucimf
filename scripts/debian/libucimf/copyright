@@ -1,27 +1,42 @@
-This package was debianized by Mat <MatLinuxer2@gmail.com> on
-Tue, 26 Dec 2006 16:55:18 +0800.
+This work was packaged for Debian by:
 
-It was downloaded from http://iiimtcf.csie.net/
+    Chun-Yu Lee (Mat) <matlinuxer2@gmail.com> on Sat, 31 Oct 2009 22:05:36 +0800
 
-Copyright Holder: Mat <MatLinuxer2@gmail.com>
+It was downloaded from:
+
+    http://ucimf.sourceforge.net 
+
+Upstream Author(s):
+
+    Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+Copyright:
+
+    <Copyright (C) 2009 Chun-Yu Lee>
 
 License:
 
    This package is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
+   it under the terms of the GNU General Public License version 2 as
+   published by the Free Software Foundation.
 
-   This package is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+    This package is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this package; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-   02111-1307, USA.
+    You should have received a copy of the GNU General Public License
+    along with this package; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 On Debian systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL'.
+Public License version 2 can be found in `/usr/share/common-licenses/GPL-2'.
 
+The Debian packaging is:
+
+    Copyright (C) 2009 Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
