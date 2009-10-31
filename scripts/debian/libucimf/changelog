@@ -1,42 +1,5 @@
-libucimf (2.2.8) unstable; urgency=low
+libucimf (2.2.8-1) unstable; urgency=low
 
-  * Version pump
+  * Initial release 
 
- -- Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>  Thu, 26 Mar 2009 21:30:00 +0800
-
-libucimf (2.2.7) unstable; urgency=low
-
-  * Version pump
-
- -- Mat <MatLinuxer2@gmail.com>  Tue, 24 Mar 2009 02:04:00 +0800
-
-libucimf (2.2.6) unstable; urgency=low
-
-  * Update to latest ucimf 2.2.6
-
- -- Mat <MatLinuxer2@gmail.com>  Mon, 23 Mar 2009 04:00:00 +0800
-
-libucimf (2.2.1) unstable; urgency=low
-
-  * Update to latest ucimf 2.2.1
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 08 Feb 2009 15:00:00 +0800
-
-libucimf (2.1.0) unstable; urgency=low
-
-  * Update to latest ucimf 2.1.0
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 12 Nov 2008 00:52:00 +0800
-
-libucimf (2.0.5) unstable; urgency=low
-
-  * Update to latest ucimf 2.0.5
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 26 Oct 2008 17:45:00 +0800
-
-libucimf (2.0.1-1) unstable; urgency=low
-
-  * Initial Release.
-
- -- Mat <MatLinuxer2@gmail.com>  Tue, 26 Dec 2006 16:55:18 +0800
-
+ -- Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>  Sat, 31 Oct 2009 22:05:36 +0800

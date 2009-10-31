@@ -56,17 +56,30 @@ build_libucimf_deb(){
 
 
 	LIBUCIMF_PATH=$( ls ${TARBALL} |grep 'libucimf.*.tar.gz'| head --lines=1 )
+	LIBUCIMF_PATH2=${LIBUCIMF_PATH/-/_}
+	LIBUCIMF_PATH3=${LIBUCIMF_PATH2/tar.gz/orig.tar.gz}
 	LIBUCIMF_FILE=${LIBUCIMF_PATH%.tar.gz}
+	LIBUCIMF_FILE2=${LIBUCIMF_FILE/-/_}
 
 	cd ${TARBALL}
-	tar -zxvf ${LIBUCIMF_PATH}
-	cd ${LIBUCIMF_FILE}
+	test -d debian && rm -r debian
+        mkdir debian && cd debian
+		cp ../${LIBUCIMF_PATH} .
+		tar -zxvf ${LIBUCIMF_PATH}
+		test -d ${LIBUCIMF_FILE} && mv ${LIBUCIMF_FILE} ${LIBUCIMF_FILE2}
+		test -f ${LIBUCIMF_PATH} && mv ${LIBUCIMF_PATH} ${LIBUCIMF_PATH3}
+		cd ${LIBUCIMF_FILE2}
 
-        cp -vr ${SCRIPTS}/debian/libucimf debian
-	dpkg-buildpackage -rfakeroot -b -d -nc
-	cd .. 
-	mv *.deb ${BINARY}
+		test -d debian && rm -r debian
+		mkdir debian
+		find ${SCRIPTS}/debian/libucimf | grep -v '.svn' | xargs cp -t debian
+		find . -name '.svn'| xargs echo 
+		#dpkg-buildpackage -rfakeroot -b -d -nc
+		debuild 
+		cd .. 
+		mv *.deb ${BINARY}
 
+	cd ..
 	popd
 }
 
