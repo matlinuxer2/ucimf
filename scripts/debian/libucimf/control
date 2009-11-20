@@ -8,7 +8,7 @@ Homepage: http://ucimf.sourceforge.net
 
 Package: libucimf
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl, libfreetype6
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Unicode Console InputMethod Framework library
  UCIMF provide an C/C++ compatible API for console applications to adopt
  external input method frameworks, such as IIIMF, OpenVanilla.

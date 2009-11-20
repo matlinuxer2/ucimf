@@ -1,13 +1,13 @@
 Source: ucimf-openvanilla
-Priority: optional
-Maintainer: Mat <MatLinuxer2@gmail.com>
-Build-Depends: debhelper, autotools-dev 
-Standards-Version: 3.6.1
 Section: libs
+Priority: extra
+Maintainer: Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+Build-Depends: cdbs, debhelper (>= 7), autotools-dev
+Standards-Version: 3.8.3
+Homepage: http://ucimf.sourceforge.net
 
 Package: ucimf-openvanilla
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libucimf
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: The OpenVanilla IMF module for UCIMF
+ The OpenVanilla IMF module provides OpenVanilla Input Method Framework support for UCIMF.
