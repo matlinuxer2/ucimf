@@ -118,17 +118,30 @@ build_openvanilla-modules_deb(){
         pushd .
 
 	OVMOD_PATH=$( ls ${TARBALL} |grep 'openvanilla-modules.*.tar.gz'| head --lines=1 )
+	OVMOD_PATH2=${OVMOD_PATH/les-0.8.0_12/les_0.8.0.12}
+	OVMOD_PATH3=${OVMOD_PATH2/tar.gz/orig.tar.gz}
 	OVMOD_FILE=${OVMOD_PATH%.tar.gz}
+	OVMOD_FILE2=${OVMOD_FILE/les-0.8.0_12/les_0.8.0.12}
 
 	cd ${TARBALL}
-	tar -zxvf ${OVMOD_PATH}
-	cd ${OVMOD_FILE}
+	test -d debian && rm -r debian
+        mkdir debian && cd debian
+		cp ../${OVMOD_PATH} .
+		tar -zxvf ${OVMOD_PATH}
+		test -d ${OVMOD_FILE} && mv ${OVMOD_FILE} ${OVMOD_FILE2}
+		test -f ${OVMOD_PATH} && mv ${OVMOD_PATH} ${OVMOD_PATH3}
+		cd ${OVMOD_FILE2}
 
-        cp -vr ${SCRIPTS}/debian/openvanilla-modules debian
-	dpkg-buildpackage -rfakeroot -b -d -nc
-	cd .. 
-	mv *.deb ${BINARY}
+		test -d debian && rm -r debian
+		mkdir debian
+		find ${SCRIPTS}/debian/openvanilla-modules | grep -v '.svn' | xargs cp -t debian
+		find . -name '.svn'| xargs echo 
+		#dpkg-buildpackage -rfakeroot -b -d -nc
+		debuild 
+		cd .. 
+		mv *.deb ${BINARY}
 
+	cd ..
 	popd
 }
 
