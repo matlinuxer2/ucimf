@@ -1,36 +1,5 @@
-ucimf-openvanilla (2.10.5) unstable; urgency=low
+ucimf-openvanilla (2.10.5-1) unstable; urgency=low
 
-  * version pump
+  * Initial release 
 
- -- Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com>  Thu, 26 Mar 2009 21:29:00 +0800
-
-ucimf-openvanilla (2.10.4) unstable; urgency=low
-
-  * version pump
-
- -- Mat <MatLinuxer2@gmail.com>  Mon, 23 Mar 2009 04:00:00 +0800
-
-ucimf-openvanilla (2.10.1) unstable; urgency=low
-
-  * Update to ucimf 2.2.1 and openvanilla 0.8.0
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 08 Feb 2009 15:00:00 +0800
-
-ucimf-openvanilla (2.9.0) unstable; urgency=low
-
-  * Update to ucimf 2.1.0 and openvanilla 0.8.0
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 12 Nov 2008 01:22:00 +0800
-
-ucimf-openvanilla (2.8.5) unstable; urgency=low
-
-  * Update to ucimf 2.0.5 and openvanilla 0.8.0
-
- -- Mat <MatLinuxer2@gmail.com>  Sun, 26 Oct 2008 17:43:08 +0800
-
-ucimf-openvanilla (0.0.1-1) unstable; urgency=low
-
-  * Initial Release.
-
- -- Mat <MatLinuxer2@gmail.com>  Mon,  1 Jan 2007 17:13:07 +0800
-
+ -- Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>  Sat, 21 Nov 2009 05:11:49 +0800

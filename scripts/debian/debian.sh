@@ -87,17 +87,30 @@ build_ucimf-openvanilla_deb(){
         pushd .
 
 	UCIMFOV_PATH=$( ls ${TARBALL} |grep 'ucimf-openvanilla.*.tar.gz'| head --lines=1 )
+	UCIMFOV_PATH2=${UCIMFOV_PATH/lla-/lla_}
+	UCIMFOV_PATH3=${UCIMFOV_PATH2/tar.gz/orig.tar.gz}
 	UCIMFOV_FILE=${UCIMFOV_PATH%.tar.gz}
+	UCIMFOV_FILE2=${UCIMFOV_FILE/lla-/lla_}
 
 	cd ${TARBALL}
-	tar -zxvf ${UCIMFOV_PATH}
-	cd ${UCIMFOV_FILE}
+	test -d debian && rm -r debian
+        mkdir debian && cd debian
+		cp ../${UCIMFOV_PATH} .
+		tar -zxvf ${UCIMFOV_PATH}
+		test -d ${UCIMFOV_FILE} && mv ${UCIMFOV_FILE} ${UCIMFOV_FILE2}
+		test -f ${UCIMFOV_PATH} && mv ${UCIMFOV_PATH} ${UCIMFOV_PATH3}
+		cd ${UCIMFOV_FILE2}
 
-        cp -vr ${SCRIPTS}/debian/ucimf-openvanilla debian
-	dpkg-buildpackage -rfakeroot -b -d -nc
-	cd .. 
-	mv *.deb ${BINARY}
+		test -d debian && rm -r debian
+		mkdir debian
+		find ${SCRIPTS}/debian/ucimf-openvanilla | grep -v '.svn' | xargs cp -t debian
+		find . -name '.svn'| xargs echo 
+		#dpkg-buildpackage -rfakeroot -b -d -nc
+		debuild 
+		cd .. 
+		mv *.deb ${BINARY}
 
+	cd ..
 	popd
 }
 
