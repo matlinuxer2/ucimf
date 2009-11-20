@@ -1,18 +1,5 @@
-openvanilla-modules (0.8.0-9) unstable; urgency=low
-
-  * Update to latest version
-
- -- Chun-Yu (Mat) <matlinuxer2@gmail.com>  Thu, 26 Mar 2009 21:30:00 +0800
-
-openvanilla-modules (0.8.0-7) unstable; urgency=low
-
-  * Update to latest version
-
- -- Mat <matlinuxer2@gmail.com>  Wed, 18 Mar 2009 21:40:00 +0800
-
-openvanilla-modules (0.8.0-5) unstable; urgency=low
+openvanilla-modules (0.8.0.12-1) unstable; urgency=low
 
   * Initial release 
 
- -- Mat <matlinuxer2@gmail.com>  Wed, 18 Mar 2009 21:40:00 +0800
-
+ -- Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>  Sat, 21 Nov 2009 07:06:54 +0800
