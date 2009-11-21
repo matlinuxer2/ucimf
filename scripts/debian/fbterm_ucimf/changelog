@@ -1,12 +1,5 @@
-fbterm-ucimf (0.2.4) unstable; urgency=low
+fbterm-ucimf (0.2.5-1) unstable; urgency=low
 
-  * Version pump
+  * Initial release
 
- -- Chun-Yu (Mat) <matlinuxer2@gmail.com>  Tue, 24 Mat 2009 02:03:00 +0800
-
-fbterm-ucimf (0.2.3) unstable; urgency=low
-
-  * Initial release 
-
- -- Mat <matlinuxer2@gmail.com>  Wed, 18 Mar 2009 21:40:00 +0800
-
+ -- Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>  Sat, 21 Nov 2009 23:31:49 +0800
