@@ -146,20 +146,33 @@ build_openvanilla-modules_deb(){
 }
 
 build_fbterm-ucimf_deb(){
-	pushd .
+        pushd .
 
 	FBTERMUCIMF_PATH=$( ls ${TARBALL} |grep 'fbterm_ucimf.*.tar.gz'| head --lines=1 )
+	FBTERMUCIMF_PATH2=${FBTERMUCIMF_PATH/_ucimf-/-ucimf_}
+	FBTERMUCIMF_PATH3=${FBTERMUCIMF_PATH2/tar.gz/orig.tar.gz}
 	FBTERMUCIMF_FILE=${FBTERMUCIMF_PATH%.tar.gz}
+	FBTERMUCIMF_FILE2=${FBTERMUCIMF_FILE/_ucimf-/-ucimf_}
 
 	cd ${TARBALL}
-	tar -zxvf ${FBTERMUCIMF_PATH}
-	cd ${FBTERMUCIMF_FILE}
+	test -d debian && rm -r debian
+        mkdir debian && cd debian
+		cp ../${FBTERMUCIMF_PATH} .
+		tar -zxvf ${FBTERMUCIMF_PATH}
+		test -d ${FBTERMUCIMF_FILE} && mv ${FBTERMUCIMF_FILE} ${FBTERMUCIMF_FILE2}
+		test -f ${FBTERMUCIMF_PATH} && mv ${FBTERMUCIMF_PATH} ${FBTERMUCIMF_PATH3}
+		cd ${FBTERMUCIMF_FILE2}
 
-        cp -vr ${SCRIPTS}/debian/fbterm_ucimf debian
-	dpkg-buildpackage -rfakeroot -b -d -nc
-	cd .. 
-	mv *.deb ${BINARY}
+		test -d debian && rm -r debian
+		mkdir debian
+		find ${SCRIPTS}/debian/fbterm_ucimf | grep -v '.svn' | xargs cp -t debian
+		find . -name '.svn'| xargs echo 
+		#dpkg-buildpackage -rfakeroot -b -d -nc
+		debuild 
+		cd .. 
+		mv *.deb ${BINARY}
 
+	cd ..
 	popd
 }
 
