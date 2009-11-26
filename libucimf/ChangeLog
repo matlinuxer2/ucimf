@@ -1,3 +1,8 @@
+2009-11-26  Mat <matlinuxer2@gmail.com>
+
+	* Fixed compile error of "‘dprintf’ was not declared in this scope"
+	* Update compability to fbterm >= 1.5
+
 2009-03-29  Mat <matlinuxer2@gmail.com>
 
 	* Remove deprecated IMF_MODULE_DIR option
