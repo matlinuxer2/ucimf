@@ -3,7 +3,7 @@
 #SRC_URL="http://sourceforge.jp/projects/jfbterm/downloads/13501/jfbterm-0.4.7.tar.gz"
 SRC_URL="http://ftp.de.debian.org/debian/pool/main/b/bogl/bogl_0.1.18-3.tar.gz"
 SRC_TARBALL=$(basename $SRC_URL)
-SRC_DIR=${SRC_TARBALL%.tar.gz}
+SRC_DIR="bogl-0.1.18"
 ROOT=$(pwd)
 
 src_fetch(){
