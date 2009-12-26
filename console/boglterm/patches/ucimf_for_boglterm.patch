@@ -1,0 +1,74 @@
+--- bogl-0.1.18/Makefile.orig	2009-12-27 00:46:02.000000000 +0800
++++ bogl-0.1.18/Makefile	2009-12-27 00:50:56.000000000 +0800
+@@ -79,7 +79,7 @@
+ 	$(CC) -DSTANDALONE_TEST $(ALLCFLAGS) bowl-boxes.c $(LIBOBJECTS) -o bowl-boxes
+ 
+ bterm: $(LIB) bterm.o bogl-term.o bogl-bgf.o
+-	$(CC) $+ $(LIB) -o bterm
++	$(CC) $+ $(LIB) -o bterm -lucimf
+ 
+ bdftobogl: $(LIBBOGLOBJECTS)
+ %.c: %.bdf bdftobogl
+--- bogl-0.1.18/bterm.c.orig	2009-12-27 00:39:52.000000000 +0800
++++ bogl-0.1.18/bterm.c	2009-12-27 01:34:48.000000000 +0800
+@@ -37,6 +37,7 @@
+ #include <sys/wait.h>
+ #include <termios.h>
+ #include <unistd.h>
++#include <ucimf.h>
+ 
+ #include "bogl.h"
+ #include "bogl-bgf.h"
+@@ -308,6 +309,10 @@
+ 
+   set_window_size(ttyfd, term->xsize, term->ysize);
+ 
++  /* Ucimf initialization */
++  ucimf_init();
++
++
+   for (;;) {
+     fd_set fds;
+     int max = 0;
+@@ -346,14 +351,20 @@
+ 	}
+ 
+       bogl_refresh = 0;
++      ucimf_refresh_begin();
+       bogl_term_redraw(term);
++      ucimf_cursor_position( term->xbase + term->xstep * (term->xpos),term->ybase + term->ystep * (term->ypos) );
++      ucimf_refresh_end();
+     }
+     if (ret == 0 || (ret < 0 && errno == EINTR))
+     {
+       if(pending)
+       {
+       	pending = 0;
++	ucimf_refresh_begin();
+ 	bogl_term_redraw(term);
++       ucimf_cursor_position( term->xbase + term->xstep * (term->xpos),term->ybase + term->ystep * (term->ypos) );
++	ucimf_refresh_end();
+       }      	
+       continue;
+     }
+@@ -362,6 +373,11 @@
+       perror("select");
+     if (FD_ISSET(0, &fds)) {
+       ret = read(0, buf, sizeof(buf));
++
++      /* Intercept the input data and pass to UCIMF */
++      ucimf_switch( buf, &ret );
++      ucimf_process_stdin( buf, &ret );
++
+       if (ret > 0)
+ 	write(ptyfd, buf, ret);
+     }
+@@ -375,5 +391,8 @@
+     }
+   }
+ 
++  /* Quit UCIMF */
++  ucimf_exit();
++
+   return 0;
+ }
