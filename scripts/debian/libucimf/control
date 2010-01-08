@@ -2,7 +2,7 @@ Source: libucimf
 Section: libs
 Priority: extra
 Maintainer: Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
-Build-Depends: cdbs, debhelper (>= 7), autotools-dev, libltdl-dev, libfreetype6-dev
+Build-Depends: cdbs, debhelper (>= 7), autotools-dev, libltdl3-dev, libfreetype6-dev, pkg-config
 Standards-Version: 3.8.3
 Homepage: http://ucimf.sourceforge.net
 
