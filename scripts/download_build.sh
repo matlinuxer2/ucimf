@@ -1,15 +1,13 @@
 #!/bin/sh
 
 FBTERM_HOME="http://fbterm.googlecode.com/"
-FBTERM="fbterm-1.4"
-FBTERM_PATCH="http://fbterm.googlecode.com/issues/attachment?aid=1767471292131701725&name=fbterm-1.4_run_command.patch"
-FBTERM_PATCH_FILE="fbterm-1.4_run_command.patch"
+FBTERM="fbterm-1.6"
 
 UCIMF_HOME="http://ucimf.googlecode.com/"
-LIBUCIMF="libucimf-2.2.8"
-UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.5"
-OPENVANILLA_MODULES="openvanilla-modules-0.8.0_9"
-FBTERM_UCIMF="fbterm_ucimf-0.2.4"
+LIBUCIMF="libucimf-2.2.9"
+UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.6"
+OPENVANILLA_MODULES="openvanilla-modules-0.8.0_14"
+FBTERM_UCIMF="fbterm_ucimf-0.2.6"
 USERMANUAL="UserManual.pdf"
 
 #DIALOG_HOME="http://www.hightek.org/dialog/"
@@ -34,7 +32,6 @@ get_source ()
 	cd ${SOURCE_DIR} &&
 
 	wget -nc -c ${FBTERM_HOME}/files/${FBTERM}.tar.gz &&
-	wget -c ${FBTERM_PATCH} -O ${FBTERM_PATCH_FILE} &&
 
 	wget -nc -c ${UCIMF_HOME}files/${LIBUCIMF}.tar.gz &&
 	wget -nc -c ${UCIMF_HOME}files/${UCIMF_OPENVANILLA}.tar.gz &&
@@ -52,8 +49,8 @@ get_source ()
 
 
 # autobuild $1 $2 $3 ...
-# autobuild "libucimf-2.2.8"
-# autobuild "libucimf-2.2.8" "--sysconfdir=/etc"
+# autobuild "libucimf-2.2.9"
+# autobuild "libucimf-2.2.9" "--sysconfdir=/etc"
 autobuild ()
 {
 	tar -xvf ${SOURCE_DIR}/$1.* -C ${BUILD_DIR} &&
@@ -83,8 +80,6 @@ autobuild ${UCIMF_OPENVANILLA}
 #autobuild ${OPENVANILLA_MODULES} "--with-zh_CN"
 autobuild ${OPENVANILLA_MODULES}
 
-autobuild ${FBTERM}
-patch -p1 -d ${BUILD_DIR}/fbterm-1.4 < ${SOURCE_DIR}/${FBTERM_PATCH_FILE}
 autobuild ${FBTERM}
 
 autobuild ${FBTERM_UCIMF}
