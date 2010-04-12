@@ -126,7 +126,7 @@ OPEN_RC FBDev::TryOpen() {
         return rc;
     }
 
-    mXres = Vinfo.xres;
+    mXres=Finfo.line_length/(Vinfo.bits_per_pixel/8);
     mYres = Vinfo.yres;
     mpBufLen = Finfo.smem_len;
     mpBuf = (char*)mmap(0,mpBufLen,PROT_READ | PROT_WRITE, MAP_SHARED, mFd, 0);
