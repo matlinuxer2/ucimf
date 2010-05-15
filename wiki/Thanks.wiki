@@ -4,6 +4,8 @@ Thanks all the people who ever help and contribe to UCIMF project. Without them,
 
 _ ( Descending with date )_
 
+* morebtcg *
+    * Patch for unusual screen resolution 1366x768. 
 
 * Eric Zhao *
     * Provide an execellent automatical download and build script.
@@ -21,10 +23,10 @@ _ ( Descending with date )_
 	* fbterm IM API design and implementation with excellent program structure
 	* excellent issue support
 
-* fourdollars *
+* Fourdollars *
 	* autotool package refinement
 
-* andy *
+* Andy *
   * arch porting
   * arch svn packages maintainance.
 
@@ -66,4 +68,4 @@ _ ( Descending with date )_
     * fbiterm's source code discussions
 
 
-_Please remind us, if anything is missing,  thank you sincerely._
+_Please remind us, if there is something missing,  thank you sincerely._
