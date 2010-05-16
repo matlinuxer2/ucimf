@@ -4,6 +4,10 @@ Thanks all the people who ever help and contribe to UCIMF project. Without them,
 
 _ ( Descending with date )_
 
+
+* Aron Xu *
+    * The great works for ucimf debian packages.
+
 * morebtcg *
     * Patch for unusual screen resolution 1366x768. 
 
