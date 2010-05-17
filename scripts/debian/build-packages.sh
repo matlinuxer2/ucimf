@@ -2,17 +2,17 @@
 
 
 function fetch_launchpad_file(){
-	THE_BRANCH=$1
+	local THE_BRANCH=$1
 	test -d $THE_BRANCH || bzr branch lp:~pkg-ime/ucimf/$THE_BRANCH
 }
 
 function fetch_googlecode_file(){
-	THE_TARBALL=$1
+	local THE_TARBALL=$1
 	test -f $THE_TARBALL || wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL
 }
 
 function find_build_dep(){
-	SEARCH_DIRS=$( echo $@ )
+	local SEARCH_DIRS=$( echo $@ )
 	if [ $# -gt 0 ]
         then
 	    echo "There are build dependencies below: "
@@ -25,7 +25,7 @@ function find_build_dep(){
 }
 
 function time_count {
-	COUNT=$1
+	local COUNT=$1
 
 	for (( x=$COUNT; $x > 0 ; x-- ))
 	do

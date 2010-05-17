@@ -1,6 +1,6 @@
 all:
-	./build-packages.sh
+	./build-packages.sh 2>&1 | tee build.log
 
 clean:
-	rm -r __debian* incoming/ 2>/dev/null
+	rm -r __debian* incoming/ build.log 2>/dev/null
 
