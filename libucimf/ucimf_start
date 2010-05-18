@@ -142,7 +142,7 @@ ime_setup(){
 
 	imes_menu=""
 
-	sys_imes_dir="/usr/lib/openvanilla/OVIMGeneric/"
+	sys_imes_dir="/usr/share/openvanilla/OVIMGeneric/"
 	imes=$( test -d $sys_imes_dir && cd $sys_imes_dir && ls *.cin)
 
 	my_imes_dir="${HOME}/.openvanilla/OVIMGeneric/"

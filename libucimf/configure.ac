@@ -44,8 +44,10 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
 SYSCONFDIR="`eval echo $sysconfdir`"
 LIBDIR="`eval echo $libdir`"
+DATADIR="`eval echo $datadir`"
 AC_DEFINE_UNQUOTED([SYSCONFDIR], ["${SYSCONFDIR}"], [Description])
 AC_DEFINE_UNQUOTED([LIBDIR], ["${LIBDIR}"], [Description])
+AC_DEFINE_UNQUOTED([DATADIR], ["${DATADIR}"], [Description])
 
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AC_ARG_ENABLE([debug],

@@ -40,7 +40,7 @@
 #include <iostream>
 using namespace std;
 
-#define IMF_MODULE_DIR LIBDIR"/ucimf/"
+#define IMF_MODULE_DIR DATADIR"/ucimf/"
 
 int LogFd=-1;
 
