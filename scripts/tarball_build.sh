@@ -8,6 +8,15 @@ fi
 
 source $ROOT/scripts/env.sh
 
+build_clean(){
+	pushd .
+
+	test -d ${BUILD} && rm -rvf ${BUILD}
+	mkdir -p ${BUILD}
+	
+	popd
+}
+
 
 tarball_build_libucimf(){
 	LIBUCIMF_PATH=$( ls ${TARBALL} |grep 'libucimf.*.tar.gz'| head --lines=1 )
@@ -47,25 +56,6 @@ tarball_build_ucimf-openvanilla(){
 
 }
 
-tarball_build_openvanilla-modules(){
-	pushd .
-
-
-	OVMOD_PATH=$( ls ${TARBALL} |grep 'openvanilla-modules.*.tar.gz'| head --lines=1 )
-	OVMOD_FILE=${OVMOD_PATH%.tar.gz}
-
-	echo "Start to build openvanilla-modules"
-
-	cd ${TARBALL}
-	tar -zxvf ${OVMOD_PATH}
-	cd ${OVMOD_FILE}
-	./configure --prefix=${BUILD} && make && make install
-
-	cd ${TARBALL}
-	rm -rvf ${OVMOD_FILE}
-
-	popd
-}
 
 tarball_build_fbterm_ucimf(){
 	pushd .
@@ -88,51 +78,9 @@ tarball_build_fbterm_ucimf(){
 
 }
 
-tarball_build_fbterm(){
-	pushd .
-
-
-	FBTERM_PATH=$( ls ${TARBALL} |grep 'fbterm.*.tar.gz'| head --lines=1 )
-	FBTERM_FILE=${FBTERM_PATH%.tar.gz}
-
-	echo "Start to build fbterm"
-
-	cd ${TARBALL}
-	tar -zxvf ${FBTERM_PATH}
-	cd ${FBTERM_FILE}
-	./configure --prefix=${BUILD} && make && make install
-
-	cd ${TARBALL}
-	rm -rvf ${FBTERM_FILE}
-
-	popd
-}
-
-tarball_build_jfbterm(){
-	pushd .
-
-
-	JFBTERM_PATH=$( ls ${TARBALL} |grep 'jfbterm.*.tar.gz'| head --lines=1 )
-	JFBTERM_FILE=${JFBTERM_PATH%.tar.gz}
-
-	echo "Start to build jfbterm"
-
-	cd ${TARBALL}
-	tar -zxvf ${JFBTERM_PATH}
-	cd ${JFBTERM_FILE}
-	./configure --prefix=${BUILD} && make && make install
-
-	cd ${TARBALL}
-	rm -rvf ${JFBTERM_FILE}
-
-	popd
-}
 
 build_clean
 tarball_build_libucimf
 tarball_build_ucimf-openvanilla
-tarball_build_openvanilla-modules
 tarball_build_fbterm_ucimf
-tarball_build_fbterm
-tarball_build_jfbterm
 

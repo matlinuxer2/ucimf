@@ -1,30 +1,33 @@
 這個資料夾是放 gentoo 的方便 scripts.
 
-Gentoo 的固定測試步驟是:
+Gentoo 的例行測試步驟是:
 
-1. 完整移除 gentoo 套件
+<1>. 測試 snapshot tarball version
+    a. 完整移除 gentoo 套件
+    
+        sudo ./unmerge.sh
+    
+    b. 安裝 ucimf 相關的套件
+    
+        sudo ./merge.sh
+    
+    c. 作例行性的測試
+    
+        * 測 jfbterm
+        * 測 fbterm
 
-    sudo ./unmerge.sh
 
-2. 安裝 ucimf 相關的套件
-
-    sudo ./merge.sh
-
-3. 作例行性的測試
-
-    * 測 jfbterm
-    * 測 fbterm
-
-4. 完整移除 gentoo 套件
-
-    sudo ./unmerge.sh
-
-5. 安裝 ucimf 相關的套件 (from svn )
-
-    sudo ./merge_svn.sh
-
-6. 作例行性的測試
-
-    * 測 jfbterm
-    * 測 fbterm
+<2>. 測試 latest svn version
+    a. 完整移除 gentoo 套件
+    
+        sudo ./unmerge.sh
+    
+    b. 安裝 ucimf 相關的套件 
+    
+        sudo ./merge_svn.sh
+    
+    c. 作例行性的測試
+    
+        * 測 jfbterm
+        * 測 fbterm
 
