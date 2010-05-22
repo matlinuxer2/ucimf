@@ -18,3 +18,40 @@
    *NOTE* Welcome to reported 'error.log' on UCIMF's forum
           ( http://groups.google.com/group/ucimf/ )
 
+
+開發測試例行事項及流程:
+
+<1> 從當前的 svn 工作目錄編譯並執行測試
+  1. 執行自動編譯腳本
+	`./build.sh` 
+
+  2. 執行運作命令腳本
+	`./run.sh`
+
+
+<2> 從當前的 svn 工作目錄編製成 tarball
+  0. 需要先作過 <1> 的流程，以展開相關檔案
+
+  1. 執行自動編製腳本
+	`./tarball.sh` 
+
+  完成後，相關的檔案即放置在 tarball/ 的目錄下。
+
+
+<3> 從當前製作的 tarball 進行編譯安裝及測試
+  0. 需要先作過 <1>, <2> 的流程，以展開相關檔案
+
+  1. 執行自動編製腳本
+	`./tarball_build.sh` 
+
+  2. 執行運作命令腳本
+	`./run.sh`
+
+
+<4> 從線上下載 tarball 進行編譯安裝及測試
+  1. 執行自動編製腳本
+	`./download_build.sh` 
+
+  2. 執行運作命令腳本
+	`./run.sh`
+

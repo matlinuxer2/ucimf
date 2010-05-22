@@ -36,43 +36,6 @@ make_tarball_of_ucimf-openvanilla(){
 	popd
 }
 
-make_tarball_of_openvanilla(){
-	pushd .
-
-	echo "Start to make tarball of openvanilla..."
-	cd ${OV}
-	test -L openvanilla-modules || ./init.sh
-	cd openvanilla-modules
-	test -f configure && ./configure --prefix=${BUILD}
-	make distcheck && ls -t openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
-
-	popd
-}
-
-make_tarball_of_jfbterm(){
-	pushd .
-
-	echo "Start to make tarball of jfbterm..."
-	cd ${CONSOLEJ}
-	./init.sh
-	cd jfbterm-0.4.7/
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
-	fakeroot make distcheck && ls -t jfbterm*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
-
-	popd
-}
-
-make_tarball_of_fbterm(){
-	pushd .
-
-	cd ${TARBALL}
-
-	FBTERM_FILE=$( ls -t fbterm*.tar.gz|grep -v 'ucimf'| head --lines=1 )
-	test -f "$FBTERM_FILE" || wget --continue http://fbterm.googlecode.com/files/fbterm-1.4.tar.gz
-
-	popd
-}
-
 make_tarball_of_fbterm-ucimf(){
 	pushd .
 
@@ -88,10 +51,5 @@ make_tarball_of_fbterm-ucimf(){
 # first
 make_tarball_of_libucimf
 make_tarball_of_ucimf-openvanilla
-# second
-make_tarball_of_openvanilla
-## third
 make_tarball_of_fbterm-ucimf
-make_tarball_of_fbterm
-make_tarball_of_jfbterm
 
