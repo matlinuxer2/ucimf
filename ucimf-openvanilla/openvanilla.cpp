@@ -215,6 +215,8 @@ void OVImf::refresh()
 
 string OVImf::process_input( const string& buf )
 {
+	if( im == 0 ) { return string(""); }
+
   int keychar,keycode,modifier;
   int buf_len = buf.size();
 
@@ -359,6 +361,7 @@ void OVImf::switch_lang()
 
 void OVImf::switch_im()
 {
+	if( im == 0 ) { return ; }
 
   current_module += 1;
   if( current_module >= mod_vector.size() ){
@@ -386,6 +389,7 @@ void OVImf::switch_im()
 
 void OVImf::switch_im_reverse()
 {
+	if( im == 0 ) { return ; }
 
   current_module -= 1;
   if( current_module < 0 ){
