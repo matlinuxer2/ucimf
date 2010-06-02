@@ -83,33 +83,6 @@ void FBLinear4::FillRect(int x1,int y1,int x2,int y2,int color) {
             fb_writeb((bits & 0x0f) | (fg & 0xf0), dest);
         }
     }
-    
-    /*  orignal by ejoy
-    __u8 *dest0,*dest;
-    __u32 bgx;
-
-    dest = (__u8*)mpBuf + mNextLine * y1 + (x1 / mBlockWidth) * 4;
-
-    bgx = color;
-    bgx |= (bgx << 4);  // expand the colour to 32bits
-    bgx |= (bgx << 8);
-    bgx |= (bgx << 16);
-
-    if (x1 == 0 && width * 4 == bytes) {
-        for (i = 0 ; i < lines * width ; i++) {
-        fb_writel (bgx, dest);
-        dest+=4;
-        }
-    } else {
-        dest0=dest;
-        for (row = lines; row-- ; dest0 += bytes) {
-            dest=dest0;
-            for (i = 0 ; i < width ; i++) {
-            fb_writel (bgx, dest);
-            dest+=4;
-        }
-    }
-*/
 }
 
 // base on libggi
@@ -124,43 +97,3 @@ inline void FBLinear4::PutPixel(int x,int y,int color) {
     xs = (x & 1) << 2;
     fb_writeb((bits & (0x0F << xs)) | ((color & 0x0f) << (xs ^ 4)), dest);
 }
-
-void FBLinear4::DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) {
-    __u8 bits;
-    __u8 *dest;
-    int row;
-    __u32 eorx,fgx,bgx;
-
-    dest = (__u8*)mpBuf + mNextLine * y + x / 2;
-
-    fgx=fg;
-    bgx=bg;
-    fgx |= (fgx << 4);
-    fgx |= (fgx << 8);
-    bgx |= (bgx << 4);
-    bgx |= (bgx << 8);
-    eorx = fgx ^ bgx;
-
-    char* cdat = pFont->pBuf;
-    for (row = mBlockHeight; row-- ; dest += mNextLine) {
-        bits = *cdat++;
-        fb_writew((nibbletab_cfb4[bits >> 4] & eorx) ^ bgx, dest+0);
-        fb_writew((nibbletab_cfb4[bits & 0xf] & eorx) ^ bgx, dest+2);
-        if (pFont->w < 12) continue;    // fontwidth = 8
-
-        bits = *cdat++;
-        fb_writew((nibbletab_cfb4[bits >> 4] & eorx) ^ bgx, dest+3);
-        if (pFont->w < 16) continue;    // fontwidth = 12
-
-        fb_writew((nibbletab_cfb4[bits & 0xf] & eorx) ^ bgx, dest+4);
-        if (pFont->w < 20) continue;    // fontwidth = 16
-
-        bits = *cdat++;
-        fb_writew((nibbletab_cfb4[bits >> 4] & eorx) ^ bgx, dest+5);
-        if (pFont->w < 24) continue;    // fontwidth = 20
-
-        fb_writew((nibbletab_cfb4[bits & 0xf] & eorx) ^ bgx, dest+6);
-        // fontwidth = 24
-    }
-}
-

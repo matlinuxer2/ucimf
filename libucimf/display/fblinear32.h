@@ -39,7 +39,6 @@ class FBLinear32 : public FBDev {
         void RevRect(int x1,int y1,int x2,int y2);
         void SaveRect(int x1, int y1, int x2, int y2, char* *buffer );
         void RstrRect(int x1, int y1, int x2, int y2, char* *buffer );
-        void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont);
 
     private:
         void InitColorMap();
