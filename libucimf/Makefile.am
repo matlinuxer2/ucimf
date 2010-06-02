@@ -1,4 +1,4 @@
-SUBDIRS = display 
+SUBDIRS = display font
 
 AM_CPPFLAGS = -g -DDEBUG 
 
@@ -10,14 +10,15 @@ imfincludedir = $(includedir)/imf/
 
 lib_LTLIBRARIES = libucimf.la
 libucimf_la_SOURCES = options.cpp \
-                        graphdev.cpp font.cpp \
+                        graphdev.cpp \
 			type.cpp graphport.cpp \
 			window.cpp widget.cpp shape.cpp cwm.cpp \
-			ucimf.cpp
+			ucimf.cpp $(top_builddir)/font/libfont.a 
 
-libucimf_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_srcdir)/include/imf `pkg-config --cflags freetype2`
-libucimf_la_LDFLAGS = -lltdl `pkg-config --libs freetype2`
-libucimf_la_LIBADD = $(top_builddir)/display/libdisplay.a
+
+libucimf_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_srcdir)/include/imf -I$(top_srcdir)/font 
+libucimf_la_LDFLAGS = -lltdl 
+libucimf_la_LIBADD = $(top_builddir)/display/libdisplay.a $(top_builddir)/font/libfont.a 
 
 bin_PROGRAMS = ucimf_keyboard
 ucimf_keyboard_SOURCES = ucimf_keyboard.cpp
@@ -39,6 +40,6 @@ install-exec-hook:
 	chown root:utmp $(DESTDIR)$(bindir)/ucimf_start || echo "Change ownership failed..."
 	chmod ug+s $(DESTDIR)$(bindir)/ucimf_start
 
-EXTRA_DIST=  ucimf_start cwm.h font.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf debug.h $(pkgconfig_DATA) $(pkgconfig_in_data)
+EXTRA_DIST=  ucimf_start cwm.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf debug.h $(pkgconfig_DATA) $(pkgconfig_in_data)
 
 

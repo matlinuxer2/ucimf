@@ -9,4 +9,4 @@ fi
 source $ROOT/scripts/env.sh
 
 
-LC_CTYPE=zh_TW.UTF-8 ${BUILD}/bin/fbterm -i ${BUILD}/bin/fbterm_ucimf 2>/dev/null
+LC_CTYPE=zh_TW.UTF-8 fbterm -i ${BUILD}/bin/fbterm_ucimf 2>/dev/null

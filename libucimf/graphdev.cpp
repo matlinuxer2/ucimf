@@ -27,6 +27,7 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "display/fbdev.h"
 #include "display/vgadev.h"
@@ -35,16 +36,9 @@
 
 // mmap framebuffer address
 GraphDev *GraphDev::mpGraphDev = NULL;
-
-// font
 int GraphDev::mXres = 0;
 int GraphDev::mYres = 0;
 
-Font* font = Font::getInstance();
-
-// char display
-int GraphDev::mBlockWidth = font->Width();
-int GraphDev::mBlockHeight = font->Height();
 
 bool GraphDev::Open() {
     //first try fbdev
@@ -132,64 +126,33 @@ void GraphDev::DrawRect(int x1,int y1,int x2,int y2,int color) {
 }
 
 int GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
-    assert( x >= 0 && x + font->Width() <= Width()
-            && y >=0 && y + font->Height() <= Height());
-    CharBitMap tmpFont;
-    font->render(c, tmpFont);
+    Font* font = Font::instance();
+    assert( x >= 0 && x + font->width() <= Width()
+            && y >=0 && y + font->height() <= Height());
+    // CharBitMap tmpFont;
+    // font->render(c, tmpFont);
+    Font::Glyph *glyph = font->getGlyph( c );
     
-    int FH = font->Height();
-    int fh = tmpFont.h;
-    int fw = tmpFont.w;
-    int wbytes = tmpFont.wBytes;
+    int FH = font->height();
+    int fh = glyph->height;
+    int fw = glyph->width;
     int i,j;
 
-    for (i = 0; i < fh ; i++)
-    {
-      for (j = 0; j < fw ; j++)
-      {
-	unsigned char bmask=0;
-	
-	switch( j%8 )
-	{
-	  case 0:
-	    bmask = 128;
-	    break;
-	  case 1:
-	    bmask = 64;
-	    break;
-	  case 2:
-	    bmask = 32;
-	    break;
-	  case 3:
-	    bmask = 16;
-	    break;
-	  case 4:
-	    bmask = 8;
-	    break;
-	  case 5:
-	    bmask = 4;
-	    break;
-	  case 6:
-	    bmask = 2;
-	    break;
-	  case 7:
-	    bmask = 1;
-	    break;
-	  default:
-	    // should never happen.
-	    break;
-	}
-	
-        if( tmpFont.pBuf[ i*wbytes + j/8 ] & bmask )
-	{
-	  PutPixel( x+j, y+i+FH-fh-1, fg);
-	}
-	else
-	{
-	  PutPixel( x+j, y+i+FH-fh-1, bg);
-	}
-      }
-    }
+    for (i = 0; i < ( FH -2 ) ; i++)
+    {  
+	    for ( j = 0; j < fw ; j++ )
+	    {  
+		    if ( i > glyph->top ) {
+			    int ii = i - glyph->top - 1 ;
+			    if ( glyph->pixmap[ ii * glyph->pitch + j ] ){
+				    PutPixel( x+j, y+i, fg);
+			    }
+		    }  
+		    else {
+			    //PutPixel( x+j, y+i, bg);
+		    }
+	    }  
+    } 
 
     return x+fw;
 

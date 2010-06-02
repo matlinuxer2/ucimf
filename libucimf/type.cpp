@@ -28,6 +28,7 @@
 #include <iconv.h>
 #include "font.h"
 #include <stdint.h>
+#include <string.h>
 
 ustring::ustring(const char* encoding, const char* data)
 {
