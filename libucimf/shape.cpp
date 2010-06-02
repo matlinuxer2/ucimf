@@ -22,6 +22,7 @@
 #include "graphport.h"
 #include "type.h"
 #include "graphdev.h"
+#include "font.h"
 
 void Rect::draw( GraphPort* gp)
 {
@@ -59,7 +60,14 @@ void Text::append( const ustring& ustr )
   
   height = font_height * data.size();
   
-  int new_length = new_str.length();
+  int new_length = 0; 
+
+  // Calculate new str's size
+  Font* font= Font::getInstance();
+  for( size_t i=0; i< new_str.size(); i++ )
+  {
+    new_length += font->length( new_str[i] );
+  }
   
   if( new_length > width )
   {
@@ -74,7 +82,14 @@ void Text::append_next( const ustring& ustr )
   
   height = font_height * data.size();
 
-  int new_length = ustr.length();
+  int new_length = 0;
+  // Calculate new str's size
+  Font* font= Font::getInstance();
+  for( size_t i=0; i< ustr.size(); i++ )
+  {
+    new_length += font->length( ustr[i] );
+  }
+
   if( new_length > width )
   {
     width = new_length;
