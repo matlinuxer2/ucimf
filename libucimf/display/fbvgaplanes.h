@@ -38,7 +38,6 @@ class FBVgaPlanes : public FBDev {
         void FillRect(int x1,int y1,int x2,int y2,int color);
         void RevRect(int x1,int y1,int x2,int y2);
         void PutPixel(int x,int y,int color);
-        void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont);
 
     private:
         // EGA/VGA special routine

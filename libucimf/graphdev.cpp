@@ -30,11 +30,6 @@
 
 #include "display/fbdev.h"
 #include "display/vgadev.h"
-#if defined(linux) || defined(__FreeBSD__)
-    #ifdef HAVE_GGI_LIB
-    #include "display/libggi.h"
-    #endif
-#endif
 
 #include "font.h"
 
@@ -50,36 +45,14 @@ Font* font = Font::getInstance();
 // char display
 int GraphDev::mBlockWidth = font->Width();
 int GraphDev::mBlockHeight = font->Height();
-int GraphDev::mBlankLineHeight = 0;
 
 bool GraphDev::Open() {
-#ifdef HAVE_GGI_LIB
-    #ifndef NDEBUG
-    //try libggi first for debug
-    char *ggiDriveName = getenv("GGI_DISPLAY");
-    if (ggiDriveName) {
-        if (LIBGGI::TryOpen(ggiDriveName))
-            return true;
-        throw(runtime_error("ggi open error, check env GGI_DISPLAY!"));
-    }
-    #endif
-#endif
     //first try fbdev
     OPEN_RC rc = FBDev::TryOpen();
     switch (rc) {
         case NORMAL:
             return true;
         case UNSUPPORT:
-#ifdef HAVE_GGI_LIB
-            //try libggi
-            {
-            char *ggiDriveName = getenv("GGI_DISPLAY");
-            if (ggiDriveName)
-                if (LIBGGI::TryOpen(ggiDriveName))
-                    return true;
-            }
-#endif
-            //libggi failed,now try vga
         case FAILURE:
 #if defined(linux)
 #ifdef USING_VGA

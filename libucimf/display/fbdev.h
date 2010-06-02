@@ -37,7 +37,6 @@ class FBDev : public GraphDev  {
 
         virtual void PutPixel(int x,int y,int color) = 0;
         virtual void FillRect(int x1,int y1,int x2,int y2,int color) = 0;
-        virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;
         virtual void SaveRect(int x1, int y1, int x2, int y2, char** buffer ) = 0;
         virtual void RstrRect(int x1, int y1, int x2, int y2, char** buffer ) = 0;
 

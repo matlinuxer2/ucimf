@@ -55,12 +55,6 @@ class GraphDev {
         // font
         int OutChar(int x, int y, int fg, int bg, unsigned int c);
 
-        // char display
-        virtual void DrawChar(int x,int y,int fg,int bg,struct CharBitMap* pFont) = 0;
-        static int BlockHeight() { return mBlockHeight; }
-        static int BlockWidth() { return mBlockWidth; }
-        static int mBlankLineHeight;
-
         void ClearScr();
         void DrawLine(int x1,int y1,int x2,int y2,int color);
         void DrawRect(int x1,int y1,int x2,int y2,int color);

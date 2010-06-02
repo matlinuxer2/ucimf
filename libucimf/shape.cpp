@@ -40,8 +40,10 @@ Text::Text()
 {
   height = width = 0;
   color_fg = color_bg = 0;
-  font_width = GraphDev::BlockWidth();
-  font_height = GraphDev::BlockHeight();
+
+  Font* font = Font::getInstance();
+  font_width = font->Width();
+  font_height = font->Height();
   data.clear();
 }
 
