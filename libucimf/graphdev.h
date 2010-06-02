@@ -67,8 +67,6 @@ class GraphDev {
         
     protected:
         static int mXres, mYres;
-        static int mBlockWidth;
-        static int mBlockHeight;
 };
 
 #define fb_readb(addr) (*(volatile __u8 *) (addr))

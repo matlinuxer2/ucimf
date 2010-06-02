@@ -41,9 +41,9 @@ Text::Text()
   height = width = 0;
   color_fg = color_bg = 0;
 
-  Font* font = Font::getInstance();
-  font_width = font->Width();
-  font_height = font->Height();
+  Font* font = Font::instance();
+  font_width = font->width();
+  font_height = font->height();
   data.clear();
 }
 
@@ -65,10 +65,12 @@ void Text::append( const ustring& ustr )
   int new_length = 0; 
 
   // Calculate new str's size
-  Font* font= Font::getInstance();
+  Font* font = Font::instance();
   for( size_t i=0; i< new_str.size(); i++ )
   {
-    new_length += font->length( new_str[i] );
+    //new_length += font->length( new_str[i] );
+    Font::Glyph *glyph = font->getGlyph( new_str[i] );
+    new_length += glyph->width;
   }
   
   if( new_length > width )
@@ -86,10 +88,12 @@ void Text::append_next( const ustring& ustr )
 
   int new_length = 0;
   // Calculate new str's size
-  Font* font= Font::getInstance();
+  Font* font = Font::instance();
   for( size_t i=0; i< ustr.size(); i++ )
   {
-    new_length += font->length( ustr[i] );
+    //new_length += font->length( ustr[i] );
+    Font::Glyph *glyph = font->getGlyph( ustr[i] );
+    new_length += glyph->width;
   }
 
   if( new_length > width )

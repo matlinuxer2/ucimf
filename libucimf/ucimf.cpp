@@ -36,11 +36,13 @@
 #include "cwm.h"
 #include "options.h"
 #include "debug.h"
+#include "font.h"
 
 #include <iostream>
 using namespace std;
 
-#define IMF_MODULE_DIR DATADIR"/ucimf/"
+//#define IMF_MODULE_DIR DATADIR"/ucimf/"
+#define IMF_MODULE_DIR LIBDIR"/ucimf/"
 
 int LogFd=-1;
 
@@ -176,6 +178,12 @@ Imf* nextImf()
 
 void ucimf_init()
 {
+	Options* option = Options::getInstance();                                                       
+	char* font_name = option->getOption("font-name");
+	int font_size = atoi( option->getOption("font-size") );
+	//Font::instance()->setInfo( "細明體", 16, 0 );
+	Font::instance()->setInfo( font_name , font_size, 0 );
+
 	stts = Status::getInstance();
 	prdt = Preedit::getInstance();
 	lkc = LookupChoice::getInstance();
