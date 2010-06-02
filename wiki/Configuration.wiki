@@ -41,6 +41,12 @@ FONT_WIDTH = 24
 FONT_HEIGHT = 24
 }}}             
 
+_( 預計於 libucimf >= 2.3.0 加入 fontconfig 的支援，設定方式預計如下: )_
+{{{
+font-names=AR PL ShanHeiSun Uni
+font-size=16
+}}}
+
 ==輸入法的安裝及管理==
  目前 UCIMF 的輸入法管理方式是直接管理 `*`.cin 表格檔案。 
  個人的輸入法表格放在 ~/.openvanilla/OVIMGeneric/ 的下面。
