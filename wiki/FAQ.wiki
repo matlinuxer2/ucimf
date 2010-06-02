@@ -1,5 +1,18 @@
 ﻿#sidebar TOCArticles
 
+===一般使用者用 ctrl-space 沒反應，要切換成 root 才行 (fbterm) ===
+一般可行的解決方法是設定 SUID.
+{{{ 
+chmod u+s /usr/bin/fbterm 
+}}}
+
+若 Kernel >= 2.6.27 時，則可以使用新的權限開啟方式:
+{{{
+sudo setcap 'cap_sys_tty_config+ep' /path/to/fbterm
+}}}
+
+( 詳情請見 man fbterm "SECURITY NOTES" 一節 )
+
 ===运行fbterm后，光标变成不闪烁的下划线，有什么办法让fbterm的光标变成闪烁的方块? ===
 可以試試看 fbterm --cursor-shape=1。 預設值是 0，你也可以將這個設定寫進 ~/.fbtermrc 裡。
 
