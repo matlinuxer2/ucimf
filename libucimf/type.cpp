@@ -117,22 +117,3 @@ bool ustring::operator==(const ustring& ustr) const
   
   return false;
 }
-
-int ustring::length() const
-{
-  if( udata.empty() )
-  {
-    return 0;
-  }
-
-  Font* font= Font::getInstance();
-  int result = 0;
-
-  for( size_t i=0; i< udata.size(); i++ )
-  {
-    result += font->length( udata[i] );
-  }
-
-  return result;
-
-}

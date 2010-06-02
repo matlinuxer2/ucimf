@@ -44,9 +44,6 @@ class ustring
     int size() const{ return udata.size(); };
     void clear(){ udata.clear(); };
     
-    // !! temporary for hacking. return the string length in PIXEl!!
-    int length() const; 
-    
   private:
     vector<unsigned long> udata;
   
