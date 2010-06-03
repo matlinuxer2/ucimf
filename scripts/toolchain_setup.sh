@@ -9,6 +9,7 @@ lookup_table(){
 	grep "^$toolname" - << EOF
 autotool Ubuntu hardy autotoolll
 autotool Debian lenny autotoolll
+autotool Gentoo n/a autotoolll
 EOF
 
 }
@@ -22,8 +23,9 @@ get_pkg_name()
 pkg_autotool=$(get_pkg_name autotool)
 all_tools="$pkg_autotool"
 
-case $Distributor_Codename in
-    lenny) echo "apt-get install $all_tools" ;;
-    hardy) echo "apt-get install $all_tools" ;;
+case $Distributor_ID in
+    Debian) echo "apt-get install $all_tools" ;;
+    Ubuntu) echo "apt-get install $all_tools" ;;
+    Gentoo) echo "emerge $all_tools" ;;
     *) echo "Your Distributor Codename => $Distributor_Codename"
 esac
