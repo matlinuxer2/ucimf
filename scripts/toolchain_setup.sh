@@ -16,10 +16,24 @@ Distributor_Codename=`lsb_release -c | awk '{print $2}'`
 #
 show_table(){
 	cat << EOF
-autotool Ubuntu hardy autotoolll
-autotool Debian lenny autotoolll
+autoconf	Debian lenny autoconf
+g++		Debian lenny g++
+ltdl-dev	Debian lenny libltdl3-dev
+freetype2-dev	Debian lenny libfreetype6-dev
+fontconfig-dev	Debian lenny libfontconfig1-dev
+make		Debian lenny make
+curses-dev	Debian lenny libncurses5-dev
+
+autoconf	Ubuntu hardy autoconf
+g++		Ubuntu hardy g++
+ltdl-dev	Ubuntu hardy libltdl3-dev
+freetype2-dev	Ubuntu hardy libfreetype6-dev
+fontconfig-dev	Ubuntu hardy libfontconfig1-dev
+make		Ubuntu hardy make
+curses-dev	Ubuntu hardy libncurses5-dev
+
 autotool Gentoo n/a automake
-autotool Gentoo n/a autotoolll
+
 automake
 autoconf
 libtool
@@ -54,8 +68,14 @@ get_pkg_name()
         fi
 }
 
-pkg_autotool=$(get_pkg_name autotool)
-all_tools="$pkg_autotool"
+pkg_autoconf=$(get_pkg_name autoconf)
+pkg_gplusplus=$(get_pkg_name g++)
+pkg_ltdl_dev=$(get_pkg_name ltdl-dev)
+pkg_freetype2_dev=$(get_pkg_name freetype2-dev)
+pkg_fontconfig_dev=$(get_pkg_name fontconfig-dev)
+pkg_make=$(get_pkg_name make)
+pkg_curses_dev=$(get_pkg_name curses-dev) 
+all_tools="$pkg_autoconf $pkg_gplusplus $pkg_ltdl_dev $pkg_freetype2_dev $pkg_fontconfig_dev $pkg_make $pkg_curses_dev"
 
 case $Distributor_ID in
     Debian) echo "apt-get install $all_tools" ;;
