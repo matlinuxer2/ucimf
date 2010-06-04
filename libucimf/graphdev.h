@@ -20,11 +20,12 @@
 
 #ifndef GRPATHDEV_H
 #define GRPATHDEV_H
-#if defined(linux)
-    #include <asm/types.h>
-#elif defined(__FreeBSD__)
-    #include "utypes.h"
-#endif
+
+typedef unsigned char __u8;
+typedef unsigned short __u16;
+typedef unsigned int __u32;
+typedef unsigned long long __u64;
+
 #include <stdexcept>
 
 struct CharBitMap {
