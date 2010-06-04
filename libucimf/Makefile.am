@@ -29,17 +29,16 @@ confdir=$(sysconfdir)
 conf_DATA = ucimf.conf 
 
 miscdir=$(datadir)/ucimf/
-misc_DATA = fonts/unifont.pcf ucimf.conf.example
+misc_DATA = ucimf.conf.example
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libucimf.pc libucimf-uninstalled.pc
-
 pkgconfig_in_data = libucimf.pc.in libucimf-uninstalled.pc.in
 
 install-exec-hook:
 	chown root:utmp $(DESTDIR)$(bindir)/ucimf_start || echo "Change ownership failed..."
 	chmod ug+s $(DESTDIR)$(bindir)/ucimf_start
 
-EXTRA_DIST=  ucimf_start cwm.h graphdev.h shape.h options.h ucimf.conf ucimf.conf.example fonts/unifont.pcf debug.h $(pkgconfig_DATA) $(pkgconfig_in_data)
+EXTRA_DIST=  $(bin_SCRIPTS) cwm.h graphdev.h shape.h options.h $(conf_DATA) $(misc_DATA) $(pkgconfig_DATA) $(pkgconfig_in_data)
 
 
