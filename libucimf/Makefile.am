@@ -9,7 +9,8 @@ imfinclude_HEADERS = include/imf/graphport.h include/imf/imf.h include/imf/type.
 imfincludedir = $(includedir)/imf/
 
 lib_LTLIBRARIES = libucimf.la
-libucimf_la_SOURCES = options.cpp \
+libucimf_la_SOURCES = cwm.h graphdev.h shape.h options.h debug.h \
+                        options.cpp \
                         graphdev.cpp \
 			type.cpp graphport.cpp \
 			window.cpp widget.cpp shape.cpp cwm.cpp \
@@ -39,6 +40,6 @@ install-exec-hook:
 	chown root:utmp $(DESTDIR)$(bindir)/ucimf_start || echo "Change ownership failed..."
 	chmod ug+s $(DESTDIR)$(bindir)/ucimf_start
 
-EXTRA_DIST=  $(bin_SCRIPTS) cwm.h graphdev.h shape.h options.h $(conf_DATA) $(misc_DATA) $(pkgconfig_DATA) $(pkgconfig_in_data)
+EXTRA_DIST=  $(bin_SCRIPTS) $(conf_DATA) $(misc_DATA) $(pkgconfig_DATA) $(pkgconfig_in_data)
 
 
