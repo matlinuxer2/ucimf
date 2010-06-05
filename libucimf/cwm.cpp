@@ -113,12 +113,12 @@ void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 }
 
 
-StatusShift::StatusShift()
+StatusShift::StatusShift( int x_shift, int y_shift )
 {
   cwm = 0;
   Options* option = Options::getInstance();
-  x_gap = atoi( option->getOption("STATUS_SHIFT_X") ); 
-  y_gap = atoi( option->getOption("STATUS_SHIFT_Y") ); 
+  x_gap = x_shift; //atoi( option->getOption("STATUS_SHIFT_X") ); 
+  y_gap = y_shift; //atoi( option->getOption("STATUS_SHIFT_Y") ); 
 }
 
 void StatusShift::update( Window* win )
@@ -155,12 +155,12 @@ void StatusShift::update( Window* win )
 
 }
 
-PreeditShift::PreeditShift()
+PreeditShift::PreeditShift( int x_shift, int y_shift )
 {
   cwm = 0;
   Options* option = Options::getInstance();
-  x_gap = atoi( option->getOption("PREEDIT_SHIFT_X") ); 
-  y_gap = atoi( option->getOption("PREEDIT_SHIFT_Y") ); 
+  x_gap = x_shift; //atoi( option->getOption("PREEDIT_SHIFT_X") ); 
+  y_gap = y_shift; //atoi( option->getOption("PREEDIT_SHIFT_Y") ); 
 }
 
 
@@ -199,12 +199,12 @@ void PreeditShift::update( Window* win )
  UrDEBUG("void PreeditShift::update( Window* win ) END\n");
 }
 
-LookupChoiceShift::LookupChoiceShift()
+LookupChoiceShift::LookupChoiceShift( int x_shift, int y_shift )
 {
   cwm = 0;
   Options* option = Options::getInstance();
-  x_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_X") ); 
-  y_gap = atoi( option->getOption("LOOKUPCHOICE_SHIFT_Y") ); 
+  x_gap = x_shift; //atoi( option->getOption("LOOKUPCHOICE_SHIFT_X") ); 
+  y_gap = y_shift; //atoi( option->getOption("LOOKUPCHOICE_SHIFT_Y") ); 
 }
 
 void LookupChoiceShift::update( Window* win )
