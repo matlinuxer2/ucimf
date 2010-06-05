@@ -1,3 +1,16 @@
+2010-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* Add typedefs for __u8, __u16, __u32 types
+	* Quote the font interfaces and implementations from FbTerm, 
+	  to add fontconfig support for ucimf.
+	* reduce font related interfaces and implementations.
+	* reduce unused library parts
+	* refine old dirty hack
+	* Adopt Aron Xu's patch. Here Thanks :-)
+	* Thanks to morebtcg's report and patch!
+	  http://code.google.com/p/ucimf/issues/detail?id=69
+
+
 2009-11-26  Mat <matlinuxer2@gmail.com>
 
 	* Fixed compile error of "‘dprintf’ was not declared in this scope"
