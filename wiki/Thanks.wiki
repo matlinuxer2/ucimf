@@ -4,9 +4,12 @@ Thanks all the people who ever help and contribe to UCIMF project. Without them,
 
 _ ( Descending with date )_
 
+* yan *
+    * A develope toolchain check helper script.
 
 * Aron Xu *
     * The great works for ucimf debian packages.
+    * Official Debian package submit and maintainance.
 
 * morebtcg *
     * Patch for unusual screen resolution 1366x768. 
