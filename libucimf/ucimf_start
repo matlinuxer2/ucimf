@@ -93,16 +93,48 @@ function save_setup(){
 	set_config_value ${UCIMF_CONF} "locale" "${THE_LOCALE}"
 	set_config_value ${UCIMF_CONF} "ime" "${THE_IME}"
 	set_config_value ${UCIMF_CONF} "term" "${THE_TERM}"
-	set_config_value ${UCIMF_CONF} "font-names" "${THE_FONT}"
+	set_config_value ${UCIMF_CONF} "font-name" "${THE_FONT}"
 	set_config_value ${UCIMF_CONF} "font-size" ${THE_FONTSIZE}
+
+	# back compatibility
+	set_config_value ${UCIMF_CONF} "STATUS_FG_COLOR" "${STATUS_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "STATUS_BG_COLOR" "${STATUS_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "STATUS_BORDER_COLOR" "${STATUS_BORDER_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_FG_COLOR" "${PREEDIT_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_BG_COLOR" "${PREEDIT_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_BORDER_COLOR" "${PREEDIT_BORDER_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_FG_COLOR" "${LOOKUPCHOICE_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BG_COLOR" "${LOOKUPCHOICE_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BORDER_COLOR" "${LOOKUPCHOICE_BORDER_COLOR}"
 }
 
 function restore_setup(){
 	THE_TERM=$( get_config_value ${UCIMF_CONF} "term" )
 	THE_LOCALE=$( get_config_value ${UCIMF_CONF} "locale" )
 	THE_IME=$( get_config_value ${UCIMF_CONF} "ime" )
-	THE_FONT=$( get_config_value ${UCIMF_CONF} "font-names" )
+	THE_FONT=$( get_config_value ${UCIMF_CONF} "font-name" )
 	THE_FONTSIZE=$( get_config_value ${UCIMF_CONF} "font-size" )
+
+	# back compatibility
+	STATUS_FG_COLOR =$( get_config_value ${UCIMF_CONF} "STATUS_FG_COLOR" )
+	STATUS_BG_COLOR =$( get_config_value ${UCIMF_CONF} "STATUS_BG_COLOR" )
+	STATUS_BORDER_COLOR =$( get_config_value ${UCIMF_CONF} "STATUS_BORDER_COLOR" )
+	PREEDIT_FG_COLOR =$( get_config_value ${UCIMF_CONF} "PREEDIT_FG_COLOR" )
+	PREEDIT_BG_COLOR =$( get_config_value ${UCIMF_CONF} "PREEDIT_BG_COLOR" )
+	PREEDIT_BORDER_COLOR =$( get_config_value ${UCIMF_CONF} "PREEDIT_BORDER_COLOR" )
+	LOOKUPCHOICE_FG_COLOR =$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_FG_COLOR" )
+	LOOKUPCHOICE_BG_COLOR =$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BG_COLOR" )
+	LOOKUPCHOICE_BORDER_COLOR =$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BORDER_COLOR" )
+	#default value
+	STATUS_FG_COLOR =${STATUS_FG_COLOR:=7}
+	STATUS_BG_COLOR =${STATUS_BG_COLOR:=8}
+	STATUS_BORDER_COLOR =${STATUS_BORDER_COLOR:=9}
+	PREEDIT_FG_COLOR =${PREEDIT_FG_COLOR:=7}
+	PREEDIT_BG_COLOR =${PREEDIT_BG_COLOR:=8}
+	PREEDIT_BORDER_COLOR =${PREEDIT_BORDER_COLOR:=9}
+	LOOKUPCHOICE_FG_COLOR =${LOOKUPCHOICE_FG_COLOR:=7}
+	LOOKUPCHOICE_BG_COLOR =${LOOKUPCHOICE_BG_COLOR:=8}
+	LOOKUPCHOICE_BORDER_COLOR =${LOOKUPCHOICE_BORDER_COLOR:=9}
 }
 
 
