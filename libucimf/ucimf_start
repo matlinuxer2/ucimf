@@ -291,6 +291,20 @@ function font_setup(){
 }
 
 
+function fontsize_setup(){
+	local result=$( dialog --stdout \
+                               --title "Fonts Size Setup" \
+                               --inputbox "Enter the font size number:" 20 60 \
+                               $THE_FONTSIZE || echo "NONE" )
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_FONTSIZE="$result"
+}
+
+
 
 ##################
 # 主程式 
