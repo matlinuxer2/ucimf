@@ -188,9 +188,10 @@ void ucimf_init()
 	prdt = Preedit::getInstance();
 	lkc = LookupChoice::getInstance();
 
-	status_shift = new StatusShift;
-	preedit_shift = new PreeditShift;
-	lookupchoice_shift = new LookupChoiceShift;
+	int font_height = Font::instance()->height();
+	status_shift = new StatusShift( 0, font_height + 8 ) ;
+	preedit_shift = new PreeditShift( 0, (font_height + 8) * 2 );
+	lookupchoice_shift = new LookupChoiceShift( 0, (font_height + 8)*3 );
 
 	cwm = Cwm::getInstance();
 

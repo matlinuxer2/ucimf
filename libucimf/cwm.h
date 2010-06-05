@@ -66,7 +66,7 @@ class Shift
 class StatusShift : public Shift
 {
   public:
-    StatusShift();
+    StatusShift( int x_shift, int y_shift );
     void update( Window* );
   private:
     int x_gap;
@@ -76,7 +76,7 @@ class StatusShift : public Shift
 class PreeditShift : public Shift
 {
   public:
-    PreeditShift();
+    PreeditShift( int x_shift, int y_shift );
     void update( Window* );
   private:
     int x_gap;
@@ -86,7 +86,7 @@ class PreeditShift : public Shift
 class LookupChoiceShift : public Shift
 {
   public:
-    LookupChoiceShift();
+    LookupChoiceShift( int x_shift, int y_shift );
     void update( Window* );
   private:
     int x_gap;
