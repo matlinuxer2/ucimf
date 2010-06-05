@@ -73,7 +73,6 @@ function env_check(){
 	echo "        ime dir: ${OPENVANILLA_MODULES_DIR}" 
 	echo "     ime tables: ${THE_IME}"
 	echo "" 
-	read -p "Press <Enter> to continue..."
 }
 
 function main_setup(){
@@ -349,6 +348,7 @@ while true; do
       ;;
     env)
       env_check
+      read -p "Press <Enter> to continue..."
       CMD="main"
       ;;
     locale)
@@ -372,7 +372,14 @@ while true; do
       CMD="main"
       ;;
     *)
-      exit 0
+      env_check
+      read -p "Are you sure to leave?(y/N): " answer
+      if [ "x$answer" == "xy" -o "x$answer" == "xY" ]
+      then
+          exit 0
+      else
+          CMD="main"
+      fi
       ;;
   esac
 done
