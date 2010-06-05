@@ -1,3 +1,7 @@
+2009-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* add fail-safe check of module dir scanning
+
 2009-02-26  Mat <MatLinuxer2@gmail.com>
 
 	* Revision to 2.10.5 

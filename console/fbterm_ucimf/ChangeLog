@@ -1,3 +1,8 @@
+2010-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* Quote the font interfaces and implementations from FbTerm, 
+	  to add fontconfig support for ucimf.
+
 2009-03-24  Mat <MatLinuxer2@gmail.com>
 
 	* Revision to 0.2.4

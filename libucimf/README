@@ -1,9 +1,10 @@
-UCIMF
+UCIMF, Unicode Console InputMethod Framework
+http://code.google.com/p/ucimf/
 
 Feature
  • Support UTF-8 
- • Support OpenVanilla Modules
- • Support PCF, TrueType Font
+ • Support OpenVanilla IMF and Modules
+ • Support Freetype + Fontconfig
  • Provide OverSpot style compose window.
  • Provide C/C++ API
 
@@ -25,36 +26,13 @@ LC_CTYPE
   for example:
      >> export LC_CTYPE=zh_TW.UTF-8
 
-OVMODULE_DIR
-  to customize OpenVanilla modules location at run-time
-  for example:
-     >> export OVMODULE_DIR=/usr/lib/openvanilla/
-
 [Config File]
 The reference order is:
   $HOME/.ucimf.conf
   /etc/ucimf.conf or ( $YOUR_INSTALL_PREFIX/etc/ucimf.conf )
 
 
-IMF_MODULE_DIR
-  IMF modules of UCIMF search path
-  for example:
-     IMF_MODULE_DIR=/usr/lib/ucimf/
-
-UCIMF_FONTPATH
-  The path of your unicode font
-  for example:
-     UCIMF_FONTPATH=/usr/share/fonts/truetype/arphic/ukai.ttf 
-
 [Function Keys]
-F12 (Ctrl-Space ) To switch input methond ON/OFF
-F11 (Ctrl-ShiftL) Switch to next input method
-F10 (Ctrl-ShiftR) Switch to next input mehtod framework 
-
-
-Homepage, Download, Source codes
-http://sourceforge.net/projects/ucimf
-
-Forum, Mailling-list, Bug report
-http://groups.google.com/group/ucimf 
-
+F12 || Ctrl-Space  ,To switch input methond ON/OFF
+F11 || Ctrl-ShiftL ,Switch to next input method
+F10 || Ctrl-ShiftR ,Switch to next input mehtod framework 
