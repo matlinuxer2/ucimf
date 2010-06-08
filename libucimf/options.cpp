@@ -122,7 +122,7 @@ char* Options::getOption( const char* opt_str )
 
     // to avoid to return NULL;
     if( !result ){
-	result="";
+	result=const_cast<char*>("");
     }
 
     return result;
