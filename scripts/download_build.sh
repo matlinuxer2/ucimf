@@ -4,10 +4,10 @@ FBTERM_HOME="http://fbterm.googlecode.com/"
 FBTERM="fbterm-1.6"
 
 UCIMF_HOME="http://ucimf.googlecode.com/"
-LIBUCIMF="libucimf-2.2.9.1"
-UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.6"
+LIBUCIMF="libucimf-2.3.1"
+UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.7"
 OPENVANILLA_MODULES="openvanilla-modules-0.8.0_14"
-FBTERM_UCIMF="fbterm_ucimf-0.2.6"
+FBTERM_UCIMF="fbterm_ucimf-0.2.7"
 USERMANUAL="UserManual.pdf"
 
 #DIALOG_HOME="http://www.hightek.org/dialog/"
