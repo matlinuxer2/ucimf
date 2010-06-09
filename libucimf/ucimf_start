@@ -50,8 +50,6 @@ function env_check(){
 	# check openvanilla's modules existed
 	local my_openvanilla_modules=$( ls -l ${OPENVANILLA_MODULES_DIR} )
 
-	echo "Detecting environments..." 
-	sleep 0.5 
 	echo "" 
 	echo "            tty: ${my_tty}" 
 	echo "      fb device: ${my_fb_dev}" 
@@ -360,6 +358,9 @@ while true; do
       sleep 0.5
       echo "Setup complete."
       sleep 0.5
+      echo "Showing environments..." 
+      sleep 0.5 
+      env_check
 
       echo "" 
       echo "To start using, just execute following command:" 
@@ -379,6 +380,8 @@ while true; do
       exit 0
       ;;
     env)
+      echo "Detecting environments..." 
+      sleep 0.5 
       env_check
       read -p "Press <Enter> to continue..."
       CMD="main"
@@ -404,10 +407,10 @@ while true; do
       CMD="main"
       ;;
     *)
-      env_check
       read -p "Are you sure to leave?(y/N): " answer
       if [ "x$answer" == "xy" -o "x$answer" == "xY" ]
       then
+          env_check
           exit 0
       else
           CMD="main"

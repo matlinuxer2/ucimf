@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([fbterm_ucimf], [0.2.7+devel], [ucimf@googlegroups.com])
+AC_INIT([fbterm-ucimf], [0.2.7+devel], [ucimf@googlegroups.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([fbterm_ucimf.cpp])
 AC_CONFIG_HEADER([config.h])
