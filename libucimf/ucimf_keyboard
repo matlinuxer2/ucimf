@@ -1,0 +1,20 @@
+#!/bin/sh
+# keys definition are in /usr/include/linux/input.h
+
+SPACE=$(grep KEY_SPACE /usr/include/linux/input.h | sed -e 's/#define[[:blank:]]KEY_SPACE[[:blank:]]*\([[:digit:]]*\)/\1/g' )
+LEFTSHIFT=$(grep KEY_LEFTSHIFT /usr/include/linux/input.h | sed -e 's/#define[[:blank:]]KEY_LEFTSHIFT[[:blank:]]*\([[:digit:]]*\)/\1/g' )
+RIGHTSHIFT=$(grep KEY_RIGHTSHIFT /usr/include/linux/input.h | sed -e 's/#define[[:blank:]]KEY_RIGHTSHIFT[[:blank:]]*\([[:digit:]]*\)/\1/g' )
+
+if [ -n "$SPACE" -a -n " $LEFTSHIFT" -a -n "$RIGHTSHIFT" ]; then
+
+loadkeys  << EOF
+control keycode $SPACE = F12
+control keycode $LEFTSHIFT = F10
+control keycode $RIGHTSHIFT = F11
+EOF
+
+else
+
+echo "Cannot find defined keys"
+
+fi
