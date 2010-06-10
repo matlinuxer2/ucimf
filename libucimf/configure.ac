@@ -5,6 +5,8 @@ AC_PREREQ(2.59)
 AC_INIT(libucimf, 2.3.1+devel, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -77,6 +79,7 @@ AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 AC_CONFIG_FILES([Makefile
 		 libucimf-uninstalled.pc
 		 libucimf.pc
+                 src/Makefile
                  font/Makefile
                  display/Makefile])
 AC_OUTPUT
