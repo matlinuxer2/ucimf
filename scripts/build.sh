@@ -45,19 +45,6 @@ build_ucimf-openvanilla(){
 	popd
 }
 
-build_fbterm-ucimf(){
-	pushd .
-
-	echo "Start to make tarball of fbterm-ucimf..."
-	cd ${FBTERMUCIMF}
-	test -f ./configure || autoreconf -sif || return 1
-	test -f Makefile && make distclean
-	./configure --prefix=${BUILD} && make && make install
-
-	popd
-}
-
 build_clean
 build_libucimf || exit 
 build_ucimf-openvanilla || exit 
-build_fbterm-ucimf || exit

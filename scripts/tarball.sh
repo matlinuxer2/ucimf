@@ -36,20 +36,6 @@ make_tarball_of_ucimf-openvanilla(){
 	popd
 }
 
-make_tarball_of_fbterm-ucimf(){
-	pushd .
-
-	echo "Start to make tarball of fbterm-ucimf..."
-	cd ${FBTERMUCIMF}
-	autoreconf -sif
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
-	make distcheck && ls -t fbterm_ucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
-
-	popd
-}
-
 # first
 make_tarball_of_libucimf
 make_tarball_of_ucimf-openvanilla
-make_tarball_of_fbterm-ucimf
-
