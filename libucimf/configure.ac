@@ -5,7 +5,6 @@ AC_PREREQ(2.59)
 AC_INIT(libucimf, 2.3.1+devel, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
