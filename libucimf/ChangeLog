@@ -1,3 +1,11 @@
+2010-06-10  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* merge fbter_ucimf into libucimf main tree
+	* replace ucimf_keyboard implementation with shell scripts
+	* move main source to src/ to seperate autotools files and sources
+	* remove deprecated part 
+	* adjust ucimf_start menu behavior
+
 2010-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Add typedefs for __u8, __u16, __u32 types
