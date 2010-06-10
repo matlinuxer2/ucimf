@@ -1,8 +1,6 @@
 SUBDIRS = display font src 
 
 AM_CPPFLAGS = -g -DDEBUG 
-ACLOCAL_AMFLAGS= -I m4
-
 
 ucimfinclude_HEADERS = include/ucimf.h
 ucimfincludedir = $(includedir)
