@@ -80,5 +80,6 @@ AC_CONFIG_FILES([Makefile
 		 libucimf.pc
                  src/Makefile
                  font/Makefile
+                 fbterm_ucimf/Makefile
                  display/Makefile])
 AC_OUTPUT

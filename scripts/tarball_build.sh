@@ -56,31 +56,7 @@ tarball_build_ucimf-openvanilla(){
 
 }
 
-
-tarball_build_fbterm_ucimf(){
-	pushd .
-
-
-	FBTERMUCIMF_PATH=$( ls ${TARBALL} |grep 'fbterm_ucimf.*.tar.gz'| head --lines=1 )
-	FBTERMUCIMF_FILE=${FBTERMUCIMF_PATH%.tar.gz}
-
-	echo "Start to build fbterm_ucimf"
-
-	cd ${TARBALL}
-	tar -zxvf ${FBTERMUCIMF_PATH}
-	cd ${FBTERMUCIMF_FILE}
-	./configure --prefix=${BUILD} && make && make install
-
-	cd ${TARBALL}
-	rm -rvf ${FBTERMUCIMF_FILE}
-
-	popd
-
-}
-
-
 build_clean
 tarball_build_libucimf
 tarball_build_ucimf-openvanilla
-tarball_build_fbterm_ucimf
 
