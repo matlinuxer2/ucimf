@@ -35,7 +35,49 @@ typedef unsigned int u32;
 typedef unsigned long long u64;
 
 
-#include "instance.h"
+
+#ifdef __cplusplus
+
+//#include "instance.h"
+#define DECLARE_INSTANCE(classname) \
+public: \
+	static classname *instance(); \
+	static void uninstance(); \
+protected: \
+	classname(); \
+	virtual ~classname(); \
+private: \
+	static classname *createInstance(); \
+	static classname *mp##classname;
+
+#define DEFINE_INSTANCE(classname) \
+classname *classname::mp##classname = 0; \
+ \
+classname *classname::instance() \
+{ \
+	if (!mp##classname) { \
+		mp##classname = createInstance(); \
+	} \
+	 \
+	return mp##classname; \
+} \
+ \
+void classname::uninstance() \
+{ \
+	if (mp##classname) { \
+		delete mp##classname; \
+		mp##classname = 0; \
+	} \
+}
+
+#define DEFINE_INSTANCE_DEFAULT(classname) \
+DEFINE_INSTANCE(classname) \
+ \
+classname *classname::createInstance() \
+{ \
+	return new classname(); \
+}
+
 
 class Font {
 	DECLARE_INSTANCE(Font)
@@ -62,5 +104,29 @@ private:
 	static u32 mFontSize;
 	static s32 mFontWidth;
 };
+
+#endif //__cplusplus
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct the_Font_Glyph {
+	s16 pitch, width, height;
+	s16 left, top;
+	u8 pixmap[0];
+} struct_Font_Glyph;
+
+struct_Font_Glyph *call_Font_getGlyph(u32 unicode);
+u32 call_Font_width();
+u32 call_Font_height();
+void call_Font_showInfo();
+void call_Font_setInfo( const s8* font_names, const s32 font_size, const s32 font_width );
+
+#ifdef __cplusplus                                                                                  
+}
+#endif
+
 
 #endif
