@@ -321,3 +321,28 @@ Font::Glyph *Font::getGlyph(u32 unicode)
 	glyphCache[unicode] = glyph;
 	return glyph;
 }
+
+
+// wrapper
+
+struct_Font_Glyph *call_Font_getGlyph(u32 unicode){
+	return (struct_Font_Glyph *)Font::instance()->getGlyph(unicode);
+}
+
+
+u32 call_Font_width(){
+	return Font::instance()->width();
+}
+
+u32 call_Font_height(){
+	return Font::instance()->height();
+}
+
+void call_Font_showInfo(){
+	Font::instance()->showInfo( true ); 
+}
+
+void call_Font_setInfo( const s8* font_names, const s32 font_size, const s32 font_width ){
+	return Font::instance()->setInfo( font_names, font_size, font_width );
+}
+
