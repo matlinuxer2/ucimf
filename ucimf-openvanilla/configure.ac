@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(ucimf-openvanilla,2.10.7+devel, ucimf@googlegroups.com)
+AC_INIT(ucimf-openvanilla,2.10.8+devel, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([openvanilla.cpp])
+AC_CONFIG_SRCDIR([src/openvanilla.cpp])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
@@ -47,5 +47,7 @@ fi
 AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
 
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile
+src/Makefile
+])
 AC_OUTPUT
