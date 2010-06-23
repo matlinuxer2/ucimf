@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 FBTERM_HOME="http://fbterm.googlecode.com/"
 FBTERM="fbterm-1.6"
@@ -18,6 +18,24 @@ DIALOG="dialog-1.1-20080819"
 SOURCE_DIR=${HOME}/source
 BUILD_DIR=${HOME}/build
 PREFIX_DIR=${HOME}/fbterminal
+
+echo ""
+echo "===NOTE==="
+echo "The script will change following directories:"
+echo ""
+echo "  source dir: $SOURCE_DIR"
+echo "  build dir: $BUILD_DIR"
+echo "  install dir: $PREFIX_DIR"
+echo ""
+
+read -p "Ready to continue?(y/N): " answer
+
+if [ "x$answer" == "xy" -o "x$answer" == "xY" ];then
+    echo "Starting processing..."
+else 
+    exit 0
+fi
+
 
 mkdir -pv ${SOURCE_DIR} ${BUILD_DIR}
 
