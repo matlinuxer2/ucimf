@@ -4,9 +4,9 @@ FBTERM_HOME="http://fbterm.googlecode.com/"
 FBTERM="fbterm-1.6"
 
 UCIMF_HOME="http://ucimf.googlecode.com/"
-LIBUCIMF="libucimf-2.3.1"
+LIBUCIMF="libucimf-2.3.4+devel"
 UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.7"
-OPENVANILLA_MODULES="openvanilla-modules-0.8.0_14"
+OPENVANILLA_MODULES="openvanilla-modules-0.9.0a1-0"
 FBTERM_UCIMF="fbterm_ucimf-0.2.7"
 USERMANUAL="UserManual.pdf"
 
@@ -80,7 +80,7 @@ autobuild ()
 
 	if [ $? != 0 ]; then
 		echo "PACKAGE AUTOBUILD:$0 ERROR!"
-		exit 1
+		#exit 1
 	fi
 }
 
