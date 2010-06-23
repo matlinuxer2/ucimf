@@ -29,8 +29,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "display/fbdev.h"
-#include "display/vgadev.h"
+#include "fbdev.h"
+#include "vgadev.h"
 
 #include "font.h"
 
