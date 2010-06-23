@@ -132,28 +132,29 @@ int GraphDev::OutChar(int x, int y, int fg, int bg, unsigned int c) {
     // CharBitMap tmpFont;
     // font->render(c, tmpFont);
     Font::Glyph *glyph = font->getGlyph( c );
-    
-    int FH = font->height();
-    int fh = glyph->height;
-    int fw = glyph->width;
-    int i,j;
 
-    for (i = 0; i < ( FH -2 ) ; i++)
+    if( !glyph ){
+	    return x + font->width(); 
+    }
+    
+    int font_height = glyph->height;
+    //int font_width = glyph->width;
+    int font_width = glyph->pitch;
+    int left = glyph->left;
+    int top = glyph->top;
+    int xi, yi;
+
+    for ( yi = 0; yi < font_height; yi++)
     {  
-	    for ( j = 0; j < fw ; j++ )
+	    for ( xi = 0; xi < font_width; xi++ )
 	    {  
-		    if ( i > glyph->top ) {
-			    int ii = i - glyph->top - 1 ;
-			    if ( glyph->pixmap[ ii * glyph->pitch + j ] ){
-				    PutPixel( x+j, y+i, fg);
-			    }
-		    }  
-		    else {
-			    //PutPixel( x+j, y+i, bg);
+		    if ( glyph->pixmap[ (yi*font_width) + xi ] ){
+			    PutPixel( x+xi, (y+top)+yi, fg);
 		    }
 	    }  
     } 
 
-    return x+fw;
+    int delta = font_width > font->width()/2 ? font_width : font->width()/2 ;
 
+    return x+delta+left;
 }
