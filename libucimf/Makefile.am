@@ -1,4 +1,4 @@
-SUBDIRS = display font src fbterm_ucimf
+SUBDIRS = display font src #fbterm_ucimf
 
 AM_CPPFLAGS = -g -DDEBUG 
 
@@ -23,5 +23,3 @@ pkgconfig_DATA = libucimf.pc libucimf-uninstalled.pc
 pkgconfig_in_data = libucimf.pc.in libucimf-uninstalled.pc.in
 
 EXTRA_DIST=  $(bin_SCRIPTS) $(conf_DATA) $(misc_DATA) $(pkgconfig_DATA) $(pkgconfig_in_data)
-
-
