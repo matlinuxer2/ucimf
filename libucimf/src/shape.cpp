@@ -70,7 +70,14 @@ void Text::append( const ustring& ustr )
   {
     //new_length += font->length( new_str[i] );
     Font::Glyph *glyph = font->getGlyph( new_str[i] );
-    new_length += glyph->width;
+
+    if( !glyph ){                                                                                   
+	    new_length += font->width();
+    }  
+    else{
+	    int delta = glyph->width > font->width()/2 ? glyph->width : font->width()/2 ;
+	    new_length += delta + glyph->left;
+    }
   }
   
   if( new_length > width )
@@ -93,7 +100,13 @@ void Text::append_next( const ustring& ustr )
   {
     //new_length += font->length( ustr[i] );
     Font::Glyph *glyph = font->getGlyph( ustr[i] );
-    new_length += glyph->width;
+    if( !glyph ){                                                                                   
+	    new_length += font->width();
+    }  
+    else{
+	    int delta = glyph->width > font->width()/2 ? glyph->width : font->width()/2 ;
+	    new_length += delta + glyph->left;
+    }
   }
 
   if( new_length > width )
