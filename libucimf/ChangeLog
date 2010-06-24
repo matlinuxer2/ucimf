@@ -1,3 +1,15 @@
+2010-06-24  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* merge fbter_ucimf into libucimf main tree
+	* fixed autoreconf error
+	* replace ucimf_keyboard implementation with shell scripts
+	* move main source to src/ to seperate autotools files and sources
+	* remove deprecated part 
+	* update some scripts
+	* adjust ucimf_start menu behavior
+	* fixed some compilation warning
+	* fixed syntax error
+
 2010-06-10  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* merge fbter_ucimf into libucimf main tree
