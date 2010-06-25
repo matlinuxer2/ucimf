@@ -262,12 +262,13 @@ void Preedit::clear()
 void Preedit::draw()
 {
  
-  int border = 3;
+  int border = 0;
 
   Text t;
   if( buf.size() > 0 )
   {
     t.append( buf );
+    border = 3;
   }
   t.bgColor( bg_color );
   t.fgColor( fg_color );
@@ -370,12 +371,13 @@ void LookupChoice::clear()
 void LookupChoice::draw()
 {
  
-  int border = 3;
+  int border = 0;
 
   Text t;
   for( size_t i=0 ; i<bufs.size(); i++ )
   {
     t.append_next( bufs[i] );
+    border = 3;
   }
   t.bgColor( bg_color );
   t.fgColor( fg_color );
