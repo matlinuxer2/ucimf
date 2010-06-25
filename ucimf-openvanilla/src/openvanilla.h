@@ -157,6 +157,5 @@ class OVImf : public Imf
     OVDictionary *dict;
 };
 
-extern "C" Imf* createImf(){ return OVImf::getInstance(); }
-extern "C" void destroyImf( Imf* imf ){ delete imf; }
-
+extern "C" Imf* createImf();
+extern "C" void destroyImf( Imf* imf );
