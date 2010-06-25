@@ -28,24 +28,17 @@ locale -a
 
 ==字型設定==
  UCIMF 的字型設定可以在你的 /etc/ucimf.conf 或是 ~/.ucimf.conf 找到。
- 設定方式，是將 FreetType 所支援的字型檔案的路徑指定給 UCIMF_FONTPATH 的參數。
-
 {{{
-UCIMF_FONTPATH = /usr/share/ucimf/unifont.pcf
-}}}                                          
-
- 字型的大小則可透過 FONT_WIDTH 及 FONT_HEIGHT 來設定。
-
-{{{
-FONT_WIDTH = 24
-FONT_HEIGHT = 24
-}}}             
-
-_( 預計於 libucimf >= 2.3.0 加入 fontconfig 的支援，設定方式預計如下: )_
-{{{
-font-names=AR PL ShanHeiSun Uni
+font-name=AR PL ShanHeiSun Uni
 font-size=16
 }}}
+
+  其中 font-name 為 fontconfig 的字型名稱，可透過
+{{{
+fc-list
+}}}
+  來查詢系統內安裝的字型列表
+
 
 ==輸入法的安裝及管理==
  目前 UCIMF 的輸入法管理方式是直接管理 `*`.cin 表格檔案。 
@@ -53,7 +46,7 @@ font-size=16
  新增輸入法的方式，即是將通用的 `*`.cin 檔案放進 ~/.openvanilla/OVIMGeneric/ 的下面。
 
 {{{
-cp baz.cin ~/.openvanilla/OVIMGeneric/
+cp foo.cin ~/.openvanilla/OVIMGeneric/
 }}}                                   
 
  欲移除輸入法，即將檔案移除即可，或是更改延伸檔名如:
