@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2008-2009 dragchan <zgchan317@gmail.com>
+ *   Copyright ? 2008-2009 dragchan <zgchan317@gmail.com>
  *   This file is part of FbTerm.
  *
  *   This program is free software; you can redistribute it and/or
@@ -18,45 +18,139 @@
  *
  */
 
+/**
+ *
+FbTerm implements a lightweight client-server input method architecture. Instead of processing user input and
+drawing input method UI itself, FbTerm acts as a client and requests the input method server to do all these works.
+
+
+Input Method Messages
+
+On startup, FbTerm forks a child process and executes the input method server program in it. FbTerm and the input
+method server will communicate each other with a unix socket pair created by FbTerm. When IM server startup, it sends
+a Connect message to FbTerm, indicates that the server has got ready. FbTerm response a FbTermInfo message, tell
+IM server things like current screen size, font size, rotation etc, help IM server draw it's UI. Of course,
+IM server may ignore these hints.
+
+When FbTerm exit, it sends a Disconnect to IM server, indicates it to exit.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |<init>      <exit>|                   |
+    |     Connect       |                  |    Disconnect     |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |    FbTermInfo     |                  |                   |<exit>
+    |------------------>|                  |                   |
+    |                   |                  |                   |
+    |                   |                  |                   |
+
+
+If user presses the input method state switch shortcut (e.g. Ctrl + Space), FbTerm sends a Active message to
+IM server, and a CursorPosition message with current cursor position. After receiving the Active message,
+IM server may want to draw it's UI, e.g. a IM status bar, on frame buffer screen. In order to avoid FbTerm corrupting
+it's UI, IM server first sends a SetWin message, tell FbTerm the screen areas occupied by its status bar, and waits FbTerm
+to response a AckWin message. Now IM server can begin to draw the status bar.
+
+While user pressing Ctrl + Space again, FbTerm sends a Deactive message to IM server. IM server should response a
+SetWin message with a empty screen area to hide its status bar and ask FbTerm to redraw screen.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |      Active       |                  |     Deactive      |
+    |------------------>|                  |------------------>|
+    |                   |                  |                   |
+    |  CursorPosition   |                  |      SetWin       |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |      SetWin       |                  |      AckWin       |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |      AckWin       |                  |                   |
+    |------------------>|                  |                   |
+    |                   |<draw UI>         |                   |
+    |                   |                  |                   |
+
+
+When IM state is on, FbTerm doesn't process any keyboard input except its shortcuts and Alt-Fn, it redirects them
+to IM server with SendKey messages. After receiving SendKey message, IM server may draw it's preedit and candidate UI.
+As described above, it should first send SetWin messages to tell FbTerm the areas occupied by preedit and candidate UI
+and wait for responsed AckWin messages before drawing UI.
+
+IM server sends the converted texts in a PutText message back to FbTerm, and FbTerm will write them to the running
+program. In the common case, the running program will change cursor position, FbTerm notifies it to IM server with a
+CursorPosition message. If IM server provides a XIM "over the spot" style UI, it may response SetWin messages to move
+and redraw it's UI.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |      SendKey      |                  |      PutText      |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |      SetWin       |                  |  CursorPosition   |
+    |<------------------|                  |------------------>|
+    |                   |                  |                   |
+    |      AckWin       |                  |      SetWin       |
+    |------------------>|                  |<------------------|
+    |                   |                  |                   |
+    |                   |<draw UI>         |      AckWin       |
+    |                   |                  |------------------>|
+    |                   |                  |                   |
+    |                   |                  |                   |<draw UI>
+
+
+When IM state is on, user presses shortcuts for switching to other sub-window or Alt-Fn for other virtual console, FbTerm
+sends a HideUI message to IM server, then waits for a AckHideUI message responsed from IM server before switching. Maybe
+IM server is busy with the previous SendKey message when HideUI message is arrived, it continues it's work, then processes
+this HideUI message, sends back a AckHideUI message to FbTerm.
+
+When switching back, FbTerm sends a ShowUI message to IM server, indicates IM server to redraw it's UI.
+
+ +------+           +------+            +------+           +------+
+ |FbTerm|           |  IM  |            |FbTerm|           |  IM  |
+ +--.---+           +---.--+            +--.---+           +---.--+
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |       HideUI      |                  |      ShowUI       |
+    |------------------>|                  |------------------>|
+    |                   |                  |                   |
+    |     AckHideUI     |                  |      SetWin       |
+    |<------------------|                  |<------------------|
+    |                   |                  |                   |
+    |<do switching>     |                  |      AckWin       |
+    |                   |                  |------------------>|
+    |                   |                  |                   |
+    |                   |                  |                   |<draw UI>
+    |                   |                  |                   |
+    |                   |                  |                   |
+    |                   |                  |                   |
+ */
+
 #ifndef IM_MESSAGE_H
 #define IM_MESSAGE_H
-
-/*
- * messages from IM to Fbterm:
- *
- * Connect:         IM send it to FbTerm after ending initization
- * PutText:         IM put translated input method text in this message, then send back to FbTerm
- * SetWins:         IM tell FbTerm that rectangles contained in the message will be used to draw IM's UI,
- *                  and FbTerm should NOT paint on these areas
- *
- *
- * messages from FbTerm to IM:
- *
- * FbTermInfo:      FbTerm send font name/size etc to IM, help IM to keep same UI with FbTerm
- * Disconnect:      FbTerm request IM to exit
- * Active:          FbTerm tell IM that user switch input method state on
- * Deactive:        FbTerm tell IM that user siwtch input method state off
- * SendKey:         when input method state is on, FbTerm send all keybord keys to IM
- * CursorPosition:  FbTerm tell IM that cursor poisition has been changed
- * AckWins:         when receive message SetWins, FbTerm send this message to IM,
- *                  on the other side, after sending SetWins, IM will keep waiting until receive AckWins from FbTerm
- * TermMode:        FbTerm send term mode to IM, help IM to translate keycode to terminal input
- *
- */
 
 typedef enum {
 	Connect = 0, Disconnect,
 	Active, Deactive,
 	SendKey, PutText,
-	SetWins, AckWins,
+	SetWin, AckWin,
 	CursorPosition, FbTermInfo, TermMode,
-	ShowUI, HideUI, AckHideUI
+	ShowUI, HideUI, AckHideUI,
+	FillRect, DrawText,
+	Ping, AckPing
 } MessageType;
 
 typedef struct {
-	unsigned char rotate;
-	unsigned short fontSize, fontHeight, fontWidth;
-	char fontName[0];
+	unsigned fontHeight, fontWidth;
+	unsigned screenHeight, screenWidth;
 } Info;
 
 #define NR_IM_WINS 10
@@ -64,29 +158,44 @@ typedef struct {
 typedef struct {
 	unsigned x, y;
 	unsigned w, h;
-} ImWin;
+} Rectangle;
 
 typedef struct {
-	unsigned short type;  // message's type, see enum MessageType
-	unsigned short len;  // message's length, including head and body
+	unsigned short type;  ///< message's type, @see MessageType
+	unsigned short len;  ///< message's length, including head and body
 
 	union {
-		char keys[0]; // for SendKey
-		char texts[0]; // for PutText
-		ImWin wins[0]; // for SetWins
-		Info info; // for FbTermInfo
-		char raw; // for Connect, 1: when IM actived, FbTerm sets keyboard mode to K_MEDIUMRAW
-				  //              0: keep K_UNICODE mode
+		char keys[0]; ///< included in message SendKey
+		char texts[0]; ///< included in message PutText
+		char raw; ///< included in message Connect
+		unsigned winid; ///< included in message ShowUI
+		Info info; ///< included in message FbTermInfo
+
+		struct {
+			Rectangle rect;
+			unsigned winid;
+		} win; ///< included in message SetWin
 
 		struct {
 			char crWithLf;
 			char applicKeypad;
 			char cursorEscO;
-		} term; // for TermMode;
+		} term; ///< included in message TermMode;
 
 		struct {
 			unsigned x, y;
-		} cursor; // for CursorPosition
+		} cursor; ///< included in message CursorPosition
+
+		struct {
+			Rectangle rect;
+			unsigned char color;
+		} fillRect; ///< included in message FillRect
+
+		struct {
+			unsigned x, y;
+			unsigned char fc, bc;
+			char texts[0];
+		} drawText; ///< included in message DrawText
 	};
 } Message;
 

@@ -1,3 +1,7 @@
+2010-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* update IM API to latest fbterm 1.6
+
 2010-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Quote the font interfaces and implementations from FbTerm, 
