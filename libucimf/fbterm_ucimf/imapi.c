@@ -34,6 +34,8 @@ static char pending_msg_buf[10240];
 static unsigned pending_msg_buf_len = 0;
 static int im_active = 0;
 
+static void wait_message(MessageType type);
+
 void register_im_callbacks(ImCallbacks callbacks)
 {
 	cbs = callbacks;
@@ -68,7 +70,7 @@ void connect_fbterm(char raw)
 	int ret = write(imfd, (char *)&msg, sizeof(msg));
 }
 
-void put_im_text(char *text, unsigned short len)
+void put_im_text(const char *text, unsigned len)
 {
 	if (imfd == -1 || !im_active || !text || !len || (OFFSET(Message, texts) + len > UINT16_MAX)) return;
 
@@ -81,44 +83,48 @@ void put_im_text(char *text, unsigned short len)
 	int ret = write(imfd, buf, MSG(buf)->len);
 }
 
-void set_im_windows(ImWin *rects, unsigned short num)
+void set_im_window(unsigned id, Rectangle rect)
 {
-	if (imfd == -1 || !im_active || (!rects && num) || num > NR_IM_WINS) return;
+	if (imfd == -1 || !im_active || id >= NR_IM_WINS) return;
 
-	char buf[OFFSET(Message, wins) + num * sizeof(ImWin)];
+	Message msg;
+	msg.type = SetWin;
+	msg.len = sizeof(msg);
+	msg.win.winid = id;
+	msg.win.rect = rect;
 
-	MSG(buf)->type = SetWins;
+	int ret = write(imfd, (char *)&msg, sizeof(msg));
+	wait_message(AckWin);
+}
+
+void fill_rect(Rectangle rect, unsigned char color)
+{
+	Message msg;
+	msg.type = FillRect;
+	msg.len = sizeof(msg);
+
+	msg.fillRect.rect = rect;
+	msg.fillRect.color = color;
+
+	int ret = write(imfd, (char *)&msg, sizeof(msg));
+}
+
+void draw_text(unsigned x, unsigned y, unsigned char fc, unsigned char bc, const char *text, unsigned len)
+{
+	if (!text || !len) return;
+
+	char buf[OFFSET(Message, drawText.texts) + len];
+
+	MSG(buf)->type = DrawText;
 	MSG(buf)->len = sizeof(buf);
-	if (num) {
-		memcpy(MSG(buf)->wins, rects, num * sizeof(ImWin));
-	}
+
+	MSG(buf)->drawText.x = x;
+	MSG(buf)->drawText.y = y;
+	MSG(buf)->drawText.fc = fc;
+	MSG(buf)->drawText.bc = bc;
+	memcpy(MSG(buf)->drawText.texts, text, len);
 
 	int ret = write(imfd, buf, MSG(buf)->len);
-
-	int ack = 0;
-	while (!ack) {
-		char *cur = pending_msg_buf + pending_msg_buf_len;
-		int len = read(imfd, cur, sizeof(pending_msg_buf) - pending_msg_buf_len);
-
-		if (len == -1 && errno == ECONNRESET) { // FbTerm has exited
-			close(imfd);
-			imfd = -1;
-			return;
-		} else if (len <= 0) continue;
-
-		pending_msg_buf_len += len;
-
-		char *end = cur + len;
-		for (; cur < end && MSG(cur)->len <= (end - cur); cur += MSG(cur)->len) {
-			if (MSG(cur)->type == AckWins) {
-				memcpy(cur, cur + MSG(cur)->len, end - cur - MSG(cur)->len);
-				pending_msg_buf_len -= MSG(cur)->len;
-
-				ack = 1;
-				break;
-			}
-		}
-	}
 }
 
 static int process_message(Message *msg)
@@ -153,13 +159,13 @@ static int process_message(Message *msg)
 		break;
 
 	case ShowUI:
-		if (cbs.show_ui) {
-			cbs.show_ui();
+		if (im_active && cbs.show_ui) {
+			cbs.show_ui(msg->winid);
 		}
 		break;
 
 	case HideUI: {
-		if (cbs.hide_ui) {
+		if (im_active && cbs.hide_ui) {
 			cbs.hide_ui();
 		}
 
@@ -195,34 +201,79 @@ static int process_message(Message *msg)
 	return exit;
 }
 
-int check_im_message()
+static int process_messages(char *buf, int len)
 {
-	char buf[sizeof(pending_msg_buf)];
-	int len;
-
-	if (pending_msg_buf_len) {
-		len = pending_msg_buf_len;
-		pending_msg_buf_len = 0;
-
-		memcpy(buf, pending_msg_buf, len);
-	} else {
-		if (imfd == -1) return 0;
-
-		len = read(imfd, buf, sizeof(buf));
-
-		if (len == -1 && errno == ECONNRESET) {
-			close(imfd);
-			imfd = -1;
-			return 0;
-		} else if (len <= 0) return 1;
-	}
-
 	char *cur = buf, *end = cur + len;
 	int exit = 0;
 
 	for (; cur < end && MSG(cur)->len <= (end - cur); cur += MSG(cur)->len) {
 		exit |= process_message(MSG(cur));
 	}
+
+	return exit;
+}
+
+static void wait_message(MessageType type)
+{
+	int ack = 0;
+	while (!ack) {
+		char *cur = pending_msg_buf + pending_msg_buf_len;
+		int len = read(imfd, cur, sizeof(pending_msg_buf) - pending_msg_buf_len);
+
+		if (len == -1 && (errno == EAGAIN || errno == EINTR)) continue;
+		else if (len <= 0) {
+			close(imfd);
+			imfd = -1;
+			return;
+		}
+
+		pending_msg_buf_len += len;
+
+		char *end = cur + len;
+		for (; cur < end && MSG(cur)->len <= (end - cur); cur += MSG(cur)->len) {
+			if (MSG(cur)->type == type) {
+				memcpy(cur, cur + MSG(cur)->len, end - cur - MSG(cur)->len);
+				pending_msg_buf_len -= MSG(cur)->len;
+
+				ack = 1;
+				break;
+			}
+		}
+	}
+
+	if (pending_msg_buf_len) {
+		Message msg;
+		msg.type = Ping;
+		msg.len = sizeof(msg);
+		int ret = write(imfd, (char *)&msg, sizeof(msg));
+	}
+}
+
+int check_im_message()
+{
+	if (imfd == -1) return 0;
+
+	char buf[sizeof(pending_msg_buf)];
+	int len, exit = 0;
+
+	if (pending_msg_buf_len) {
+		len = pending_msg_buf_len;
+		pending_msg_buf_len = 0;
+
+		memcpy(buf, pending_msg_buf, len);
+		exit |= process_messages(buf, len);
+	}
+
+	len = read(imfd, buf, sizeof(buf));
+
+	if (len == -1 && (errno == EAGAIN || errno == EINTR)) return 1;
+	else if (len <= 0) {
+		close(imfd);
+		imfd = -1;
+		return 0;
+	}
+
+	exit |= process_messages(buf, len);
 
 	return !exit;
 }
