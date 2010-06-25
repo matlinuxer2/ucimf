@@ -4,7 +4,7 @@ FBTERM_HOME="http://fbterm.googlecode.com/"
 FBTERM="fbterm-1.6"
 
 UCIMF_HOME="http://ucimf.googlecode.com/"
-LIBUCIMF="libucimf-2.3.4+devel"
+LIBUCIMF="libucimf-2.3.5"
 UCIMF_OPENVANILLA="ucimf-openvanilla-2.10.7"
 OPENVANILLA_MODULES="openvanilla-modules-0.9.0a1-0"
 FBTERM_UCIMF="fbterm_ucimf-0.2.7"
@@ -74,7 +74,7 @@ autobuild ()
 	tar -xvf ${SOURCE_DIR}/$1.* -C ${BUILD_DIR} &&
 	cd ${BUILD_DIR}/$1 &&
 
-	./configure --prefix=${PREFIX_DIR} $2 &&
+	./configure --prefix=${PREFIX_DIR} $2 
 	make &&
 	make install
 

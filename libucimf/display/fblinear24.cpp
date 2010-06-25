@@ -160,7 +160,6 @@ void FBLinear24::RevRect(int x1,int y1,int x2,int y2) {
 
 
 void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
- UrDEBUG("FBLinear24::SaveRect( %d, %d, %d, %d) \n", x1,y1,x2,y2 );
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -189,11 +188,9 @@ void FBLinear24::SaveRect(int x1,int y1,int x2,int y2, char* *buffer) {
             fb_writeb( fb_readb(dest8++) , buf++ );
         }
     }
- UrDEBUG("FBLinear24::SaveRect() End\n");
 }
 
 void FBLinear24::RstrRect(int x1,int y1,int x2,int y2, char* *buffer) {
- UrDEBUG("FBLinear24::RstrRect( %d, %d, %d, %d )\n", x1, y1, x2, y2 );
     assert( x1 >= 0 && x1 < Width() && y1 >=0 && y1 < Height());
     assert( x2 >= 0 && x2 < Width() && y2 >=0 && y2 < Height());
     assert(x1 <= x2 && y1 <= y2);
@@ -219,7 +216,6 @@ void FBLinear24::RstrRect(int x1,int y1,int x2,int y2, char* *buffer) {
     delete [] (*buffer);
     *buffer = NULL;
 
- UrDEBUG("FBLinear24::RstrRect() End\n");
 }
 
 inline void FBLinear24::PutPixel(int x,int y,int color) {

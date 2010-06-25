@@ -1,3 +1,8 @@
+2009-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* update to latest OpenVanilla API
+
+
 2009-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* add fail-safe check of module dir scanning

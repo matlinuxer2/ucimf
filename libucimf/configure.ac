@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libucimf, 2.3.5, ucimf@googlegroups.com)
+AC_INIT(libucimf, 2.3.5+devel, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 
@@ -80,6 +80,7 @@ AC_CONFIG_FILES([Makefile
 		 libucimf.pc
                  src/Makefile
                  font/Makefile
+                 fbterm_ucimf/Makefile
                  display/Makefile])
 
 AC_OUTPUT
