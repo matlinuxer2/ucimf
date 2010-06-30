@@ -26,7 +26,14 @@
 
 int LogFd=-1;
 
+// path for openvanilla.so to locate libovimgeneric,... *.so 
 #define OV_MODULEDIR LIBDIR"/openvanilla/"
+
+// path for libovimgeneric.so, to locate *.cin , and data per modules
+#define OV_MODULEDIR2 LIBDIR"/openvanilla/"
+
+// path for libovimgeneric.so, mostly unused.
+#define OV_MODULEDIR3 LIBDIR"/openvanilla/"
 
 /* 
  * implementation of OVImf
@@ -75,66 +82,73 @@ OVImf::OVImf()
 
   UrDEBUG( "OVIMF starting \n" );
   UrDEBUG( "OVIMF Module Dir: %s \n", OV_MODULEDIR );
+  UrDEBUG( "OVIMF Module Dir2: %s \n", OV_MODULEDIR2 );
+  UrDEBUG( "OVIMF Module Dir3: %s \n", OV_MODULEDIR3 );
 
   lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
 
-  DIR *dir = opendir( OV_MODULEDIR );
-  if( dir )
-  {
-    struct dirent *d_ent;
-    while( ( d_ent = readdir(dir) ) != NULL )
-    {
-      if( strstr( d_ent->d_name, ".so") )
-      {
-	  OVLibrary* mod = new OVLibrary();
-	  
-	  UrDEBUG( "loading .so: %s \n", d_ent->d_name );
+  struct dirent **namelist;
 
-	  mod->handle = lt_dlopen( d_ent->d_name );
-	  if(mod->handle == NULL){
-            UrDEBUG( "lt_dlopen loading error: %s \n", lt_dlerror() );
-	    delete mod;
-	    continue;
-	  }
-	  else{ 
-	    mod->getModule = (TypeGetModule)lt_dlsym( mod->handle, "OVGetModuleFromLibrary" );
-	    mod->getLibVersion = (TypeGetLibVersion)lt_dlsym( mod->handle, "OVGetLibraryVersion" );
-	    mod->initLibrary = (TypeInitLibrary)lt_dlsym( mod->handle, "OVInitializeLibrary" );
-	  }
+  int n = scandir( OV_MODULEDIR, &namelist, 0, alphasort);
+  if (n < 0){
+	  UrDEBUG("%s\n", OV_MODULEDIR" is not found" );
+  }  
+  else {
+	  while (n--) {
+		  UrDEBUG("%s\n", namelist[n]->d_name);
+		  if( strstr( namelist[n]->d_name, ".so") ) {
+			  OVLibrary* mod = new OVLibrary();
 
-	  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
-             UrDEBUG( " the loading module is not compatible with current spec \n" );
-	     delete mod;
-	     continue;
-	  }
-	  
-	  if( mod->getLibVersion() < OV_VERSION ){
-             UrDEBUG( "Library Version is not match: %d \n", OV_VERSION );
-	     delete mod;
-	     continue;
-	  }
+			  UrDEBUG( "loading .so: %s \n", namelist[n]->d_name );
+
+			  mod->handle = lt_dlopen( namelist[n]->d_name );
+			  if(mod->handle == NULL){
+				  UrDEBUG( "lt_dlopen loading error: %s \n", lt_dlerror() );
+				  delete mod;
+				  continue;
+			  }
+			  else{ 
+				  mod->getModule = (TypeGetModule)lt_dlsym( mod->handle, "OVGetModuleFromLibrary" );
+				  mod->getLibVersion = (TypeGetLibVersion)lt_dlsym( mod->handle, "OVGetLibraryVersion" );
+				  mod->initLibrary = (TypeInitLibrary)lt_dlsym( mod->handle, "OVInitializeLibrary" );
+			  }
+
+			  if( !mod->getModule || !mod->getLibVersion || !mod->initLibrary ){
+				  UrDEBUG( " the loading module is not compatible with current spec \n" );
+				  delete mod;
+				  continue;
+			  }
+
+			  if( mod->getLibVersion() < OV_VERSION ){
+				  UrDEBUG( "Library Version is not match: %d \n", OV_VERSION );
+				  delete mod;
+				  continue;
+			  }
 
 
-	  if(mod){
-	     OVModule* m;
-	     mod->initLibrary(srv, OV_MODULEDIR);
-	     for(int i=0; m = mod->getModule(i); i++)
-	     {
-	       string str1= m->moduleType();
-	       string str2= "OVInputMethod";
-	       if( str1 == str2 )
-	       {
-	         mod_vector.push_back(m);
-	       }
-	     }
-	     delete mod;
-	  }
+			  if(mod){
+				  OVModule* m;
+				  mod->initLibrary(this->srv, OV_MODULEDIR2 );
+				  for(int i=0; m = mod->getModule(i); i++) {
+					  string str1= m->moduleType();
+					  string str2= "OVInputMethod";
+					  if( str1 == str2 )
+					  {
+						  this->mod_vector.push_back(m);
+					  }
+				  }
+				  delete mod;
+			  }
 
-      }
-    }
-    closedir(dir);
-  }
+		  }
+
+	  free(namelist[n]);
+
+	  }  
+  free(namelist);
+  }  
+
 
    
   //OVInputMethod* im = dynamic_cast<OVInputMethod*>(mod_vector[ current_module ]);
@@ -150,7 +164,7 @@ OVImf::OVImf()
     
     if( im !=0 )
     {
-      im->initialize( dict, srv, OV_MODULEDIR );
+      im->initialize( dict, srv, OV_MODULEDIR3 );
       cxt = im->newContext();
       cxt->start( preedit, lookupchoice, srv );
       
@@ -371,7 +385,7 @@ void OVImf::switch_im()
 
   if( im !=0 )
   {
-    im->initialize( dict, srv, OV_MODULEDIR );
+    im->initialize( dict, srv, OV_MODULEDIR3 );
     cxt = im->newContext();
     cxt->start( preedit, lookupchoice, srv );
     
@@ -399,7 +413,7 @@ void OVImf::switch_im_reverse()
 
   if( im !=0 )
   {
-    im->initialize( dict, srv, OV_MODULEDIR );
+    im->initialize( dict, srv, OV_MODULEDIR3 );
     cxt = im->newContext();
     cxt->start( preedit, lookupchoice, srv );
     
