@@ -10,6 +10,7 @@ _ ( Descending with date )_
 * Aron Xu *
     * The great works for ucimf debian packages.
     * Official Debian package submit and maintainance.
+    * manpages for libucimf and fbterm_ucimf writtings.
 
 * morebtcg *
     * Patch for unusual screen resolution 1366x768. 
