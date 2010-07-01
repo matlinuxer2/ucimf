@@ -1,0 +1,29 @@
+2009-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* update to latest OpenVanilla API
+
+
+2009-06-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* add fail-safe check of module dir scanning
+
+2009-02-26  Mat <MatLinuxer2@gmail.com>
+
+	* Revision to 2.10.5 
+	* Enable autocomposing 
+
+2009-02-26  Mat <MatLinuxer2@gmail.com>
+
+	* Revision to 2.10.3 ( 2.2.3 + 0.8.0 )
+	* Log message to file .ucimf-log
+
+2009-01-28  Mat <MatLinuxer2@gmail.com>
+
+	* Revision to 2.10.0 ( 2.2.0+0.8.0 )
+	* Add <Backspace> support
+	* ...and... Happy Chinese New Year :-D
+
+2006-01-06  Mat <MatLinuxer2@gmail.com>
+
+	* Initial Revision 1.9.1
+

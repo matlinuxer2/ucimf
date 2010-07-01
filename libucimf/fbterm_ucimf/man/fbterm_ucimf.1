@@ -1,0 +1,52 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH FBTERM_UCIMF 1 "Feburary 17, 2010"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+fbterm_ucimf \- ucimf input method interface for fbterm
+.SH SYNOPSIS
+.B fbterm-ucimf
+.SH DESCRIPTION
+This manual page documents briefly the
+.B fbterm_ucimf
+commands.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBfbterm_ucimf\fP is a program that providing an interface for fbterm 
+using ucimf, the Linux unicode framebuffer consle input method framework.
+.PP
+This program is intended to be work with a non-setuid fbterm using 
+\fBfbterm -i fbterm_ucimf\fP command, however because of some unresolved 
+problem in fbterm package this aim has not been achieved yet. 
+.PP
+Currently this program is the only known working solution to start 
+ucimf in Debian. Setuid fbterm is required, use command 
+\fBchown root:utmp /usr/bin/fbterm\fP to change its user/group to 
+root/utmp, and \fBchmod 6755 /usr/bin/fbterm\fP to change make it setuid. 
+After doing so users without root privilege are able to load the input 
+method with \fBfbterm -i fbterm_ucimf\fP while starting fbterm, then press 
+Ctrl+Space to activate the input method, and Ctrl+Shift to switch among 
+the input methods to find your preferred one.
+.SH SEE ALSO
+.BR ucimf (1).
+.br
+.SH AUTHOR
+libucimf was written by Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
+.PP
+This manual page was written by Aron Xu <happyaron.xu@gmail.com>,
+for the Debian project (and may be used by others).

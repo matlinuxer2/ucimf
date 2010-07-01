@@ -1,0 +1,15 @@
+UCIMF Developers
+----------------
+  * Mat <MatLinuxer2@gmail.com>
+  * Jim Huang <jserv.tw@gmail.com>
+
+Builtin Font (taken from GNU Unifont)
+------------
+  * GNU Unifont by Roman Czyborra
+
+External Source
+---------------
+  * ejoy <ejoy@users.sourceforge.net>,
+    huyong <ccpaging@online.sh.cn>,
+    rick <rick@chinaren.com>: Authors of zhcon.
+  * Josh Vanderhoof : Linux Real Mode Interface

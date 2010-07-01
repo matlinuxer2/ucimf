@@ -1,0 +1,428 @@
+#!/bin/bash
+
+# TODO: ucimf_start => ucimf_start.in
+
+UCIMF_CONF="${HOME}/.ucimf.conf"
+UCIMF_LOG="${HOME}/.ucimf-log" 
+OPENVANILLA_MODULES_DIR="${HOME}/.openvanilla/OVIMGeneric/"
+OPENVANILLA_MODULES_DIR_SYS="/usr/lib/openvanilla/OVIMGeneric/"
+
+#
+# functions in planing
+#
+function common_filter(){
+  cat < /dev/stdin | sed -e "s/\(.*\)#.*/\1/g" | sed -e "s/^\W*\(.*\)/\1/g" | sed -e "/^$/d"
+}
+
+function get_config_value(){
+  local conf_file=$1
+  local var_name=$2
+
+  cat $conf_file | common_filter \
+                 | grep "$var_name" \
+                 | sed -e "s/$var_name.*=\(.*\)/\1/g"
+}
+
+function set_config_value(){
+  local conf_file=$1
+  local var_name=$2
+  local var_value="$3"
+
+  sed -i -e "/$var_name/d" $1 
+  cat >> $conf_file << EOF
+# <$var_name>
+$var_name=$var_value
+EOF
+}
+
+
+#
+#  This function is to check environment setting before excution
+# 
+function env_check(){
+	# check ttyname in /dev/tty* or /dev/vc*
+	local my_tty="$(tty)"
+
+	# check /dev/fb0 existence and permission
+	local my_fb_dev=$( ls /dev/fb* | head -n 1 )
+	local my_fb_perm=$( ls -l $my_fb_dev | cut -c-23  )
+        local my_fb_bits=$( cat /sys/class/graphics/$(basename $my_fb_dev)/bits_per_pixel)
+        local my_fb_size=$( cat /sys/class/graphics/$(basename $my_fb_dev)/virtual_size)
+
+	# check fbterm permission
+	local fbterm_perm=$( ls -l $(which fbterm) | cut -c-23 )
+	local fbterm_getcap=$( /sbin/getcap $(which fbterm) | grep fbterm | cut -f2 -d= )
+
+	# check openvanilla's modules existed
+	local my_openvanilla_modules=$( ls -l ${OPENVANILLA_MODULES_DIR} )
+
+	echo "" 
+	echo "            tty: ${my_tty}" 
+	echo "      fb device: ${my_fb_dev}" 
+	echo "  fb permission: ${my_fb_perm}" 
+	echo " bits per pixel: ${my_fb_bits}" 
+	echo "        fb size: ${my_fb_size}" 
+	echo "" 
+	echo "      conf file: ${UCIMF_CONF}" 
+	echo "       log file: ${UCIMF_LOG}"
+	echo "" 
+	echo "           term: ${THE_TERM}"
+	echo "    fbterm perm: ${fbterm_perm}"
+	echo "  fbterm getcap: ${fbterm_getcap}"
+	echo "" 
+	echo "           font: ${THE_FONT}"
+	echo "      font-size: ${THE_FONTSIZE}"
+	echo "" 
+	echo "         locale: ${LC_CTYPE}" 
+	echo "  config locale: ${THE_LOCALE}" 
+	echo "" 
+	echo "        ime dir: ${OPENVANILLA_MODULES_DIR}" 
+	echo "     ime tables: ${THE_IME}"
+	echo "" 
+}
+
+function main_setup(){
+	dialog --stdout \
+	--title "UCIMF -- Unicode Console InputMethod Framework" \
+	--menu "Enter the setup menu" 20 60 14 \
+	"env"         "Run-time detected environment parameters" \
+	"locale"      "Locale settings" \
+	"term"        "Detected console terminal applications" \
+	"ime"         "Input Method Engines (IME) setup" \
+	"font"        "Fonts settings" \
+	"fontsize"    "Fonts size settings" \
+	"done"         "Save and prepare to run program" \
+	| xargs echo
+}
+
+function save_setup(){
+	set_config_value ${UCIMF_CONF} "locale" "${THE_LOCALE}"
+	set_config_value ${UCIMF_CONF} "ime" "${THE_IME}"
+	set_config_value ${UCIMF_CONF} "term" "${THE_TERM}"
+	set_config_value ${UCIMF_CONF} "font-name" "${THE_FONT}"
+	set_config_value ${UCIMF_CONF} "font-size" ${THE_FONTSIZE}
+
+	# back compatibility
+	set_config_value ${UCIMF_CONF} "STATUS_FG_COLOR" "${STATUS_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "STATUS_BG_COLOR" "${STATUS_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "STATUS_BORDER_COLOR" "${STATUS_BORDER_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_FG_COLOR" "${PREEDIT_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_BG_COLOR" "${PREEDIT_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "PREEDIT_BORDER_COLOR" "${PREEDIT_BORDER_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_FG_COLOR" "${LOOKUPCHOICE_FG_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BG_COLOR" "${LOOKUPCHOICE_BG_COLOR}"
+	set_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BORDER_COLOR" "${LOOKUPCHOICE_BORDER_COLOR}"
+}
+
+function restore_setup(){
+	THE_TERM=$( get_config_value ${UCIMF_CONF} "term" )
+	THE_LOCALE=$( get_config_value ${UCIMF_CONF} "locale" )
+	THE_IME=$( get_config_value ${UCIMF_CONF} "ime" )
+	THE_FONT=$( get_config_value ${UCIMF_CONF} "font-name" )
+	THE_FONTSIZE=$( get_config_value ${UCIMF_CONF} "font-size" )
+
+	# back compatibility
+	STATUS_FG_COLOR=$( get_config_value ${UCIMF_CONF} "STATUS_FG_COLOR" )
+	STATUS_BG_COLOR=$( get_config_value ${UCIMF_CONF} "STATUS_BG_COLOR" )
+	STATUS_BORDER_COLOR=$( get_config_value ${UCIMF_CONF} "STATUS_BORDER_COLOR" )
+	PREEDIT_FG_COLOR=$( get_config_value ${UCIMF_CONF} "PREEDIT_FG_COLOR" )
+	PREEDIT_BG_COLOR=$( get_config_value ${UCIMF_CONF} "PREEDIT_BG_COLOR" )
+	PREEDIT_BORDER_COLOR=$( get_config_value ${UCIMF_CONF} "PREEDIT_BORDER_COLOR" )
+	LOOKUPCHOICE_FG_COLOR=$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_FG_COLOR" )
+	LOOKUPCHOICE_BG_COLOR=$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BG_COLOR" )
+	LOOKUPCHOICE_BORDER_COLOR=$( get_config_value ${UCIMF_CONF} "LOOKUPCHOICE_BORDER_COLOR" )
+	#default value
+	STATUS_FG_COLOR=${STATUS_FG_COLOR:=7}
+	STATUS_BG_COLOR=${STATUS_BG_COLOR:=8}
+	STATUS_BORDER_COLOR=${STATUS_BORDER_COLOR:=9}
+	PREEDIT_FG_COLOR=${PREEDIT_FG_COLOR:=7}
+	PREEDIT_BG_COLOR=${PREEDIT_BG_COLOR:=8}
+	PREEDIT_BORDER_COLOR=${PREEDIT_BORDER_COLOR:=9}
+	LOOKUPCHOICE_FG_COLOR=${LOOKUPCHOICE_FG_COLOR:=7}
+	LOOKUPCHOICE_BG_COLOR=${LOOKUPCHOICE_BG_COLOR:=8}
+	LOOKUPCHOICE_BORDER_COLOR=${LOOKUPCHOICE_BORDER_COLOR:=9}
+}
+
+
+function locale_setup(){
+       local my_locale=${LC_CTYPE}
+
+       # Check locale settings
+       local lcs=$(locale -a|grep -i utf*8)
+
+       local lcs_menu=""
+
+       if [ "x$my_locale" != "x" ]
+       then 
+	   lcs_menu="$my_locale Current_locale_setting"
+       fi
+
+       for lc in $lcs
+       do
+           lcs_menu="$lcs_menu $lc $lc"
+       done
+
+       local result=$( dialog --stdout \
+                              --title "Locale settings" \
+                              --menu "Select the locale:" 20 60 14 \
+                              $lcs_menu || echo "NONE" ) 
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_LOCALE="$result"
+}
+
+function term_setup(){
+	local my_term=${THE_TERM}
+
+	local terms_menu=""
+	if [ "x$my_term" != "x" ]
+	then 
+	    terms_menu="$my_term Current_terminal_setting"
+        fi
+
+
+	local bin_jfbterm=$(which jfbterm 2>/dev/null )
+	if [ $? == 0 ]
+	then 
+	    local ucimf_ldd=$( ldd ${bin_jfbterm} | grep ucimf )
+	    if [ "x$ucimf_ldd" != "x" ]
+	    then
+	    terms_menu="${terms_menu} jfbterm \"J Framebuffer terminal\""
+	    fi
+        fi
+
+	local bin_fbterm=$(which fbterm 2>/dev/null )
+	if [ $? == 0 ]
+	then 
+	    terms_menu="${terms_menu} fbterm \"FbTerm,fast FrameBuffer based TERMinal emulator\"" 
+        fi
+	        
+	local result=$( dialog --stdout \
+                               --title "Detected console terminal applications" \
+                               --menu "Select the application:" 20 60 14 \
+                               --file <(echo $terms_menu) || echo "NONE" )
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_TERM="$result"
+}
+
+function ime_setup(){
+	local my_imes=${THE_IME} 
+
+	local imes_menu=""
+
+	local sys_imes_dir="${OPENVANILLA_MODULES_DIR_SYS}"
+	local my_imes_dir="${OPENVANILLA_MODULES_DIR}"
+
+	local imes=$( test -d $sys_imes_dir && cd $sys_imes_dir && ls *.cin)
+	local imes_on=$( test -d $my_imes_dir && cd $my_imes_dir && ls *.cin)
+	local imes_off=$( test -d $my_imes_dir && cd $my_imes_dir && ls *.cin.off )
+
+	# 顯示設定為開啟的輸入法表格
+        for ime in $imes_on 
+        do
+            imes_menu="$imes_menu $ime $ime on"
+        done
+
+	# 顯示設定為關閉的輸入法表格
+        for ime in $imes_off 
+        do
+            imes_menu="$imes_menu ${ime%.off} ${ime%.off} off"
+        done
+
+	# 顯示系統有而個人目錄下沒有的輸入法表格
+        for ime in $imes 
+        do
+	    if ! [ -f $my_imes_dir/$ime ]
+	    then
+		    imes_menu="$imes_menu $ime $ime off"
+	    fi
+        done
+
+	local result=$( dialog --stdout \
+                               --title "Input Method Engines(IME) Setup" \
+                               --checklist "Select toggle referred IME:" 20 60 14 \
+                               $imes_menu || echo "NONE" )
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_IME="$result"
+
+	echo "Updating ime tables..."
+	echo ""
+	install -d $my_imes_dir
+
+	# 將選定的項目打開
+	for ime_to_be_on in ${THE_IME}
+	do  
+	    ime=$( echo $ime_to_be_on | tr -d \" )
+
+            # 如果 ime 已經在開啟的列表上
+	    if ! [ "${imes_on/$ime/}" = "${imes_on}" ]
+	    then
+	       echo " [on] $ime"
+            # 如果 ime 尚在關閉的列表上
+	    elif ! [ "${imes_off/$ime.off/}" = "${imes_off}" ]
+	    then 
+	       echo "[off] $ime"
+	       mv $my_imes_dir/${ime}.off $my_imes_dir/${ime}
+            # 如果 ime 是在系統的列表上
+	    elif ! [ "${imes/$ime/}" = "${imes}" ]
+	    then
+	       echo " [on] $ime ( copy from $sys_imes_dir ) "
+	       cp $sys_imes_dir/$ime $my_imes_dir/$ime
+            fi
+	done
+	
+	# 將未勾選的項目關閉
+	local imes4=${THE_IME}
+	for ime in $imes_on
+	do
+	    if [ "${imes4/$ime/}" = "${imes4}" ]
+	    then
+		# 若是系統有的內建表格，則刪除
+		if [ -f $sys_imes_dir/$ime ]; then
+	            echo "[off] $ime ( duplicate item in $sys_imes_dir, removed ) "
+	            rm $my_imes_dir/${ime} 
+
+		# 若是系統沒有的表格，則更名
+		else
+	            echo "[off] $ime"
+	            mv $my_imes_dir/${ime} $my_imes_dir/${ime}.off
+		fi 
+	    fi
+	done
+
+	echo ""
+	read -p "Press <Enter> to continue..."
+}
+
+function show_font_list(){
+	IFS=$'\n'
+        for line in $(fc-list)
+        do
+	    local font=$(echo $line | cut -d: -f1| cut -d, -f1)
+            echo "\"$font\" \"$font\" off"
+        done
+}
+
+function font_setup(){
+	local result=$( dialog --stdout \
+                               --title "Fonts Setup" \
+                               --radiolist "Select the font:" 20 60 14 \
+                               --file <( show_font_list ) || echo "NONE" )
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_FONT="$result"
+}
+
+
+function fontsize_setup(){
+	local result=$( dialog --stdout \
+                               --title "Fonts Size Setup" \
+                               --inputbox "Enter the font size number:" 20 60 \
+                               $THE_FONTSIZE || echo "NONE" )
+
+	if [ "x$result" == "xNONE" ] ; then
+           return
+        fi
+	
+	THE_FONTSIZE="$result"
+}
+
+
+
+##################
+# 主程式 
+##################
+
+# 先檢查檔案跟目錄是否存在
+test -f ${UCIMF_CONF} || touch ${UCIMF_CONF}
+
+# 讀取目前的設定
+restore_setup
+
+# 對話式選單的主程式
+CMD="main"
+while true; do
+  case $CMD in
+    main)
+      CMD=$(main_setup) # 回主選單
+      ;;
+    done)
+      echo -n "Saving settings...."
+      save_setup
+      sleep 0.5
+      echo "Setup complete."
+      sleep 0.5
+      echo "Showing environments..." 
+      sleep 0.5 
+      env_check
+
+      echo "" 
+      echo "To start using, just execute following command:" 
+      echo "" 
+
+      if [ "x$THE_TERM" == "xfbterm" ]
+      then
+	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM -i fbterm_ucimf 2>/dev/null"
+      elif [ "x$THE_TERM" == "jfbterm" ]
+      then
+	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM 2>/dev/null"
+      fi
+
+      echo "" 
+      echo "Enjoy it! :-)" 
+      
+      exit 0
+      ;;
+    env)
+      echo "Detecting environments..." 
+      sleep 0.5 
+      env_check
+      read -p "Press <Enter> to continue..."
+      CMD="main"
+      ;;
+    locale)
+      locale_setup
+      CMD="main"
+      ;;
+    term)
+      term_setup
+      CMD="main"
+      ;;
+    ime)
+      ime_setup
+      CMD="main"
+      ;;
+    font)
+      font_setup
+      CMD="main"
+      ;;
+    fontsize)
+      fontsize_setup
+      CMD="main"
+      ;;
+    *)
+      read -p "Are you sure to leave?(y/N): " answer
+      if [ "x$answer" == "xy" -o "x$answer" == "xY" ]
+      then
+          env_check
+          exit 0
+      else
+          CMD="main"
+      fi
+      ;;
+  esac
+done

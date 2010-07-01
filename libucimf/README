@@ -1,0 +1,38 @@
+UCIMF, Unicode Console InputMethod Framework
+http://code.google.com/p/ucimf/
+
+Feature
+ • Support UTF-8 
+ • Support OpenVanilla IMF and Modules
+ • Support Freetype + Fontconfig
+ • Provide OverSpot style compose window.
+ • Provide C/C++ API
+
+
+[Boot Parameters]
+Framebuffer mode is needed.
+You can add "vga=XXX" to LILO, GRUB, or other bootloaders to let the kernel
+start with proper framebuffer mode automatically.
+
+vga=785  (640x480, 16 )
+vga=788  (800x600, 16 )
+vga=791  (1024x768, 16 )
+vga=794  (1280x1024, 16 )
+
+[Shell Enviroments]
+
+LC_CTYPE
+  use UTF-8 as to recogize characters. 
+  for example:
+     >> export LC_CTYPE=zh_TW.UTF-8
+
+[Config File]
+The reference order is:
+  $HOME/.ucimf.conf
+  /etc/ucimf.conf or ( $YOUR_INSTALL_PREFIX/etc/ucimf.conf )
+
+
+[Function Keys]
+F12 || Ctrl-Space  ,To switch input methond ON/OFF
+F11 || Ctrl-ShiftL ,Switch to next input method
+F10 || Ctrl-ShiftR ,Switch to next input mehtod framework 
