@@ -1,0 +1,40 @@
+diff -Naur jfbterm-0.4.7.orig/fbcommon.c jfbterm-0.4.7/fbcommon.c
+--- jfbterm-0.4.7.orig/fbcommon.c	2003-09-03 00:23:17.000000000 +0900
++++ jfbterm-0.4.7/fbcommon.c	2007-08-18 10:55:30.000000000 +0900
+@@ -46,7 +46,6 @@
+ #endif
+ #include <linux/vt.h>
+ #include <linux/fb.h>
+-#include <asm/page.h>
+ 
+ #include "mytypes.h"
+ #include "fbcommon.h"
+@@ -475,6 +474,9 @@
+ 			perror("ioctl FBIOGET_CON2FBMAP");
+ 			c2m.framebuffer = 0;
+ 		}
++		if (-1 == c2m.framebuffer) {
++			c2m.framebuffer = 0;
++		}
+ 		close(fd);
+ 		snprintf(fbdn, 15, "/dev/fb%d", c2m.framebuffer);
+ 	}
+diff -Naur jfbterm-0.4.7.orig/util.h jfbterm-0.4.7/util.h
+--- jfbterm-0.4.7.orig/util.h	2003-09-16 00:45:31.000000000 +0900
++++ jfbterm-0.4.7/util.h	2007-08-18 08:48:49.000000000 +0900
+@@ -31,6 +31,7 @@
+ 
+ #include <sys/types.h>
+ #include <stdlib.h>
++#include <unistd.h>
+ 
+ void util_privilege_init();
+ void util_privilege_on();
+@@ -49,4 +50,7 @@
+ 
+ int util_search_string(const char* s, const char** array);
+ 
++#define PAGE_SIZE (sysconf(_SC_PAGESIZE))
++#define PAGE_MASK (~(PAGE_SIZE-1))
++
+ #endif /* INCLUDE_UTIL_H */

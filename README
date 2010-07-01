@@ -1,0 +1,19 @@
+0. Please execute
+
+     `./init.sh`
+
+   to get jfbterm's source code.
+
+1. To compile jfbterm，please execute
+   
+     `cd jfbterm-0.4.7/`
+     `LDFLAGS="-L/usr/lib/" ./configure --prefix=/usr/` 
+     `make`
+
+   P.S. /usr/ can be set to your prefered path.
+   P.S. LDFLAGS is needed to locate where libucimf.so is.
+
+2. To install, please execute
+      
+     `make install`
+
