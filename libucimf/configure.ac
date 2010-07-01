@@ -81,6 +81,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  font/Makefile
                  fbterm_ucimf/Makefile
+                 man/Makefile
                  display/Makefile])
 
 AC_OUTPUT

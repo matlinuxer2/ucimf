@@ -1,0 +1,51 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH UCIMF_START 1 "January 29, 2010"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+ucimf_start \- libucimf unicode console input method framework starter
+.SH SYNOPSIS
+.B ucimf_start
+.SH DESCRIPTION
+\fBucimf_start\fP is an assistant program to help setting up ucimf and 
+start consle terminal program.
+.PP
+.SH NOTICE
+\fBucimf_start\fP needs to be set setuid to root (and setgid to utmp) to 
+be functional, otherwise users cannot use keyboard shortcut in fbterm 
+because Debian does not install fbterm with setuid by default.
+.PP
+setuid to root could probably \fBdo harm to your security\fP, so set it at your 
+own risk. If you run FbTerm, use \fIfbterm -i fbterm_ucimf\fP to start it 
+instead.
+.PP
+\fBucimf\fP needs to run under an UTF-8 consle environment, please 
+use \fBlocale -a\fP to see the UTF-8 locales that your system is supported 
+and use command like \fBexport LC_ALL=zh_CN.UTF-8\fP to set up the locale.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+.SH SEE ALSO
+.BR ucimf (1),
+.BR ucimf_keyboard (1),
+.BR ucimf.conf (5).
+.br
+.SH AUTHOR
+libucimf was written by Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
+.PP
+This manual page was written by Aron Xu <happyaron.xu@gmail.com>,
+for the Debian project (and may be used by others).
