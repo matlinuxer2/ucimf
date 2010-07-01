@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: ucimf_start => ucimf_start.in
+
 UCIMF_CONF="${HOME}/.ucimf.conf"
 UCIMF_LOG="${HOME}/.ucimf-log" 
 OPENVANILLA_MODULES_DIR="${HOME}/.openvanilla/OVIMGeneric/"
@@ -43,9 +45,13 @@ function env_check(){
 
 	# check /dev/fb0 existence and permission
 	local my_fb_dev=$( ls /dev/fb* | head -n 1 )
-	local my_fb_perm=$( ls -l $my_fb_dev | cut -c-24  )
+	local my_fb_perm=$( ls -l $my_fb_dev | cut -c-23  )
         local my_fb_bits=$( cat /sys/class/graphics/$(basename $my_fb_dev)/bits_per_pixel)
         local my_fb_size=$( cat /sys/class/graphics/$(basename $my_fb_dev)/virtual_size)
+
+	# check fbterm permission
+	local fbterm_perm=$( ls -l $(which fbterm) | cut -c-23 )
+	local fbterm_getcap=$( /sbin/getcap $(which fbterm) | grep fbterm | cut -f2 -d= )
 
 	# check openvanilla's modules existed
 	local my_openvanilla_modules=$( ls -l ${OPENVANILLA_MODULES_DIR} )
@@ -61,6 +67,8 @@ function env_check(){
 	echo "       log file: ${UCIMF_LOG}"
 	echo "" 
 	echo "           term: ${THE_TERM}"
+	echo "    fbterm perm: ${fbterm_perm}"
+	echo "  fbterm getcap: ${fbterm_getcap}"
 	echo "" 
 	echo "           font: ${THE_FONT}"
 	echo "      font-size: ${THE_FONTSIZE}"
@@ -83,7 +91,7 @@ function main_setup(){
 	"ime"         "Input Method Engines (IME) setup" \
 	"font"        "Fonts settings" \
 	"fontsize"    "Fonts size settings" \
-	"run"         "Save and prepare to run program" \
+	"done"         "Save and prepare to run program" \
 	| xargs echo
 }
 
@@ -352,7 +360,7 @@ while true; do
     main)
       CMD=$(main_setup) # 回主選單
       ;;
-    run)
+    done)
       echo -n "Saving settings...."
       save_setup
       sleep 0.5
