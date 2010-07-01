@@ -1,0 +1,51 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH UCIMF.CONF 5 "January 29, 2010"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+ucimf.conf \- ucimf configuration files 
+.SH DESCRIPTION
+\fBucimf.conf\fP can be used either as /etc/ucimf.conf as a system wide 
+configuration or $HOME/.ucimf.conf as a per-user configuration.
+.PP
+ucimf uses \fBUCIMF_FONTPATH\fP to set unicode font to use. For example:
+.br 
+\fIUCIMF_FONTPATH = /usr/share/ucimf/unifont.pcf\fP
+.br
+and font size can be set by \fBFONT_WIDTH\fP and \fBFONT_HEIGHT\fP:
+.br
+\fIFONT_WIDTH = 24\fP
+.br
+\fIFONT_HEIGHT = 24\fP
+.PP
+Input method framwork modules of UCIMF search path is set by \fBIMF_MODULE_DIR\fP:
+.br
+IMF_MODULE_DIR=/usr/lib/ucimf/
+.PP
+
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+.SH SEE ALSO
+.BR ucimf (1),
+.BR ucimf_keyboard (1),
+.BR ucimf.conf (5).
+.br
+.SH AUTHOR
+libucimf was written by Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
+.PP
+This manual page was written by Aron Xu <happyaron.xu@gmail.com>,
+for the Debian project (and may be used by others).

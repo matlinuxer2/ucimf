@@ -1,0 +1,105 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH UCIMF 1 "January 29, 2010"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+ucimf \- unicode console input method framework 
+.SH DESCRIPTION
+\fBucimf\fP is an input method framework designed for Linux unicode console.
+.PP
+.SH FEATURE
+ • Support UTF-8 
+.br
+ • Support OpenVanilla Modules
+.br
+ • Support PCF, TrueType Font
+.br
+ • Provide OverSpot style compose window
+.br
+ • Provide C/C++ API
+.br
+.PP
+.SH BOOT PARAMETERS
+Framebuffer mode is needed.
+.PP
+You can add "vga=XXX" to LILO, GRUB, or other bootloaders to let the kernel
+start with proper framebuffer mode automatically.
+.br
+vga=785  (640x480, 16 ), vga=788  (800x600, 16 ), vga=791  (1024x768, 16 ), 
+vga=794  (1280x1024, 16 )
+.PP
+
+.SH USAGE
+\fBucimf\fP needs to run under an UTF-8 consle environment, please 
+use \fBlocale -a\fP to see the UTF-8 locales that your system is supported 
+and use command like \fBexport LC_ALL=zh_CN.UTF-8\fP to set up the locale.
+.PP
+To start ucimf with FbTerm, prefer to install \fBfbterm-ucimf\fP package and 
+run \fIfbterm -i fbterm_ucimf\fP, or see \fBucimf_start(1)\fP as an 
+not-recommended alternate.
+.PP
+When the user is running an \fIFbTerm\fP, key combination \fBCtrl+Space\fP is 
+the switch of enable/disable the input method, \fBCtrl+ShiftLeft\fP to 
+switch to next input method, and \fBCtrl+ShiftRight\fP to switch to next input 
+method framework.
+.br
+For \fIjfbterm\fP, \fBF12\fP is the switch of enable/disable the input method, 
+\fBF11\fP to switch to next input method, and \fBF10\fP to next input method 
+framework.
+.PP
+If the user wishes to use Ctrl+Space and Ctrl+ShiftLeft under jfbterm, please 
+use \fBucimf_keyboard\fP, which maps Ctrl+Space to F12, and Ctrl+ShiftLeft to 
+F11.
+.PP
+.SH TABLE MANAGEMENT
+\fBucimf\fP use standard *.cin files directly to manage its input method 
+tables, per-user input method tables is put in 
+.br
+\fI~/.openvanilla/OVIMGeneric/\fP.
+.PP
+Installing or removing a table is simply copy or remove a file in that directory.
+.PP
+The order of loading table is managed by the name of the table files, for exaple 
+you can name your tables like this:
+.br
+\fI01_xxx.cin\fP, \fI02_xyz.cin\fP, \fI03_aaa.cin\fP, ...
+.br
+ucimf will follow this order while loading input method tables.
+.PP
+.SH SHELL ENVIROMENT
+\fBLC_CTYPE\fP - use \fIUTF-8\fP as to recogize characters. For example:
+.br
+\fIexport LC_CTYPE=zh_CN.UTF-8\fP
+.PP
+\fBOVMODULE_DIR\fP - to customize OpenVanilla modules location at run-time. 
+For example:
+.br
+\fIexport OVMODULE_DIR=/usr/lib/openvanilla/\fP
+.PP
+
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+.SH SEE ALSO
+.BR ucimf_start (1),
+.BR ucimf_keyboard (1),
+.BR ucimf.conf (5).
+.br
+.SH AUTHOR
+libucimf was written by Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
+.PP
+This manual page was written by Aron Xu <happyaron.xu@gmail.com>,
+for the Debian project (and may be used by others).
