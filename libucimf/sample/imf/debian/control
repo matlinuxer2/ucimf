@@ -1,0 +1,14 @@
+Source: ucimf-dummy
+Priority: optional
+Maintainer: Mat <MatLinuxer2@gmail>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, ucimf-dev (>=1.9.0)
+Standards-Version: 3.6.1
+Section: libs
+
+Package: ucimf-dummy
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ucimf(>=1.9.0)
+Description: A dummy module for UCIMF
+ This module doesn't do any special, just redirect input keys to output chars.
+ The role it plays is for UCIMF to check modules' loading.
