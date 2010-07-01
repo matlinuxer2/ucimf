@@ -1,0 +1,95 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH JFBTERM 1 "Aug 30, 2003"
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.\" =======================================================================
+.SH NAME
+jfbterm \- program to print several character sets on framebuffer device.
+.SH SYNOPSIS
+.B jfbterm
+.RI [ options ] 
+.\" =======================================================================
+.SH DESCRIPTION
+This manual page documents briefly the
+.B jfbterm
+command.
+.PP
+\fBjfbterm\fP is a program that prints various encodings such as
+UTF\-8, ISO\-8859\-*, EUC\-*, and so on, on Linux framebuffer device,
+like KON that prints on VGA device.  It supports ISO\-2022\-compliant
+character sets, encodings which consist from such character sets, UTF\-8,
+and encodings which \fBiconv\fR(3) can convert from/to UTF\-8.
+In GNU libc systems, all encodings which are available for \fBiconv\fR(3)
+meet this condition and are available.
+.PP
+This supports fullwidth characters (which occupies two columns, like
+CJK Ideogram, Hiragana, Katakana, and Hangul).  However, this doesn't
+support combining characters nor BIDI.
+.\" =======================================================================
+.SH OPTIONS
+This program follows the usual GNU command line syntax, with long
+options starting with two dashes (`\-').
+A summary of options is included below.
+.TP
+.B \-h, \-\-help
+Show summary of current configuration.
+.TP
+.B \-e, \-\-exec, \-\-shell
+Specify a program that run in jfbterm. Default is $SHELL (or /bin/sh). 
+Rest of arguments will be passed to the specified program.
+.TP
+.B \-f, \-\-config
+Specify a pathname of the configuration file. Default is /etc/jfbterm.conf.
+.TP
+.B \-c, \-\-encoding, \-\-charmap
+Specify the encoding.  The format is same as \fBencoding\fR line
+of \fBjfbterm.conf\fR(5) file.
+.IP
+When the given string is "locale" (the first format), the encoding
+specified by LC_CTYPE locale is adopted.
+.IP
+When the given string doesn't contain `,' (the second format), the
+string is assumed as an encoding name.  A valid encoding name is either
+a name defined in encoding.\fIencodingName\fR line in \fBjfbterm.conf\fR(5)
+or a name which is valid for \fBiconv\fR(1) or \fBiconv_open\fR(3).
+.IP
+When the given string contains a `,' (the third format), the
+string is assumed to have
+\fIGL\fR,\fIGR\fR,\fIG0\fR,\fIG1\fR,\fIG2\fR,\fIG3\fR format.
+See \fBjfbterm.conf\fR(5) for detail.
+.TP
+.B \-r, \-\-reset
+Output ISO\-2022 initialize sequence to tty. You can specify codeset name
+as optional argument like: \fB\-\-reset=\fP\fIencodingName\fP.
+Default is locale's codeset.
+.TP
+.B \-q, \-\-quiet
+Don't print out messages.
+.\" =======================================================================
+.SH NOTES
+Since version 0.3.14, default encoding has been changed from EUC-\JP to
+encoding for locale.  To make it enable to display EUC\-JP, run
+.nf
+
+	$ jfbterm \-\-reset=EUC\-JP
+or
+	$ export LANG=ja_JP.eucJP
+	$ jfbterm \-r
+
+.fi
+if you have already invoked jfbterm and are on it.  If you have not
+invoked jfbterm and want to invoke it now, set LANG variable before
+invoking jfbterm.
+.SH SEE ALSO
+.BR jfbterm.conf (5).
+.SH AUTHOR
+This manual page was written by Fumitoshi UKAI <ukai@debian.or.jp>.

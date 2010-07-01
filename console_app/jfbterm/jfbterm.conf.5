@@ -1,0 +1,178 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH JFBTERM.CONF 5 "Aug 30, 2003"
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.\" =======================================================================
+.SH NAME
+jfbterm.conf \- configuration file for jfbterm(1)
+.\" =======================================================================
+.SH DESCRIPTION
+This manual page documents briefly the
+.B jfbterm.conf
+configuration file that is used in 
+.BR jfbterm (1)
+command.
+.\" =======================================================================
+.SH CONFIGURATIONS
+The format of an entry for this file is:
+.TP
+	\fIentryName\fP : \fIvalue\fP
+.PP
+If `+' is at beginning of the line, \fIvalue\fP is added to
+\fIentryName\fP as an array.  This means that one \fIentryName\fP
+can have multiple \fIvalue\fPs.
+.PP
+A summary of configrations is included below.
+.TP
+.\" -----------------------------------------------------------------------
+.B term
+TERM environment variable's value for a program that runs in 
+.BR jfbterm (1).
+The default is \fBjfbterm\fR.
+.TP
+.\" -----------------------------------------------------------------------
+.B fontset
+This assigns a font for each character set.  A term "character set"
+means a set of characters and is an element for "encodings".
+In other words, an encoding consists from one or more character
+sets.  In jfbterm, most of character sets are assumed to have
+ISO\-2022\-compliant structure, i.e., a character set contains
+94 characters, 96 characters, 94^N characters, or 96^N characters.
+\fBiso10646.1\fR is the only exception.
+.IP
+The format of \fBfontset\fP value is:
+.nf
+
+	\fIcharsetName\fP,\fItype\fP,\fIside\fP,\fIfontname\fP
+
+.fi
+You can see a list of available \fIcharsetName\fPs by
+running "jfbterm \-\-help".
+.IP
+\fItype\fP specifies "pcf" or "alias".  If \fItype\fP is "pcf",
+\fIfontname\fP is a pathname of a font file. If \fItype\fP is "alias",
+\fIfontname\fP specifies another \fIcharsetName\fP, which means that
+the character set of \fIcharsetName\fP will use the same font to
+the character set of \fIfontname\fP.
+.IP
+\fIside\fP specifies in which side (GL or GR) the font has glyphs for
+the character set, in terms of ISO\-2022.  \fBL\fR means GL (0x20\-0x7f)
+and \fBR\fR means GR (0xa0\-0xff).  A unique specification, \fBU\fR,
+is used only for \fRiso10646.1\fR.
+.IP
+For example, \fBiso8859.1\-1987\fR is a character set which contains
+96 characters.
+The glyphs for iso8859.1\-1987 characters are available in GR side of
+*\-iso8859\-1 fonts.
+.TP
+.\" -----------------------------------------------------------------------
+.B encoding
+This defines an encoding.  An encoding is what you really use
+to express texts and consists from one or more character sets.
+In jfbterm, most of encodings are defined as ISO\-2022's initial
+state and jfbterm can change character sets by using ISO\-2022
+escape sequences.  However, non\-ISO\-2022\-compliant encodings
+such as Big5 and KOI8\-R are also supported via \fBiconv\fR(3).
+.IP
+The format of \fBencoding\fP value is
+.nf
+
+	locale
+or
+	\fIencodingName\fP
+or
+	\fIGL\fP,\fIGR\fP,\fIG0\fP,\fIG1\fP,\fIG2\fP,\fIG3\fP
+
+.fi
+If \fBencoding\fP value is "locale" (the first case), then
+\fIencodingName\fP value is initialized by the current LC_CTYPE
+locale ("locale \-k charmap") and falling into the second case.
+.IP
+If no `,' is found in \fBencoding\fP value, it is recognized as
+\fIencodingName\fP (the second case).  If the \fIencodingName\fR
+matches one of \fBencoding.\fIencodingName\fR which is explained
+below, this definition is used.  Otherwise, if the \fIencodingName\fR
+matches one of valid encoding names for \fBiconv\fR(1) or
+\fBiconv_open\fR(3), \fBjfbterm\fR will work in UTF\-8 mode internally.
+This means that the font defined by \fBfontset:iso10646.1\fR line will
+be used and \fBiconv\fR(3) will be used to emulate the given
+\fIencodingName\fR.  This behavior is just as if there is a line:
+.nf
+
+	encoding.\fIencodingName\fP : other,\fIencodingName\fR,iconv,UTF\-8
+
+.fi
+This mechanism enables \fBjfbterm\fR to support various
+encodings which are not ISO\-2022\-compliant.
+.IP
+If a `,' is found in \fBencoding\fR value, it is recognized as
+the third case.  This format defines an encoding as an ISO\-2022
+initial state.  \fIGL\fR and \fIGR\fR specifies a slot (one of
+\fBG0\fR, \fBG1\fR, \fBG2\fR, or \fBG3\fR) which is invoked into
+GL (0x20\-0x7F) and GR (0xA0\-0xFF).
+\fIG0\fR, \fIG1\fR, \fIG2\fR, and \fIG3\fR specifies the character
+set which is designated into the corresponding slot.
+.IP
+The default is "locale".
+.TP
+.\" -----------------------------------------------------------------------
+.BI encoding. encodingName
+This defines an encoding of \fIencodingName\fP as an ISO\-2022
+initial state, like the third case of \fBencoding\fR item which
+is explained already.  The format is like following:
+.nf
+
+	\fIGL\fP,\fIGR\fP,\fIG0\fP,\fIG1\fP,\fIG2\fP,\fIG3\fP
+or
+	UTF\-8,iso10646.1
+or
+	other,\fIencodingName\fP,iconv,\fIinternal\-encodingName\fP
+
+.fi
+The first case is just same as explained in the third case of
+\fBencoding\fR item.
+.IP
+The second case means that the encoding is UTF\-8.  This is a
+special case.
+.IP
+The third case defines an encoding as a conversion of an other
+encoding.  \fBjfbterm\fR will use the encoding of
+\fIinternal\-encodingName\fP internally and will use \fBiconv\fR(3) 
+for conversion. 
+.IP
+Note that, in the third case, \fIinternal\-encodingName\fR must be a valid
+encoding name which is defined in other \fBencoding.\fIencodingName\fR
+line (which has the first or second format).  Both of
+\fIinternal\-encodingName\fR and \fIencodingName\fR must be valid
+encoding names for \fBiconv\fR(1) or \fBiconv_open\fR(3).
+Also, Both \fIencodingName\fRs (one is a part of
+\fBencoding.\fIencodingName\fR and the another appears next
+to "other,") must be same.
+.TP
+.\" -----------------------------------------------------------------------
+.B color.gamma
+Color gamma value.  The default is 1.7.
+.PP
+.\" =======================================================================
+.SH FILES
+.TP
+.I /etc/jfbterm.conf
+Configuration file for 
+.BR jfbterm (1).
+.\" =======================================================================
+.SH SEE ALSO
+.BR jfbterm (1),
+.BR locale (1),
+.BR iconv (3).
+.\" =======================================================================
+.SH AUTHOR
+This manual page was written by Fumitoshi UKAI <ukai@debian.or.jp>.

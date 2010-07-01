@@ -1,0 +1,13 @@
+
+graphiz:
+	g++ -g -shared -o libgraphiz.a -I. `freetype-config --cflags` -L. -Ldisplay -ldisplay -lfreetype graphdev.cpp font.cpp 
+
+
+main:
+	gcc -g -shared iiimccf.c -o libiiimccf.so
+	cp libiiimccf.so /tmp/iterm/lib/
+libgraphdev.so: libdisplay.a
+	g++ -g -shared -I. -Ldisplay -ldisplay graphdev.cpp  
+libdisplay.so:
+	g++ -g -shared -I.  ./display/*cpp -o ./display/libdisplay.a ./display
+

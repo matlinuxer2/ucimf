@@ -1,0 +1,12 @@
+--- Modules/Makefile.orig	2008-10-31 18:40:12.000000000 +0800
++++ Modules/Makefile	2008-10-31 18:47:05.000000000 +0800
+@@ -28,8 +28,7 @@
+ # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
+-MODULES=OVIMArray OVIMGeneric OVIMPOJ-Holo OVIMPhonetic OVIMSpaceChewing \
+-    OVKPPhraseTools OVOFFullWidthCharacter OVOFHanConvert OVOFReverseLookup
++MODULES=OVIMGeneric OVIMPOJ-Holo OVIMPhonetic
+ 
+ all:
+ 	for i in $(MODULES) ; do make -C $$i all ;done
