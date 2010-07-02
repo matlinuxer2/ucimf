@@ -1,41 +1,25 @@
 #!/bin/bash
 
-ROOT="$( dirname $(echo $0))/.."
-if [ "`echo "$ROOT" | cut -c1`" != "/" ];
-then
-        ROOT="$(pwd)/$ROOT"
-fi
+ROOT="$( readlink -f $(dirname $0)/..)" &&  source ${ROOT}/scripts/env.sh
 
-source $ROOT/scripts/env.sh
+tarball_clean(){
+	#test -d ${TARBALL} && rm -rf ${TARBALL} 
+	mkdir -p ${TARBALL}
+}
 
+make_tarball(){
+	local SRC_DIR=$1
 
-test -d ${TARBALL} && rm -rvf ${TARBALL} 
-install -d ${TARBALL}
-
-make_tarball_of_libucimf(){
+	echo "==== entering ${SRC_DIR} and start to make tarball ===="
 	pushd .
-
-	echo "Start to make tarball of libucimf..."
-	cd ${LIBUCIMF}
-	autoreconf -sif
-	test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
-	make distcheck && ls -t libucimf*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
-
+	cd ${SRC_DIR}
+		test -f ./configure || autoreconf -sif || return 1
+		#test -f configure && LDFLAGS="-L${BUILD}/lib" LIBS="-lucimf" CPPFLAGS="-I${BUILD}/include" ./configure --prefix=${BUILD}
+		test -f configure && ./configure --prefix=${BUILD} || return 1
+		make distcheck && ( ls -t *.tar.gz | head -n1 | xargs cp -t ${TARBALL} ) || return 1
 	popd
 }
 
-make_tarball_of_ucimf-openvanilla(){
-	pushd .
-
-	echo "Start to make tarball of ucimf-openvanilla..."
-	cd ${UCIMFOV}
-	autoreconf -sif
-	test -f configure && OV_MODULEDIR=${BUILD}/lib/openvanilla ./configure --prefix=${BUILD}
-	make distcheck && ls -t ucimf-openvanilla*.tar.gz | head -n1 | xargs cp -t ${TARBALL}
-
-	popd
-}
-
-# first
-make_tarball_of_libucimf
-make_tarball_of_ucimf-openvanilla
+tarball_clean
+make_tarball ${LIBUCIMF}
+make_tarball ${UCIMFOV}
