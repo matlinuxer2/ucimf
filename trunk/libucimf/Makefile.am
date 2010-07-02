@@ -1,4 +1,4 @@
-SUBDIRS = display font src fbterm_ucimf man
+SUBDIRS = display font src man sample
 
 AM_CPPFLAGS = -g -DDEBUG 
 

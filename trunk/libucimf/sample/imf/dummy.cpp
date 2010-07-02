@@ -41,7 +41,7 @@ void DummyImf::refresh()
   Status* stts = Status::getInstance();
   //stts->set_imf_name("Dummy");
   //stts->set_im_name("none");
-  stts->set_imf_status("Dummy","none","");
+  stts->set_imf_status(const_cast<char*>("Dummy"),const_cast<char*>("none"),const_cast<char*>("") );
 }
 
 string DummyImf::process_input( const string& input)
