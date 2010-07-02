@@ -24,12 +24,11 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/types.h>
+#include <config.h>
 #include "options.h"
 #include "debug.h" 
 
 using namespace std;
-
-#define UCIMFRC_SYS SYSCONFDIR"/ucimf.conf"
 
 Options* Options::_instance = 0;
 
@@ -52,7 +51,7 @@ Options::Options()
   if ( access(conf.c_str(), R_OK ) != 0 )
   {
     UrDEBUG("Could not open config file: %s \n",conf.c_str() );
-    conf = UCIMFRC_SYS;
+    conf = UCIMF_CONF;
   }
 
   UrDEBUG("Checking config file: %s \n", conf.c_str() );

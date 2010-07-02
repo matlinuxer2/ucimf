@@ -9,6 +9,7 @@ console04_LDADD = -lucimf -L$(top_builddir)/src
 ############################
 
 pkglib_LTLIBRARIES = dummy.la
+pkglibdir=$(libdir)/ucimf
 
 dummy_la_SOURCES = imf/dummy.cpp imf/dummy.h
 dummy_la_LIBADD = -lucimf -L$(top_builddir)/src 

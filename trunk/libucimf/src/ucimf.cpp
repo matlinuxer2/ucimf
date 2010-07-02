@@ -30,6 +30,7 @@
 #include <ltdl.h>
 #include <vector>
 #include <fcntl.h>
+#include <config.h>
 
 #include "imf.h"
 #include "widget.h"
@@ -40,9 +41,6 @@
 
 #include <iostream>
 using namespace std;
-
-//#define IMF_MODULE_DIR DATADIR"/ucimf/"
-#define IMF_MODULE_DIR LIBDIR"/ucimf/"
 
 int LogFd=-1;
 
@@ -274,81 +272,6 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 
 }
 
-void ucimf_switch_raw( char *buf, int *p_buf_len )
-{ 
-	//char *buf;
-	//size_t n = read(fd, buf, sizeof(buf));
-
-	size_t n = (*p_buf_len);
-	int kc;
-
-	int i = 0;
-	while (i < n) {
-		const char *s;
-		s = (buf[i] & 0x80) ? "release" : "press";
-		char down = !(buf[i] & 0x80);
-
-		if (i+2 < n && (buf[i] & 0x7f) == 0
-		&& (buf[i+1] & 0x80) != 0
-		&& (buf[i+2] & 0x80) != 0) {
-			kc = ((buf[i+1] & 0x7f) << 7) |
-			(buf[i+2] & 0x7f);
-			i += 3;
-		} else {
-			kc = (buf[i] & 0x7f);
-			i++;
-		}
-		UrDEBUG( "keycode %3d %s\n", kc, s);
-	}
-
-
-  if( kc !=67 || kc != 68 || kc != 87 || kc != 88 )
-  {
-    return;
-  }
-  else
-  {
-      if(  kc == 88 ) // F12
-      {
-	cwm->set_focus( !cwm->get_focus() );
-	if(imf!=0)
-	{
-	   imf->refresh();
-	}
-      }
-      else if( cwm->get_focus() && kc == 87 ) // IM=ON && F11
-      {
-	if( cwm->get_focus() && imf !=0 )
-	  imf->switch_im();
-	else
-	  cwm->set_focus( true );
-      }
-      else if( cwm->get_focus() && kc == 68 ) // IM=ON && F10
-      {
-	prdt->clear();
-	lkc->clear();
-	stts->clear();
-
-	imf = nextImf();
-	if( imf!=0 )
-	{
-	  imf->refresh();
-	}
-      }
-      else
-      {
-	return;
-      }
-
-      // Clear input buffer
-      bzero( buf, *p_buf_len);
-      (*p_buf_len)=0; 
-  }
-
-
-}
-
-
 char* ucimf_process_stdin( char *buf, int *p_ret )
 {
   string input( buf, *p_ret );
@@ -409,13 +332,13 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		return buf;
 	}
 
-	if( kc== KEY_SPACE && shift_down[KG_CTRL] >0 )
+	if( kc== KEY_SPACE && shift_down[KG_CTRL] >0 ) // Ctrl+Space
 	{
 		bzero( buf, *p_ret);
 		(*p_ret)=0; 
 		return buf;
 	}
-	else if( kc==KEY_LEFTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F11
+	else if( kc==KEY_LEFTSHIFT && shift_down[KG_CTRL] >0 ) // Ctrl+LeftShift
 	{
 		if( cwm->get_focus() && imf !=0 )
 		imf->switch_im();
@@ -426,12 +349,28 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		(*p_ret)=0; 
 		return buf;
 	}
-	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // IM=ON && F10
+	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // Ctrl+RightShift
 	{
 		if( cwm->get_focus() && imf !=0 )
 		imf->switch_im_reverse();
 		else
 		cwm->set_focus( true );
+
+		bzero( buf, *p_ret);
+		(*p_ret)=0; 
+		return buf;
+	}
+	else if( kc==KEY_F9 ) // F9
+	{
+		prdt->clear();
+		lkc->clear();
+		stts->clear();
+
+		imf = nextImf();
+		if( imf!=0 )
+		{
+			imf->refresh();
+		}
 
 		bzero( buf, *p_ret);
 		(*p_ret)=0; 
