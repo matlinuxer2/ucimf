@@ -41,6 +41,7 @@ class DummyImf : public Imf
     string process_input( const string& input );
     void  switch_lang(){};
     void  switch_im();
+    void  switch_im_reverse(){};
     void  switch_im_per_lang(){};
 };
 

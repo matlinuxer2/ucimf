@@ -1,0 +1,33 @@
+Dear Users,
+  
+  ( for tarball source )
+
+  1. This extension has dependency on 'libucimf', please 
+     remember to install it before compilation. 
+
+  2. The package obey common tarball conventions, just 
+       `./configure`
+       `make`
+       `make install`
+     and append customization parameters as `./configure --help` said.
+ 
+
+Dear Developers,
+
+  ( for online repository source )
+
+  0. Please execute following command to initialize autotools 
+      for the first compilation
+  
+       `autoreconf -i --force`
+  
+     It will generate 'configure' and 'Makefile'
+  
+  1. Compile
+
+       `make`
+  
+  2. Install
+        
+       `make install` 
+  
