@@ -30,4 +30,6 @@ tarball_build(){
 build_clean
 tarball_build "libucimf"
 tarball_build "ucimf-openvanilla"
+tarball_build "openvanilla-modules"
+tarball_build "fbterm_ucimf"
 

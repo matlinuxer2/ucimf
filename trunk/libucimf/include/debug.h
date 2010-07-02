@@ -1,6 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <stdio.h>
 
 #define UCIMF_ERR(format...)    	{extern int LogFd; if( LogFd >=0 ){ dprintf( LogFd, "[Err]:"format  );} }
