@@ -33,15 +33,26 @@
 
 #include "dummy.h"
 #include <imf/widget.h>
+#include <config.h>
 
 using namespace std;
 
 void DummyImf::refresh()
 {
   Status* stts = Status::getInstance();
-  //stts->set_imf_name("Dummy");
-  //stts->set_im_name("none");
-  stts->set_imf_status(const_cast<char*>("Dummy"),const_cast<char*>("none"),const_cast<char*>("") );
+  LookupChoice* lkc = LookupChoice::getInstance();
+
+  stts->set_imf_status(const_cast<char*>("UCIMF"),const_cast<char*>(VERSION),const_cast<char*>("") );
+
+  lkc->clear();
+  lkc->append_next( const_cast<char*>("Note::") );
+  lkc->append_next( const_cast<char*>("  <Ctrl+Space>: toggle IM on/off") );
+  lkc->append_next( const_cast<char*>("  <Ctrl+RightShift>: Switch IME forward") );
+  lkc->append_next( const_cast<char*>("  <Ctrl+LeftShift>: Switch IME backward") );
+  lkc->append_next( const_cast<char*>("  <F9>: Switch IMF") );
+  lkc->append_next( const_cast<char*>("") );
+  lkc->append_next( const_cast<char*>("Press <F9> to continue...") );
+  lkc->render();
 }
 
 string DummyImf::process_input( const string& input)

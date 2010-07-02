@@ -30,6 +30,8 @@ AC_FUNC_CLOSEDIR_VOID
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memset setlocale strstr])
 
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
 AC_DEFINE_UNQUOTED([LIBDIR], ["`eval echo $libdir`"], [Description])
 
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
