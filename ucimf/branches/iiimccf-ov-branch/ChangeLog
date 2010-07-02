@@ -1,9 +1,0 @@
-2005-12-18  Jim Huang  <jserv.tw@gmail.com>
-
-	* display/fblinear8.cpp (FBLinear8::DrawChar),
-	display/fblinear24.cpp (FBLinear24::DrawChar): Fix GCC 4.0 compilation
-	errors.
-
-	* Makefile.am: Added /usr/include/iiim as include path.
-
-	* test/*: Disabled old tests.
