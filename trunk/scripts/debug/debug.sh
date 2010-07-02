@@ -1,7 +1,6 @@
 #!/bin/bash
 
-ROOT="$( dirname $( readlink -f $0))/../.."
-source $ROOT/scripts/env.sh
+ROOT="$( readlink -f $(dirname $0)/../..)" &&  source ${ROOT}/scripts/env.sh
 
 ERROR_LOG=${BUILD}/error.log
 
@@ -47,37 +46,24 @@ echo "===Run again message===" | tee -a ${ERROR_LOG}
 ./run.sh 2>>${ERROR_LOG} >> ${ERROR_LOG}
 
 	
-echo "===Console Terminal failed, try testing===" | tee -a ${ERROR_LOG}
-build_console_testing
-
 echo "===Testing console case 01===" | tee -a ${ERROR_LOG}
-cd ${BUILD}
 LC_CTYPE=zh_TW.UTF-8 gdb -batch -x ${SCRIPTS}/debug/trace.gdb ${BUILD}/bin/console01 >>${ERROR_LOG} 2>&1
 
 echo "===Run again message===" | tee -a ${ERROR_LOG}
 LC_CTYPE=zh_TW.UTF-8 ${BUILD}/bin/console01 >>${ERROR_LOG} 2>&1
-if (( $? )) 
-then
-	echo "====Rebuild libucimf==="
-	build_libucimf
-	setup_libucimf
-fi
-
-echo "===Testing console case 02===" | tee -a ${ERROR_LOG}
-cd ${BUILD}
-LC_CTYPE=zh_TW.UTF-8 gdb -batch -x ${SCRIPTS}/debug/trace.gdb ${BUILD}/bin/console02 >>${ERROR_LOG} 2>&1
-
-echo "===Testing console case 03===" | tee -a ${ERROR_LOG}
-cd ${BUILD}
-FONT_PATH=${BUILD}/share/ucimf/unifont.pcf gdb -batch -x ${SCRIPTS}/debug/trace.gdb ${BUILD}/bin/console03 >>${ERROR_LOG} 2>&1
 
 
 # Create convient bug report pack
-test -d ${BUILD}/BugReport && rm -rf ${BUILD}/BugReport 
+BUG_REPORT_DIR="${SCRIPTS}/_report"
 
-mkdir -p ${BUILD}/BugReport
-cp ${ROOT}/libucimf/config.log  ${BUILD}/BugReport/libucimf.config.log
-cp ${ROOT}/ucimf-openvanilla/config.log  ${BUILD}/BugReport/ucimf_openvanilla.config.log
-cp ${ROOT}/console/fbterm_ucimf/config.log ${BUILD}/BugReport/fbterm_ucimf.config.log
-cd ${BUILD}
-tar -czf BugReport.tar.gz BugReport/
+test -d ${BUG_REPORT_DIR} && rm -rf ${BUG_REPORT_DIR} 
+mkdir -p ${BUG_REPORT_DIR}
+
+cp ${LIBUCIMF}/config.log  ${BUG_REPORT_DIR}/libucimf.config.log
+cp ${UCIMFOV}/config.log  ${BUG_REPORT_DIR}/ucimf-openvanilla.config.log
+cp ${ERROR_LOG} ${BUG_REPORT_DIR}/error.log
+cp ${HOME}/.ucimf-log ${BUG_REPORT_DIR}/ucimf-log
+
+pushd .
+cd ${BUG_REPORT_DIR}/.. && tar -czf ${SCRIPTS}/bug_report.tar.gz $(basename $BUG_REPORT_DIR)
+popd 

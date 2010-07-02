@@ -1,62 +1,33 @@
 #!/bin/bash
 
-ROOT="$( dirname $(echo $0))/.."
-if [ "`echo "$ROOT" | cut -c1`" != "/" ];
-then
-        ROOT="$(pwd)/$ROOT"
-fi
-
-source $ROOT/scripts/env.sh
+ROOT="$( readlink -f $(dirname $0)/..)" &&  source ${ROOT}/scripts/env.sh
 
 build_clean(){
-	pushd .
-
-	test -d ${BUILD} && rm -rvf ${BUILD}
+	test -d ${BUILD} && rm -rf ${BUILD}
 	mkdir -p ${BUILD}
-	
-	popd
 }
 
+tarball_build(){
+	local NAME=$1
 
-tarball_build_libucimf(){
-	LIBUCIMF_PATH=$( ls ${TARBALL} |grep 'libucimf.*.tar.gz'| head --lines=1 )
-	LIBUCIMF_FILE=${LIBUCIMF_PATH%.tar.gz}
-
-	echo "Start to build libucimf"
-
-	cd ${TARBALL}
-	tar -zxvf ${LIBUCIMF_PATH}
-	cd ${LIBUCIMF_FILE}
-	./configure --prefix=${BUILD} && make && make install
-
-	cd ${TARBALL}
-	rm -rvf ${LIBUCIMF_FILE}
-
-	back_to_scripts
-}
-
-tarball_build_ucimf-openvanilla(){
+	echo "==== entering ${TARBALL} and start to build ${NAME} ===="
 	pushd .
-
-
-	UCIMFOV_PATH=$( ls ${TARBALL} |grep 'ucimf-openvanilla.*.tar.gz'| head --lines=1 )
-	UCIMFOV_FILE=${UCIMFOV_PATH%.tar.gz}
-
-	echo "Start to build ucimf-openvanilla"
-
 	cd ${TARBALL}
-	tar -zxvf ${UCIMFOV_PATH}
-	cd ${UCIMFOV_FILE}
-	./configure --prefix=${BUILD} && make && make install
+		TARBALL_FILE=$( ls -t |grep "$NAME.*.tar.gz"| head --lines=1 )
+		TARBALL_DIR=${TARBALL_FILE%.tar.gz}
 
-	cd ${TARBALL}
-	rm -rvf ${UCIMFOV_FILE}
+		( tar -zxf ${TARBALL_FILE} && test -d ${TARBALL_DIR} ) || return 1
 
+		pushd .
+		cd ${TARBALL_DIR}
+			./configure --prefix=${BUILD} && make && make install
+		popd .
+
+		rm -rf ${TARBALL_DIR}
 	popd
-
 }
 
 build_clean
-tarball_build_libucimf
-tarball_build_ucimf-openvanilla
+tarball_build "libucimf"
+tarball_build "ucimf-openvanilla"
 
