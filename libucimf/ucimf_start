@@ -306,6 +306,12 @@ function ime_setup(){
 }
 
 function show_font_list(){
+
+	if [ "x$THE_FONT" != "x" ] ; then
+            echo "\"$THE_FONT\" \"$THE_FONT\" on"
+        fi
+	
+	THE_FONT="$result"
 	IFS=$'\n'
         for line in $(fc-list)
         do
