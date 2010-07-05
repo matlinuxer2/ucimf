@@ -72,8 +72,8 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 
 AC_CONFIG_FILES([Makefile
-		 libucimf-uninstalled.pc
-		 libucimf.pc
+                 libucimf-uninstalled.pc
+                 libucimf.pc
                  src/Makefile
                  font/Makefile
                  man/Makefile

@@ -56,29 +56,29 @@ function env_check(){
 	# check openvanilla's modules existed
 	local my_openvanilla_modules=$( ls -l ${OPENVANILLA_MODULES_DIR} )
 
-	echo "" 
+	echo 
 	echo "            tty: ${my_tty}" 
 	echo "      fb device: ${my_fb_dev}" 
 	echo "  fb permission: ${my_fb_perm}" 
 	echo " bits per pixel: ${my_fb_bits}" 
 	echo "        fb size: ${my_fb_size}" 
-	echo "" 
+	echo 
 	echo "      conf file: ${UCIMF_CONF}" 
 	echo "       log file: ${UCIMF_LOG}"
-	echo "" 
+	echo 
 	echo "           term: ${THE_TERM}"
 	echo "    fbterm perm: ${fbterm_perm}"
 	echo "  fbterm getcap: ${fbterm_getcap}"
-	echo "" 
+	echo 
 	echo "           font: ${THE_FONT}"
 	echo "      font-size: ${THE_FONTSIZE}"
-	echo "" 
+	echo 
 	echo "         locale: ${LC_CTYPE}" 
 	echo "  config locale: ${THE_LOCALE}" 
-	echo "" 
+	echo 
 	echo "        ime dir: ${OPENVANILLA_MODULES_DIR}" 
 	echo "     ime tables: ${THE_IME}"
-	echo "" 
+	echo 
 }
 
 function main_setup(){
@@ -257,7 +257,7 @@ function ime_setup(){
 	THE_IME="$result"
 
 	echo "Updating ime tables..."
-	echo ""
+	echo
 	install -d $my_imes_dir
 
 	# 將選定的項目打開
@@ -301,7 +301,7 @@ function ime_setup(){
 	    fi
 	done
 
-	echo ""
+	echo
 	read -p "Press <Enter> to continue..."
 }
 
@@ -376,9 +376,9 @@ while true; do
       sleep 0.5 
       env_check
 
-      echo "" 
+      echo
       echo "To start using, just execute following command:" 
-      echo "" 
+      echo
 
       if [ "x$THE_TERM" == "xfbterm" ]
       then
@@ -388,7 +388,7 @@ while true; do
 	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM 2>/dev/null"
       fi
 
-      echo "" 
+      echo 
       echo "Enjoy it! :-)" 
       
       exit 0
