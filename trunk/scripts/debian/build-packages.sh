@@ -3,7 +3,8 @@
 
 function fetch_launchpad_file(){
 	local THE_BRANCH=$1
-	test -d $THE_BRANCH || bzr branch lp:~pkg-ime/ucimf/$THE_BRANCH
+	#test -d $THE_BRANCH || bzr branch lp:~pkg-ime/ucimf/$THE_BRANCH
+	test -d $THE_BRANCH || bzr branch lp:~matlinuxer2/ucimf/$THE_BRANCH
 }
 
 function fetch_googlecode_file(){
