@@ -55,12 +55,13 @@ time_count 5
 
 #### Make debian packages and merge them into repository tre ####
 TEMP_DIR="incoming"
+CODE_NAME=${1}
 
 #### http://code.google.com/p/pkgbzr/
 #### debbing is a debian packaging tool based on debuild and ppa_publish ####
-debbing libucimf-2.3.5.tar.gz debian-libucimf/debian $TEMP_DIR 
-debbing ucimf-openvanilla-2.10.9.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR 
-debbing openvanilla-modules-0.8.0_14.tar.gz debian-openvanilla-modules/debian $TEMP_DIR 
-debbing fbterm_ucimf-0.2.8.tar.gz debian-fbterm-ucimf/debian $TEMP_DIR 
+debbing libucimf-2.3.5.tar.gz debian-libucimf/debian $TEMP_DIR $CODE_NAME 
+debbing ucimf-openvanilla-2.10.9.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR $CODE_NAME 
+debbing openvanilla-modules-0.8.0_14.tar.gz debian-openvanilla-modules/debian $TEMP_DIR $CODE_NAME 
+debbing fbterm_ucimf-0.2.8.tar.gz debian-fbterm-ucimf/debian $TEMP_DIR $CODE_NAME 
 
 rm -r __debian*
