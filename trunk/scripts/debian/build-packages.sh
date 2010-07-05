@@ -44,10 +44,10 @@ fetch_launchpad_file debian-openvanilla-modules
 fetch_launchpad_file debian-libucimf 
 fetch_launchpad_file debian-fbterm-ucimf 
 
-fetch_googlecode_file libucimf-2.3.1.tar.gz
-fetch_googlecode_file ucimf-openvanilla-2.10.7.tar.gz
+fetch_googlecode_file libucimf-2.3.5.tar.gz
+fetch_googlecode_file ucimf-openvanilla-2.10.9.tar.gz
 fetch_googlecode_file openvanilla-modules-0.8.0_14.tar.gz
-fetch_googlecode_file fbterm_ucimf-0.2.7.tar.gz
+fetch_googlecode_file fbterm_ucimf-0.2.8.tar.gz
 
 #### Output possible build dependencies ####
 find_build_dep debian-ucimf-openvanilla debian-openvanilla-modules debian-libucimf debian-fbterm-ucimf 
