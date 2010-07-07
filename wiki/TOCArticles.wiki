@@ -3,6 +3,7 @@
     * [Arch Arch Linux]                       
     * [Debian Debian GNU/Linux]               
     * [Gentoo Gentoo Linux]                   
+    * [Ubuntu Ubuntu Linux]               
   * [Configuration 設定]                      
   * [Usage 使用]                              
   * [UserManual 用戶手冊]                     
