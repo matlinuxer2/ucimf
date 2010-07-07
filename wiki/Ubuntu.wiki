@@ -4,7 +4,12 @@
 *注*：請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
 
 === 添加軟件倉庫源 === 
-將下列連結加入你的 /etc/apt/sources.list
+手動執行如下命令
+{{{
+sudo add-apt-repository ppa:ucimf-dev
+}}}
+
+或者將下列連結加入你的 /etc/apt/sources.list
 {{{
 deb http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
 deb-src http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
