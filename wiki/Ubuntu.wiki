@@ -6,9 +6,11 @@
 === 添加軟件倉庫源 === 
 將下列連結加入你的 /etc/apt/sources.list
 {{{
-deb http://ppa.launchpad.net/matlinuxer2/ucimf/ubuntu lucid main
-deb-src http://ppa.launchpad.net/matlinuxer2/ucimf/ubuntu lucid main
+deb http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
+deb-src http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
 }}}
+
+* lucid 可換成 karmic/jaunty/... 等其他 codename *
 
 === 安裝相關套件 ===
 請用 aptitude 安裝下列套件
