@@ -11,6 +11,7 @@ _ ( Descending with date )_
     * The great works for ucimf debian packages.
     * Official Debian package submit and maintainance.
     * manpages for libucimf and fbterm_ucimf writtings.
+    * Ubuntu PPA packaging submit and maintainance.
 
 * morebtcg *
     * Patch for unusual screen resolution 1366x768. 
