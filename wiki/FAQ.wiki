@@ -1,17 +1,25 @@
 ﻿#sidebar TOCArticles
 
 ===一般使用者用 ctrl-space 沒反應，要切換成 root 才行 (fbterm) ===
-一般可行的解決方法是設定 SUID.
+這個狀況的特徵是在 fbterm 啟動時，出現下述訊息
+{{{
+[input] can't change kernel keymap table, all shortcuts will NOT work,  see SECURITY NOTES section of man page for solution.
+}}}
+
+解法1) setuid (適用一般狀況)
 {{{ 
 chmod u+s /usr/bin/fbterm 
 }}}
 
-若 Kernel >= 2.6.27 時，則可以使用新的權限開啟方式:
+解法2)  setcap (適用於 Kernel >= 2.6.27 )
 {{{
-sudo setcap 'cap_sys_tty_config+ep' /path/to/fbterm
+sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 }}}
 
+
 ( 詳情請見 man fbterm "SECURITY NOTES" 一節 )
+
+( 感謝 Zhong Sheng 的補充 )
 
 ===运行fbterm后，光标变成不闪烁的下划线，有什么办法让fbterm的光标变成闪烁的方块? ===
 可以試試看 fbterm --cursor-shape=1。 預設值是 0，你也可以將這個設定寫進 ~/.fbtermrc 裡。
@@ -99,26 +107,12 @@ jfbterm 需要 patch 過，也可以換成其他 patch 過的 term
 原始的 jfbterm 並不認得 ucimf, 所以需要作一些 patch 讓 jfbterm 把輸入傳給 ucimf 處理
 如果不打的話，就跟原來的 jfbterm 的功能一樣，但沒辦法輸入。
 
-=== 讓 ucimf 在其它 fbterm 下運行試試看可不可以? ===
+=== 讓 ucimf 在其它 framebuffer term 下運行試試看可不可以? ===
 可以的，只要將你想要用的 framebuffer term 作適當的 patch 即可
-( 目前已經實作了 fbterm-ucimf 的程式，在 fbterm 1.3 版之後，正式支援 fbterm 的輸入功能 )
+目前已經實作支援的 term 應用有 fbterm ( 透過 fbterm_ucimf ), jfbterm, boglterm.
 
 === 我是 debian stable 能不能用呢？ ===
 debian stable 已經納入考量，也已經可以用嘍!
-
-=== 我刚才又试了一下。现在的错误为terminate called after throwing an instance of 'std::runtime_error' what():  Could not open config file! ===
-檢查一下看有沒有連結到舊的函式庫
-
-===fonts/unifont.pcf taken from GNU Unifont?===
-yes, unifont is token from GNU Unifont
-
-
-=== ucimf 可以 disable FreeType 嗎? ===
-不行，目前是 depend on freetype 來作 font render
-印象中 FT rendering 有 error 要 catch
-
-=== openvanilla.h:24:37: error: OpenVanilla/OpenVanilla.h: No such file or directory ===
-openvanilla-framework 這個
 
 === UCIMF才是正式名稱? 與jfbterm怎作區別? ===
 jfbterm 負責顯示 unicode 的 console,
