@@ -17,33 +17,32 @@ Distributor_Codename=`lsb_release -c | awk '{print $2}'`
 show_table(){
 	cat << EOF
 autoconf	Debian lenny autoconf
-g++		Debian lenny g++
-ltdl-dev	Debian lenny libltdl3-dev
-freetype2-dev	Debian lenny libfreetype6-dev
-fontconfig-dev	Debian lenny libfontconfig1-dev
-make		Debian lenny make
-curses-dev	Debian lenny libncurses5-dev
-
 autoconf	Ubuntu hardy autoconf
+autoconf	Gentoo n/a   autoconf 
+
+g++		Debian lenny g++
 g++		Ubuntu hardy g++
+g++		Gentoo n/a   gcc
+
+ltdl-dev	Debian lenny libltdl3-dev
 ltdl-dev	Ubuntu hardy libltdl3-dev
+ltdl-dev	Gentoo n/a   libtool
+
+freetype2-dev	Debian lenny libfreetype6-dev
 freetype2-dev	Ubuntu hardy libfreetype6-dev
+freetype2-dev	Gentoo n/a   freetype
+
+fontconfig-dev	Debian lenny libfontconfig1-dev
 fontconfig-dev	Ubuntu hardy libfontconfig1-dev
+fontconfig-dev	Gentoo n/a   fontconfig
+
+make		Debian lenny make
 make		Ubuntu hardy make
+make		Gentoo n/a   make
+
+curses-dev	Debian lenny libncurses5-dev
 curses-dev	Ubuntu hardy libncurses5-dev
-
-autotool Gentoo n/a automake
-
-automake
-autoconf
-libtool
-subversion
-fakeroot
-g++
-libfreetype
-libfontconfig
-libltdl
-pkg-config
+curses-dev	Gentoo n/a   ncurses
 EOF
 
 }
@@ -58,7 +57,7 @@ get_pkg_name()
 	result=$( show_table | grep "^$query_cmd" 2>/dev/null \
                      | grep $Distributor_ID  2>/dev/null \
                      | grep $Distributor_Codename 2>/dev/null \
-                     | awk '{print $4}' \
+                     | cut -d ' ' -f3- \
                      | xargs echo -n  )
 
 	if [ "x" != "x$result" ]; then
