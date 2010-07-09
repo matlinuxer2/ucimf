@@ -1,0 +1,22 @@
+#sidebar TOCArticles
+
+= 如何在 *[http://www.exherbo.org Exherbo Linux]* 中安裝和使用 *UCIMF* =
+
+==  添加 *[http://git.exherbo.org/summer/repositories/exhereses-cn/index.html exhereses-cn]* 软件仓库 ==
+
+{{{
+    sudo cave resolve -x repository/exhereses-cn
+}}}
+
+== 安裝 *UCIMF* 相關套件 ==
+
+{{{
+    sudo cave resolve -x ucimf
+}}}
+
+命令執行完畢后會安裝如下軟體套件
+ * fbterm
+ * fbterm-ucimf
+ * libucimf
+ * openvanilla-modules
+ * ucimf-openvanilla
