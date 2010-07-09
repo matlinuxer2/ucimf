@@ -45,6 +45,7 @@ deb-src http://ppa.launchpad.net/ucimf-dev/ppa/ubuntu lucid main
 ||  Ctrl-ShiftR || 切換前一個輸入法 ||
 
 === 測試 unstable 分支的最新程式 ===
+請手動執行如下命令
 {{{
 sudo add-apt-repository ppa:ucimf-dev/unstable
 }}}
