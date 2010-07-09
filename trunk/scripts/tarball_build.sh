@@ -10,6 +10,8 @@ build_clean(){
 tarball_build(){
 	local NAME=$1
 
+	install -d ${TARBALL}
+
 	echo "==== entering ${TARBALL} and start to build ${NAME} ===="
 	pushd .
 	cd ${TARBALL}
@@ -26,6 +28,23 @@ tarball_build(){
 		rm -rf ${TARBALL_DIR}
 	popd
 }
+
+function prepare_tarball(){
+	local THE_TARBALL=$1
+
+	install -d ${TARBALL}
+
+	pushd .
+	cd ${TARBALL}
+		test -f $THE_TARBALL || wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL
+	popd
+}
+
+
+prepare_tarball libucimf-2.3.5.tar.gz 
+prepare_tarball ucimf-openvanilla-2.10.9.tar.gz 
+prepare_tarball openvanilla-modules-0.8.0_14.tar.gz 
+prepare_tarball fbterm_ucimf-0.2.8.tar.gz 
 
 build_clean
 tarball_build "libucimf"
