@@ -31,6 +31,8 @@
 #include <vector>
 #include <fcntl.h>
 #include <config.h>
+#include <signal.h>
+#include <setjmp.h>
 
 #include "imf.h"
 #include "widget.h"
@@ -100,6 +102,24 @@ unsigned short keycode_to_keysym(unsigned short keycode, char down);
 char *keysym_to_term_string(unsigned short keysym, char down);
 
 
+jmp_buf setjmpBuffer;
+void signalHandler( int err_num ){
+  UrDEBUG( "==== catch os-level error! <%d> ====\n", err_num ); 
+  longjmp( setjmpBuffer, 1 );
+}
+
+#define _TRAP( COMMANDS ) \
+if ( setjmp( setjmpBuffer ) == 0 ){ \
+	try{ \
+		COMMANDS \
+	} \
+	catch(...){                                                                  \
+		UrDEBUG( "==== catch user-level error! ====\n" ); \
+	} \
+} \
+else{ \
+	UrDEBUG( "==== IMF module has some os-level error, here ignore it once  ====\n" ); \
+} \
 
 
 
@@ -176,6 +196,10 @@ Imf* nextImf()
 
 void ucimf_init()
 {
+	signal( SIGFPE, signalHandler );
+	signal( SIGSEGV, signalHandler );
+	signal( SIGILL, signalHandler );
+
 	Options* option = Options::getInstance();                                                       
 	char* font_name = option->getOption("font-name");
 	int font_size = atoi( option->getOption("font-size") );
@@ -242,22 +266,26 @@ void ucimf_switch( unsigned char *buf, int *p_buf_len )
 	cwm->set_focus( !cwm->get_focus() );
 	if(imf!=0)
 	{
-	   imf->refresh();
+	   _TRAP( imf->refresh(); )
 	}
       }
       else if( cwm->get_focus() && buf[3] == 51 ) // IM=ON && F11
       {
-	if( cwm->get_focus() && imf !=0 )
-	  imf->switch_im();
-	else
-	  cwm->set_focus( true );
+	if( cwm->get_focus() && imf !=0 ){
+		_TRAP( imf->switch_im(); )
+	}
+	else{
+		cwm->set_focus( true );
+	}
       }
       else if( cwm->get_focus() && buf[3] == 49 ) // IM=ON && F10
       {
-	if( cwm->get_focus() && imf !=0 )
-	  imf->switch_im_reverse();
-	else
-	  cwm->set_focus( true );
+	if( cwm->get_focus() && imf !=0 ){
+		_TRAP( imf->switch_im_reverse(); )
+	}
+	else{
+		cwm->set_focus( true );
+	}
       }
       else
       {
@@ -287,7 +315,8 @@ char* ucimf_process_stdin( char *buf, int *p_ret )
     (*p_ret)=0; 
     strcpy(buf,"");
 
-    output = imf->process_input( input );
+    _TRAP( output = imf->process_input( input ); )
+
     (*p_ret) = output.copy( buf, string::npos ); // need to be checked!
   }
 
@@ -340,10 +369,12 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 	else if( kc==KEY_LEFTSHIFT && shift_down[KG_CTRL] >0 ) // Ctrl+LeftShift
 	{
-		if( cwm->get_focus() && imf !=0 )
-		imf->switch_im();
-		else
-		cwm->set_focus( true );
+		if( cwm->get_focus() && imf !=0 ){
+			_TRAP( imf->switch_im(); )
+		}
+		else{
+			cwm->set_focus( true );
+		}
 
 		bzero( buf, *p_ret);
 		(*p_ret)=0; 
@@ -351,10 +382,12 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 	else if( kc==KEY_RIGHTSHIFT && shift_down[KG_CTRL] >0 ) // Ctrl+RightShift
 	{
-		if( cwm->get_focus() && imf !=0 )
-		imf->switch_im_reverse();
-		else
-		cwm->set_focus( true );
+		if( cwm->get_focus() && imf !=0 ){
+			_TRAP( imf->switch_im_reverse(); )
+		}
+		else{
+			cwm->set_focus( true );
+		}
 
 		bzero( buf, *p_ret);
 		(*p_ret)=0; 
@@ -369,7 +402,7 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 		imf = nextImf();
 		if( imf!=0 )
 		{
-			imf->refresh();
+			_TRAP( imf->refresh(); )
 		}
 
 		bzero( buf, *p_ret);
@@ -399,7 +432,8 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 	else
 	{
-		output = imf->process_input( input );
+		_TRAP( output = imf->process_input( input ); )
+
 		(*p_ret) = output.copy( buf, string::npos ); // need to be checked!
 	}
 
