@@ -54,12 +54,12 @@ static void im_deactive()
 	first_show = 1;
 }
 
-static void process_raw_key(char *buf, int len) 
+static void process_raw_key(char *buf, unsigned int len) 
 {
 
     if( len <= 0 ) { return; }
 
-    char* result = ucimf_process_raw( buf, &len ); 
+    char* result = ucimf_process_raw( buf, (int*)&len ); 
 
     if( len <= 0 ) { 
 	    return; 
@@ -71,30 +71,6 @@ static void process_raw_key(char *buf, int len)
 	    put_im_text( result, result_len );
     }
 
-}
-
-static void process_key(char *keys, unsigned len)
-{
-	if (raw_mode) {
-		process_raw_key(keys, len);
-	} else {
-		//UrDEBUG("getkey, (%c, 0x%x)\n", *keys, *keys);
-
-		/* patch */
-		int buf_len=len;
-		char *buf = (char*)malloc( sizeof(char)*(buf_len+1) );
-		for( int i=0; i<len ; i++ )
-		{
-			buf[i]=keys[i];
-		}
-
-		char* result = ucimf_process_stdin( buf, &buf_len ); 
-
-		unsigned short result_len = buf_len;
-		/* patch */
-
-		put_im_text( result, result_len);
-	}
 }
 
 static void cursor_pos_changed(unsigned x, unsigned y)
@@ -109,7 +85,7 @@ static ImCallbacks cbs = {
 	im_deactive, // .deactive
 	0,
 	0,
-	process_key, // .send_key
+	process_raw_key, // .send_key
 	cursor_pos_changed, // .cursor_position
 	0, // .fbterm_info
 	0 // .term_mode
