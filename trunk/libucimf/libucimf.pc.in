@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libucimf
 Description: UCIMF (http://ucimf.sourceforge.net ) is a toolkit framework for input method under unicode console environment.
 Version: @PACKAGE_VERSION@
-Requires: freetype 
+Requires: freetype2 fontconfig
 Libs: -L${libdir} -lucimf
 Cflags: -I${includedir}
