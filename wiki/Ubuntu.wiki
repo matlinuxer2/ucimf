@@ -4,7 +4,7 @@
 *注*：請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
 
 === 添加軟件倉庫源 === 
-手動執行如下命令
+普通用戶請手動執行如下命令
 {{{
 sudo add-apt-repository ppa:ucimf-dev/ppa
 }}}
@@ -43,3 +43,16 @@ deb-src http://ppa.launchpad.net/ucimf-dev/ppa/ubuntu lucid main
 ||  Ctrl-Space ||  切換輸入狀態 ||
 ||  Ctrl-ShiftL || 切換輸入法 ||
 ||  Ctrl-ShiftR || 切換前一個輸入法 ||
+
+=== 測試 unstable 分支的最新程式 ===
+{{{
+sudo add-apt-repository ppa:ucimf-dev/unstable
+}}}
+
+或者將下列連結加入你的 /etc/apt/sources.list
+{{{
+deb http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
+deb-src http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
+}}}
+
+其他操作和以上步驟相同，如果您成功安裝請告訴我們，我們將把他們同步到 stable 分支給其他朋友使用。
