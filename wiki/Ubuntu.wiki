@@ -6,13 +6,13 @@
 === 添加軟件倉庫源 === 
 手動執行如下命令
 {{{
-sudo add-apt-repository ppa:ucimf-dev
+sudo add-apt-repository ppa:ucimf-dev/ppa
 }}}
 
 或者將下列連結加入你的 /etc/apt/sources.list
 {{{
-deb http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
-deb-src http://ppa.launchpad.net/ucimf-dev/unstable/ubuntu lucid main 
+deb http://ppa.launchpad.net/ucimf-dev/ppa/ubuntu lucid main 
+deb-src http://ppa.launchpad.net/ucimf-dev/ppa/ubuntu lucid main 
 }}}
 
 * lucid 可換成 karmic/jaunty/... 等其他 codename *
