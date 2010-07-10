@@ -22,10 +22,12 @@ layman -a gentoo-taiwan
 app-i18n/jfbterm ~*
 app-i18n/fbterm ~*
 app-i18n/fbterm-ucimf ~*
-app-i18n/libucimf **
-app-i18n/ucimf-openvanilla **
-app-i18n/openvanilla-modules **
+app-i18n/libucimf ~*
+app-i18n/ucimf-openvanilla ~*
+app-i18n/openvanilla-modules ~*
 }}}
+
+( TODO: 將測試過較穩定的套件標為 stable ) 
 
 == 安裝/使用 *UCIMF* 相關套件 ==
 
