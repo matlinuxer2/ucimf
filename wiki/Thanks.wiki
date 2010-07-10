@@ -22,6 +22,7 @@ _ ( Descending with date )_
 * oahong *
     * Several document refinement.
     * gentoo porting and package maintainance
+    * Exherbo Linux packages and related introduction pages
 
 * Qi Wenmin *
 	* fbterm testing
@@ -34,6 +35,7 @@ _ ( Descending with date )_
 
 * Fourdollars *
 	* autotool package refinement
+        * patches for ubuntu PPA dependencies
 
 * Andy *
   * arch porting
