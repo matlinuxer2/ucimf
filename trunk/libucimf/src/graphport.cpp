@@ -39,52 +39,52 @@ GraphPort::GraphPort()
 
 int GraphPort::OutChar( int x, int y, int fg, int bg, unsigned int charcode )
 {
-    UrDEBUG("GraphPort::OutChar( %d, %d, %d, %d, %d )\n", x, y, fg, bg, charcode );
+    //UrDEBUG("GraphPort::OutChar( %d, %d, %d, %d, %d )\n", x, y, fg, bg, charcode );
     int x_next = x+ x_tmp;
     if( gdev )
     {
 	    x_next = gdev->OutChar( x+x_tmp, y+ y_tmp, fg, bg, charcode );
     }
     return x_next-x_tmp;
-    UrDEBUG("GraphPort::OutChar() End\n")
+    //UrDEBUG("GraphPort::OutChar() End\n")
 }
 
 
 
 void GraphPort::PutPixel( int x, int y, int color)
 {
-    UrDEBUG("GraphPort::PutPixel( %d, %d, %d )\n", x, y, color );
+    //UrDEBUG("GraphPort::PutPixel( %d, %d, %d )\n", x, y, color );
 
     if( !gdev ) return;
     gdev->PutPixel( x+x_tmp, y+y_tmp, color );
-    UrDEBUG("GraphPort::PutPixel() End\n");
+    //UrDEBUG("GraphPort::PutPixel() End\n");
 }
 
 void GraphPort::FillRect( int x, int y, int width, int height, int color) 
 {
- UrDEBUG("GraphPort::FillRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
+ //UrDEBUG("GraphPort::FillRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
     if( !gdev ) return;
     gdev->FillRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
- UrDEBUG("GraphPort::FillRect() End()\n");
+ //UrDEBUG("GraphPort::FillRect() End()\n");
 }
 
 void GraphPort::DrawRect( int x, int y, int width, int height, int color) 
 {
- UrDEBUG("GraphPort::DrawRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
+ //UrDEBUG("GraphPort::DrawRect( %d, %d, %d, %d, %d )\n", x, y, width, height, color );
 
     if( !gdev ) return;
     gdev->DrawRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height, color );
 
- UrDEBUG("GraphPort::DrawRect() End()\n");
+ //UrDEBUG("GraphPort::DrawRect() End()\n");
 }
 
 void GraphPort::RevRect( int x, int y, int width, int height)
 {
 
- UrDEBUG("GraphPort::RevRect( %d, %d, %d, %d )\n", x, y, width, height );
+ //UrDEBUG("GraphPort::RevRect( %d, %d, %d, %d )\n", x, y, width, height );
     if( !gdev ) return;
     gdev->RevRect( x+x_tmp, y+y_tmp, x+x_tmp+width, y+y_tmp+height );
- UrDEBUG("GraphPort::RevRect() End()\n");
+ //UrDEBUG("GraphPort::RevRect() End()\n");
 }
 
 void GraphPort::setPseudo( bool flag)

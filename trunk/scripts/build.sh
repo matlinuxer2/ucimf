@@ -14,7 +14,7 @@ autotools_build(){
 	pushd .
 	cd ${SRC_DIR}
 		test -f ./configure || autoreconf -sif || return 1
-		test -f Makefile && make distclean 
+		test -f Makefile && make clean && make distclean 
 		( ./configure --prefix=${BUILD} && make && make install ) || return 1
 	popd
 }

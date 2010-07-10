@@ -30,21 +30,24 @@ tarball_build(){
 }
 
 function prepare_tarball(){
-	local THE_TARBALL=$1
+	local NAME=$1
+	local VERSION=$2
 
 	install -d ${TARBALL}
 
 	pushd .
 	cd ${TARBALL}
-		test -f $THE_TARBALL || wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL
+		THE_TARBALL=$( ls -t |grep "$NAME.*.tar.gz"| head --lines=1 )
+
+		test -f $THE_TARBALL || ( THE_TARBALL="$NAME-$VERSION.tar.gz" ; wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL )
 	popd
 }
 
 
-prepare_tarball libucimf-2.3.5.tar.gz 
-prepare_tarball ucimf-openvanilla-2.10.9.tar.gz 
-prepare_tarball openvanilla-modules-0.8.0_14.tar.gz 
-prepare_tarball fbterm_ucimf-0.2.8.tar.gz 
+prepare_tarball libucimf 2.3.5
+prepare_tarball ucimf-openvanilla 2.10.9
+prepare_tarball openvanilla-modules 0.8.0_14
+prepare_tarball fbterm_ucimf 0.2.8
 
 build_clean
 tarball_build "libucimf"
