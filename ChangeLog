@@ -1,3 +1,22 @@
+2010-07-09  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r496] Makefile.am, configure.ac, fbterm_ucimf.cpp:
+	  * some adjust of configure.ac and Makefile.am for fbterm_ucimf
+
+2010-07-02  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r473] Makefile.am, NEWS, README, configure.ac:
+	  * pass build
+	* [r472] .:
+	  * migrate code [4]
+
+2010-07-01  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r468] :
+	  * migrate code [1]
+	* [r463] :
+	  * Add Aron Xu's manpages for fbterm_ucimf ( Thanks Aron Xu! )
+
 2010-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* update IM API to latest fbterm 1.6
@@ -7,17 +26,17 @@
 	* Quote the font interfaces and implementations from FbTerm, 
 	  to add fontconfig support for ucimf.
 
-2009-03-24  Mat <MatLinuxer2@gmail.com>
+2009-03-24  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Revision to 0.2.4
 	* Fixed Ctrl-Space error while vim and nano editing
 
-2009-02-26  Mat <MatLinuxer2@gmail.com>
+2009-02-26  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Revision to 0.2.3
 	* Log message to file .ucimf-log
 
-2009-01-29  Mat <MatLinuxer2@gmail.com>
+2009-01-29  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Initial Revision 0.2.0
 
