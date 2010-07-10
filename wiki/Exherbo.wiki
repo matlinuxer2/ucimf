@@ -1,6 +1,6 @@
 #sidebar TOCArticles
 
-= 如何在 *[http://www.exherbo.org Exherbo Linux]* 中安裝和使用 *UCIMF* =
+= 如何在 *[http://www.exherbo.org Exherbo Linux]* 中安裝 *UCIMF* =
 
 ==  添加 *[http://git.exherbo.org/summer/repositories/exhereses-cn/index.html exhereses-cn]* 软件仓库 ==
 
@@ -14,7 +14,7 @@
     sudo cave resolve -x ucimf
 }}}
 
-命令執行完畢后會安裝如下軟體套件
+命令執行完畢后會安裝如下軟體套件:
  * fbterm
  * fbterm-ucimf
  * libucimf
