@@ -1,3 +1,30 @@
+2010-07-08  a0726h77
+
+	* [r489] src/openvanilla.cpp, src/ovimf.cpp:
+	  * pass compilation on debian
+
+2010-07-02  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r476] configure.ac:
+	  * add default IMF instance
+	  * update UCIMF_CONF, IMF_MODULE_DIR, LIBDIR's define
+
+2010-07-01  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r468] .:
+	  * migrate code [1]
+
+2010-06-30  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r460] :
+	  * add missing Makefile.am
+	  * split OV_MODULEDIR into 3 different pathes
+
+2010-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r458] :
+	  * enter next devel stage
+
 2009-06-25  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* update to latest OpenVanilla API
@@ -7,23 +34,23 @@
 
 	* add fail-safe check of module dir scanning
 
-2009-02-26  Mat <MatLinuxer2@gmail.com>
+2009-02-26  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Revision to 2.10.5 
 	* Enable autocomposing 
 
-2009-02-26  Mat <MatLinuxer2@gmail.com>
+2009-02-26  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Revision to 2.10.3 ( 2.2.3 + 0.8.0 )
 	* Log message to file .ucimf-log
 
-2009-01-28  Mat <MatLinuxer2@gmail.com>
+2009-01-28  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Revision to 2.10.0 ( 2.2.0+0.8.0 )
 	* Add <Backspace> support
 	* ...and... Happy Chinese New Year :-D
 
-2006-01-06  Mat <MatLinuxer2@gmail.com>
+2006-01-06  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* Initial Revision 1.9.1
 

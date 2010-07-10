@@ -24,10 +24,8 @@ Dear Developers,
      It will generate 'configure' and 'Makefile'
   
   1. Compile
-       `OV_MODULEDIR=/lib/openvanilla ./configure ` 
+       `./configure ` 
        `make`
-  
-     "OV_MODULEDIR" can be customized to your modules' path.
   
   2. Install
         
