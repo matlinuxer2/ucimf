@@ -31,7 +31,7 @@ int LogFd=-1;
 #define OV_MODULEDIR LIBDIR"/openvanilla/"
 
 // path for libovimgeneric.so, to locate *.cin , and data per modules
-#define OV_MODULEDIR2 LIBDIR"/openvanilla/"
+#define OV_MODULEDIR2 DATADIR"/openvanilla/"
 
 // path for libovimgeneric.so, mostly unused.
 #define OV_MODULEDIR3 LIBDIR"/openvanilla/"
