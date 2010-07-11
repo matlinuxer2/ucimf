@@ -51,10 +51,17 @@ function env_check(){
         local my_fb_size=$( cat /sys/class/graphics/$(basename $my_fb_dev)/virtual_size)
 
 	# check fbterm permission
-	local fbterm_perm=$( ls -l $(which fbterm) | cut -c-23 )
-	local fbterm_getcap=$( /sbin/getcap $(which fbterm) | grep fbterm | cut -f2 -d= )
+	local fbterm_path=$( which fbterm 2>/dev/null ) 
+	if [ "x$fbterm_path" != "x" ]; then
+		local fbterm_perm=$( ls -l $fbterm_path | cut -c-23 )
+		local fbterm_getcap=$( /sbin/getcap $fbterm_path 2>/dev/null | cut -f2 -d= )
+	else
+		local fbterm_perm=" <not found> "
+		local fbterm_getcap=" <not found> "
+	fi
 
 	# check openvanilla's modules existed
+	test -d ${OPENVANILLA_MODULES_DIR} || install -d ${OPENVANILLA_MODULES_DIR}
 	local my_openvanilla_modules=$( ls -l ${OPENVANILLA_MODULES_DIR} )
 
 	echo 
@@ -383,10 +390,10 @@ while true; do
 
       if [ "x$THE_TERM" == "xfbterm" ]
       then
-	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM -i fbterm_ucimf 2>/dev/null"
+	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM -i fbterm_ucimf"
       elif [ "x$THE_TERM" == "jfbterm" ]
       then
-	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM 2>/dev/null"
+	      echo "    LC_CTYPE=\"$THE_LOCALE\" $THE_TERM"
       fi
 
       echo 
