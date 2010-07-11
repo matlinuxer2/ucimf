@@ -74,6 +74,7 @@ AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 AC_CONFIG_FILES([Makefile
                  libucimf-uninstalled.pc
                  libucimf.pc
+                 ucimf_start
                  src/Makefile
                  font/Makefile
                  man/Makefile

@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# TODO: ucimf_start => ucimf_start.in
-
 UCIMF_CONF="${HOME}/.ucimf.conf"
 UCIMF_LOG="${HOME}/.ucimf-log" 
 OPENVANILLA_MODULES_DIR="${HOME}/.openvanilla/OVIMGeneric/"
-OPENVANILLA_MODULES_DIR_SYS="/usr/lib/openvanilla/OVIMGeneric/"
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+OPENVANILLA_MODULES_DIR_SYS="@libdir@/openvanilla/OVIMGeneric/"
+OPENVANILLA_MODULES_DIR_SYS2="@datadir@/openvanilla/OVIMGeneric/"
 
 #
 # functions in planing
@@ -217,7 +218,7 @@ function ime_setup(){
 
 	local imes_menu=""
 
-	local sys_imes_dir="${OPENVANILLA_MODULES_DIR_SYS}"
+	local sys_imes_dir="${OPENVANILLA_MODULES_DIR_SYS2}"
 	local my_imes_dir="${OPENVANILLA_MODULES_DIR}"
 
 	local imes=$( test -d $sys_imes_dir && cd $sys_imes_dir && ls *.cin)
