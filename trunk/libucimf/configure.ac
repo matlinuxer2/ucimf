@@ -71,6 +71,12 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove memset munmap setlocale strstr])
 
+AC_CHECK_PROG( DIALOG, dialog, yes, no)
+if test "$DIALOG" = no ; then
+        AC_MSG_WARN([Couldn't find dialog. It recommanded to have 'dialog' to execute 'ucimf_start' successfully.])  
+fi
+
+
 AC_CONFIG_FILES([Makefile
                  libucimf-uninstalled.pc
                  libucimf.pc
