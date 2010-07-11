@@ -44,10 +44,10 @@ function prepare_tarball(){
 }
 
 
-prepare_tarball libucimf 2.3.5
-prepare_tarball ucimf-openvanilla 2.10.9
+prepare_tarball libucimf 2.3.7
+prepare_tarball ucimf-openvanilla 2.10.10
 prepare_tarball openvanilla-modules 0.8.0_14
-prepare_tarball fbterm_ucimf 0.2.8
+prepare_tarball fbterm_ucimf 0.2.9
 
 build_clean
 tarball_build "libucimf"

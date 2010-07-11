@@ -44,10 +44,10 @@ fetch_launchpad_file debian-openvanilla-modules
 fetch_launchpad_file debian-libucimf 
 fetch_launchpad_file debian-fbterm-ucimf 
 
-fetch_googlecode_file libucimf-2.3.5.tar.gz
-fetch_googlecode_file ucimf-openvanilla-2.10.9.tar.gz
+fetch_googlecode_file libucimf-2.3.7.tar.gz
+fetch_googlecode_file ucimf-openvanilla-2.10.10.tar.gz
 fetch_googlecode_file openvanilla-modules-0.8.0_14.tar.gz
-fetch_googlecode_file fbterm_ucimf-0.2.8.tar.gz
+fetch_googlecode_file fbterm_ucimf-0.2.9.tar.gz
 
 #### Output possible build dependencies ####
 find_build_dep debian-ucimf-openvanilla debian-openvanilla-modules debian-libucimf debian-fbterm-ucimf 
@@ -59,9 +59,9 @@ CODE_NAME=${1}
 
 #### http://code.google.com/p/pkgbzr/
 #### debbing is a debian packaging tool based on debuild and ppa_publish ####
-debbing libucimf-2.3.5.tar.gz debian-libucimf/debian $TEMP_DIR $CODE_NAME 
-debbing ucimf-openvanilla-2.10.9.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR $CODE_NAME 
+debbing libucimf-2.3.7.tar.gz debian-libucimf/debian $TEMP_DIR $CODE_NAME 
+debbing ucimf-openvanilla-2.10.10.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR $CODE_NAME 
 debbing openvanilla-modules-0.8.0_14.tar.gz debian-openvanilla-modules/debian $TEMP_DIR $CODE_NAME 
-debbing fbterm_ucimf-0.2.8.tar.gz debian-fbterm-ucimf/debian $TEMP_DIR $CODE_NAME 
+debbing fbterm_ucimf-0.2.9.tar.gz debian-fbterm-ucimf/debian $TEMP_DIR $CODE_NAME 
 
 rm -r __debian*
