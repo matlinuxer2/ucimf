@@ -23,7 +23,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "debug.h"
+
 
 int LogFd=-1;
 
@@ -86,6 +90,30 @@ OVImf::OVImf()
   UrDEBUG( "OVIMF Module Dir2: %s \n", OV_MODULEDIR2 );
   UrDEBUG( "OVIMF Module Dir3: %s \n", OV_MODULEDIR3 );
 
+
+  // check *.cin search path 
+  bool inUserDir = false;
+  bool inLibDir = false;
+  bool inDataDir = false;
+
+  struct stat stb;
+  char user_dir[64];
+  snprintf( user_dir, sizeof(user_dir), "%s/%s", getenv("HOME"), ".openvanilla/OVIMGeneric/");
+
+  if (stat( user_dir, &stb) == 0 && S_ISDIR(stb.st_mode)){
+	  inUserDir = true;
+	  UrDEBUG( "Found *.cin search path: %s \n", user_dir );
+  }
+  if (stat(OV_MODULEDIR2"/OVIMGeneric/", &stb) == 0 && S_ISDIR(stb.st_mode)){
+	  inDataDir = true;
+	  UrDEBUG( "Found *.cin search path: %s \n", OV_MODULEDIR2"/OVIMGeneric/" );
+  }
+  if (stat(OV_MODULEDIR"/OVIMGeneric/", &stb) == 0 && S_ISDIR(stb.st_mode)){
+	  inLibDir = true;
+	  UrDEBUG( "Found *.cin search path: %s \n", OV_MODULEDIR"/OVIMGeneric/" );
+  }
+
+
   lt_dlinit();
   lt_dlsetsearchpath( OV_MODULEDIR );
 
@@ -130,7 +158,25 @@ OVImf::OVImf()
 
 			  if(mod){
 				  OVModule* m;
-				  mod->initLibrary(this->srv, OV_MODULEDIR2 );
+
+				  // Check *.cin search path in order
+				  if ( inUserDir ){
+					  mod->initLibrary(this->srv, user_dir );
+					  UrDEBUG( "Set *.cin search path to: %s \n", user_dir );
+				  }
+				  else if ( inDataDir ){
+					  mod->initLibrary(this->srv, OV_MODULEDIR2 );
+					  UrDEBUG( "Set *.cin search path to: %s \n", OV_MODULEDIR2"/OVIMGeneric/" );
+				  }
+				  else if ( inLibDir ){
+					  mod->initLibrary(this->srv, OV_MODULEDIR );
+					  UrDEBUG( "Set *.cin search path to: %s \n", OV_MODULEDIR"/OVIMGeneric/" );
+				  }
+				  else {
+					  mod->initLibrary(this->srv, user_dir );
+					  UrDEBUG( "Set *.cin search path to: %s \n", user_dir );
+				  }
+
 				  for(int i=0; m = mod->getModule(i); i++) {
 					  string str1= m->moduleType();
 					  string str2= "OVInputMethod";
