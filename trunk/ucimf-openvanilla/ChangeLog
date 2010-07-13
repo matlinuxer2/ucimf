@@ -1,3 +1,23 @@
+2010-07-13  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r510] src/ovimf.cpp:
+	  Add compatibility to old openvanilla-modules.
+	  Make *.cin search path set to ~/.openvanilla/OVIMGeneric,
+	  /usr/share/openvanilla/OVIMGeneric,
+	  /usr/lib/openvanilla/OVIMGeneric in order
+
+2010-07-11  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r507] Makefile.am, configure.ac, m4, m4/ac-define-dir.m4,
+	  src/ovimf.cpp:
+	  Change *.cin search path to $datadir/openvanilla/OVIMGeneric
+
+2010-07-10  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r501] configure.ac:
+	  Enter next develope stage
+
+
 2010-07-08  a0726h77
 
 	* [r489] src/openvanilla.cpp, src/ovimf.cpp:
