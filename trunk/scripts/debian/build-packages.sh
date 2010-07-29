@@ -3,8 +3,8 @@
 
 function fetch_launchpad_file(){
 	local THE_BRANCH=$1
-	#test -d $THE_BRANCH || bzr branch lp:~pkg-ime/ucimf/$THE_BRANCH
-	test -d $THE_BRANCH || bzr branch lp:~matlinuxer2/ucimf/$THE_BRANCH
+	test -d $THE_BRANCH || bzr branch lp:~pkg-ime/ucimf/$THE_BRANCH
+	#test -d $THE_BRANCH || bzr branch lp:~matlinuxer2/ucimf/$THE_BRANCH
 }
 
 function fetch_googlecode_file(){
@@ -18,7 +18,7 @@ function find_build_dep(){
         then
 	    echo "There are build dependencies below: "
 	    echo ""
-	    find $SEARCH_DIRS -name 'control' | xargs grep "Build-Depends"| cut -f3- -d: | sed -e "s/(.*)//g" -e "s/,/\n/g" | sort | uniq | xargs echo -n
+	    find $SEARCH_DIRS -name 'control' | xargs grep "Build-Depends"| cut -f3- -d: | sed -e "s/(.*)//g" -e "s/,/\n/g" -e "s/|//g" | sort | uniq | xargs echo -n
 	    echo ""
 	    echo ""
 	fi
@@ -45,8 +45,8 @@ fetch_launchpad_file debian-libucimf
 fetch_launchpad_file debian-fbterm-ucimf 
 
 fetch_googlecode_file libucimf-2.3.7.tar.gz
-fetch_googlecode_file ucimf-openvanilla-2.10.10.tar.gz
-fetch_googlecode_file openvanilla-modules-0.8.0_14.tar.gz
+fetch_googlecode_file ucimf-openvanilla-2.10.11.tar.gz
+fetch_googlecode_file openvanilla-modules-0.9.0a1.3.tar.gz
 fetch_googlecode_file fbterm_ucimf-0.2.9.tar.gz
 
 #### Output possible build dependencies ####
@@ -60,8 +60,8 @@ CODE_NAME=${1}
 #### http://code.google.com/p/pkgbzr/
 #### debbing is a debian packaging tool based on debuild and ppa_publish ####
 debbing libucimf-2.3.7.tar.gz debian-libucimf/debian $TEMP_DIR $CODE_NAME 
-debbing ucimf-openvanilla-2.10.10.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR $CODE_NAME 
-debbing openvanilla-modules-0.8.0_14.tar.gz debian-openvanilla-modules/debian $TEMP_DIR $CODE_NAME 
+debbing ucimf-openvanilla-2.10.11.tar.gz debian-ucimf-openvanilla/debian $TEMP_DIR $CODE_NAME 
+debbing openvanilla-modules-0.9.0a1.3.tar.gz debian-openvanilla-modules/debian $TEMP_DIR $CODE_NAME 
 debbing fbterm_ucimf-0.2.9.tar.gz debian-fbterm-ucimf/debian $TEMP_DIR $CODE_NAME 
 
-rm -r __debian*
+#rm -r __debian*
