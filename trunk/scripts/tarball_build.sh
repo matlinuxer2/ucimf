@@ -39,7 +39,7 @@ function prepare_tarball(){
 	cd ${TARBALL}
 		THE_TARBALL=$( ls -t |grep "$NAME.*.tar.gz"| head --lines=1 )
 
-		test -f $THE_TARBALL || ( THE_TARBALL="$NAME-$VERSION.tar.gz" ; wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL )
+		test -f "$THE_TARBALL" || ( THE_TARBALL="$NAME-$VERSION.tar.gz" ; wget --continue http://ucimf.googlecode.com/files/$THE_TARBALL )
 	popd
 }
 
