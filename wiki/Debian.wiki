@@ -2,30 +2,40 @@
 = Debian Packages 方法 =
 
 
-*注*：請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
+*註*：請先將之前舊的檔案清除, 避免連結到舊的檔案 ( optional )
 
 === 添加軟件倉庫源 === 
-將下列連結加入你的 /etc/apt/sources.list
-{{{
-deb http://people.debian.org.tw/~mat/ stable main
-deb http://people.debian.org.tw/~mat/ testing main
-( amd64 的套件仍在建構中 )
+* 使用 testing ( squeeze ) 及 unstable ( sid ) 版本的已可直接從官方庫件庫下載 *
 
-如果使用 debian stable 分支，安裝 fbterm 需添加 testing 或 sid 源
-deb http://ftp.debian.org/debian testing main
+使用舊版本的人，包括 stable (lenny) 及 oldstable (etch)，請將下列連結加入你的 /etc/apt/sources.list
+{{{
+deb http://people.debian.org.tw/~mat/debian stable main
+deb http://people.debian.org.tw/~mat/debian oldstable main
 }}}
 
+
 === 安裝相關套件 ===
- 請用 aptitude 安裝 (jfbterm+ucimf)
-   jfbterm 
-   libucimf
-   ucimf-openvanilla
-   openvanilla-modules
- 或 ( FbTerm+ucimf)
-  fbterm 
-  fbterm-ucimf
-  ucimf-openvanilla
-  openvanilla-modules
+
+以 FbTerm 作為 terminal
+{{{
+aptitude install fbterm fbterm-ucimf 
+aptitude install libucimf0 ucimf-openvanilla openvanilla-imgeneric 
+aptitude install [openvanilla-imgeneric-data-ja|openvanilla-imgeneric-data-zh_CN|openvanilla-imgeneric-data-zh_TW|...]
+}}}
+
+以 jfbterm 作為 terminal
+{{{
+aptitude install jfbterm
+aptitude install libucimf0 ucimf-openvanilla openvanilla-imgeneric 
+aptitude install [openvanilla-imgeneric-data-ja|openvanilla-imgeneric-data-zh_CN|openvanilla-imgeneric-data-zh_TW|...]
+}}}
+
+*註*：舊版升級時，幾個套件名稱的變更如下:
+{{{
+libopenvanilla, libopenvanilla-data, libopenvanilla-dev
+=>
+openvanilla-imgeneric,openvanilla-imgeneric-data-all, openvanilla-imgeneric-data-ja,...
+}}}
 
 === 使用 ===
 依序執行下列步驟即可 ( 使用 jfbterm )
