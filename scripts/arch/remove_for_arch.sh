@@ -2,18 +2,18 @@
 
 
 # for tarball
-pacman --remove fbterm-ucimf 
-pacman --remove fbterm
-pacman --remove openvanilla 
-pacman --remove ucimf-openvanilla 
-pacman --remove libucimf 
+pacman --remove --noconfirm fbterm-ucimf 
+pacman --remove --noconfirm fbterm
+pacman --remove --noconfirm openvanilla 
+pacman --remove --noconfirm ucimf-openvanilla 
+pacman --remove --noconfirm libucimf 
 
 # for svn
-pacman --remove fbterm-ucimf-svn
-pacman --remove fbterm-svn
-pacman --remove openvanilla-svn 
-pacman --remove ucimf-openvanilla-svn 
-pacman --remove libucimf-svn 
+pacman --remove --noconfirm fbterm-ucimf-svn
+pacman --remove --noconfirm fbterm-svn
+pacman --remove --noconfirm openvanilla-svn 
+pacman --remove --noconfirm ucimf-openvanilla-svn 
+pacman --remove --noconfirm libucimf-svn 
 
 # clean temporary file
 rm -rf /tmp/pacman-tmp-*

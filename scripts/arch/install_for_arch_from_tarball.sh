@@ -20,14 +20,15 @@ make_pkgbuild_from_aur () {
 
 	pushd . ; cd "$SCRIPTS_ARCH/$PKGNAME"
 		fetch_file_from PKGBUILD http://aur.archlinux.org/packages/$PKGNAME/$PKGNAME/PKGBUILD
-		makepkg
+		makepkg -i --noconfirm
+		makepkg -f --source 
 	popd
 }
 
+( pacman -Q | egrep "^fbterm " >/dev/null ) || yaourt -S --noconfirm fbterm
 make_pkgbuild_from_aur libucimf
-make_pkgbuild_from_aur ucimf-openvanilla
 make_pkgbuild_from_aur openvanilla-modules
+make_pkgbuild_from_aur ucimf-openvanilla
 make_pkgbuild_from_aur fbterm-ucimf
-make_pkgbuild_from_aur fbterm
 
 pacman -Q |egrep "ucimf|openvanilla|fbterm"
