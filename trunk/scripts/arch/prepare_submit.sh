@@ -29,9 +29,16 @@ copy_pkgbuild_from_local () {
 
 	install -d "$SCRIPTS_ARCH_SUBMIT"
 
+	# prepare source package for upload
+	pushd . ; cd "$SCRIPTS_ARCH/$PKGNAME"
+		makepkg --source --force
+	popd
+
 	pushd . ; cd "$SCRIPTS_ARCH_SUBMIT"
 		local TARGET_FILE="$SCRIPTS_ARCH/$PKGNAME/PKGBUILD"
+		local TARGET_FILE2=$( find $SCRIPTS_ARCH/$PKGNAME -name "$PKGNAME-*.src.tar.gz" | xargs ls -t | head -n 1 )
 		test -f $TARGET_FILE && cp -v $TARGET_FILE PKGBUILD-$PKGNAME 
+		test -f $TARGET_FILE2 &&  cp -v $TARGET_FILE2 .
 	popd
 }
 
