@@ -351,8 +351,8 @@ char* ucimf_process_raw( char *buf, int *p_ret )
 	}
 
 	unsigned short sym = keycode_to_keysym( kc, down );
-	char *str = (char*)malloc( sizeof(char)*128 );
-	str = keysym_to_term_string(sym, down);
+	char str[128];
+	strcpy( str, keysym_to_term_string(sym, down) );
 
 	if( !down )
 	{
