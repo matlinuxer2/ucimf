@@ -19,6 +19,7 @@ TARBALL=${SCRIPTS}/_tarball/
 # package's directory
 LIBUCIMF=${ROOT}/libucimf/
 UCIMFOV=${ROOT}/ucimf-openvanilla/
+UCIMFSUNPINYIN=${ROOT}/ucimf-sunpinyin/
 FBTERMUCIMF=${ROOT}/console/fbterm_ucimf/
 
 set_env () {

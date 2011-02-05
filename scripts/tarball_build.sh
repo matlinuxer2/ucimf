@@ -18,7 +18,7 @@ tarball_build(){
 		TARBALL_FILE=$( ls -t |grep "$NAME.*.tar.gz"| head --lines=1 )
 		TARBALL_DIR=${TARBALL_FILE%.tar.gz}
 
-		( tar -zxf ${TARBALL_FILE} && test -d ${TARBALL_DIR} ) || return 1
+		( tar -zxf ${TARBALL_FILE} && test -d "${TARBALL_DIR}" ) || return 1
 
 		pushd .
 		cd ${TARBALL_DIR}
@@ -52,6 +52,7 @@ prepare_tarball fbterm_ucimf 0.2.9
 build_clean
 tarball_build "libucimf"
 tarball_build "ucimf-openvanilla"
+tarball_build "ucimf-sunpinyin"
 tarball_build "openvanilla-modules"
 tarball_build "fbterm_ucimf"
 
