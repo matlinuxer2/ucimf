@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([ucimf-sunpinyin],[0.1],[ucimf@googlegroups.com])
+AC_INIT([ucimf-sunpinyin],[0.2+devel],[ucimf@googlegroups.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/sunpinyin.cpp])
 AC_CONFIG_HEADERS([config.h])

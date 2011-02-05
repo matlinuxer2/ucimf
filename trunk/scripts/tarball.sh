@@ -23,3 +23,4 @@ make_tarball(){
 tarball_clean
 make_tarball ${LIBUCIMF}
 make_tarball ${UCIMFOV}
+make_tarball ${UCIMFSUNPINYIN}
