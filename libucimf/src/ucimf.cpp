@@ -133,7 +133,6 @@ void scanImf()
   UrDEBUG("IMF Modules scan path: %s \n", IMF_MODULE_DIR );
  
   lt_dlinit();
-  lt_dlsetsearchpath( IMF_MODULE_DIR );
 
   DIR *dir = opendir( IMF_MODULE_DIR );
   if( dir )
@@ -143,6 +142,7 @@ void scanImf()
     {
       if( strstr( d_ent->d_name, ".so") )
       {
+	  lt_dlsetsearchpath( IMF_MODULE_DIR );
 	  lt_dlhandle handle = lt_dlopen( d_ent->d_name );
 	  if( handle == NULL){
 	    UrDEBUG( "lt_dlopen %s failed\n", d_ent->d_name );
