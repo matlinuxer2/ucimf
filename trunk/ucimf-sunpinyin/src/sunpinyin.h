@@ -18,10 +18,10 @@ class UcimfWindowHandler : public CIMIWinHandler, public Imf
 	public:
 		std::string process_input( const std::string& input );
 		void refresh();
-		void switch_im();
-		void switch_im_reverse();
-		void switch_lang();
-		void switch_im_per_lang();
+		void switch_im(){};
+		void switch_im_reverse(){};
+		void switch_lang(){};
+		void switch_im_per_lang(){};
 
 	public:
 		~UcimfWindowHandler();
