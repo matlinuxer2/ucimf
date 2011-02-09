@@ -9,41 +9,24 @@
 using namespace std;
 
 
-
-bool bUseShuangpin = true;
-EShuangpinType SPScheme = MS2003;                                                                 
-bool bFuzzySegmentation = false;
-bool bFuzzyInnerSegmentation = false;
-
-Preedit *prdt;
-LookupChoice *lkc;
-Status *stts;
-
-
-void UcimfWindowHandler::updatePreedit(const IPreeditString* ppd){
-	cerr << "updatePreedit begin" << endl;
-
+void UcimfWindowHandler::updatePreedit(const IPreeditString* ppd)
+{
 	size_t ss_max_bytes = 128 ; // 最多能處理的 bytes
 	size_t handled_bytes = 0; // 實際處理的 bytes
 
 	char ss[ss_max_bytes]; // 用來接轉換後的字串的 buffer
 	handled_bytes = WCSTOMBS( ss, ppd->string(), ss_max_bytes );
 
-	cerr << ss << endl;
-
+	Preedit *prdt = Preedit::getInstance();
 	prdt->clear();
 	prdt->append( ss );
 	prdt->render();
-
-	cerr << "updatePreedit end" << endl;
 };
 
-void UcimfWindowHandler::updateCandidates(const ICandidateList* pcl){
-	cerr << "updateCandidates begin" << endl;
 
-	string s;
-	std::stringstream item(s);
-
+void UcimfWindowHandler::updateCandidates(const ICandidateList* pcl)
+{
+	LookupChoice *lkc = LookupChoice::getInstance();
 	lkc->clear();
 
 	for ( int i=0; i < pcl->size() ;i++) {
@@ -53,14 +36,13 @@ void UcimfWindowHandler::updateCandidates(const ICandidateList* pcl){
 		handled_bytes = WCSTOMBS( ss, pcl->candiString(i), ss_max_bytes );
 		ss[handled_bytes] = 0x0; 
 
-		cerr << "["<< i << "]" << ss << endl;
+		string s;
+		std::stringstream item(s);
 		item << (i+1)%10 <<  ss << " ";
+		lkc->append_next( const_cast<char*>(item.str().c_str()) );
 	}
-	lkc->append( const_cast<char*>(item.str().c_str()) );
+
 	lkc->render();
-
-	cerr << "updateCandidates end" << endl;
-
 };
 
 void UcimfWindowHandler::commit(const TWCHAR* str)
@@ -72,28 +54,9 @@ void UcimfWindowHandler::commit(const TWCHAR* str)
 	handled_bytes = WCSTOMBS( ss, str, ss_max_bytes );
 	ss[ handled_bytes ] = 0x0;
 	commit_buf = ss;
-
-	cerr << ss << endl;
 }
 
-void UcimfWindowHandler::updateStatus(int key, int value)
-{
-	switch (key) {
-		case STATUS_ID_CN: {
-			cerr << "STATUS_ID_CN" << endl;
-			break;
-		}
-		case STATUS_ID_FULLPUNC: {
-			cerr << "STATUS_ID_FULLPUNC" << endl;
-			break;
-		}
-		case STATUS_ID_FULLSYMBOL: {
-			cerr << "STATUS_ID_FULLSYMBOL" << endl;
-			break;
-		}
-	}
-}
-
+void UcimfWindowHandler::updateStatus(int key, int value) { }
 
 Imf* UcimfWindowHandler::_instance = 0;
 
@@ -107,9 +70,13 @@ Imf* UcimfWindowHandler::getInstance()
 
 UcimfWindowHandler::UcimfWindowHandler()
 {
-	prdt = Preedit::getInstance();
-	lkc = LookupChoice::getInstance();
-	stts = Status::getInstance();
+	// 目前是將 SunPinyin 的輸入設定寫死
+	// TODO: 實作 SunPinyin 動態設定
+	bool bUseShuangpin = true;
+	EShuangpinType SPScheme = MS2003;                                                                 
+	bool bFuzzySegmentation = false;
+	bool bFuzzyInnerSegmentation = false;
+
 
 	CSunpinyinSessionFactory& fac = CSunpinyinSessionFactory::getFactory();
 
@@ -159,7 +126,8 @@ int stdin_to_sunpinyin_keycode( int keychar )
 
 void UcimfWindowHandler::refresh()
 {
-  stts->set_imf_status( const_cast<char*>("SunPinyin"), const_cast<char*>("SunPinyin"), const_cast<char*>(""));
+	Status *stts = Status::getInstance();
+	stts->set_imf_status( const_cast<char*>("SunPinyin"), const_cast<char*>("SunPinyin"), const_cast<char*>(""));
 }
 
 string UcimfWindowHandler::process_input( const string& buf )
@@ -261,21 +229,14 @@ string UcimfWindowHandler::process_input( const string& buf )
 	  }
   }
 	
-  //cxt->keyEvent( keyevent, prdt, lookupchoice, srv);
-  {
-	  // key => 'z'
-	  //unsigned keycode = 44; //event->keyval;
-	  //unsigned keyvalue = 0x7a; //event->keyval;
-	  unsigned keyvalue = keychar;
+  unsigned keyvalue = keychar;
 
-	  if ( keyvalue < 0x20 && keyvalue > 0x7E){
-		  keyvalue = 0;
-	  }
-
-	  CKeyEvent key_event(keycode, keyvalue, NULL );
-	  view->onKeyEvent(key_event);
-
+  if ( keyvalue < 0x20 && keyvalue > 0x7E){
+	  keyvalue = 0;
   }
+
+  CKeyEvent key_event(keycode, keyvalue, NULL );
+  view->onKeyEvent(key_event);
 
 
   if( commit_buf.size() > 0 )
@@ -287,12 +248,6 @@ string UcimfWindowHandler::process_input( const string& buf )
   return result;
 
 }
-
-void UcimfWindowHandler::switch_lang(){ }
-void UcimfWindowHandler::switch_im(){ }
-void UcimfWindowHandler::switch_im_reverse() { }
-void UcimfWindowHandler::switch_im_per_lang() { }
-
 
 Imf* createImf() { 
 	return UcimfWindowHandler::getInstance(); 
