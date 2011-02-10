@@ -23,4 +23,5 @@ build_clean
 autotools_build ${LIBUCIMF} || exit
 autotools_build ${UCIMFOV} || exit
 autotools_build ${UCIMFSUNPINYIN} || exit
+autotools_build ${UCIMFCHEWING} || exit
 
