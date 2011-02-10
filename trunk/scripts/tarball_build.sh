@@ -53,6 +53,7 @@ build_clean
 tarball_build "libucimf"
 tarball_build "ucimf-openvanilla"
 tarball_build "ucimf-sunpinyin"
+tarball_build "ucimf-chewing"
 tarball_build "openvanilla-modules"
 tarball_build "fbterm_ucimf"
 

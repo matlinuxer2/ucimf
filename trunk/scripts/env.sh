@@ -20,6 +20,7 @@ TARBALL=${SCRIPTS}/_tarball/
 LIBUCIMF=${ROOT}/libucimf/
 UCIMFOV=${ROOT}/ucimf-openvanilla/
 UCIMFSUNPINYIN=${ROOT}/ucimf-sunpinyin/
+UCIMFCHEWING=${ROOT}/ucimf-chewing/
 FBTERMUCIMF=${ROOT}/console/fbterm_ucimf/
 
 set_env () {
