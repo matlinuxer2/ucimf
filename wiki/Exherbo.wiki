@@ -13,10 +13,17 @@
 {{{
     sudo cave resolve -x ucimf
 }}}
-
-命令執行完畢后會安裝如下軟體套件:
+選擇適合自己的輸入法引擎(以sunpinyin爲例，非拼音用戶可選擇ucimf-chewing或ucimf-openvanilla):
+{{{
+    sudo cave resolve -x1 ucimf-sunpinyin
+}}}
+命令執行完畢后會安裝如下軟體套件(ucimf set):
  * fbterm
  * fbterm-ucimf
  * libucimf
- * openvanilla-modules
- * ucimf-openvanilla
+ * openvanilla-modules (?)
+ * ucimf-openvanilla (?)
+ * ucimf-sunpinyin (?)
+ * ucimf-chewing (?)
+
+Note: 標註(？)爲可選組件。
