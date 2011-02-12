@@ -8,6 +8,7 @@
 #include <iconv.h>
 using namespace std;
 
+int prdt_len = 0;
 
 void UcimfWindowHandler::updatePreedit(const IPreeditString* ppd)
 {
@@ -16,6 +17,8 @@ void UcimfWindowHandler::updatePreedit(const IPreeditString* ppd)
 
 	char ss[ss_max_bytes]; // 用來接轉換後的字串的 buffer
 	handled_bytes = WCSTOMBS( ss, ppd->string(), ss_max_bytes );
+	
+	prdt_len = handled_bytes;
 
 	Preedit *prdt = Preedit::getInstance();
 	prdt->clear();
@@ -72,7 +75,7 @@ UcimfWindowHandler::UcimfWindowHandler()
 {
 	// 目前是將 SunPinyin 的輸入設定寫死
 	// TODO: 實作 SunPinyin 動態設定
-	bool bUseShuangpin = true;
+	bool bUseShuangpin = false;
 	EShuangpinType SPScheme = MS2003;                                                                 
 	bool bFuzzySegmentation = false;
 	bool bFuzzyInnerSegmentation = false;
@@ -205,8 +208,7 @@ string UcimfWindowHandler::process_input( const string& buf )
   
   string result;
 
-  //if ( prdt->isEmpty() ){
-  if ( false ){
+  if ( prdt_len == 0 ){
 	  if( keycode == IM_VK_BACK_SPACE )
 	  {
 		  result = "\x7f";
