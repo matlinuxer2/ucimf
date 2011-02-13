@@ -145,8 +145,7 @@ void StatusShift::update( Window* win )
     shift_y -= height;
   }
 
-  win->x( x + shift_x );
-  win->y( y + shift_y );
+  win->xy( x + shift_x, y+shift_y );
 
 }
 
@@ -187,8 +186,7 @@ void PreeditShift::update( Window* win )
     shift_y -= height;
   }
 
-  win->x( x + shift_x );
-  win->y( y + shift_y );
+  win->xy( x + shift_x, y + shift_y );
   
 }
 
@@ -226,7 +224,6 @@ void LookupChoiceShift::update( Window* win )
     shift_y -= height;
   }
 
-  win->x( x + shift_x );
-  win->y( y + shift_y );
+  win->xy( x + shift_x, y + shift_y );
 
 }

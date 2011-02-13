@@ -107,7 +107,19 @@ void Window::h( int new_height)
   }
 }
 
+void Window::xy( int new_x, int new_y )
+{
+  bool prev_visible = isVisible();
 
+  hide();
+  pos_x  = new_x; 
+  pos_y  = new_y; 
+
+  if( prev_visible == true )
+  {
+    show();
+  }
+}
 
 void Window::measure( int max_x, int max_y )
 {

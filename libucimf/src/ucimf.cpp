@@ -228,9 +228,9 @@ void ucimf_init()
 
   prev_focus = false;
   imf = 0;
-  cwm->attachWindow( stts->getWindow(), status_shift );
-  cwm->attachWindow( prdt->getWindow(), preedit_shift );
   cwm->attachWindow( lkc->getWindow(), lookupchoice_shift );
+  cwm->attachWindow( prdt->getWindow(), preedit_shift );
+  cwm->attachWindow( stts->getWindow(), status_shift );
   cwm->set_focus( false );
   scanImf();
   imf = imfs[current_imf];
