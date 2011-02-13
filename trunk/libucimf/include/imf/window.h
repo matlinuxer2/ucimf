@@ -44,6 +44,7 @@ class Window
     void y( int new_y );
     void w( int new_width );
     void h( int new_height );
+    void xy( int new_x, int new_y );
     void measure( int max_x, int max_y );
 
     bool isVisible(){ return visible; };
