@@ -19,7 +19,7 @@ autotools_build(){
 	popd
 }
 
-build_clean
+#build_clean
 autotools_build ${LIBUCIMF} || exit
 autotools_build ${UCIMFOV} || exit
 autotools_build ${UCIMFSUNPINYIN} || exit
