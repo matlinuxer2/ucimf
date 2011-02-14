@@ -40,10 +40,7 @@ class Window
     int y(){ return pos_y; };
     int w(){ return width; };
     int h(){ return height; };
-    void x( int new_x );
-    void y( int new_y );
-    void w( int new_width );
-    void h( int new_height );
+    void wh( int new_width, int new_height );
     void xy( int new_x, int new_y );
     void measure( int max_x, int max_y );
 
