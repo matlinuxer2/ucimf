@@ -21,7 +21,6 @@
 #include "shape.h"
 #include "graphport.h"
 #include "type.h"
-#include "graphdev.h"
 #include "font.h"
 
 void Rect::draw( GraphPort* gp)
