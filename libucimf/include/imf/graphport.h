@@ -28,6 +28,7 @@ class Shape;
 class GraphPort 
 {
     friend class Window;
+    friend class Cwm;
 
   public:
     int OutChar(  int x, int y, int fg, int bg, unsigned int charcode );
@@ -35,6 +36,8 @@ class GraphPort
     void FillRect( int x, int y, int width, int height, int color);
     void DrawRect( int x, int y, int width, int height, int color);
     void RevRect(  int x, int y, int width, int height);
+    int  Height();
+    int  Width();
     
     void draw( int x, int y, Shape* sp );
     void setXY( int x_to_draw, int y_to_draw ){ x_tmp = x_to_draw; y_tmp = y_to_draw; };
