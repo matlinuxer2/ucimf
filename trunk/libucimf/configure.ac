@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libucimf, 2.3.7+devel, ucimf@googlegroups.com)
+AC_INIT(libucimf, 2.3.8, ucimf@googlegroups.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 

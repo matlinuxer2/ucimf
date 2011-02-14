@@ -4,6 +4,7 @@ http://code.google.com/p/ucimf/
 Feature
  • Support UTF-8 
  • Support OpenVanilla IMF and Modules
+ • Support SunPinyin Input Method Framework
  • Support Freetype + Fontconfig
  • Provide OverSpot style compose window.
  • Provide C/C++ API

@@ -1,3 +1,50 @@
+2011-02-14  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r534]
+	  include/imf/window.h, src/graphport.cpp, src/window.cpp:
+	  minor changes to reduce instructions
+	* [r533]
+	  include/imf/graphport.h, src/cwm.cpp, src/graphport.cpp, src/shape.cpp:
+	  wrap dependency from graphdev.h to graphport.h
+
+2011-02-13  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r532]
+	  include/imf/window.h, src/cwm.cpp, src/ucimf.cpp, src/window.cpp:
+	  Try fix about window push/pop broken bug.
+
+2011-02-05  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r523]
+	  src/ucimf.cpp:
+	  use lt_setsearchpath just before lt_dlopen, to avoid search path shifted by other module.
+	  
+
+2010-11-20  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r520]
+	  src/ucimf.cpp:
+	  change malloc to fixed size char array, to fix memory leak bug.
+
+2010-07-11  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r509]
+	  configure.ac:
+	  Add 'dialog' check and warn message when ./configure
+	  
+	* [r508]
+	  ucimf_start.in:
+	  Update scripts 'tarballs' version
+	* [r506]
+	  Makefile.am, configure.ac, ucimf_start, ucimf_start.in:
+	  make cin tables path configurable
+
+2010-07-10  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
+
+	* [r499]
+	  ChangeLog, TODO, configure.ac, src/graphport.cpp:
+	  Release 2.3.7
+
 2010-07-09  Chun-Yu Lee (Mat) <matlinuxer2@gmail.com>
 
 	* [r497] Makefile.am, libucimf.pc.in, sample/Makefile.am,
