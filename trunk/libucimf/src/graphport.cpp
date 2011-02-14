@@ -103,8 +103,7 @@ void GraphPort::setPseudo( bool flag)
 {
   if( flag != pseudo && flag == true && win!=0)
   {
-    win->w(0);
-    win->h(0);
+    win->wh(0,0);
   }
   pseudo = flag;
 
