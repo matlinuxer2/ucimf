@@ -19,9 +19,9 @@
  */
 
 #include <stdlib.h>
-#include "graphdev.h"
 #include "cwm.h"
 #include "options.h"
+#include "graphport.h"
 #include <iostream>
 #include "debug.h"
 using namespace std;
@@ -42,10 +42,9 @@ Cwm::Cwm()
 {
   _cursor_x = _cursor_y =0;
   _focus = false;
-  GraphDev::Open();
-  GraphDev* gdev=GraphDev::mpGraphDev;
-  _xres= gdev->Width();
-  _yres= gdev->Height();
+  GraphPort* gp = new GraphPort;
+  _xres= gp->Width();
+  _yres= gp->Height();
   
   cwmmap.clear();
 }
