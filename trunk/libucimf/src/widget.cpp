@@ -30,27 +30,12 @@ using namespace std;
 
 Window* Widget::getWindow()
 {
-  if( win == 0 )
-  {
-    win = new Window;
-    win->wd = this;
-  }
-  return win;
-}
-
-GraphPort* Widget::getGraphPort()
-{
-  if( gp == 0 )
-  {
-    win = getWindow();
-    gp = win->gp;
-  }
-
-  return gp;
+  return this;
 }
 
 void Widget::render()
 {
+  Window *win = this;
   bool prev_visible = win->isVisible();
   // Estimate the width, height first
   win->hide();
@@ -88,10 +73,6 @@ Options* option = Options::getInstance();
   bg_color = atoi( option->getOption("STATUS_BG_COLOR") ); 
   fg_color = atoi( option->getOption("STATUS_FG_COLOR") ); 
   border_color = atoi( option->getOption("STATUS_BORDER_COLOR") ); 
-  win = 0;
-  gp = 0;
-  win = getWindow();
-  gp = getGraphPort();
 }
 
 Status* Status::getInstance()
@@ -160,6 +141,7 @@ void Status::set_border_color( int border )
 
 void Status::draw()
 {
+  GraphPort *gp = this->getGraphPort();
  
   int border = 3;
 
@@ -211,10 +193,6 @@ Options* option = Options::getInstance();
   bg_color = atoi( option->getOption("PREEDIT_BG_COLOR") ); 
   fg_color = atoi( option->getOption("PREEDIT_FG_COLOR") ); 
   border_color = atoi( option->getOption("PREEDIT_BORDER_COLOR") ); 
-  win = 0;
-  gp = 0;
-  win = getWindow();
-  gp = getGraphPort();
 }
 
 Preedit* Preedit::getInstance()
@@ -261,6 +239,7 @@ void Preedit::clear()
 
 void Preedit::draw()
 {
+  GraphPort *gp = this->getGraphPort();
  
   int border = 0;
 
@@ -300,10 +279,6 @@ Options* option = Options::getInstance();
   bg_color = atoi( option->getOption("LOOKUPCHOICE_BG_COLOR") ); 
   fg_color = atoi( option->getOption("LOOKUPCHOICE_FG_COLOR") ); 
   border_color = atoi( option->getOption("LOOKUPCHOICE_BORDER_COLOR") ); 
-  win = 0;
-  gp = 0;
-  win = getWindow();
-  gp = getGraphPort();
 }
 
 LookupChoice* LookupChoice::getInstance()
@@ -370,6 +345,7 @@ void LookupChoice::clear()
 
 void LookupChoice::draw()
 {
+  GraphPort *gp = this->getGraphPort();
  
   int border = 0;
 
