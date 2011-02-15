@@ -95,11 +95,11 @@ void Cwm::set_focus( bool new_focus )
 
 void Cwm::update( Window* cw )
 {
-  Shift *s = cwmmap[cw];
-if( s->cwm != 0 )
-{
-  s->update( cw );
-}
+	Shift *s = cwmmap[cw];
+	if( s->cwm != 0 )
+	{
+		s->update( cw );
+	}
 }
 
 void Cwm::attachWindow( Window* new_win, Shift* new_shift)
@@ -111,7 +111,7 @@ void Cwm::attachWindow( Window* new_win, Shift* new_shift)
 
 StatusShift::StatusShift( int x_shift, int y_shift )
 {
-  cwm = 0;
+  cwm = Cwm::getInstance();
   Options* option = Options::getInstance();
   x_gap = x_shift; //atoi( option->getOption("STATUS_SHIFT_X") ); 
   y_gap = y_shift; //atoi( option->getOption("STATUS_SHIFT_Y") ); 
@@ -119,8 +119,6 @@ StatusShift::StatusShift( int x_shift, int y_shift )
 
 void StatusShift::update( Window* win )
 {
-  cwm = Cwm::getInstance();
-
   int Xres= cwm->xres() - 16;
   int Yres= cwm->yres() - 16 ;
   int x = cwm->cursor_x();
@@ -150,7 +148,7 @@ void StatusShift::update( Window* win )
 
 PreeditShift::PreeditShift( int x_shift, int y_shift )
 {
-  cwm = 0;
+  cwm = Cwm::getInstance();
   Options* option = Options::getInstance();
   x_gap = x_shift; //atoi( option->getOption("PREEDIT_SHIFT_X") ); 
   y_gap = y_shift; //atoi( option->getOption("PREEDIT_SHIFT_Y") ); 
@@ -159,7 +157,6 @@ PreeditShift::PreeditShift( int x_shift, int y_shift )
 
 void PreeditShift::update( Window* win )
 {
-  cwm = Cwm::getInstance();
   int Xres= cwm->xres() -16;
   int Yres= cwm->yres() -16;
   int x = cwm->cursor_x();
@@ -191,7 +188,7 @@ void PreeditShift::update( Window* win )
 
 LookupChoiceShift::LookupChoiceShift( int x_shift, int y_shift )
 {
-  cwm = 0;
+  cwm = Cwm::getInstance();
   Options* option = Options::getInstance();
   x_gap = x_shift; //atoi( option->getOption("LOOKUPCHOICE_SHIFT_X") ); 
   y_gap = y_shift; //atoi( option->getOption("LOOKUPCHOICE_SHIFT_Y") ); 
@@ -199,7 +196,6 @@ LookupChoiceShift::LookupChoiceShift( int x_shift, int y_shift )
 
 void LookupChoiceShift::update( Window* win )
 {
-  cwm = Cwm::getInstance();
   int Xres= cwm->xres()-16;
   int Yres= cwm->yres()-16;
   int x = cwm->cursor_x();
