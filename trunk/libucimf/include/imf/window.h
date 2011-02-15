@@ -57,7 +57,6 @@ class Window
     bool visible;
     int pos_x, pos_y, width, height;
     GraphPort *gp;
-    Widget *wd;
 };
 
 #endif

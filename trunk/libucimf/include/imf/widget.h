@@ -29,17 +29,12 @@
 using std::vector;
 
 
-class Widget
+class Widget : public Window
 {
   public:
     Window* getWindow();
-    GraphPort* getGraphPort();
     virtual void draw()=0;
     void render();
-    
-  protected:
-    GraphPort *gp;
-    Window *win;
 };
 
 class Status : public Widget{
