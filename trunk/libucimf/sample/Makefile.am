@@ -1,8 +1,12 @@
-noinst_PROGRAMS = console01 console04
+noinst_PROGRAMS = console01 console02 console04
 
 console01_SOURCES = term/console01.cpp
 console01_CPPFLAGS = -I$(top_srcdir)/include
 console01_LDADD = $(top_builddir)/src/libucimf.la
+
+console02_SOURCES = term/console02.cpp
+console02_CPPFLAGS = -I$(top_srcdir)/include
+console02_LDADD = $(top_builddir)/src/libucimf.la
 
 console04_SOURCES = term/console04.cpp
 console04_CPPFLAGS = -I$(top_srcdir)/include
