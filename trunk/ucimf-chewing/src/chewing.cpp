@@ -108,20 +108,83 @@ string UcimfChewingHandler::process_input( const string& buf )
 	}
 
 	int *prdt_count;
+	
+	string s; stringstream prdt_pre(s);
 	char *prdt_text = chewing_zuin_String( ctx, prdt_count);
 	char *prdt_text2 = chewing_buffer_String( ctx );
 
+	int cursor;
+	vector< pair<int, int> > intervals;
+	{
+		cursor = chewing_cursor_Current( ctx );
+		prdt_pre << cursor << "," ;
+
+		IntervalType it;
+
+		chewing_interval_Enumerate( ctx );
+		while ( chewing_interval_hasNext( ctx ) ) {
+			chewing_interval_Get( ctx, &it ); 
+
+			prdt_pre << "[" << it.from << "-" << it.to << "]" ;
+
+			pair <int, int> intv ( it.from, it.to );
+			intervals.push_back( intv );
+		}
+	}
+
+
 	Preedit *prdt = Preedit::getInstance();
 	prdt->clear();
+	prdt->append( const_cast<char*>(prdt_pre.str().c_str()) );
 	prdt->append( prdt_text2 );
 	prdt->append( prdt_text );
 	prdt->render();
 
+/*
 	char *lkc_text = chewing_cand_String( ctx );
 	LookupChoice *lkc = LookupChoice::getInstance();
 	lkc->clear();
 	lkc->append( lkc_text );
 	lkc->render();
+*/
+
+	LookupChoice *lkc = LookupChoice::getInstance();
+	lkc->clear();
+	{
+		int i = 1;
+		int currentPageNo;
+		char str[ 20 ];
+		char *cand_string;
+
+		chewing_cand_Enumerate( ctx );
+		while ( chewing_cand_hasNext( ctx ) ) { 
+			if ( i > chewing_cand_ChoicePerPage( ctx ) ) {
+				break;
+			}
+
+			/*
+			 if ( hasColor ){
+				 attron( COLOR_PAIR( 3 ) );
+			 }
+			 addstr( str );
+
+			 if ( hasColor ) {
+				 attroff( COLOR_PAIR( 3 ) );
+			 }
+			 */
+
+			cand_string = chewing_cand_String( ctx );
+			lkc->append_next( cand_string );
+
+			//addstr( str );
+
+			free( cand_string );
+			i++;
+		}   
+	}
+	lkc->render();
+
+
 
 	if ( chewing_commit_Check( ctx ) ) {
 		char *s;
