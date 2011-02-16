@@ -5,9 +5,67 @@
 #include <iostream>
 #include <string>
 #include <iconv.h>
+#include <string.h>
 using namespace std;
 
 static int selKey_define[ 11 ] = {'1','2','3','4','5','6','7','8','9','0',0}; /* Default */
+
+
+vector<uint32_t> _str_to_utf32( char* input, const char* enc ){
+	vector<uint32_t> result;
+
+	size_t inbuf_len  = strlen( input );	
+	size_t outbuf_len = 256;
+
+	char output[outbuf_len];
+
+	char* inbuf  = (char*)input; 
+	char* outbuf = (char*)output;
+	size_t inbytesleft  = sizeof(char) * inbuf_len;
+	size_t outbytesleft = sizeof(char) * outbuf_len;
+
+	iconv_t conv_codec = iconv_open( "UTF-32", enc );
+	iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+	iconv_close( conv_codec );
+
+	// 計算字數, 一個 UTF-32 的字有 4 bytes.
+	int count = ( outbuf_len - outbytesleft ) / 4;
+
+	// The first byte of UTF-32 word( == output[0]) is byte-order header, so to ignore it!
+	for( int i=1; i< count; i++) {
+		result.push_back( ((uint32_t*)output)[i] );
+	}
+
+	return result;
+}
+
+char* _utf32_to_str( vector<uint32_t> input, const char* enc ){
+	size_t inbuf_len  = input.size()*4;
+	size_t outbuf_len = inbuf_len / 4 * 8;
+
+	char tmp[inbuf_len];
+	char output[outbuf_len];
+
+	for( int i=0; i< input.size(); i++ ){
+		((uint32_t*)tmp)[i] = input[i];
+	}
+
+	char* inbuf = (char*)tmp;
+	char* outbuf = (char*)output;
+	size_t inbytesleft = inbuf_len;
+	size_t outbytesleft = outbuf_len;
+
+	iconv_t conv_codec = iconv_open( enc, "UTF-32" );
+	iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+	iconv_close( conv_codec );
+
+	output[outbuf_len-outbytesleft]=0;
+
+	string result( output );
+
+	return const_cast<char*>(result.c_str() );
+}
+
 
 Imf* UcimfChewingHandler::_instance = 0;
 
@@ -114,8 +172,8 @@ string UcimfChewingHandler::process_input( const string& buf )
 	char *prdt_text = chewing_zuin_String( ctx, prdt_count);
 	char *prdt_text2 = chewing_buffer_String( ctx );
 
-	vector<uint32_t> utf32_prdt_text  = str_to_utf32( prdt_text, "UTF-8" );
-	vector<uint32_t> utf32_prdt_text2 = str_to_utf32( prdt_text2,"UTF-8" );
+	vector<uint32_t> utf32_prdt_text  = _str_to_utf32( prdt_text, "UTF-8" );
+	vector<uint32_t> utf32_prdt_text2 = _str_to_utf32( prdt_text2,"UTF-8" );
 
 	// 取得虛擬遊標的位置
 	int cursor = chewing_cursor_Current( ctx );
@@ -135,7 +193,7 @@ string UcimfChewingHandler::process_input( const string& buf )
 			if( i >=0 && i < utf32_prdt_text2.size() ){
 				vector<uint32_t> utf32_word;
 				utf32_word.push_back( utf32_prdt_text2[i] );
-				prdt_pre << utf32_to_str( utf32_word, "UTF-8" );
+				prdt_pre << _utf32_to_str( utf32_word, "UTF-8" );
 			}
 			//prdt_pre << it.from << "-" << it.to ;
 			if( i+1 == cursor && cursor == utf32_prdt_text2.size() ){
