@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([ucimf-chewing],[0.1+devel],[ucimf@googlegroups.com])
+AC_INIT([ucimf-chewing],[0.2],[ucimf@googlegroups.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/chewing.cpp])
 AC_CONFIG_HEADERS([config.h])
