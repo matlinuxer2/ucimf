@@ -22,6 +22,7 @@
 #define __Type__
 
 #include <string>
+#include <stdint.h>
 #include <vector>
 using namespace std;
 
@@ -48,5 +49,8 @@ class ustring
     vector<unsigned long> udata;
   
 };
+
+vector<uint32_t> str_to_utf32( char*, const char* enc ); 
+char* utf32_to_str( vector<uint32_t>, const char* enc );
 
 #endif

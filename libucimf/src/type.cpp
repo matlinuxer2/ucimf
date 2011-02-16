@@ -118,3 +118,58 @@ bool ustring::operator==(const ustring& ustr) const
   
   return false;
 }
+
+vector<uint32_t> str_to_utf32( char* input, const char* enc ){
+	vector<uint32_t> result;
+
+	size_t inbuf_len  = strlen( input );	
+	size_t outbuf_len = 256;
+
+	char output[outbuf_len];
+
+	char* inbuf  = (char*)input; 
+	char* outbuf = (char*)output;
+	size_t inbytesleft  = sizeof(char) * inbuf_len;
+	size_t outbytesleft = sizeof(char) * outbuf_len;
+
+	iconv_t conv_codec = iconv_open( "UTF-32", enc );
+	iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+	iconv_close( conv_codec );
+
+	// 計算字數, 一個 UTF-32 的字有 4 bytes.
+	int count = ( outbuf_len - outbytesleft ) / 4;
+
+	// The first byte of UTF-32 word( == output[0]) is byte-order header, so to ignore it!
+	for( int i=1; i< count; i++) {
+		result.push_back( ((uint32_t*)output)[i] );
+	}
+
+	return result;
+}
+
+char* utf32_to_str( vector<uint32_t> input, const char* enc ){
+	size_t inbuf_len  = input.size()*4;
+	size_t outbuf_len = inbuf_len / 4 * 8;
+
+	char tmp[inbuf_len];
+	char output[outbuf_len];
+
+	for( int i=0; i< input.size(); i++ ){
+		((uint32_t*)tmp)[i] = input[i];
+	}
+
+	char* inbuf = (char*)tmp;
+	char* outbuf = (char*)output;
+	size_t inbytesleft = inbuf_len;
+	size_t outbytesleft = outbuf_len;
+
+	iconv_t conv_codec = iconv_open( enc, "UTF-32" );
+	iconv( conv_codec, &inbuf, &inbytesleft, &outbuf, &outbytesleft );
+	iconv_close( conv_codec );
+
+	output[outbuf_len-outbytesleft]=0;
+
+	string result( output );
+
+	return const_cast<char*>(result.c_str() );
+}
