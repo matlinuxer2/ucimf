@@ -113,23 +113,35 @@ string UcimfChewingHandler::process_input( const string& buf )
 	char *prdt_text = chewing_zuin_String( ctx, prdt_count);
 	char *prdt_text2 = chewing_buffer_String( ctx );
 
-	int cursor;
-	vector< pair<int, int> > intervals;
-	{
-		cursor = chewing_cursor_Current( ctx );
-		prdt_pre << cursor << "," ;
+	vector<uint32_t> utf32_prdt_text  = str_to_utf32( prdt_text, "UTF-8" );
+	vector<uint32_t> utf32_prdt_text2 = str_to_utf32( prdt_text2,"UTF-8" );
 
+	// 取得虛擬遊標的位置
+	int cursor = chewing_cursor_Current( ctx );
+
+	// 計算斷詞的區間
+	chewing_interval_Enumerate( ctx );
+	while ( chewing_interval_hasNext( ctx ) ) {
 		IntervalType it;
+		chewing_interval_Get( ctx, &it ); 
 
-		chewing_interval_Enumerate( ctx );
-		while ( chewing_interval_hasNext( ctx ) ) {
-			chewing_interval_Get( ctx, &it ); 
+		prdt_pre << "[" ;
+		for( int i=it.from; i<it.to; i++ ){
+			if( cursor == i ){
+				prdt_pre << "." ;
+			}
 
-			prdt_pre << "[" << it.from << "-" << it.to << "]" ;
-
-			pair <int, int> intv ( it.from, it.to );
-			intervals.push_back( intv );
+			if( i >=0 && i < utf32_prdt_text2.size() ){
+				vector<uint32_t> utf32_word;
+				utf32_word.push_back( utf32_prdt_text2[i] );
+				prdt_pre << utf32_to_str( utf32_word, "UTF-8" );
+			}
+			//prdt_pre << it.from << "-" << it.to ;
+			if( i+1 == cursor && cursor == utf32_prdt_text2.size() ){
+				prdt_pre << "." ;
+			}
 		}
+		prdt_pre << "]" ;
 	}
 
 
@@ -139,14 +151,6 @@ string UcimfChewingHandler::process_input( const string& buf )
 	prdt->append( prdt_text2 );
 	prdt->append( prdt_text );
 	prdt->render();
-
-/*
-	char *lkc_text = chewing_cand_String( ctx );
-	LookupChoice *lkc = LookupChoice::getInstance();
-	lkc->clear();
-	lkc->append( lkc_text );
-	lkc->render();
-*/
 
 	LookupChoice *lkc = LookupChoice::getInstance();
 	lkc->clear();
@@ -162,21 +166,13 @@ string UcimfChewingHandler::process_input( const string& buf )
 				break;
 			}
 
-			/*
-			 if ( hasColor ){
-				 attron( COLOR_PAIR( 3 ) );
-			 }
-			 addstr( str );
-
-			 if ( hasColor ) {
-				 attroff( COLOR_PAIR( 3 ) );
-			 }
-			 */
-
 			cand_string = chewing_cand_String( ctx );
-			lkc->append_next( cand_string );
 
-			//addstr( str );
+			string s2; stringstream lkc_pre(s2);
+			lkc_pre << i << ". " ;
+
+			lkc->append_next( const_cast<char*>(lkc_pre.str().c_str()) );
+			lkc->append( cand_string );
 
 			free( cand_string );
 			i++;
