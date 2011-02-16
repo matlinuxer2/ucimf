@@ -82,7 +82,7 @@ UcimfChewingHandler::UcimfChewingHandler()
 	/* Initialize libchewing */
 	/* for the sake of testing, we should not change existing hash data */
 	char *prefix = const_cast<char*>(CHEWING_DATA_PREFIX);
-	chewing_Init( prefix, TEST_HASH_DIR );
+	chewing_Init( prefix, NULL );
 
 	/* Request handle to ChewingContext */
 	ctx = chewing_new();
