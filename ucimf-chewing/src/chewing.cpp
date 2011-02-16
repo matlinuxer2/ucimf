@@ -7,6 +7,7 @@
 #include <iconv.h>
 using namespace std;
 
+static int selKey_define[ 11 ] = {'1','2','3','4','5','6','7','8','9','0',0}; /* Default */
 
 Imf* UcimfChewingHandler::_instance = 0;
 
@@ -35,7 +36,7 @@ UcimfChewingHandler::UcimfChewingHandler()
 	chewing_set_candPerPage( ctx, 9 );
 	chewing_set_maxChiSymbolLen( ctx, 16 );
 	chewing_set_addPhraseDirection( ctx, 1 );
-	//chewing_set_selKey( ctx, selKey_define, 10 );
+	chewing_set_selKey( ctx, selKey_define, 10 );
 	chewing_set_spaceAsSelection( ctx, 1 );
 	chewing_set_autoShiftCur( ctx, 1 );
 	chewing_set_phraseChoiceRearward( ctx, 1 );
