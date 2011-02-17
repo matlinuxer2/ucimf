@@ -207,7 +207,6 @@ string UcimfChewingHandler::process_input( const string& buf )
 	Preedit *prdt = Preedit::getInstance();
 	prdt->clear();
 	prdt->append( const_cast<char*>(prdt_pre.str().c_str()) );
-	prdt->append( prdt_text2 );
 	prdt->append( prdt_text );
 	prdt->render();
 
