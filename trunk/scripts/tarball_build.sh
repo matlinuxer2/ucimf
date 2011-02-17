@@ -47,7 +47,7 @@ function prepare_tarball(){
 prepare_tarball libucimf 2.3.8
 prepare_tarball ucimf-openvanilla 2.10.11
 prepare_tarball ucimf-sunpinyin 0.4
-prepare_tarball ucimf-chewing 0.2
+prepare_tarball ucimf-chewing 0.3
 prepare_tarball openvanilla-modules 0.9.0a1.3
 prepare_tarball fbterm_ucimf 0.2.9
 
