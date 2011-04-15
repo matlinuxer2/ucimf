@@ -1,0 +1,44 @@
+這個資料夾是放 arch 的方便 scripts.
+
+Arch 的例行測試步驟是:
+
+<1>. 測試 snapshot tarball version
+    a. 完整移除 arch 套件
+    
+        sudo ./remove_for_arch.sh
+    
+    b. 安裝 ucimf 相關的套件
+    
+        sudo ./install_for_arch_from_tarball.sh
+    
+    c. 作例行性的測試
+    
+        * 測 jfbterm
+        * 測 fbterm
+
+
+<2>. 測試 latest svn version
+    a. 完整移除 arch 套件
+    
+        sudo ./remove_for_arch.sh
+    
+    b. 安裝 ucimf 相關的套件 
+    
+        sudo ./install_for_arch_from_svn.sh
+    
+    c. 作例行性的測試
+    
+        * 測 jfbterm
+        * 測 fbterm
+
+
+<3>. 上傳 AUR 準備步驟
+    a. 刪除 submit/ 子目錄
+
+    b. 使用自動製作上傳格式及比對 script
+
+       ./prepare_submit.sh
+
+       執行後，在 submit/ 下會有 *.src.tar.gz 作為上傳的檔案。
+       同時，在 submit/ 下，也有 *.diff 作為本地端修改與線上的差異比對。
+
