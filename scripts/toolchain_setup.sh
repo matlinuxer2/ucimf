@@ -4,8 +4,11 @@
 # TODO: 如果沒有 lsb_release 的話，或許可以讓使用者指定 distribution 跟 codename 的參數
 # TODO: 像是 `toolchain_setup.sh <distribution> <codename>`
 
-Distributor_ID=`lsb_release -i | awk '{print $3}'`
-Distributor_Codename=`lsb_release -c | awk '{print $2}'`
+Distributor_ID="$1"
+Distributor_Codename="$2"
+
+Distributor_ID=${Distributor_ID:=`lsb_release -i | awk '{print $3}'`}
+Distributor_Codename=${Distributor_Codename:=`lsb_release -c | awk '{print $2}'`}
 
 # 
 #  顯示 inline 的 cmd_name <--> pkg_name 的對應表格
@@ -19,30 +22,37 @@ show_table(){
 autoconf	Debian lenny autoconf
 autoconf	Ubuntu hardy autoconf
 autoconf	Gentoo n/a   autoconf 
+autoconf	Arch   n/a   autoconf 
 
 g++		Debian lenny g++
 g++		Ubuntu hardy g++
 g++		Gentoo n/a   gcc
+g++		Arch   n/a   gcc
 
 ltdl-dev	Debian lenny libltdl3-dev
 ltdl-dev	Ubuntu hardy libltdl3-dev
 ltdl-dev	Gentoo n/a   libtool
+ltdl-dev	Arch   n/a   libtool
 
 freetype2-dev	Debian lenny libfreetype6-dev
 freetype2-dev	Ubuntu hardy libfreetype6-dev
 freetype2-dev	Gentoo n/a   freetype
+freetype2-dev	Arch   n/a   freetype2
 
 fontconfig-dev	Debian lenny libfontconfig1-dev
 fontconfig-dev	Ubuntu hardy libfontconfig1-dev
 fontconfig-dev	Gentoo n/a   fontconfig
+fontconfig-dev	Arch   n/a   fontconfig
 
 make		Debian lenny make
 make		Ubuntu hardy make
 make		Gentoo n/a   make
+make		Arch   n/a   make
 
 curses-dev	Debian lenny libncurses5-dev
 curses-dev	Ubuntu hardy libncurses5-dev
 curses-dev	Gentoo n/a   ncurses
+curses-dev	Arch   n/a   ncurses
 EOF
 
 }
@@ -63,7 +73,7 @@ get_pkg_name()
 	if [ "x" != "x$result" ]; then
             echo "$result"
         else
-            echo "<$result>'s package not found." > /dev/stderr
+            echo "<$query_cmd>'s package not found." > /dev/stderr
         fi
 }
 
@@ -80,5 +90,6 @@ case $Distributor_ID in
     Debian) echo "apt-get install $all_tools" ;;
     Ubuntu) echo "apt-get install $all_tools" ;;
     Gentoo) echo "emerge $all_tools" ;;
+    Arch)   echo "pacman -S $all_tools" ;;
     *) echo "Your distribution($Distributor_ID) haven't been included the check list yet."
 esac

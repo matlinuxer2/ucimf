@@ -20,7 +20,8 @@ fetch_pkgbuild_from_aur () {
 	install -d "$SCRIPTS_ARCH_SUBMIT"
 
 	pushd . ; cd "$SCRIPTS_ARCH_SUBMIT"
-		fetch_file_from PKGBUILD-$PKGNAME.orig http://aur.archlinux.org/packages/$PKGNAME/$PKGNAME/PKGBUILD
+		# 把在 AUR 的 PKGBUILD 下載下來作比對
+		fetch_file_from PKGBUILD-$PKGNAME.orig http://aur.archlinux.org/packages/$PKGNAME/PKGBUILD
 	popd
 }
 
@@ -50,8 +51,33 @@ fetch_and_diff () {
 	install -d "$SCRIPTS_ARCH_SUBMIT"
 
 	pushd . ; cd "$SCRIPTS_ARCH_SUBMIT"
+		# 比本地端的 PKGBUILD 和線上的不同之處
 		diff -Naur PKGBUILD-$PKGNAME.orig PKGBUILD-$PKGNAME > PKGBUILD-$PKGNAME.diff
 	popd
+}
+
+show_upload_hint () {
+	install -d "$SCRIPTS_ARCH_SUBMIT"
+
+	echo ""
+	echo "Difference between local and online PKGBUILD: "
+	echo ""
+	for x in `find $SCRIPTS_ARCH_SUBMIT -type f -name '*.diff'`
+	do 
+		if [ -s "$x" ]
+		then 
+			echo "$x" 
+		fi
+	done
+
+	echo ""
+	echo "Upload helper scripts below: "
+	echo ""
+	for x in `find $SCRIPTS_ARCH_SUBMIT -type f -name '*.src.tar.gz'`
+	do 
+		echo "aurploader -k -a $x"
+	done
+
 }
 
 fetch_and_diff libucimf
@@ -62,3 +88,5 @@ fetch_and_diff fbterm-ucimf
 fetch_and_diff libucimf-svn
 fetch_and_diff ucimf-openvanilla-svn
 fetch_and_diff fbterm-ucimf-svn
+
+show_upload_hint
