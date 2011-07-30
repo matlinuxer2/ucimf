@@ -1,6 +1,7 @@
 #include "uchewing.h"
 #include <imf/widget.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <sstream>
 #include <iostream>
 #include <string>
