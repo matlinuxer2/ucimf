@@ -179,9 +179,9 @@ string UcimfWindowHandler::process_input( const string& buf )
 	break;
     }
   }
-  else if( buf_len == 4 && buf[0]==27 && buf[1]==91 && buf[4]==126 )
+  else if( buf_len == 4 && buf[0]==27 && buf[1]==91 && buf[3]==126 )
   {
-    switch( buf[3] )
+    switch( buf[2] )
     {
       case 53:
 	keychar = 0;
