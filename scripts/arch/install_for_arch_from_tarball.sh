@@ -19,7 +19,7 @@ make_pkgbuild_from_aur () {
 	install -d "$SCRIPTS_ARCH/$PKGNAME"
 
 	pushd . ; cd "$SCRIPTS_ARCH/$PKGNAME"
-		fetch_file_from PKGBUILD http://aur.archlinux.org/packages/$PKGNAME/$PKGNAME/PKGBUILD
+		fetch_file_from PKGBUILD http://aur.archlinux.org/packages/$PKGNAME/PKGBUILD
 		makepkg -i --noconfirm
 		makepkg -f --source 
 	popd
@@ -29,6 +29,8 @@ make_pkgbuild_from_aur () {
 make_pkgbuild_from_aur libucimf
 make_pkgbuild_from_aur openvanilla-modules
 make_pkgbuild_from_aur ucimf-openvanilla
+# dependencies: yaourt intltool git scons sunpinyin-git
+make_pkgbuild_from_aur ucimf-sunpinyin
 make_pkgbuild_from_aur fbterm-ucimf
 
 pacman -Q |egrep "ucimf|openvanilla|fbterm"
