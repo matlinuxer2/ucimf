@@ -82,6 +82,7 @@ show_upload_hint () {
 
 fetch_and_diff libucimf
 fetch_and_diff ucimf-openvanilla 
+fetch_and_diff ucimf-sunpinyin
 fetch_and_diff openvanilla-modules
 fetch_and_diff fbterm-ucimf
 	
