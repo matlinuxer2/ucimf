@@ -6,6 +6,7 @@ pacman --remove --noconfirm fbterm-ucimf
 pacman --remove --noconfirm fbterm
 pacman --remove --noconfirm openvanilla 
 pacman --remove --noconfirm ucimf-openvanilla 
+pacman --remove --noconfirm ucimf-sunpinyin
 pacman --remove --noconfirm libucimf 
 
 # for svn

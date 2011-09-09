@@ -19,7 +19,7 @@ make_pkgbuild_from_aur () {
 	install -d "$SCRIPTS_ARCH/$PKGNAME"
 
 	pushd . ; cd "$SCRIPTS_ARCH/$PKGNAME"
-		fetch_file_from PKGBUILD http://aur.archlinux.org/packages/$PKGNAME/$PKGNAME/PKGBUILD
+		fetch_file_from PKGBUILD http://aur.archlinux.org/packages/$PKGNAME/PKGBUILD
 		makepkg -i --noconfirm
 		makepkg -f --source 
 	popd
