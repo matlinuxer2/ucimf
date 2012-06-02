@@ -1,4 +1,4 @@
-noinst_PROGRAMS = console01 console02 console04
+noinst_PROGRAMS = console01 console04
 
 console01_SOURCES = term/console01.cpp
 console01_CPPFLAGS = -I$(top_srcdir)/include
