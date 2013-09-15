@@ -33,6 +33,7 @@
 #include <config.h>
 #include <signal.h>
 #include <setjmp.h>
+#include <unistd.h>
 
 #include "imf.h"
 #include "widget.h"
