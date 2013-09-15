@@ -21,7 +21,7 @@ ucimf \- unicode console input method framework
 \fBucimf\fP is an input method framework designed for Linux unicode console.
 .PP
 .SH FEATURE
- • Support UTF-8 
+ • Support UTF\-8 
 .br
  • Support OpenVanilla Modules
 .br
@@ -43,13 +43,13 @@ vga=794  (1280x1024, 16 )
 .PP
 
 .SH USAGE
-\fBucimf\fP needs to run under an UTF-8 consle environment, please 
-use \fBlocale -a\fP to see the UTF-8 locales that your system is supported 
-and use command like \fBexport LC_ALL=zh_CN.UTF-8\fP to set up the locale.
+\fBucimf\fP needs to run under an UTF\-8 consle environment, please 
+use \fBlocale \-a\fP to see the UTF\-8 locales that your system is supported 
+and use command like \fBexport LC_ALL=zh_CN.UTF\-8\fP to set up the locale.
 .PP
-To start ucimf with FbTerm, prefer to install \fBfbterm-ucimf\fP package and 
-run \fIfbterm -i fbterm_ucimf\fP, or see \fBucimf_start(1)\fP as an 
-not-recommended alternate.
+To start ucimf with FbTerm, prefer to install \fBfbterm\-ucimf\fP package and 
+run \fIfbterm \-i fbterm_ucimf\fP, or see \fBucimf_start(1)\fP as an 
+not\-recommended alternate.
 .PP
 When the user is running an \fIFbTerm\fP, key combination \fBCtrl+Space\fP is 
 the switch of enable/disable the input method, \fBCtrl+ShiftLeft\fP to 
@@ -66,7 +66,7 @@ F11.
 .PP
 .SH TABLE MANAGEMENT
 \fBucimf\fP use standard *.cin files directly to manage its input method 
-tables, per-user input method tables is put in 
+tables, per\-user input method tables is put in 
 .br
 \fI~/.openvanilla/OVIMGeneric/\fP.
 .PP
@@ -79,12 +79,12 @@ you can name your tables like this:
 .br
 ucimf will follow this order while loading input method tables.
 .PP
-.SH SHELL ENVIROMENT
-\fBLC_CTYPE\fP - use \fIUTF-8\fP as to recogize characters. For example:
+.SH SHELL ENVIRONMENT
+\fBLC_CTYPE\fP \- use \fIUTF-8\fP as to recogize characters. For example:
 .br
 \fIexport LC_CTYPE=zh_CN.UTF-8\fP
 .PP
-\fBOVMODULE_DIR\fP - to customize OpenVanilla modules location at run-time. 
+\fBOVMODULE_DIR\fP \- to customize OpenVanilla modules location at run-time. 
 For example:
 .br
 \fIexport OVMODULE_DIR=/usr/lib/openvanilla/\fP
@@ -99,7 +99,7 @@ For example:
 .BR ucimf.conf (5).
 .br
 .SH AUTHOR
-libucimf was written by Chun-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
+libucimf was written by Chun\-Yu Lee (Mat) <MatLinuxer2@gmail.com> and Jim Huang <jserv.tw@gmail.com>.
 .PP
 This manual page was written by Aron Xu <happyaron.xu@gmail.com>,
 for the Debian project (and may be used by others).
