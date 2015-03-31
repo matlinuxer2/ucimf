@@ -219,7 +219,11 @@ void ucimf_init()
 	cwm = Cwm::getInstance();
 
 	char name[64];
-	snprintf(name, sizeof(name), "%s/%s", getenv("HOME"), ".ucimf-log");
+        char* env_HOME = getenv("HOME");
+        if ( env_HOME == NULL ) {
+            env_HOME=const_cast<char*>("/tmp");
+        }
+	snprintf(name, sizeof(name), "%s/%s", env_HOME, ".ucimf-log");
 
         extern int LogFd;
 	LogFd = open(name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);

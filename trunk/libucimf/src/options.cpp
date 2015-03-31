@@ -44,7 +44,11 @@ Options* Options::getInstance()
 
 Options::Options()
 {
-  string conf = getenv("HOME");
+  char* env_HOME = getenv("HOME");
+  if ( env_HOME == NULL ) {
+      env_HOME=const_cast<char*>("/tmp");
+  }
+  string conf = env_HOME;
   conf += "/.ucimf.conf";
 
   UrDEBUG("Checking config file: %s \n", conf.c_str() );
